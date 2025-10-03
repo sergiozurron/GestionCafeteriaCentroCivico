@@ -1,10 +1,8 @@
-# Proyecto de Modelado Software: Biblioteca FDI
+# Proyecto de Modelado Software: Proyecto de Modelado Software: Centro cívico y cafetería
 
-Este repositorio contiene el código fuente correspondiente al proyecto de Modelado de Software "Biblioteca FDI".
+Este repositorio contiene el código fuente correspondiente al proyecto de Modelado de Software.
 
-El objetivo del proyecto es desarrollar una aplicación Java de manejo de datos, en este caso, los datos correspondientes a una biblioteca universitaria como la de la Facultad de Informática de la UCM.
-
-Se recomienda encarecidamente a todos los miembros del equipo leer este documento antes de empezar a realizar cambios.
+El objetivo del proyecto es desarrollar una aplicación Java de manejo de datos.
 
 - [Proyecto de Modelado Software: Biblioteca FDI](#proyecto-de-modelado-software-biblioteca-fdi)
   - [Cómo aportar al repositorio](#cómo-aportar-al-repositorio)

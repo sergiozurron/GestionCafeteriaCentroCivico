@@ -1,0 +1,94 @@
+package com.grupoms.app.presentacion.proveedor;
+
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+
+import com.grupoms.app.negocio.proveedor.TProveedor;
+import com.grupoms.app.presentacion.IGUI;
+import com.grupoms.app.presentacion.controlador.Context;
+import com.grupoms.app.presentacion.controlador.Controlador;
+import com.grupoms.app.presentacion.controlador.Evento;
+
+public class GUIAltaProveedor extends JFrame implements IGUI {
+
+	private static final long serialVersionUID = 1L;
+
+	private JTextField campoNombre;
+	private JTextField campoTarifa;
+	private JTextField campoTiempoEntrega;
+
+	public GUIAltaProveedor() {
+		setTitle("[ALTA PROVEEDOR]");
+		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+		setSize(400, 300);
+		setLocationRelativeTo(null);
+
+		JPanel panel = new JPanel(new GridBagLayout());
+		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.insets = new Insets(10, 10, 10, 10);
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+
+		JLabel etiquetaNombre = new JLabel("Nombre");
+		JLabel etiquetaTarifa = new JLabel("Tarifa");
+		JLabel etiquetaTiempoEntrega = new JLabel("Tiempo de Entrega");
+
+		campoNombre = new JTextField(20);
+		campoTarifa = new JTextField(20);
+		campoTiempoEntrega = new JTextField(20);
+
+		JButton botonAlta = new JButton("Alta Proveedor");
+		
+		botonAlta.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				TProveedor proveedor = new TProveedor();
+				proveedor.setNombre(campoNombre.getText());
+				proveedor.setTarifa(Double.parseDouble(campoTarifa.getText()));
+				proveedor.setTiempoEntrega(Integer.parseInt(campoTiempoEntrega.getText()));
+				Context contexto = new Context(Evento.ALTA_PROVEEDOR, proveedor);
+				Controlador.getInstance().handle(contexto);
+			}
+		});
+
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		panel.add(etiquetaNombre, gbc);
+		gbc.gridx = 1;
+		panel.add(campoNombre, gbc);
+
+		gbc.gridx = 0;
+		gbc.gridy = 1;
+		panel.add(etiquetaTarifa, gbc);
+		gbc.gridx = 1;
+		panel.add(campoTarifa, gbc);
+
+		gbc.gridx = 0;
+		gbc.gridy = 2;
+		panel.add(etiquetaTiempoEntrega, gbc);
+		gbc.gridx = 1;
+		panel.add(campoTiempoEntrega, gbc);
+
+		gbc.gridx = 0;
+		gbc.gridy = 3;
+		gbc.gridwidth = 2;
+		gbc.anchor = GridBagConstraints.CENTER;
+		panel.add(botonAlta, gbc);
+
+		add(panel);
+	}
+
+	@Override
+	public void actualizar(Context context) {
+		setVisible(true);
+	}
+
+}

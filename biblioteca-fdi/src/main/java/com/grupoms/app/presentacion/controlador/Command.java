@@ -1,4 +1,4 @@
-package com.grupoms.app.presentacion;
+package com.grupoms.app.presentacion.controlador;
 
 public interface Command {
 	

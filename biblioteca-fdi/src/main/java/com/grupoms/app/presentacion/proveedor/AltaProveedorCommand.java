@@ -1,16 +1,20 @@
 package com.grupoms.app.presentacion.proveedor;
 
-import com.grupoms.app.negocio.TProveedor;
-import com.grupoms.app.presentacion.Command;
-import com.grupoms.app.presentacion.Context;
+import com.grupoms.app.negocio.factoria.FactoriaSA;
+import com.grupoms.app.negocio.proveedor.TProveedor;
+import com.grupoms.app.presentacion.controlador.Command;
+import com.grupoms.app.presentacion.controlador.Context;
+import com.grupoms.app.presentacion.controlador.Evento;
 
 public class AltaProveedorCommand implements Command {
 
 	@Override
 	public Context execute(Object data) {
 		TProveedor proveedor = (TProveedor) data;
-		// FactoriaSA ...
-		return null;
+		int idProveedor = FactoriaSA.getInstancia().creaSAProveedor().altaProveedor(proveedor);
+		if (idProveedor == -1)
+			return new Context(Evento.ALTA_PROVEEDOR_KO, null);
+		return new Context(Evento.ALTA_PROVEEDOR_OK, idProveedor);
 	}
 
 }

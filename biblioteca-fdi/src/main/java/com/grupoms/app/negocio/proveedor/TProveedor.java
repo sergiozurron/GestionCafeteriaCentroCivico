@@ -1,41 +1,51 @@
-package com.grupoms.app.negocio;
+package com.grupoms.app.negocio.proveedor;
 
 public class TProveedor {
 
 	private Integer id;
 	private String nombre;
-	private String tarifa;
-	private String tiempoEntrega;
-	private String activo;
-	
+	private Double tarifa;
+	private Integer tiempoEntrega; // En días
+	private Boolean activo;
+
 	public Integer getId() {
 		return id;
 	}
+
 	public void setId(Integer id) {
 		this.id = id;
 	}
+
 	public String getNombre() {
 		return nombre;
 	}
+
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
 	}
-	public String getTarifa() {
+
+	public Double getTarifa() {
 		return tarifa;
 	}
-	public void setTarifa(String tarifa) {
+
+	public void setTarifa(Double tarifa) {
 		this.tarifa = tarifa;
 	}
-	public String getTiempoEntrega() {
+
+	public Integer getTiempoEntrega() {
 		return tiempoEntrega;
 	}
-	public void setTiempoEntrega(String tiempoEntrega) {
+
+	public void setTiempoEntrega(Integer tiempoEntrega) {
 		this.tiempoEntrega = tiempoEntrega;
 	}
-	public String getActivo() {
+
+	public Boolean getActivo() {
 		return activo;
 	}
-	public void setActivo(String activo) {
+
+	public void setActivo(Boolean activo) {
 		this.activo = activo;
 	}
+
 }

@@ -1,5 +1,6 @@
 package com.grupoms.app.negocio.factoria;
 
+import com.grupoms.app.negocio.mesa.SAMesa;
 import com.grupoms.app.negocio.proveedor.SAProveedor;
 
 public abstract class FactoriaSA {
@@ -14,5 +15,5 @@ public abstract class FactoriaSA {
 	}
 	
 	public abstract SAProveedor creaSAProveedor();
-
+	public abstract SAMesa creaSAMesa();
 }

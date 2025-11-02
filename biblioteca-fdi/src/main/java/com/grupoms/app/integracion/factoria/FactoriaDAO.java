@@ -14,8 +14,8 @@ public class FactoriaDAO {
 		return instancia;
 	}
 	
-	public DAOProveedor creaDAOProveedor() {
-		return new DAOProveedorImpl();
-	}
-	
+	public abstract DAOProveedor creaDAOProveedor();
+	public abstract DAOPedido creaDAOPedido ();
+	public abstract DAOEmpleado creaDAOEmpleado();
+	public abstract DAOIngrediente creaDAOIngrediente();
 }

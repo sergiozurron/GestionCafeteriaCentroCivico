@@ -23,15 +23,60 @@ public class DAOPedidoImp implements DAOPedido{
 
     @Override
     public TPedido mostrarPedido(Integer id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'mostrarPedido'");
+        TPedido pedido = null;
+        try{
+            TransactionManager tm = TransactionManager.getInstance();
+            Transaction t = tm.getTransaccion();
+            Connection c = (Connection) t.getResource();
+            PreparedStatement statement = c.prepareStatement("SELECT * FROM pedido WHERE id = ? FOR UPDATE");
+            statement.setInt(1, id);
+            ResultSet result = statement.executeQuery();
+            if (result.next()) {
+				pedido = new TPedido();
+				pedido.setId(result.getInt(1));
+				pedido.setTotal(result.getDouble(2));
+				pedido.setFecha(new Date(result.getDate(3).getTime()));
+				pedido.setActivo(result.getBoolean(4));
+                pedido.setEstado(result.getString(5));
+                pedido.setIdEmpleado(result.getInt(6));
+                pedido.setIdMesa(result.getInt(7));
+			}
+			result.close();
+            statement.close();
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return pedido;
     }
 
     @Override
     public Set<TPedido> mostrarListaPedidos() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'mostrarListaPedidos'");
+        Set<TPedido> pedidos = new LinkedHashSet<TPedido>();
+		try {
+			Transaction t = TransactionManager.getInstance().getTransaccion();
+			Connection c = (Connection) t.getResource();
+			PreparedStatement statement = c.prepareStatement("SELECT * FROM factura FOR UPDATE");
+			ResultSet result = statement.executeQuery();
+			while (result.next()) {
+				TPedido pedido = new TPedido();
+				pedido.setId(result.getInt(1));
+				pedido.setTotal(result.getDouble(2));
+				pedido.setFecha(new Date(result.getDate(3).getTime()));
+				pedido.setActivo(result.getBoolean(4));
+                pedido.setEstado(result.getString(5));
+                pedido.setIdEmpleado(result.getInt(6));
+                pedido.setIdMesa(result.getInt(7));
+				pedidos.add(pedido);
+			}
+			statement.close();
+			result.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return pedidos;
     }
+       
 
     @Override
     public Integer modificarPedido(TPedido tpedido) {
@@ -41,9 +86,18 @@ public class DAOPedidoImp implements DAOPedido{
 
     @Override
     public Integer devolverPedido(Integer id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'devolverPedido'");
-    }
+        int exito = -1;
+		try {
+			Transaction t = TransactionManager.getInstance().getTransaccion();
+			Connection c = (Connection) t.getResource();
+			Statement s = c.createStatement();
+			exito = s.executeUpdate("UPDATE pedido SET activo = 0 WHERE id = " + id + ";");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return exito;
+	}
+    
 
     
 }

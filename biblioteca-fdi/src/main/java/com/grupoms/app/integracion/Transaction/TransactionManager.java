@@ -7,4 +7,9 @@ public interface TransactionManager {
     Transaction getTransaccion();
 
     void deleteTransaccion() throws Exception;
+
+    static TransactionManager getInstance() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getInstance'");
+    }
 }

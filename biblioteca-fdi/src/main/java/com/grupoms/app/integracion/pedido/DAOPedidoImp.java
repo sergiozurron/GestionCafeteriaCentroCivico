@@ -79,8 +79,67 @@ public class DAOPedidoImp implements DAOPedido{
 
     @Override
     public Integer modificarPedido(TPedido tpedido) {
-      
+    Integer resultado = -1; // valor por defecto si falla
+    Transaction t = TransactionManager.getInstance().getTransaccion();
+
+        try {
+            t.start();
+            Connection c = (Connection) t.getResource();
+
+            // Comprobamos el estado del pedido
+            try (PreparedStatement st1 = c.prepareStatement(
+                    "SELECT estado FROM pedido WHERE id = ? FOR UPDATE")) {
+
+                st1.setInt(1, tpedido.getId());
+
+                try (ResultSet rs = st1.executeQuery()) {
+                    if (rs.next()) {
+                        String estadoActual = rs.getString("estado");
+
+                        if (!"PREPARACION".equalsIgnoreCase(estadoActual)) {
+                            System.out.println("No se puede modificar el pedido, ya está terminado.");
+                            t.rollback();
+                        } else {
+                            // Modificamos el pedido
+                            try (PreparedStatement statement = c.prepareStatement(
+                                    "UPDATE pedido SET total_factura = ?, estado = ?, activo = ? WHERE id = ?")) {
+
+                                statement.setDouble(1, tpedido.getTotal());
+                                statement.setString(2, tpedido.getEstado());
+                                statement.setBoolean(3, tpedido.getActivo());
+                                statement.setInt(4, tpedido.getId());
+
+                                int filas = statement.executeUpdate();
+                                if (filas > 0) {
+                                    System.out.println("Pedido modificado correctamente.");
+                                    resultado = tpedido.getId(); // devolvemos el id del pedido
+                                    t.commit();
+                                } else {
+                                    System.out.println("No se pudo modificar el pedido.");
+                                    t.rollback();
+                                }
+                            }
+                        }
+                    } else {
+                        System.out.println("Pedido no encontrado.");
+                        t.rollback();
+                    }
+                }
+            }
+
+        } catch (Exception e) {
+                e.printStackTrace();
+            try {
+                if (t != null) t.rollback(); // solo hacemos rollback de la transacción que ya tenemos
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+
+        return resultado;
     }
+
+
 
     @Override
     public Integer devolverPedido(Integer id) {
@@ -98,10 +157,62 @@ public class DAOPedidoImp implements DAOPedido{
 
     @Override
     public Set<TPedido> mostrarListaPedidosEmpleado(Integer idEmpleado) {
+        Set<TPedido> pedidos = new LinkedHashSet<>();
+        try {
+            Transaction t = TransactionManager.getInstance().getTransaccion();
+            Connection c = (Connection) t.getResource();
+            PreparedStatement statement = c.prepareStatement(
+                "SELECT * FROM pedido FOR UPDATE WHERE idEmpleado = ?"
+            );
+            statement.setInt(1, idEmpleado);
+            ResultSet result = statement.executeQuery();
+            while (result.next()) {
+                TPedido pedido = new TPedido();
+                pedido.setId(result.getInt("id"));
+                pedido.setTotal(result.getDouble("totalFactura"));
+                pedido.setFecha(new Date(result.getDate("fecha").getTime()));
+                pedido.setActivo(result.getBoolean("activo"));
+                pedido.setEstado(result.getString("estado"));
+                pedido.setIdEmpleado(result.getInt("idEmpleado"));
+                pedido.setIdMesa(result.getInt("idMesa"));
+                pedidos.add(pedido);
+            }
+            statement.close();
+            result.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return pedidos;
+    }
       
 
     @Override
     public Set<TPedido> mostrarListaPedidosMesa(Integer idMesa) {
-       
+        Set<TPedido> pedidos = new LinkedHashSet<>();
+        try {
+            Transaction t = TransactionManager.getInstance().getTransaccion();
+            Connection c = (Connection) t.getResource();
+            PreparedStatement statement = c.prepareStatement(
+                "SELECT * FROM pedido FOR UPDATE WHERE idMesa = ?"
+            );
+            statement.setInt(1, idMesa);
+            ResultSet result = statement.executeQuery();
+            while (result.next()) {
+                TPedido pedido = new TPedido();
+                pedido.setId(result.getInt("id"));
+                pedido.setTotal(result.getDouble("totalFactura"));
+                pedido.setFecha(new Date(result.getDate("fecha").getTime()));
+                pedido.setActivo(result.getBoolean("activo"));
+                pedido.setEstado(result.getString("estado"));
+                pedido.setIdEmpleado(result.getInt("idEmpleado"));
+                pedido.setIdMesa(result.getInt("idMesa"));
+                pedidos.add(pedido);
+            }
+            statement.close();
+            result.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return pedidos;
     }
 }

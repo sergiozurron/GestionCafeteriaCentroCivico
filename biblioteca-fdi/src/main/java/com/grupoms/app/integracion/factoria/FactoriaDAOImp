@@ -1,3 +1,24 @@
+package com.grupoms.app.integracion.factoria;
+
+import com.grupoms.app.integracion.mesa;
+import com.grupoms.app.integracion.pedido;
+import com.grupoms.app.integracion.proveedor;
+import com.grupoms.app.integracion.ingrediente;
+
 public class FactoriaDAOImp extends FactoriaDAO{
-    
+
+    public PedidoDAO creaDAOPedido(){
+        return new DAOPedidoImp;
+    }
+    public PedidoDAO creaDAOMesa(){
+        return new DAOMesaImp;
+    }
+    public PedidoDAO creaDAOProveedor(){
+        return new DAOProveedorImp;
+    }
+
+    public PedidoDAO creaDAOIngrediente(){
+        return new DAOIngredienteImp;
+    }
+
 }

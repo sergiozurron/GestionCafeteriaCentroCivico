@@ -5,6 +5,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Date;
 import java.time.LocalDate;
 
 import javax.swing.JButton;
@@ -63,20 +64,20 @@ public class GUI_AltaPedido extends JFrame implements IGUI{
                 try{
 				TPedido pedido = new TPedido();
 				pedido.setTotal(0.0);
-				pedido.setMesa(Integer.parseInt(campoMesa.getText()));
-				pedido.setEmplead(Integer.parseInt(campoEmpleado.getText()));
+				pedido.setIdMesa(Integer.parseInt(campoMesa.getText()));
+				pedido.setIdEmpleado(Integer.parseInt(campoEmpleado.getText()));
 				pedido.setEstado(campoEstado.getText());
                 pedido.setActivo(true);
-                pedido.setFecha(LocalDate.now());
+                pedido.setFecha(new java.sql.Date(System.currentTimeMillis()));
                 
                 
-                Context contexto = new Context(Evento.ALTA_PROVEEDOR, proveedor);
+                Context contexto = new Context(Evento.ALTA_PROVEEDOR, pedido);
 				Controlador.getInstance().handle(contexto);
 
-                JOptionPane.showConfirmDialog(null, "Pedido creado con exito")
+                JOptionPane.showConfirmDialog(null, "Pedido creado con exito");
 
                 } catch (NumberFormatException ex){
-                    JOptionPane.showConfirmDialog(null, "Error: los campos numericos no son validos")
+                    JOptionPane.showConfirmDialog(null, "Error: los campos numericos no son validos");
                 }
 
 			}
@@ -114,7 +115,6 @@ public class GUI_AltaPedido extends JFrame implements IGUI{
     @Override
     public void actualizar(Context context) {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'actualizar'");
     }
     
     public void initGUI(){

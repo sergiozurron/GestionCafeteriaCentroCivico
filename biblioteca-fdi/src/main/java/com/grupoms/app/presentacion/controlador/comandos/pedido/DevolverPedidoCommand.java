@@ -1,4 +1,4 @@
-package com.grupoms.app.presentacion.pedido;
+package com.grupoms.app.presentacion.controlador.comandos.pedido;
 
 import com.grupoms.app.negocio.factoria.FactoriaSA;
 import com.grupoms.app.negocio.pedido.SAPedido;

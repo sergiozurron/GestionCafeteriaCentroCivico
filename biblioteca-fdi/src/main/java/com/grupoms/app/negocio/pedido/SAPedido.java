@@ -2,23 +2,23 @@ package com.grupoms.app.negocio.pedido;
 import java.util.Set;
 
 public interface SAPedido {
-    public Integer altaPedido(TPedido pedido);
+     public Integer altaPedido(TPedido pedido);
+
+    public Integer confirmarPedido(Integer idPedido);
 
     public Integer modificarPedido(TPedido pedido);
 
-    public void confirmarPedido(TPedido pedido);
+    public TPedido mostrarPedido(Integer idPedido);
 
-    public void devolverPedido(TPedido pedido);
+    public Set<TPedido> mostrarPedidos();
 
-    public void vincularProductoPedido(TProducto producto);
+    public Integer devolverPedido(Integer idPedido);
 
-    public void desvincularProductoPedido(TProducto producto);
+    public Integer vincularProducto(Integer idPedido, Integer idProducto, Integer cantidad);
 
-    public TPedido mostrarPedido(TPedido pedido);
+    public Integer desvincularProducto(Integer idPedido, Integer idProducto);
 
-    public Set<TPedido> mostrarListaPedidos();
+    public Set<TPedido> mostrarPedidosPorEmpleado(Integer idEmpleado);
 
-    public Set<TPedido> mostrarPedidosEmpleado(Integer idEmpleado);
-
-    public Set<TPedido> mostrarPedidosMesa(Integer idMesa);
+    public Set<TPedido> mostrarPedidosPorMesa(Integer idMesa);
 }

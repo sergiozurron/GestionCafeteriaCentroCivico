@@ -12,7 +12,7 @@ public class DevolverPedidoCommand implements Command {
     @Override
     public Context execute(Object data) {
        TPedido pedido = (TPedido) data;
-       SAPedido sa = FactoriaSA.getInstancia().creaSAPedido();
+       SAPedido sa = FactoriaSA.getInstance().creaSAPedido();
        sa.devolverPedido(pedido);
        return new Context(Evento.DEVOLVER_PEDIDO, pedido);
     }

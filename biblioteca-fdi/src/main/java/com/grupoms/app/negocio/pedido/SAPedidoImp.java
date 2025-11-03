@@ -49,6 +49,7 @@ public class SAPedidoImp implements SAPedido{
         t.start();
         pedido.setEstado("EN PREPARACION");
         dao.modificarPedido(pedido);
+        t.commit();
        }catch (Exception e) {
             e.printStackTrace();
             try {
@@ -77,9 +78,23 @@ public class SAPedidoImp implements SAPedido{
     }
 
     @Override
-    public Integer devolverPedido(Integer idPedido) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'devolverPedido'");
+    public void devolverPedido(TPedido pedido) {
+        Transaction t = TransactionManager.getInstance().getTransaction();
+        try {
+            t.start();
+
+            // Llamada al DAO para cambiar estado y activo
+            dao.devolverPedido(pedido);
+
+            t.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+            try {
+                if (t != null) t.rollback();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
     }
 
     @Override

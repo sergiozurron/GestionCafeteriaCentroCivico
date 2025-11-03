@@ -14,7 +14,7 @@ public interface DAOPedido{
 
     public Set<TPedido> mostrarPedidos();
 
-    public Integer devolverPedido(Integer idPedido);
+    public void devolverPedido(TPedido pedido);
 
     public Integer vincularProducto(Integer idPedido, Integer idProducto, Integer cantidad);
 

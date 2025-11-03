@@ -82,9 +82,22 @@ public class DAOPedidoImp implements DAOPedido{
     }
 
     @Override
-    public Integer devolverPedido(Integer idPedido) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'devolverPedido'");
+    public void devolverPedido(TPedido pedido) {
+        try {
+        Transaction t = TransactionManager.getInstance().getTransaction();
+        Connection c = (Connection) t.getResource();
+
+        String sql = "UPDATE pedido SET estado = ?, activo = ? WHERE id = ?";
+        try (PreparedStatement stmt = c.prepareStatement(sql)) {
+            stmt.setString(1, "DEVUELTO");
+            stmt.setBoolean(2, false);
+            stmt.setInt(3, pedido.getId());
+
+            stmt.executeUpdate();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

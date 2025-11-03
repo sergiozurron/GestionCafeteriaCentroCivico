@@ -2,11 +2,11 @@ package com.grupoms.app.integracion.Transaction;
 
 public interface TransactionManager {
 
-    Transaction newTransaccion() throws Exception;
+    Transaction newTransaction() throws Exception;
 
-    Transaction getTransaccion();
+    Transaction getTransaction();
 
-    void deleteTransaccion() throws Exception;
+    void deleteTransaction() throws Exception;
 
     static TransactionManager getInstance() {
         // TODO Auto-generated method stub

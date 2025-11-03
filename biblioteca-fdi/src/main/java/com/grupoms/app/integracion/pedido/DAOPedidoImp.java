@@ -135,64 +135,23 @@ public class DAOPedidoImp implements DAOPedido{
        
     @Override
     public Integer modificarPedido(TPedido tpedido) {
-    Integer resultado = -1; // valor por defecto si falla
-    Transaction t = TransactionManager.getInstance().getTransaccion();
+        Integer exito = -1;
 
-        try {
-            t.start();
-            Connection c = (Connection) t.getResource();
+        Transaccion t = TransactionManager.getInstance().getTransaccion();
+        Connection c = (Connection) t.getResource();
 
-            // Comprobamos el estado del pedido
-            try (PreparedStatement st1 = c.prepareStatement(
-                    "SELECT estado FROM pedido WHERE id = ? FOR UPDATE")) {
+        String sql = "UPDATE pedido SET totalFactura = ?, estado = ?, activo = ? WHERE id = ?";
+        try (PreparedStatement ps = c.prepareStatement(sql)) {
+            ps.setDouble(1, pedido.getTotal());
+            ps.setString(2, pedido.getEstado());
+            ps.setBoolean(3, pedido.getActivo());
+            ps.setInt(4, pedido.getId());
 
-                st1.setInt(1, tpedido.getId());
-
-                try (ResultSet rs = st1.executeQuery()) {
-                    if (rs.next()) {
-                        String estadoActual = rs.getString("estado");
-
-                        if (!"PREPARACION".equalsIgnoreCase(estadoActual) || !"ABIERTO".equalsIgnoreCase(estadoActual)) {
-                            System.out.println("No se puede modificar el pedido, ya está terminado.");
-                            t.rollback();
-                        } else {
-                            // Modificamos el pedido
-                            try (PreparedStatement statement = c.prepareStatement(
-                                    "UPDATE pedido SET total_factura = ?, estado = ?, activo = ? WHERE id = ?")) {
-
-                                statement.setDouble(1, tpedido.getTotal());
-                                statement.setString(2, tpedido.getEstado());
-                                statement.setBoolean(3, tpedido.getActivo());
-                                statement.setInt(4, tpedido.getId());
-
-                                int filas = statement.executeUpdate();
-                                if (filas > 0) {
-                                    System.out.println("Pedido modificado correctamente.");
-                                    resultado = tpedido.getId(); // devolvemos el id del pedido
-                                    t.commit();
-                                } else {
-                                    System.out.println("No se pudo modificar el pedido.");
-                                    t.rollback();
-                                }
-                            }
-                        }
-                    } else {
-                        System.out.println("Pedido no encontrado.");
-                        t.rollback();
-                    }
-                }
-            }
-
-        } catch (Exception e) {
-                e.printStackTrace();
-            try {
-                if (t != null) t.rollback(); // solo hacemos rollback de la transacción que ya tenemos
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
+            int rows = ps.executeUpdate();
+            if (rows > 0) exito = pedido.getId();
         }
 
-        return resultado;
+        return exito;
     }
 
     @Override

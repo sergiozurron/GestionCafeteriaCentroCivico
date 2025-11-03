@@ -6,10 +6,10 @@ import com.grupoms.app.integracion.factoria.FactoriaDAO;
 import com.grupoms.app.integracion.mesa.DAOMesa;
 
 public class SAMesaImp implements SAMesa{
-	
+	private DAOMesa daoMesa = FactoriaDAO.getInstancia().creaDAOMesa();
 	@Override
 	public int altaMesa(TMesa mesa) {
-		DAOMesa daoMesa = FactoriaDAO.getInstancia().creaDAOMesa();
+		
 		TMesa mesaExistente = daoMesa.buscaPorNumero(mesa.getNumero());
 		if (mesaExistente != null && mesaExistente.getActivo()) {
 			return -1;
@@ -20,7 +20,6 @@ public class SAMesaImp implements SAMesa{
 	}
 	
 	public void bajaMesa(Integer id) {
-		DAOMesa daoMesa = FactoriaDAO.getInstancia().creaDAOMesa();
 		TMesa mesaExistente = daoMesa.buscarPorId(id);
 		if(mesaExistente == null || !mesaExistente.getActivo()) {
 			return;
@@ -29,7 +28,6 @@ public class SAMesaImp implements SAMesa{
 	}
 	
 	public void modificarMesa(TMesa mesa) {
-		DAOMesa daoMesa = FactoriaDAO.getInstancia().creaDAOMesa();
 		TMesa mesaExistente = daoMesa.buscarPorId(mesa.getId());
 		
 		if (mesaExistente != null && mesaExistente.getActivo()) {
@@ -43,7 +41,6 @@ public class SAMesaImp implements SAMesa{
 	}
 	
 	public TMesa mostrarMesa(Integer id) {
-		DAOMesa daoMesa = FactoriaDAO.getInstancia().creaDAOMesa();
 		TMesa mesaExistente = daoMesa.buscarPorId(id);
 		if (mesaExistente != null && mesaExistente.getActivo()) {
 			return null;
@@ -52,7 +49,6 @@ public class SAMesaImp implements SAMesa{
 	}
 	
 	public List<TMesa> mostrarMesas(){
-		DAOMesa daoMesa = FactoriaDAO.getInstancia().creaDAOMesa();
 		return daoMesa.mostrarTodos();
 	}
 }

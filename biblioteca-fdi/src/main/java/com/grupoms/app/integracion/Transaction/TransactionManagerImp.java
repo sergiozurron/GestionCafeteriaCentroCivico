@@ -20,7 +20,7 @@ public class TransactionManagerImp implements TransactionManager {
     }
 
     @Override
-    public Transaction newTransaccion() throws Exception {
+    public Transaction newTransaction() throws Exception {
         long idHilo = Thread.currentThread().getId();
         Transaction tx = FactoriaTransaction.getInstance().createTransaction();
         tx.start();
@@ -29,13 +29,13 @@ public class TransactionManagerImp implements TransactionManager {
     }
 
     @Override
-    public Transaction getTransaccion() {
+    public Transaction getTransaction() {
         long idHilo = Thread.currentThread().getId();
         return transacciones.get(idHilo);
     }
 
     @Override
-    public void deleteTransaccion() throws Exception {
+    public void deleteTransaction() throws Exception {
         long idHilo = Thread.currentThread().getId();
         Transaction tx = transacciones.get(idHilo);
         if (tx != null) {

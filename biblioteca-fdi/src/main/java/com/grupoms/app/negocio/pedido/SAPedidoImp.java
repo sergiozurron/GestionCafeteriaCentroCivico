@@ -22,10 +22,9 @@ public class SAPedidoImp implements SAPedido{
             pedido.setFecha(new java.sql.Date(System.currentTimeMillis()));
 
             // Crear transacción
-            t = TransactionManager.getInstance().newTransaccion();
+            t = TransactionManager.getInstance().newTransaction();
             
             // Llamada al DAO (el DAO se encargará de usar TransactionManager)
-            DAOPedido dao = new DAOPedidoImp();
             idGenerado = dao.altaPedido(pedido);
 
             t.commit();
@@ -39,9 +38,22 @@ public class SAPedidoImp implements SAPedido{
     }
 
     @Override
-    public void modificarPedido(TPedido pedido) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'modificarPedido'");
+    public Integer modificarPedido(TPedido pedido) {
+        Integer idModificar = -1;
+        Transaction t = null;
+        try{
+            if(!pedido.getEstado().equals("EN PREPARACION") || !pedido.getEstado().equals("ABIERTO")){
+                System.out.println("No se puede modificar un pedido que no esta 'EN PREPARACION'");
+                return idModificar;
+            }
+            t = TransactionManager.getInstance().newTransaction();
+
+            idModificar=dao.modificarPedido(pedido);
+            t.commit();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return idModificar;
     }
 
     @Override

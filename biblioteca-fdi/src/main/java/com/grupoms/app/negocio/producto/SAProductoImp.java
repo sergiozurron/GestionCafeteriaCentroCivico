@@ -9,13 +9,30 @@ public class SAProductoImp implements SAProducto{
     private DAOProducto daoProducto = FactoriaDAO.getInstancia().creaDAOProducto();
 
     public Integer altaProducto(TProducto producto) {
-        TProducto productoExistente = daoProducto.buscaPorNombre(producto.getNombre());
-		if (productoExistente != null && productoExistente.getActivo()) {
-			return -1;
-		}
-		producto.setActivo(true);
-		daoProducto.crea(producto);
-		return producto.getId();
+
+        Transaction t = null;
+        Integer idGenerado = null;
+
+        try {
+            
+            t = TransactionManager.getInstance().newTransaction();
+            t.start();
+
+            producto.setNombre("");
+            producto.setPrecio(-1);
+            producto.setStock(-1);
+		    producto.setActivo(true);
+
+            idGenerado = daoProducto.altaProducto(producto);
+            t.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+            if (t != null) {
+                try { t.rollback(); } catch(Exception ex) { ex.printStackTrace(); }
+            }
+        }
+
+        return idGenerado;
     }
 
     public void bajaProducto(Integer id) {

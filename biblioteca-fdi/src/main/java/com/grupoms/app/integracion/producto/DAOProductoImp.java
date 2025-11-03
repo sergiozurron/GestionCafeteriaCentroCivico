@@ -13,32 +13,57 @@ public class DAOProductoImp implements DAOProducto {
 
     @Override
 	public Integer altaProducto(TProducto producto) {
-		try (Connection conn = getConnection();
-				PreparedStatement stmt = conn.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS)) {
+		Integer idGenerado = null;
+        try {
+            Transaction t = TransactionManager.getInstance().getTransaction();
+            Connection c = (Connection) t.getResource();
 
-			stmt.setString(1, producto.getNombre());
-			stmt.setDouble(2, producto.getPrecio());
-            stmt.setInteger(3, producto.getStock());
-			stmt.setBoolean(4, producto.getActivo());
+			try (PreparedStatement ps = c.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS)) {
 
-			stmt.executeUpdate();
+				ps.setString(1, producto.getNombre());
+				ps.setDouble(2, producto.getPrecio());
+           		ps.setInteger(3, producto.getStock());
+				ps.setBoolean(4, producto.getActivo());
 
-			ResultSet rs = stmt.getGeneratedKeys();
-			rs.next();
-			producto.setId(rs.getInt(1));
-            return producto.getId();
+				ps.executeUpdate();
+
+				// Obtener el ID generado
+                try (ResultSet rs = ps.getGeneratedKeys()) {
+                    if (rs.next()) {
+                        idGenerado = rs.getInt(1);
+                    }
+                }
+			}
 
 		} catch (SQLException e) {
 	        System.err.println("Error dando de alta producto: " + e.getMessage());
 		}
+		return idGenerado;
 	}
 
     public Integer bajaProducto(Integer id) {
-
+		
 	}
 
 	public Integer modificarProducto(TProducto producto) {
+		int exito = -1;
+        try{
+            Transaction t = TransactionManager.getInstance().getTransaction();
+            Connection c = (Connection) t.getResource();
+			try (PreparedStatement ps = c.prepareStatement(UPDATE)) {
 
+				ps.setString(1, producto.getNombre());
+				ps.setDouble(2, producto.getPrecio());
+           		ps.setInteger(3, producto.getStock());
+				ps.setBoolean(4, producto.getActivo());
+				ps.setInteger(5, producto.getId());
+
+				exito = statement.executeUpdate(); // numero de filas afectadas
+			}
+		} catch (SQLException e) {
+	        System.err.println("Error modificando producto: " + e.getMessage());
+		}
+		return exito != -1 ? pedido.getId() : exito;
 	}
 
 	public TProducto mostrarProducto(Integer id) {

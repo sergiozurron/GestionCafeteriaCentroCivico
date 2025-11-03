@@ -12,97 +12,64 @@ public class SAPedidoImp implements SAPedido{
 
     @Override
     public Integer altaPedido(TPedido pedido) {
-        Integer idGenerado = -1;
-        Transaction t = null;
-        try {
-            // Inicializaciones internas del pedido
-            pedido.setActivo(true);
-            pedido.setEstado("Abierto");
-            pedido.setTotal(0.0);
-            pedido.setFecha(new java.sql.Date(System.currentTimeMillis()));
-
-            // Crear transacción
-            t = TransactionManager.getInstance().newTransaction();
-            
-            // Llamada al DAO (el DAO se encargará de usar TransactionManager)
-            idGenerado = dao.altaPedido(pedido);
-
-            t.commit();
-        } catch (Exception e) {
-            e.printStackTrace();
-            if (t != null) {
-                try { t.rollback(); } catch(Exception ex) { ex.printStackTrace(); }
-            }
-        }
-        return idGenerado;
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'altaPedido'");
     }
 
     @Override
-    public Integer modificarPedido(TPedido pedido) {
-        Integer idModificar = -1;
-        Transaction t = null;
-        try{
-            if(!pedido.getEstado().equals("EN PREPARACION") || !pedido.getEstado().equals("ABIERTO")){
-                System.out.println("No se puede modificar un pedido que no esta 'EN PREPARACION'");
-                return idModificar;
-            }
-            t = TransactionManager.getInstance().newTransaction();
-
-            idModificar=dao.modificarPedido(pedido);
-            t.commit();
-        }catch(Exception e){
-            e.printStackTrace();
-        }
-        return idModificar;
-    }
-
-    @Override
-    public void confirmarPedido(TPedido pedido) {
+    public Integer confirmarPedido(Integer idPedido) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'confirmarPedido'");
     }
 
     @Override
-    public void devolverPedido(TPedido pedido) {
+    public Integer modificarPedido(TPedido pedido) {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'devolverPedido'");
+        throw new UnsupportedOperationException("Unimplemented method 'modificarPedido'");
     }
 
     @Override
-    public void vincularProductoPedido(TProducto producto) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'vincularProductoPedido'");
-    }
-
-    @Override
-    public void desvincularProductoPedido(TProducto producto) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'desvincularProductoPedido'");
-    }
-
-    @Override
-    public TPedido mostrarPedido(TPedido pedido) {
+    public TPedido mostrarPedido(Integer idPedido) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'mostrarPedido'");
     }
 
     @Override
-    public Set<TPedido> mostrarListaPedidos() {
+    public Set<TPedido> mostrarPedidos() {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'mostrarListaPedidos'");
+        throw new UnsupportedOperationException("Unimplemented method 'mostrarPedidos'");
     }
 
     @Override
-    public Set<TPedido> mostrarPedidosEmpleado(Integer idEmpleado) {
+    public Integer devolverPedido(Integer idPedido) {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'mostrarPedidosEmpleado'");
+        throw new UnsupportedOperationException("Unimplemented method 'devolverPedido'");
     }
 
     @Override
-    public Set<TPedido> mostrarPedidosMesa(Integer idMesa) {
+    public Integer vincularProducto(Integer idPedido, Integer idProducto, Integer cantidad) {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'mostrarPedidosMesa'");
+        throw new UnsupportedOperationException("Unimplemented method 'vincularProducto'");
     }
+
+    @Override
+    public Integer desvincularProducto(Integer idPedido, Integer idProducto) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'desvincularProducto'");
+    }
+
+    @Override
+    public Set<TPedido> mostrarPedidosPorEmpleado(Integer idEmpleado) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'mostrarPedidosPorEmpleado'");
+    }
+
+    @Override
+    public Set<TPedido> mostrarPedidosPorMesa(Integer idMesa) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'mostrarPedidosPorMesa'");
+    }
+
 
     
 }

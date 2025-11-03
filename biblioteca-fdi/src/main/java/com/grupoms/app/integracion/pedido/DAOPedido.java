@@ -6,20 +6,24 @@ import java.util.Set;
 
 
 public interface DAOPedido{
-    public Integer confirmarPedido(TPedido pedido);
+    public Integer altaPedido(TPedido pedido);
 
-    public TPedido mostrarPedido(Integer id);
+    public Integer confirmarPedido(Integer idPedido);
 
-    public Set<TPedido> mostrarListaPedidos();
+    public Integer modificarPedido(TPedido pedido);
 
-    public Set<TPedido> mostrarListaPedidosEmpleado(Integer idEmpleado);
+    public TPedido mostrarPedido(Integer idPedido);
 
-    public Set<TPedido> mostrarListaPedidosMesa(Integer idMesa);
+    public Set<TPedido> mostrarPedidos();
 
-    public Integer modificarPedido (TPedido tpedido);
+    public Integer devolverPedido(Integer idPedido);
 
-    public Integer devolverPedido(Integer id);
-    
-    public Integer altaPedido(TPedido tpedido) throws Exception;
+    public Integer vincularProducto(Integer idPedido, Integer idProducto, Integer cantidad);
+
+    public Integer desvincularProducto(Integer idPedido, Integer idProducto);
+
+    public Set<TPedido> mostrarPedidosPorEmpleado(Integer idEmpleado);
+
+    public Set<TPedido> mostrarPedidosPorMesa(Integer idMesa);
 
 }

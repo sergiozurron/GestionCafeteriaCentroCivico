@@ -1,17 +1,10 @@
 package com.grupoms.app.integracion.Transaction;
 
-public abstract class TransactionManager{
-    private static TransactionManager instance;
+public interface TransactionManager {
 
-    public static synchronized TransactionManager getInstance(){
-        if(instance == null) instance = new TransactionManagerImp();
-        return instance;
-    }
+    Transaction newTransaccion() throws Exception;
 
-    public abstract Transaction newTransaction();
+    Transaction getTransaccion();
 
-    public abstract Transaction getTransaction();
-
-    public abstract void deleteTransaction();
-
+    void deleteTransaccion() throws Exception;
 }

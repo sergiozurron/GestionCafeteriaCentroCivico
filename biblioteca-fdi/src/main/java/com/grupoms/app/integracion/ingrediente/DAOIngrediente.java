@@ -1,6 +1,7 @@
 package com.grupoms.app.integracion.ingrediente;
 
 import java.util.Set;
+import com.grupoms.app.negocio.ingrediente.*;
 
 public interface DAOIngrediente {
     public Integer altaIngrediente(TIngrediente ingrediente);

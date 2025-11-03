@@ -1,9 +1,10 @@
 package com.grupoms.app.negocio.factoria;
 
-import com.grupoms.app.negocio.mesa.SAMesa;
-import com.grupoms.app.negocio.mesa.SAMesaImp;
-import com.grupoms.app.negocio.proveedor.SAProveedor;
-import com.grupoms.app.negocio.proveedor.SAProveedorImpl;
+import com.grupoms.app.negocio.mesa.*;
+import com.grupoms.app.negocio.proveedor.*;
+import com.grupoms.app.negocio.pedido.*;
+import com.grupoms.app.negocio.ingrediente.*;
+
 
 public class FactoriaSAImp extends FactoriaSA {
 

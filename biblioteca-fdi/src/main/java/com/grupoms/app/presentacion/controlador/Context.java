@@ -14,7 +14,11 @@ public class Context {
 		this.evento = evento;
 	}
 
-	public void setEvento(int evento) {
+	public Context() {
+        //TODO Auto-generated constructor stub
+    }
+
+    public void setEvento(int evento) {
 		this.evento = evento;
 	}
 

@@ -1,47 +1,49 @@
 package com.grupoms.app.integracion.Transaction;
 
-import java.util.concurrent.ConcurrentHashMap;
+import java.sql.Connection;
+import java.util.HashMap;
+import java.util.Map;
 
-public class TransactionManagerImp extends TransactionManager{
-    private ConcurrentHashMap<Thread, Transaction> transactions;
+public class TransactionManagerImp implements TransactionManager {
 
-    public TransactionManagerImp(){
-        transactions = new ConcurrentHashMap<Thread,Transaction>();
+    // Map para gestionar transacciones por hilo
+    private Map<Long, Transaction> transacciones = new HashMap<>();
+
+    private static TransactionManagerImp instance;
+
+    // Singleton
+    public static synchronized TransactionManagerImp getInstance() {
+        if (instance == null) {
+            instance = new TransactionManagerImp();
+        }
+        return instance;
     }
 
     @Override
-    public Transaction newTransaction(){
-        Thread currentThread = Thread.currentThread();
-        Transaction existente = transactions.get(currentThread);
-
-        if (existente == null) {
-            Transaction nueva = FactoriaTransaction.getInstance().createTransaction();
-            transactions.put(currentThread, nueva);
-            return nueva;
-        }
-        throw new IllegalStateException("Ya existe una transacción activa para este hilo.");
+    public Transaction newTransaccion() throws Exception {
+        long idHilo = Thread.currentThread().getId();
+        Transaction tx = FactoriaTransaction.getInstance().createTransaction();
+        tx.start();
+        transacciones.put(idHilo, tx);
+        return tx;
     }
 
     @Override
-    public Transaction getTransaction() {
-        Thread currentThread = Thread.currentThread();
-        Transaction t = transactions.get(currentThread);
-
-        if (t != null) {
-            return t;
-        }
-        throw new IllegalStateException("No hay ninguna transacción activa para este hilo.");
+    public Transaction getTransaccion() {
+        long idHilo = Thread.currentThread().getId();
+        return transacciones.get(idHilo);
     }
 
     @Override
-    public void deleteTransaction() {
-        Thread currentThread = Thread.currentThread();
-        Transaction t = transactions.get(currentThread);
-
-        if (t != null) {
-            transactions.remove(currentThread);
-        } else {
-            throw new IllegalStateException("No existe una transacción para eliminar en este hilo.");
+    public void deleteTransaccion() throws Exception {
+        long idHilo = Thread.currentThread().getId();
+        Transaction tx = transacciones.get(idHilo);
+        if (tx != null) {
+            Connection conn = tx.getConnection();
+            if (conn != null && !conn.isClosed()) {
+                conn.close();
+            }
         }
+        transacciones.remove(idHilo);
     }
 }

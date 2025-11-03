@@ -11,6 +11,7 @@ import java.util.Set;
 
 import com.grupoms.app.integracion.Transaction.Transaction;
 import com.grupoms.app.integracion.Transaction.TransactionManager;
+import com.grupoms.app.negocio.pedido.TPedido;
 
 public class DAOPedidoImp implements DAOPedido{
 
@@ -44,4 +45,5 @@ public class DAOPedidoImp implements DAOPedido{
         throw new UnsupportedOperationException("Unimplemented method 'devolverPedido'");
     }
 
+    
 }

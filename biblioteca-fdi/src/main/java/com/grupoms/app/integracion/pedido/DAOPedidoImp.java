@@ -48,17 +48,25 @@ public class DAOPedidoImp implements DAOPedido{
         return idGenerado;
     }
     
-
-    @Override
-    public Integer confirmarPedido(Integer idPedido) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'confirmarPedido'");
-    }
-
     @Override
     public Integer modificarPedido(TPedido pedido) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'modificarPedido'");
+        int exito = -1;
+        try{
+            Transaction t = TransactionManager.getInstance().getTransaction();
+            Connection c = (Connection) t.getResource();
+            String sql = "UPDATE pedido SET total = ?, estado = ?, activo = ? WHERE id = ?";
+            try (PreparedStatement statement = c.prepareStatement(sql)) {
+                statement.setDouble(1, pedido.getTotal());
+                statement.setString(2, pedido.getEstado());
+                statement.setBoolean(3, pedido.getActivo());
+                statement.setInt(4, pedido.getId());
+
+                exito = statement.executeUpdate(); // número de filas afectadas
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return exito!=-1? pedido.getId():exito;
     }
 
     @Override

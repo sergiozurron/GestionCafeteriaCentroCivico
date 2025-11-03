@@ -13,7 +13,7 @@ public class ConfirmarPedidoCommand implements Command{
     @Override
     public Context execute(Object data) {
         TPedido pedido = (TPedido) data;
-       SAPedido sa = FactoriaSA.getInstancia().creaSAPedido();
+       SAPedido sa = FactoriaSA.getInstance().creaSAPedido();
        sa.confirmarPedido(pedido);
        return new Context(Evento.CONFIRMAR_PEDIDO, pedido);
     }

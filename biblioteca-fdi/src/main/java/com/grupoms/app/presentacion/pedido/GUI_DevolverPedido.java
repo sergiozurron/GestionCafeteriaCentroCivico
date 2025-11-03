@@ -27,48 +27,22 @@ public class GUI_DevolverPedido extends JFrame implements IGUI{
 
     @Override
     public void actualizar(Context context) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'actualizar'");
+        if(context.getEvento() == Evento.DEVOLVER_PEDIDO){
+            JOptionPane.showMessageDialog(this,"Pedido devuelto con exito");
+        }
     }
 
     public GUI_DevolverPedido(){
         super("Devolver Pedido");
-        setTitle("[DEVOLVER PEDIDO]");
-        setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-        setSize(400, 200);
+        initGUI();
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        pack();
         setLocationRelativeTo(null);
+        setVisible(true);
+    }
 
-        JPanel panel = new JPanel(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(10, 10, 10, 10);
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-
-        // Etiquetas
-        JLabel labelId = new JLabel("ID del pedido:");
-        campoID = new JTextField(20);
-
-        gbc.gridx = 0; gbc.gridy = 0;
-        panel.add(labelId, gbc);
-        gbc.gridx = 1;
-        panel.add(campoID, gbc);
-        JButton botonDevolver = new JButton("Devolver");
-        botonDevolver.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    int idPedido = Integer.parseInt(campoID.getText());
-
-                    Context contexto = new Context(Evento.DEVOLVER_PEDIDO, idPedido);
-                    Controlador.getInstance().handle(contexto);
-
-                } catch (NumberFormatException ex) {
-                    JOptionPane.showMessageDialog(GUI_DevolverPedido.this,
-                            "Error: introduce un ID numérico válido",
-                            "Error",
-                            JOptionPane.ERROR_MESSAGE);
-                }
-            }
-        });
+    public void initGUI(){
+        
     }
     
 }

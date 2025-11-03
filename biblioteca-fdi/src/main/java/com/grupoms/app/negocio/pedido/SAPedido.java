@@ -2,9 +2,9 @@ package com.grupoms.app.negocio.pedido;
 import java.util.Set;
 
 public interface SAPedido {
-     public Integer altaPedido(TPedido pedido);
+    public Integer altaPedido(TPedido pedido);
 
-    public Integer confirmarPedido(Integer idPedido);
+    public void confirmarPedido(TPedido pedido);
 
     public Integer modificarPedido(TPedido pedido);
 

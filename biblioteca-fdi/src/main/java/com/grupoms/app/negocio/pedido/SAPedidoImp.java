@@ -42,15 +42,26 @@ public class SAPedidoImp implements SAPedido{
     }
 
     @Override
-    public Integer confirmarPedido(Integer idPedido) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'confirmarPedido'");
+    public void confirmarPedido(TPedido pedido) {
+       Transaction t = null;
+       try{
+        t = TransactionManager.getInstance().getTransaction();
+        t.start();
+        pedido.setEstado("EN PREPARACION");
+        dao.modificarPedido(pedido);
+       }catch (Exception e) {
+            e.printStackTrace();
+            try {
+                if (t != null) t.rollback(); // rollback si falla algo
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
     }
 
     @Override
     public Integer modificarPedido(TPedido pedido) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'modificarPedido'");
+        
     }
 
     @Override

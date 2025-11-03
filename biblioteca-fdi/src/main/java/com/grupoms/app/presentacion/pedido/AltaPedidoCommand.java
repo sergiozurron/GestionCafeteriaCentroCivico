@@ -12,9 +12,10 @@ public class AltaPedidoCommand implements Command{
 
     @Override
     public Context execute(Object data) {
-        SAPedido sa = new SAPedidoImp();
-		int res = sa.altaPedido((TPedido) data);
-		return new Context(Evento.ALTA_PEDIDO, res);
+        TPedido pedido = (TPedido) data;
+       SAPedido sa = FactoriaSA.getInstancia().creaSAPedido();
+       sa.altaPedido(pedido);
+       return new Context(Evento.ALTA_PEDIDO, pedido);
     }
     
 }

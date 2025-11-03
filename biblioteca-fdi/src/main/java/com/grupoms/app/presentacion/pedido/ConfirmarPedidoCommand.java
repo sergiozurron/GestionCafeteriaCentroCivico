@@ -1,13 +1,21 @@
 package com.grupoms.app.presentacion.pedido;
 
+import com.grupoms.app.negocio.factoria.FactoriaSA;
+import com.grupoms.app.negocio.pedido.SAPedido;
+import com.grupoms.app.negocio.pedido.SAPedidoImp;
+import com.grupoms.app.negocio.pedido.TPedido;
 import com.grupoms.app.presentacion.controlador.Context;
+import com.grupoms.app.presentacion.controlador.Evento;
 import com.grupoms.app.presentacion.controlador.comandos.Command;
 
 public class ConfirmarPedidoCommand implements Command{
 
     @Override
     public Context execute(Object data) {
-        
+        TPedido pedido = (TPedido) data;
+       SAPedido sa = FactoriaSA.getInstancia().creaSAPedido();
+       sa.confirmarPedido(pedido);
+       return new Context(Evento.CONFIRMAR_PEDIDO, pedido);
     }
     
 }

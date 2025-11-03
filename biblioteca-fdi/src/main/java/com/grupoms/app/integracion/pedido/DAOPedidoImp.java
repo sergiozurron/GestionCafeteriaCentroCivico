@@ -21,7 +21,7 @@ public class DAOPedidoImp implements DAOPedido{
         Transaction t = null;
 
         try {
-            t = TransactionManager.getInstance().getTransaccion();
+            t = TransactionManager.getInstance().getTransaction();
             t.start();
             Connection c = (Connection) t.getResource();
 
@@ -82,7 +82,7 @@ public class DAOPedidoImp implements DAOPedido{
         TPedido pedido = null;
         try{
             TransactionManager tm = TransactionManager.getInstance();
-            Transaction t = tm.getTransaccion();
+            Transaction t = tm.getTransaction();
             Connection c = (Connection) t.getResource();
             PreparedStatement statement = c.prepareStatement("SELECT * FROM pedido WHERE id = ? FOR UPDATE");
             statement.setInt(1, id);
@@ -110,7 +110,7 @@ public class DAOPedidoImp implements DAOPedido{
     public Set<TPedido> mostrarListaPedidos() {
         Set<TPedido> pedidos = new LinkedHashSet<TPedido>();
 		try {
-			Transaction t = TransactionManager.getInstance().getTransaccion();
+			Transaction t = TransactionManager.getInstance().getTransaction();
 			Connection c = (Connection) t.getResource();
 			PreparedStatement statement = c.prepareStatement("SELECT * FROM factura FOR UPDATE");
 			ResultSet result = statement.executeQuery();

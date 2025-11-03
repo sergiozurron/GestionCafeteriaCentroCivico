@@ -97,7 +97,4 @@ public class DAOPedidoImp implements DAOPedido{
 		}
 		return exito;
 	}
-    
-
-    
 }

@@ -35,7 +35,7 @@ public class DAOMesaImp implements DAOMesa{
 			mesa.setId(rs.getInt(1));
 
 		} catch (SQLException e) {
-			e.printStackTrace();
+	        System.err.println("Error dando de alta mesa: " + e.getMessage());
 		}
 	}
 
@@ -55,7 +55,7 @@ public class DAOMesaImp implements DAOMesa{
 				}
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+	        System.err.println("Error encontrando mesa: " + e.getMessage());
 		}
 		return null;
 	}
@@ -76,7 +76,7 @@ public class DAOMesaImp implements DAOMesa{
 				}
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+	        System.err.println("Error encontrando mesa: " + e.getMessage());
 		}
 		return null;
 	}
@@ -86,33 +86,33 @@ public class DAOMesaImp implements DAOMesa{
 		try (Connection conn = getConnection(); Statement stmt = conn.createStatement()) {
 			stmt.executeUpdate("DELETE FROM MESAS");
 		} catch (SQLException e) {
-			e.printStackTrace();
+	        System.err.println("Error eliminando todas las mesas: " + e.getMessage());
 		}		
 	}
 	
 	@Override
 	public List<TMesa> mostrarTodos(){
-		    List<TMesa> lista = new ArrayList<>();
+	    List<TMesa> lista = new ArrayList<>();
 
-		    try (Connection conn = getConnection();
-		         PreparedStatement ps = conn.prepareStatement(ALL)) {
+	    try (Connection conn = getConnection();
+	         PreparedStatement ps = conn.prepareStatement(ALL)) {
 
-		        ResultSet rs = ps.executeQuery();
+	        ResultSet rs = ps.executeQuery();
 
-		        while (rs.next()) {
-		        	TMesa mesa = new TMesa();
-		            mesa.setId(rs.getInt("id"));
-		            mesa.setUbicacion(rs.getString("ubicacion"));
-		            mesa.setNumero(rs.getInt("numero"));
-		            mesa.setActivo(rs.getBoolean("activo"));
-		            lista.add(mesa);
-		        }
+	        while (rs.next()) {
+	        	TMesa mesa = new TMesa();
+	            mesa.setId(rs.getInt("id"));
+	            mesa.setUbicacion(rs.getString("ubicacion"));
+	            mesa.setNumero(rs.getInt("numero"));
+	            mesa.setActivo(rs.getBoolean("activo"));
+	            lista.add(mesa);
+	        }
 
-		    } catch (SQLException e) {
-		        System.err.println("Error leyendo todas las mesas: " + e.getMessage());
-		    }
+	    } catch (SQLException e) {
+	        System.err.println("Error leyendo todas las mesas: " + e.getMessage());
+	    }
 
-		    return lista;
+	    return lista;
 	}
 	
 	@Override

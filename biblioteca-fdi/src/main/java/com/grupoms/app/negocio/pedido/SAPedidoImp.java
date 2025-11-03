@@ -12,8 +12,33 @@ public class SAPedidoImp implements SAPedido{
 
     @Override
     public Integer altaPedido(TPedido pedido) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'altaPedido'");
+        Transaction t = null;
+        Integer idGenerado = null;
+
+        try {
+            // 1. Iniciar transacción
+            t = TransactionManager.getInstance().newTransaction();
+
+            // 2. Inicializar campos del pedido
+            pedido.setEstado("Abierto");
+            pedido.setTotal(0.0);
+            pedido.setActivo(true);
+            pedido.setFecha(new java.sql.Date(System.currentTimeMillis()));
+
+            // 3. Llamada al DAO pasando la transacción
+            idGenerado = dao.altaPedido(pedido);
+
+            // 4. Commit
+            t.commit();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            if (t != null) {
+                try { t.rollback(); } catch(Exception ex) { ex.printStackTrace(); }
+            }
+        }
+
+        return idGenerado;
     }
 
     @Override

@@ -2,7 +2,7 @@ package com.grupoms.app.presentacion.controlador;
 
 public class Context {
 
-	private int evento;
+	private Integer evento;
 	private Object datos;
 
 	public Context(int evento, Object datos) {

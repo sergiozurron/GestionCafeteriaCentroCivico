@@ -1,6 +1,6 @@
 package com.grupoms.app.presentacion.controlador;
 
-public interface Command {
+public abstract interface Command {
 	
-	Context execute(Object data);
+	public abstract Context execute(Object data);
 }

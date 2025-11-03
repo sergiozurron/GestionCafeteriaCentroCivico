@@ -18,7 +18,7 @@ import com.grupoms.app.presentacion.controlador.Context;
 import com.grupoms.app.presentacion.controlador.Controlador;
 import com.grupoms.app.presentacion.controlador.Evento;
 
-public class GUIAltaProveedor extends JFrame implements IGUI {
+public class GUI_AltaProveedor extends JFrame implements IGUI {
 
 	private static final long serialVersionUID = 1L;
 
@@ -26,7 +26,7 @@ public class GUIAltaProveedor extends JFrame implements IGUI {
 	private JTextField campoTarifa;
 	private JTextField campoTiempoEntrega;
 
-	public GUIAltaProveedor() {
+	public GUI_AltaProveedor() {
 		setTitle("[ALTA PROVEEDOR]");
 		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		setSize(400, 300);

@@ -5,10 +5,12 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.time.LocalDate;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -47,49 +49,65 @@ public class GUI_AltaPedido extends JFrame implements IGUI{
 
 
 
-		campoTotal = new JTextField(20);
-		campoFecha = new JTextField(20);
+		campoTotal = new JTextField("0.0");
+        campoTotal.setEditable(false); //no lo puede editar manualmente
 		campoMesa = new JTextField(20);
         campoEmpleado = new JTextField(20);
         campoEstado = new JTextField(20);
 
-		JButton botonAlta = new JButton("Alta Proveedor");
+		JButton botonAlta = new JButton("Alta Pedido");
 		
 		botonAlta.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				TProveedor proveedor = new TProveedor();
-				pedido.setTotal(campoTotal.getText());
-				pedido.setTarifa(Double.parseDouble(campoTarifa.getText()));
-				proveedor.setTiempoEntrega(Integer.parseInt(campoTiempoEntrega.getText()));
-				Context contexto = new Context(Evento.ALTA_PROVEEDOR, proveedor);
+                try{
+				TPedido pedido = new TPedido();
+				pedido.setTotal(0.0);
+				pedido.setMesa(Integer.parseInt(campoMesa.getText()));
+				pedido.setEmplead(Integer.parseInt(campoEmpleado.getText()));
+				pedido.setEstado(campoEstado.getText());
+                pedido.setActivo(true);
+                pedido.setFecha(LocalDate.now());
+                
+                
+                Context contexto = new Context(Evento.ALTA_PROVEEDOR, proveedor);
 				Controlador.getInstance().handle(contexto);
+
+                JOptionPane.showConfirmDialog(null, "Pedido creado con exito")
+
+                } catch (NumberFormatException ex){
+                    JOptionPane.showConfirmDialog(null, "Error: los campos numericos no son validos")
+                }
+
 			}
 		});
 
-		gbc.gridx = 0;
-		gbc.gridy = 0;
-		panel.add(etiquetaNombre, gbc);
-		gbc.gridx = 1;
-		panel.add(campoNombre, gbc);
+		// Layout con GridBag
+        gbc.gridx = 0; gbc.gridy = 0;
+        panel.add(labelTotal, gbc);
+        gbc.gridx = 1;
+        panel.add(campoTotal, gbc);
 
-		gbc.gridx = 0;
-		gbc.gridy = 1;
-		panel.add(etiquetaTarifa, gbc);
-		gbc.gridx = 1;
-		panel.add(campoTarifa, gbc);
+        gbc.gridx = 0; gbc.gridy = 1;
+        panel.add(labelMesa, gbc);
+        gbc.gridx = 1;
+        panel.add(campoMesa, gbc);
 
-		gbc.gridx = 0;
-		gbc.gridy = 2;
-		panel.add(etiquetaTiempoEntrega, gbc);
-		gbc.gridx = 1;
-		panel.add(campoTiempoEntrega, gbc);
+        gbc.gridx = 0; gbc.gridy = 2;
+        panel.add(labelEmpleado, gbc);
+        gbc.gridx = 1;
+        panel.add(campoEmpleado, gbc);
 
-		gbc.gridx = 0;
-		gbc.gridy = 3;
-		gbc.gridwidth = 2;
-		gbc.anchor = GridBagConstraints.CENTER;
-		panel.add(botonAlta, gbc);
+        gbc.gridx = 0; gbc.gridy = 3;
+        panel.add(labelEstado, gbc);
+        gbc.gridx = 1;
+        panel.add(campoEstado, gbc);
+
+        gbc.gridx = 0; gbc.gridy = 4;
+        gbc.gridwidth = 2;
+        gbc.anchor = GridBagConstraints.CENTER;
+        panel.add(botonAlta, gbc);
+
 
 		add(panel);
     }
@@ -100,6 +118,6 @@ public class GUI_AltaPedido extends JFrame implements IGUI{
     }
     
     public void initGUI(){
-
+        setVisible(true);
     }
 }

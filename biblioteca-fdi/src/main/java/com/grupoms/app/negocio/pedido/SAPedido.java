@@ -6,7 +6,7 @@ public interface SAPedido {
 
     public void modificarPedido(TPedido pedido);
 
-    public void confirmarPedido();
+    public void confirmarPedido(TPedido pedido);
 
     public void devolverPedido(TPedido pedido);
 

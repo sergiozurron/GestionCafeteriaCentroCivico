@@ -95,4 +95,13 @@ public class DAOPedidoImp implements DAOPedido{
 		}
 		return exito;
 	}
+
+    @Override
+    public Set<TPedido> mostrarListaPedidosEmpleado(Integer idEmpleado) {
+      
+
+    @Override
+    public Set<TPedido> mostrarListaPedidosMesa(Integer idMesa) {
+       
+    }
 }

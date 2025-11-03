@@ -16,7 +16,7 @@ public class SAPedidoImp implements SAPedido{
     }
 
     @Override
-    public void confirmarPedido() {
+    public void confirmarPedido(TPedido pedido) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'confirmarPedido'");
     }

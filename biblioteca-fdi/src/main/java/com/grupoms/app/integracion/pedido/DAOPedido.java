@@ -12,9 +12,9 @@ public interface DAOPedido{
 
     public Set<TPedido> mostrarListaPedidos();
 
-    public Set<TPedido> mostrarListaPedidosEmpleado();
+    public Set<TPedido> mostrarListaPedidosEmpleado(Integer idEmpleado);
 
-    public Set<TPedido> mostrarListaPedidosMesa(Integer )
+    public Set<TPedido> mostrarListaPedidosMesa(Integer idMesa);
 
     public Integer modificarPedido (TPedido tpedido);
 

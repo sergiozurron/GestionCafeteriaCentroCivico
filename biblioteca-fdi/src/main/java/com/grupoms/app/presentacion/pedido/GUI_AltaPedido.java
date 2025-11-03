@@ -63,21 +63,16 @@ public class GUI_AltaPedido extends JFrame implements IGUI{
 			public void actionPerformed(ActionEvent e) {
                 try{
 				TPedido pedido = new TPedido();
-				pedido.setTotal(0.0);
 				pedido.setIdMesa(Integer.parseInt(campoMesa.getText()));
 				pedido.setIdEmpleado(Integer.parseInt(campoEmpleado.getText()));
-				pedido.setEstado(campoEstado.getText());
-                pedido.setActivo(true);
-                pedido.setFecha(new java.sql.Date(System.currentTimeMillis()));
-                
-                
-                Context contexto = new Context(Evento.ALTA_PROVEEDOR, pedido);
+			             
+                Context contexto = new Context(Evento.ALTA_PEDIDO, pedido);
 				Controlador.getInstance().handle(contexto);
 
                 JOptionPane.showConfirmDialog(null, "Pedido creado con exito");
 
                 } catch (NumberFormatException ex){
-                    JOptionPane.showConfirmDialog(null, "Error: los campos numericos no son validos");
+                    JOptionPane.showMessageDialog(null, "Error: los campos numericos no son validos");
                 }
 
 			}

@@ -19,5 +19,7 @@ public interface DAOPedido{
     public Integer modificarPedido (TPedido tpedido);
 
     public Integer devolverPedido(Integer id);
+    
+    public Integer altaPedido(TPedido tpedido) throws Exception;
 
 }

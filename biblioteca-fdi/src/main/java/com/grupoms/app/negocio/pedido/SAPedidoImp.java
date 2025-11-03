@@ -1,12 +1,41 @@
 package com.grupoms.app.negocio.pedido;
+import java.sql.Connection;
 import java.util.Set;
+
+import com.grupoms.app.integracion.Transaction.Transaction;
+import com.grupoms.app.integracion.Transaction.TransactionManager;
+import com.grupoms.app.integracion.pedido.*;
 
 public class SAPedidoImp implements SAPedido{
 
+    private DAOPedido dao = new DAOPedidoImp();
+
     @Override
-    public void altaPedido(TPedido pedido) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'altaPedido'");
+    public Integer altaPedido(TPedido pedido) {
+        Integer idGenerado = -1;
+        Transaction t = null;
+        try {
+            // Inicializaciones internas del pedido
+            pedido.setActivo(true);
+            pedido.setEstado("Abierto");
+            pedido.setTotal(0.0);
+            pedido.setFecha(new java.sql.Date(System.currentTimeMillis()));
+
+            // Crear transacción
+            t = TransactionManager.getInstance().newTransaccion();
+            
+            // Llamada al DAO (el DAO se encargará de usar TransactionManager)
+            DAOPedido dao = new DAOPedidoImp();
+            idGenerado = dao.altaPedido(pedido);
+
+            t.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+            if (t != null) {
+                try { t.rollback(); } catch(Exception ex) { ex.printStackTrace(); }
+            }
+        }
+        return idGenerado;
     }
 
     @Override

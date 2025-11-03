@@ -16,8 +16,65 @@ import com.grupoms.app.negocio.pedido.TPedido;
 public class DAOPedidoImp implements DAOPedido{
 
     @Override
-    public Integer confirmarPedido(TPedido pedido) {
-        
+    public Integer confirmarPedido(TPedido tpedido) {
+        Integer resultado = -1;
+        Transaction t = null;
+
+        try {
+            t = TransactionManager.getInstance().getTransaccion();
+            t.start();
+            Connection c = (Connection) t.getResource();
+
+            // Bloqueamos el pedido
+            try (PreparedStatement statement = c.prepareStatement(
+                    "SELECT estado FROM pedido WHERE id = ? FOR UPDATE")) {
+
+                statement.setInt(1, tpedido.getId());
+
+                try (ResultSet rs = statement.executeQuery()) {
+                    if (rs.next()) {
+                        String estadoActual = rs.getString("estado");
+
+                        // Solo se puede confirmar si está abierto (pedido inicial)
+                        if (!"ABIERTO".equalsIgnoreCase(estadoActual)) {
+                            System.out.println("No se puede confirmar el pedido, ya está en preparación o terminado.");
+                            t.rollback();
+                        } else {
+                            // Actualizamos el estado a EN_PREPARACION
+                            try (PreparedStatement stUpdate = c.prepareStatement(
+                                    "UPDATE pedido SET estado = 'EN_PREPARACION', total_factura = ? WHERE id = ?")) {
+
+                                stUpdate.setDouble(1, tpedido.getTotal()); // Total calculado
+                                stUpdate.setInt(2, tpedido.getId());
+
+                                int filas = stUpdate.executeUpdate();
+                                if (filas > 0) {
+                                    System.out.println("Pedido confirmado y en preparación correctamente.");
+                                    resultado = tpedido.getId();
+                                    t.commit();
+                                } else {
+                                    System.out.println("No se pudo confirmar el pedido.");
+                                    t.rollback();
+                                }
+                            }
+                        }
+                    } else {
+                        System.out.println("Pedido no encontrado.");
+                        t.rollback();
+                    }
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            try {
+                if (t != null) t.rollback();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+
+        return resultado;
     }
 
     @Override
@@ -76,7 +133,6 @@ public class DAOPedidoImp implements DAOPedido{
 		return pedidos;
     }
        
-
     @Override
     public Integer modificarPedido(TPedido tpedido) {
     Integer resultado = -1; // valor por defecto si falla
@@ -96,7 +152,7 @@ public class DAOPedidoImp implements DAOPedido{
                     if (rs.next()) {
                         String estadoActual = rs.getString("estado");
 
-                        if (!"PREPARACION".equalsIgnoreCase(estadoActual)) {
+                        if (!"PREPARACION".equalsIgnoreCase(estadoActual) || !"ABIERTO".equalsIgnoreCase(estadoActual)) {
                             System.out.println("No se puede modificar el pedido, ya está terminado.");
                             t.rollback();
                         } else {
@@ -138,8 +194,6 @@ public class DAOPedidoImp implements DAOPedido{
 
         return resultado;
     }
-
-
 
     @Override
     public Integer devolverPedido(Integer id) {
@@ -185,7 +239,6 @@ public class DAOPedidoImp implements DAOPedido{
         return pedidos;
     }
       
-
     @Override
     public Set<TPedido> mostrarListaPedidosMesa(Integer idMesa) {
         Set<TPedido> pedidos = new LinkedHashSet<>();
@@ -215,4 +268,33 @@ public class DAOPedidoImp implements DAOPedido{
         }
         return pedidos;
     }
+
+    @Override
+    public Integer altaPedido(TPedido pedido)throws Exception {
+        Integer idGenerado = -1;
+        
+        Transaction t = TransactionManager.getInstance().getTransaccion();
+        Connection c = (Connection) t.getResource();
+        
+        String sql = "INSERT INTO pedido (idEmpleado, idMesa, totalFactura, estado, activo, fecha) VALUES (?, ?, ?, ?, ?, ?)";
+        try (PreparedStatement ps = c.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            ps.setInt(1, pedido.getIdEmpleado());
+            ps.setInt(2, pedido.getIdMesa());
+            ps.setDouble(3, pedido.getTotal());
+            ps.setString(4, pedido.getEstado());
+            ps.setBoolean(5, pedido.getActivo());
+            ps.setDate(6, pedido.getFecha());
+
+            ps.executeUpdate();
+
+            try (ResultSet rs = ps.getGeneratedKeys()) {
+                if (rs.next()) {
+                    idGenerado = rs.getInt(1);
+                }
+            }
+        }
+
+        return idGenerado;
+    }
+
 }

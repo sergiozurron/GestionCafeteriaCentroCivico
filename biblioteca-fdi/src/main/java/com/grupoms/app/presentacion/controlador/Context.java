@@ -10,10 +10,6 @@ public class Context {
 		this.datos = datos;
 	}
 
-	public Context(Integer evento) {
-		this.evento = evento;
-	}
-
 	public Context() {
         //TODO Auto-generated constructor stub
     }

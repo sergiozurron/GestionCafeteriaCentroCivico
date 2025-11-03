@@ -7,6 +7,7 @@ import com.grupoms.app.negocio.ingrediente.*;
 
 
 public class FactoriaSAImp extends FactoriaSA {
+	
 
 	public SAProveedor creaSAProveedor() {
 		return new SAProveedorImpl();

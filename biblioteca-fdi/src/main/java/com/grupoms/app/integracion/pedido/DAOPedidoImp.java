@@ -137,19 +137,11 @@ public class DAOPedidoImp implements DAOPedido{
     public Integer modificarPedido(TPedido tpedido) {
         Integer exito = -1;
 
-        Transaccion t = TransactionManager.getInstance().getTransaccion();
+        Transaction t = TransactionManager.getInstance().getTransaction();
         Connection c = (Connection) t.getResource();
 
         String sql = "UPDATE pedido SET totalFactura = ?, estado = ?, activo = ? WHERE id = ?";
-        try (PreparedStatement ps = c.prepareStatement(sql)) {
-            ps.setDouble(1, pedido.getTotal());
-            ps.setString(2, pedido.getEstado());
-            ps.setBoolean(3, pedido.getActivo());
-            ps.setInt(4, pedido.getId());
-
-            int rows = ps.executeUpdate();
-            if (rows > 0) exito = pedido.getId();
-        }
+       
 
         return exito;
     }
@@ -158,7 +150,7 @@ public class DAOPedidoImp implements DAOPedido{
     public Integer devolverPedido(Integer id) {
         int exito = -1;
 		try {
-			Transaction t = TransactionManager.getInstance().getTransaccion();
+			Transaction t = TransactionManager.getInstance().getTransaction();
 			Connection c = (Connection) t.getResource();
 			Statement s = c.createStatement();
 			exito = s.executeUpdate("UPDATE pedido SET activo = 0 WHERE id = " + id + ";");
@@ -172,7 +164,7 @@ public class DAOPedidoImp implements DAOPedido{
     public Set<TPedido> mostrarListaPedidosEmpleado(Integer idEmpleado) {
         Set<TPedido> pedidos = new LinkedHashSet<>();
         try {
-            Transaction t = TransactionManager.getInstance().getTransaccion();
+            Transaction t = TransactionManager.getInstance().getTransaction();
             Connection c = (Connection) t.getResource();
             PreparedStatement statement = c.prepareStatement(
                 "SELECT * FROM pedido FOR UPDATE WHERE idEmpleado = ?"
@@ -202,7 +194,7 @@ public class DAOPedidoImp implements DAOPedido{
     public Set<TPedido> mostrarListaPedidosMesa(Integer idMesa) {
         Set<TPedido> pedidos = new LinkedHashSet<>();
         try {
-            Transaction t = TransactionManager.getInstance().getTransaccion();
+            Transaction t = TransactionManager.getInstance().getTransaction();
             Connection c = (Connection) t.getResource();
             PreparedStatement statement = c.prepareStatement(
                 "SELECT * FROM pedido FOR UPDATE WHERE idMesa = ?"
@@ -232,7 +224,7 @@ public class DAOPedidoImp implements DAOPedido{
     public Integer altaPedido(TPedido pedido)throws Exception {
         Integer idGenerado = -1;
         
-        Transaction t = TransactionManager.getInstance().getTransaccion();
+        Transaction t = TransactionManager.getInstance().getTransaction();
         Connection c = (Connection) t.getResource();
         
         String sql = "INSERT INTO pedido (idEmpleado, idMesa, totalFactura, estado, activo, fecha) VALUES (?, ?, ?, ?, ?, ?)";

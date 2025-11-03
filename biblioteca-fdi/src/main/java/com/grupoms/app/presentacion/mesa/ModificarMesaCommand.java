@@ -6,14 +6,17 @@ import com.grupoms.app.presentacion.controlador.Context;
 import com.grupoms.app.presentacion.controlador.Evento;
 import com.grupoms.app.presentacion.controlador.comandos.Command;
 
-public class AltaMesaCommand implements Command{
+public class ModificarMesaCommand implements Command{
 
 	@Override
 	public Context execute(Object data) {
 		TMesa mesa = (TMesa) data;
-		int idMesa = FactoriaSA.getInstancia().creaSAMesa().altaMesa(mesa);
-		if (idMesa == -1)
-			return new Context(Evento.ALTA_MESA_KO, null);
-		return new Context(Evento.ALTA_MESA_OK, idMesa);
+		try {
+		FactoriaSA.getInstancia().creaSAMesa().modificarMesa(mesa);
+		} catch (IllegalArgumentException e) {
+			System.out.println(e.getMessage());
+			return new Context(Evento.MODIFICAR_MESA_KO, null);
+		}
+		return new Context(Evento.MODIFICAR_MESA_OK, mesa.getId());
 	}
 }

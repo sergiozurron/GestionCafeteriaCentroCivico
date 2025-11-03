@@ -27,12 +27,27 @@ public class Evento {
 	public static final int ALTA_MESA = 16;
 	public static final int ALTA_MESA_OK = 17;
 	public static final int ALTA_MESA_KO = 18;
+	
+	public static final int BAJA_MESA = 16;
+	public static final int BAJA_MESA_OK = 17;
+	public static final int BAJA_MESA_KO = 18;
+
+	public static final int MODIFICAR_MESA = 19;
+	public static final int MODIFICAR_MESA_OK = 20;
+	public static final int MODIFICAR_MESA_KO = 21;
+
+	public static final int MOSTRAR_MESA = 22;
+	public static final int MOSTRAR_MESA_OK = 23;
+	public static final int MOSTRAR_MESA_KO = 24;
+
+	public static final int MOSTRAR_LISTA_MESA = 25;
+	public static final int MOSTRAR_LISTA_MESA_OK = 26;
+	public static final int MOSTRAR_LISTA_MESA_KO = 27;
 
 	//Pedido
 	public static final int ALTA_PEDIDO = 31;
 	public static final int ALTA_PEDIDO_OK = 32;
 	public static final int ALTA_PEDIDO_KO = 33;
-	
 	
 	public static final int MODIFICAR_PEDIDO = 37;
 	public static final int MODIFICAR_PEDIDO_OK = 38;

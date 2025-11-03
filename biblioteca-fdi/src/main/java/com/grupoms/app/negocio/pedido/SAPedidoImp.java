@@ -18,7 +18,7 @@ public class SAPedidoImp implements SAPedido{
         try {
             // 1. Iniciar transacción
             t = TransactionManager.getInstance().newTransaction();
-
+            t.start();
             // 2. Inicializar campos del pedido
             pedido.setEstado("Abierto");
             pedido.setTotal(0.0);

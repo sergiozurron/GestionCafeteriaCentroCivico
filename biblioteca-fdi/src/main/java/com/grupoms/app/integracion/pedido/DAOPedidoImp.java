@@ -16,35 +16,38 @@ import com.grupoms.app.negocio.pedido.TPedido;
 public class DAOPedidoImp implements DAOPedido{
 
     @Override
-    public Integer altaPedido(TPedido pedido, Transaction t) {
+    public Integer altaPedido(TPedido pedido) {
         Integer idGenerado = null;
+        try {
+            Transaction t = TransactionManager.getInstance().getTransaction();
+            Connection c = (Connection) t.getResource();
 
-        // La conexión se obtiene de la transacción
-        Connection c = (Connection) t.getResource();
+            // Insert en la tabla pedido
+            String sql = "INSERT INTO pedido (idMesa, idEmpleado, total, estado, activo, fecha) VALUES (?, ?, ?, ?, ?, ?)";
+            try (PreparedStatement ps = c.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+                ps.setInt(1, pedido.getIdMesa());
+                ps.setInt(2, pedido.getIdEmpleado());
+                ps.setDouble(3, pedido.getTotal());
+                ps.setString(4, pedido.getEstado());
+                ps.setBoolean(5, pedido.getActivo());
+                ps.setDate(6, new java.sql.Date(pedido.getFecha().getTime()));
 
-        // PreparedStatement con RETURN_GENERATED_KEYS para obtener el id
-        String sql = "INSERT INTO pedido (idMesa, idEmpleado, total, estado, activo, fecha) VALUES (?, ?, ?, ?, ?, ?)";
+                ps.executeUpdate();
 
-        try (PreparedStatement stmt = c.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
-            stmt.setInt(1, pedido.getIdMesa());
-            stmt.setInt(2, pedido.getIdEmpleado());
-            stmt.setDouble(3, pedido.getTotal());
-            stmt.setString(4, pedido.getEstado());
-            stmt.setBoolean(5, pedido.getActivo());
-            stmt.setDate(6, new java.sql.Date(pedido.getFecha().getTime()));
-
-            stmt.executeUpdate();
-
-            try (ResultSet rs = stmt.getGeneratedKeys()) {
-                if (rs.next()) {
-                    idGenerado = rs.getInt(1);
+                // Obtener el ID generado
+                try (ResultSet rs = ps.getGeneratedKeys()) {
+                    if (rs.next()) {
+                        idGenerado = rs.getInt(1);
+                    }
                 }
             }
-        }
 
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return idGenerado;
     }
-    }
+    
 
     @Override
     public Integer confirmarPedido(Integer idPedido) {

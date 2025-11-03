@@ -17,8 +17,7 @@ public class DAOPedidoImp implements DAOPedido{
 
     @Override
     public Integer confirmarPedido(TPedido pedido) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'confirmarPedido'");
+        
     }
 
     @Override
@@ -80,8 +79,7 @@ public class DAOPedidoImp implements DAOPedido{
 
     @Override
     public Integer modificarPedido(TPedido tpedido) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'modificarPedido'");
+      
     }
 
     @Override

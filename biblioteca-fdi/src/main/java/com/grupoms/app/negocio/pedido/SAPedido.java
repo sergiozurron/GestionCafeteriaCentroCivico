@@ -6,15 +6,15 @@ public interface SAPedido {
 
     public void modificarPedido(TPedido pedido);
 
-    public void confirmarPedido(TPedido pedido);
+    public void confirmarPedido();
 
     public void devolverPedido(TPedido pedido);
 
-    public void vincularProductoPedido(Integer idProducto, Integer idPedido);
+    public void vincularProductoPedido(TProducto producto);
 
-    public void desvincularProductoPedido(Integer idProducto, Integer idPedido);
+    public void desvincularProductoPedido(TProducto producto);
 
-    public TPedido mostrarPedido(Integer idPedido);
+    public TPedido mostrarPedido(TPedido pedido);
 
     public Set<TPedido> mostrarListaPedidos();
 

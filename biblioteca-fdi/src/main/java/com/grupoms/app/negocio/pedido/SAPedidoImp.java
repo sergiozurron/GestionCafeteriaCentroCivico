@@ -16,7 +16,7 @@ public class SAPedidoImp implements SAPedido{
     }
 
     @Override
-    public void confirmarPedido(TPedido pedido) {
+    public void confirmarPedido() {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'confirmarPedido'");
     }
@@ -28,19 +28,19 @@ public class SAPedidoImp implements SAPedido{
     }
 
     @Override
-    public void vincularProductoPedido(Integer idProducto, Integer idPedido) {
+    public void vincularProductoPedido(TProducto producto) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'vincularProductoPedido'");
     }
 
     @Override
-    public void desvincularProductoPedido(Integer idProducto, Integer idPedido) {
+    public void desvincularProductoPedido(TProducto producto) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'desvincularProductoPedido'");
     }
 
     @Override
-    public TPedido mostrarPedido(Integer idPedido) {
+    public TPedido mostrarPedido(TPedido pedido) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'mostrarPedido'");
     }
@@ -62,7 +62,6 @@ public class SAPedidoImp implements SAPedido{
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'mostrarPedidosMesa'");
     }
-
 
     
 }

@@ -1,4 +1,4 @@
-package integracion.Transaction;
+package com.grupoms.app.integracion.Transaction;
 
 public abstract class TransactionManager{
     private static TransactionManager instance;

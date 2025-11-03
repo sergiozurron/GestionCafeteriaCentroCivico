@@ -1,6 +1,5 @@
-package integracion.pedido;
+package com.grupoms.app.integracion.pedido;
 
-import negocio.pedido.TPedido;
 
 import java.sql.Connection;
 import java.sql.Date;
@@ -10,24 +9,39 @@ import java.sql.Statement;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import integracion.Transaction.Transaction;
-import integracion.Transaction.TransactionManager;
+import com.grupoms.app.integracion.Transaction.Transaction;
+import com.grupoms.app.integracion.Transaction.TransactionManager;
 
 public class DAOPedidoImp implements DAOPedido{
 
-    public Integer confirmarPedido(TPedido pedido);
-
-    public TPedido mostrarPedido(Integer id){
-        TPedido pedido = null;
-        try{
-            TransactionManager tm = TransactionManager.getInstancia();
-            Transaction t = tm.getTransaction();
-        }
+    @Override
+    public Integer confirmarPedido(TPedido pedido) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'confirmarPedido'");
     }
 
-    public Set<TPedido> mostrarListaPedidos();
+    @Override
+    public TPedido mostrarPedido(Integer id) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'mostrarPedido'");
+    }
 
-    public Integer modificarPedido (TPedido tpedido);
+    @Override
+    public Set<TPedido> mostrarListaPedidos() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'mostrarListaPedidos'");
+    }
 
-    public Integer devolverPedido(Integer id);
+    @Override
+    public Integer modificarPedido(TPedido tpedido) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'modificarPedido'");
+    }
+
+    @Override
+    public Integer devolverPedido(Integer id) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'devolverPedido'");
+    }
+
 }

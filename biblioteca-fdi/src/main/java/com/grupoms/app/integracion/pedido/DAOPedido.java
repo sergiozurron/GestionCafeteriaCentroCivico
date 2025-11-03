@@ -1,7 +1,9 @@
-package integracion.pedido;
+package com.grupoms.app.integracion.pedido;
 
-import negocio.pedido.TPedido;
-import java.util.set;
+import com.grupoms.app.negocio.pedido.TPedido;
+
+import java.util.Set;
+
 
 public interface DAOPedido{
     public Integer confirmarPedido(TPedido pedido);

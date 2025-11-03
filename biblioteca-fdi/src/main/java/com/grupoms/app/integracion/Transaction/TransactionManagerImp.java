@@ -1,6 +1,6 @@
-package integracion.Transaction;
+package com.grupoms.app.integracion.Transaction;
 
-import java.util.concurrent.concurrentHashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class TransactionManagerImp extends TransactionManager{
     private ConcurrentHashMap<Thread, Transaction> transactions;
@@ -12,20 +12,20 @@ public class TransactionManagerImp extends TransactionManager{
     @Override
     public Transaction newTransaction(){
         Thread currentThread = Thread.currentThread();
-        Transaccion existente = transacciones.get(currentThread);
+        Transaction existente = transactions.get(currentThread);
 
         if (existente == null) {
-            Transaccion nueva = FactoriaTransaccion.getInstance().createTransaction();
-            transacciones.put(currentThread, nueva);
+            Transaction nueva = FactoriaTransaction.getInstance().createTransaction();
+            transactions.put(currentThread, nueva);
             return nueva;
         }
         throw new IllegalStateException("Ya existe una transacción activa para este hilo.");
     }
 
     @Override
-    public Transaccion getTransaction() {
+    public Transaction getTransaction() {
         Thread currentThread = Thread.currentThread();
-        Transaccion t = transacciones.get(currentThread);
+        Transaction t = transactions.get(currentThread);
 
         if (t != null) {
             return t;
@@ -36,10 +36,10 @@ public class TransactionManagerImp extends TransactionManager{
     @Override
     public void deleteTransaction() {
         Thread currentThread = Thread.currentThread();
-        Transaccion t = transacciones.get(currentThread);
+        Transaction t = transactions.get(currentThread);
 
         if (t != null) {
-            transacciones.remove(currentThread);
+            transactions.remove(currentThread);
         } else {
             throw new IllegalStateException("No existe una transacción para eliminar en este hilo.");
         }

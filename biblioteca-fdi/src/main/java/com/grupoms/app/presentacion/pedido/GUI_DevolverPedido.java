@@ -56,7 +56,7 @@ public class GUI_DevolverPedido extends JFrame implements IGUI{
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    int idPedido = Integer.parseInt(campoIdPedido.getText());
+                    int idPedido = Integer.parseInt(campoID.getText());
 
                     Context contexto = new Context(Evento.DEVOLVER_PEDIDO, idPedido);
                     Controlador.getInstance().handle(contexto);

@@ -1,7 +1,7 @@
 package com.grupoms.app.presentacion.pedido;
 
-import com.grupoms.app.presentacion.controlador.Command;
 import com.grupoms.app.presentacion.controlador.Context;
+import com.grupoms.app.presentacion.controlador.comandos.Command;
 
 public class DevolverPedidoCommand implements Command {
 

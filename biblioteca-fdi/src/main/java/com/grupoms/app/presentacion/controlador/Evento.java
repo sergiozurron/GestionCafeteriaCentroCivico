@@ -41,6 +41,8 @@ public class Evento {
 	public static final int MOSTRAR_PEDIDO = 40;
 	public static final int MOSTRAR_PEDIDO_OK = 41;
 	public static final int MOSTRAR_PEDIDO_KO = 42;
+
+	public static final int DEVOLVER_PEDIDO =43;
 	
 
 }

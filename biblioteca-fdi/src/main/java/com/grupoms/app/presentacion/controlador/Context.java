@@ -10,7 +10,8 @@ public class Context {
 		this.datos = datos;
 	}
 
-	public Context() {
+	public Context(Integer evento) {
+		this.evento = evento;
 	}
 
 	public void setEvento(int evento) {
@@ -19,10 +20,6 @@ public class Context {
 
 	public int getEvento() {
 		return evento;
-	}
-
-	public void setDatos(Object datos) {
-		this.datos = datos;
 	}
 
 	public Object getDatos() {

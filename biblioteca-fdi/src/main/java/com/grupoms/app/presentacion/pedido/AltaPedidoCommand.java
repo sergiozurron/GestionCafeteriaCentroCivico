@@ -1,20 +1,20 @@
 package com.grupoms.app.presentacion.pedido;
 
 import com.grupoms.app.negocio.factoria.FactoriaSA;
+import com.grupoms.app.negocio.pedido.SAPedido;
+import com.grupoms.app.negocio.pedido.SAPedidoImp;
 import com.grupoms.app.negocio.pedido.TPedido;
-import com.grupoms.app.presentacion.controlador.Command;
 import com.grupoms.app.presentacion.controlador.Context;
 import com.grupoms.app.presentacion.controlador.Evento;
+import com.grupoms.app.presentacion.controlador.comandos.Command;
 
 public class AltaPedidoCommand implements Command{
 
     @Override
     public Context execute(Object data) {
-        TPedido pedido = (TPedido) pedido;
-		int idPedido = FactoriaSA.getInstancia().creaSAPedido().altaPedido(pedido);
-		if (idPedido == -1)
-			return new Context(Evento.ALTA_PEDIDO_KO, null);
-		return new Context(Evento.ALTA_PEDIDO_OK, idPedido);
+        SAPedido sa = new SAPedidoImp();
+		int res = sa.altaPedido((TPedido) data);
+		return new Context(Evento.ALTA_PEDIDO, res);
     }
     
 }

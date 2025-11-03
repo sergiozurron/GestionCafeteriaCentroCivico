@@ -1,15 +1,22 @@
 package com.grupoms.app.presentacion.controlador;
 
+import com.grupoms.app.presentacion.controlador.comandos.Command;
+import com.grupoms.app.presentacion.controlador.comandos.FactoryCommand;
 import com.grupoms.app.presentacion.factoria.FactoriaVistas;
 
 public class ControladorImpl extends Controlador {
 
 	@Override
 	public void handle(Context context) {
-		CommandMapper commandMapper = CommandMapper.getInstance();
-		Context respuesta = commandMapper.getCommand(context.getEvento()).execute(context.getDatos());
-		//tendriamos que mirar si la factoria devuelve null o no
-		FactoriaVistas.getInstance().creaVista(commandMapper.getView(context.getEvento())).actualizar(respuesta);
+		FactoryCommand factory = FactoryCommand.getInstance();
+		Command command = factory.getCommand(context.getEvento());
+
+		if (command != null) {
+			Context respuesta = command.execute(context.getDatos());
+			String vista = factory.getView(context.getEvento());
+			if (vista != null)
+				FactoriaVistas.getInstance().creaVista(vista).actualizar(respuesta);
+		}
 	}
 
 }

@@ -4,6 +4,7 @@ import com.grupoms.app.negocio.mesa.*;
 import com.grupoms.app.negocio.proveedor.*;
 import com.grupoms.app.negocio.pedido.*;
 import com.grupoms.app.negocio.ingrediente.*;
+import com.grupoms.app.negocio.producto.*;
 
 
 public class FactoriaSAImp extends FactoriaSA {
@@ -25,6 +26,11 @@ public class FactoriaSAImp extends FactoriaSA {
 	@Override
 	public SAIngrediente creaSAIngrediente() {
 		return new SAIngredienteImp();
+	}
+
+	@Override
+	public SAProducto creaSAProducto() {
+		return new SAProductoImp();
 	}
 
 }

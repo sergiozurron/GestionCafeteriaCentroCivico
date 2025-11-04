@@ -32,7 +32,7 @@ public class GUI_AltaMesa extends JFrame implements IGUI {
 
     @Override
     public void actualizar(Context context) {
-        if (context.getEvento() == Evento.ALTA_MESA) {
+        if (context.getEvento() == Evento.ALTA_MESA_OK) {
             JOptionPane.showMessageDialog(this, "Mesa creada con éxito");
             numero.setText("");
             ubicacion.setText("");
@@ -45,7 +45,10 @@ public class GUI_AltaMesa extends JFrame implements IGUI {
             rbtnTerraza.setSelected(false);
             panelSala.setVisible(false);
             panelTerraza.setVisible(false);
+        } else if (context.getEvento() == Evento.ALTA_MESA_KO) {
+            JOptionPane.showMessageDialog(this, "Error al crear la mesa");
         }
+
     }
 
     private void initGUI() {

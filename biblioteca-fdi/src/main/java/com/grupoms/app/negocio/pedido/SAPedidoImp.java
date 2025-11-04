@@ -20,16 +20,14 @@ public class SAPedidoImp implements SAPedido{
 
             t = TransactionManager.getInstance().newTransaction();
             t.start();
-            // 2. Inicializar campos del pedido
+
             pedido.setEstado("Abierto");
             pedido.setTotal(0.0);
             pedido.setActivo(true);
             pedido.setFecha(new java.sql.Date(System.currentTimeMillis()));
 
-            // 3. Llamada al DAO pasando la transacción
             idGenerado = dao.altaPedido(pedido);
 
-            // 4. Commit
             t.commit();
 
         } catch (Exception e) {
@@ -37,6 +35,7 @@ public class SAPedidoImp implements SAPedido{
             if (t != null) {
                 try { t.rollback(); } catch(Exception ex) { ex.printStackTrace(); }
             }
+            throw new IllegalArgumentException("Error al crear el pedido", e);
         }
 
         return idGenerado;

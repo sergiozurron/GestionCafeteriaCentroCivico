@@ -78,4 +78,9 @@ public class Evento {
     public static final Integer MODIFICAR_INGREDIENTE_OK = 67;
     public static final Integer MODIFICAR_INGREDIENTE_KO = 68;
 
+	//ORDEN
+    public static final int ALTA_ORDEN = 200;
+    public static final int ANADIR_PRODUCTO = 201;
+    public static final int QUITAR_PRODUCTO = 202;
+
 }

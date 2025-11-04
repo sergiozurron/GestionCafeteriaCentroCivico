@@ -31,5 +31,4 @@ public class TOrden {
         this.precio_venta=double1;
     }
 
-
 }

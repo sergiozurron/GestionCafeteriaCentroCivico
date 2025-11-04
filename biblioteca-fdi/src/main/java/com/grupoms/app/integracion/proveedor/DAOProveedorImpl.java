@@ -12,8 +12,8 @@ import com.grupoms.app.negocio.proveedor.TProveedor;
 public class DAOProveedorImpl implements DAOProveedor {
 
 	private static final String INSERT = "INSERT INTO PROVEEDORES(nombre, tarifa, tiempo_entrega, activo) VALUES (?, ?, ?, ?)";
-	private static final String READ_BY_ID = "SELECT * FROM PROVEEDORES WHERE id = ?";
-	private static final String READ_BY_NAME = "SELECT * FROM PROVEEDORES WHERE nombre = ?";
+	private static final String READ_BY_ID = "SELECT * FROM PROVEEDORES WHERE id = ? FOR UPDATE";
+	private static final String READ_BY_NAME = "SELECT * FROM PROVEEDORES WHERE nombre = ? FOR UPDATE";
 	
 
 	@Override

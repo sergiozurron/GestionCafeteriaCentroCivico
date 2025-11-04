@@ -25,7 +25,6 @@ import com.grupoms.app.presentacion.controlador.Controlador;
 import com.grupoms.app.presentacion.controlador.Evento;
 
 public class GUI_MostrarMesa extends JFrame implements IGUI {
-	private int holaa;
 
     private JTextField idMesa;
     private JComboBox<String> tipoMesa;

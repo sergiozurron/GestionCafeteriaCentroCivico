@@ -1,6 +1,6 @@
 package com.grupoms.app.negocio.producto;
 
-public class TProducto {
+public abstract class TProducto {
 
     // Atributos
     private Integer id;
@@ -9,6 +9,11 @@ public class TProducto {
     private Double precio;
     private Integer stock;
     private Boolean activo;
+    private String tipo;
+
+    public TProducto(String tipo) {
+        this.tipo = tipo;
+    }
 
     // Getters
     public Integer getId() {return id;}
@@ -16,6 +21,8 @@ public class TProducto {
     public Double getPrecio() {return precio;}
     public Integer getStock() {return stock;}
     public Boolean getActivo() {return activo;}
+
+    public String getTipo() {return tipo;}
 
     // Setters
     public void setId(Integer id) {
@@ -33,4 +40,5 @@ public class TProducto {
     public void setActivo(Boolean activo) {
         this.activo = activo;
     }
+    public void setTipo(String tipo) {this.tipo = tipo;}
 }

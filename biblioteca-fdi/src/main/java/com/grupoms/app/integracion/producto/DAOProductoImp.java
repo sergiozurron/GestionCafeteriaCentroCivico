@@ -10,6 +10,8 @@ import java.util.List;
 
 import com.grupoms.app.integracion.Transaction.Transaction;
 import com.grupoms.app.integracion.Transaction.TransactionManager;
+import com.grupoms.app.negocio.producto.TBebida;
+import com.grupoms.app.negocio.producto.TComida;
 import com.grupoms.app.negocio.producto.TProducto;
 
 public class DAOProductoImp implements DAOProducto {
@@ -97,7 +99,12 @@ public class DAOProductoImp implements DAOProducto {
 
 				try (ResultSet rs = ps.executeQuery()) {
 					if (rs.next()) {
-						producto = new TProducto();
+						String tipo = rs.getString("tipo");
+						if (tipo.equals("Bebida")) {
+							producto = new TBebida();
+						} else /*  if (tipo.equals("Comida")) */{
+							producto = new TComida();
+						}
 						producto.setId(rs.getInt("id"));
 						producto.setNombre(rs.getString("nombre"));
 						producto.setPrecio(rs.getDouble("precio"));
@@ -122,7 +129,13 @@ public class DAOProductoImp implements DAOProducto {
 				ResultSet rs = ps.executeQuery();
 
 				while (rs.next()) {
-					TProducto producto = new TProducto();
+					TProducto producto;
+					String tipo = rs.getString("tipo");
+						if (tipo.equals("Bebida")) {
+							producto = new TBebida();
+						} else /*  if (tipo.equals("Comida")) */{
+							producto = new TComida();
+						}
 					producto.setId(rs.getInt("id"));
 					producto.setNombre(rs.getString("nombre"));
 					producto.setPrecio(rs.getDouble("precio"));

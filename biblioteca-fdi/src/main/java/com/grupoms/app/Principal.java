@@ -49,7 +49,8 @@ public class Principal extends JFrame implements IGUI {
             {"Mostrar Proveedor", "GUI_MOSTRAR_PROVEEDOR"}
         });
 
-         JPanel panelIngrediente = crearPanelCategoria("Ingrerdientes", new String[][]{
+        // --- Sección Ingredientes ---
+        JPanel panelIngrediente = crearPanelCategoria("Ingrerdientes", new String[][]{
             {"Alta Ingrediente", "GUI_ALTA_INGREDIENTE"},
             {"Baja Ingrediente", "GUI_BAJA_INGREDIENTE"},
             {"Modificar Ingrediente", "GUI_MODIFICAR_INGREDIENTE"},
@@ -58,6 +59,7 @@ public class Principal extends JFrame implements IGUI {
 
         });
 
+        // --- Sección Empleados ---
         JPanel panelEmpleado = crearPanelCategoria("Empleados", new String[][]{
             {"Alta Empleado", "GUI_ALTA_EMPLEADO"},
             {"Baja Empleado", "GUI_BAJA_EMPLEADO"},
@@ -66,11 +68,21 @@ public class Principal extends JFrame implements IGUI {
             {"Mostrar Lista Empleados", "GUI_LISTAR_EMPLEADOS"}
         });
 
+        // --- Sección Productos ---
+        JPanel panelProducto = crearPanelCategoria("Productos", new String[][]{
+            {"Alta Producto", "GUI_ALTA_PRODUCTO"},
+            {"Baja Producto", "GUI_BAJA_PRODUCTO"},
+            {"Modificar Producto", "GUI_MODIFICAR_PRODUCTO"},
+            {"Mostrar Producto", "GUI_MOSTRAR_PRODUCTO"},
+            {"Mostrar Lista Productos", "GUI_LISTAR_PRODUCTOS"}
+        });
+
         panelCentral.add(panelPedidos);
         panelCentral.add(panelMesas);
         panelCentral.add(panelProveedores);
         panelCentral.add(panelIngrediente);
         panelCentral.add(panelEmpleado);
+        panelCentral.add(panelProducto);
 
 
         add(panelCentral, BorderLayout.CENTER);

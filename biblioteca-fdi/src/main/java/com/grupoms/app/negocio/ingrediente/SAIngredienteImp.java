@@ -1,5 +1,6 @@
 package com.grupoms.app.negocio.ingrediente;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import com.grupoms.app.integracion.Transaction.Transaction;
@@ -129,12 +130,22 @@ public class SAIngredienteImp implements SAIngrediente{
 
     @Override
     public Set<TIngrediente> mostrarListaIngredientes() {
-        Set<TIngrediente> listaIngredientes = null;
+        Set<TIngrediente> listaIngredientes = new HashSet<>();
         Transaction t = null;
         try {
             t = TransactionManager.getInstance().newTransaction();
             t.start();
-            listaIngredientes = dao.mostrarListaIngredientes();
+
+            Set<TIngrediente> todos = dao.mostrarListaIngredientes();
+             for(TIngrediente ing : todos) {
+                if(ing.getActivo()) {
+                    listaIngredientes.add(ing);
+                }
+            }
+
+            if(listaIngredientes.isEmpty()) {
+                throw new IllegalArgumentException("No hay ingredientes activos en la base de datos");
+            }
             t.commit();
         } catch (Exception e) {
             e.printStackTrace();

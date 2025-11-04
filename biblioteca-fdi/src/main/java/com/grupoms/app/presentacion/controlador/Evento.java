@@ -82,6 +82,11 @@ public class Evento {
     public static final int MOSTRAR_INGREDIENTE_KO = 70;
 	public static final Integer MOSTRAR_INGREDIENTE = 71;
 
+	public static final int MOSTRAR_INGREDIENTES = 72;
+	public static final int MOSTRAR_INGREDIENTES_OK = 73;
+	public static final int MOSTRAR_INGREDIENTES_KO = 74;
+
+
 
 	//ORDEN
     public static final int ANADIR_PRODUCTO = 201;

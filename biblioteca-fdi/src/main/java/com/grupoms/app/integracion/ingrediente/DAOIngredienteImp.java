@@ -80,7 +80,7 @@ public class DAOIngredienteImp implements DAOIngrediente{
     }
 
     @Override
-    public Set<TIngrediente> mostrarListaIngredientes() {
+    public Set<TIngrediente> mostrarListaIngredientes() throws Exception{
         Set<TIngrediente> listaIngredientes = new HashSet<>();
         try {
             Transaction t = TransactionManager.getInstance().getTransaction();
@@ -101,7 +101,7 @@ public class DAOIngredienteImp implements DAOIngrediente{
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+           throw new Exception("Error al obtener la lista de ingredientes"+ e.getMessage());
         }
         return listaIngredientes;
     }

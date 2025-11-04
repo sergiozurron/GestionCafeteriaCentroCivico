@@ -8,7 +8,7 @@ public interface DAOIngrediente {
 
     public TIngrediente mostrarIngrediente(Integer id);
 
-    public Set<TIngrediente> mostrarListaIngredientes();
+    public Set<TIngrediente> mostrarListaIngredientes() throws Exception;
     
     public Set<TIngrediente> mostrarIngredientePorProducto(Integer idProducto);
 

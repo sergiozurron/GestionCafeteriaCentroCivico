@@ -53,7 +53,9 @@ public class Principal extends JFrame implements IGUI {
             {"Alta Ingrediente", "GUI_ALTA_INGREDIENTE"},
             {"Baja Ingrediente", "GUI_BAJA_INGREDIENTE"},
             {"Modificar Ingrediente", "GUI_MODIFICAR_INGREDIENTE"},
-            {"Mostrar Ingrediente", "GUI_MOSTRAR_INGREDIENTE"}
+            {"Mostrar Ingrediente", "GUI_MOSTRAR_INGREDIENTE"},
+            {"Mostrar Lista Ingredientes", "GUI_LISTAR_INGREDIENTES"}
+
         });
 
         panelCentral.add(panelPedidos);

@@ -89,13 +89,13 @@ public class GUI_AltaProveedor extends JFrame implements IGUI {
 
 	@Override
 	public void actualizar(Context context) {
-		 if (context.getEvento() == Evento.ALTA_PROVEEDOR) {
-        JOptionPane.showMessageDialog(this, "Proveedor creado con éxito");
-        // Limpiamos los campos para la siguiente entrada
-        campoNombre.setText("");
-        campoTarifa.setText("");
-        campoTiempoEntrega.setText("");
-    }
+		if (context.getEvento() == Evento.ALTA_PROVEEDOR) {
+			JOptionPane.showMessageDialog(this, "Proveedor creado con éxito");
+			// Limpiamos los campos para la siguiente entrada
+			campoNombre.setText("");
+			campoTarifa.setText("");
+			campoTiempoEntrega.setText("");
+    	}
 	}
 
 }

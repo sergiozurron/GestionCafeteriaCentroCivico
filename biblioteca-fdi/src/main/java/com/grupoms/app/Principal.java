@@ -30,7 +30,8 @@ public class Principal extends JFrame implements IGUI {
             {"Alta Pedido", "GUI_ALTA_PEDIDO"},
             {"Mostrar Pedido", "GUI_MOSTRAR_PEDIDO"},
             {"Devolver Pedido", "GUI_DEVOLVER_PEDIDO"},
-            {"Confirmar Pedido", "GUI_CONFIRMAR_PEDIDO"}
+            {"Confirmar Pedido", "GUI_CONFIRMAR_PEDIDO"},
+            {"Modificar Pedido", "GUI_MODIFICAR_PEDIDO"}
         });
 
         // --- Sección Mesas ---

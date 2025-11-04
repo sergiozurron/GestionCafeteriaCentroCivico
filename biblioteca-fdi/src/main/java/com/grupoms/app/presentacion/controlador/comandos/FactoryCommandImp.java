@@ -27,6 +27,7 @@ public class FactoryCommandImp extends FactoryCommand {
         commands.put(Evento.ALTA_PEDIDO, new AltaPedidoCommand());
         commands.put(Evento.DEVOLVER_PEDIDO, new DevolverPedidoCommand());
         commands.put(Evento.CONFIRMAR_PEDIDO, new ConfirmarPedidoCommand());
+        commands.put(Evento.MODIFICAR_PEDIDO, new ModificarPedidoCommand());
 
         //ingrediente
         commands.put(Evento.ALTA_INGREDIENTE, new AltaIngredienteCommand());
@@ -52,6 +53,9 @@ public class FactoryCommandImp extends FactoryCommand {
         views.put(Evento.ALTA_MESA_OK, "GUI_ALTA_MESA");
         views.put(Evento.ALTA_MESA_KO, "GUI_ALTA_MESA");
 
+        views.put(Evento.MODIFICAR_PEDIDO, "GUI_MODIFICAR_PEDIDO");
+        views.put(Evento.MODIFICAR_PEDIDO_OK, "GUI_MODIFICAR_PEDIDO");
+        views.put(Evento.MODIFICAR_PEDIDO_KO, "GUI_MODIFICAR_PEDIDO");
     }
     @Override
     public Command getCommand(Integer event) {

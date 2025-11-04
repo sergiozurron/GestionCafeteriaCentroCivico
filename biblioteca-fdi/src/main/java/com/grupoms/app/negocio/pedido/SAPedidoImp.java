@@ -135,7 +135,10 @@ public class SAPedidoImp implements SAPedido{
             TPedido pedidoExistente = dao.mostrarPedido(pedido.getId());
             if (pedidoExistente == null)
                 throw new IllegalArgumentException("El pedido con ID " + pedido.getId() + " no existe.");
-
+            if (!pedidoExistente.getEstado().equalsIgnoreCase("ABIERTO") &&
+                !pedidoExistente.getEstado().equalsIgnoreCase("EN PREPARACION")) {
+                    throw new IllegalStateException("Solo se pueden modificar pedidos en estado Abierto o EN PREPARACION.");
+             }
             Boolean exito = dao.modificarPedido(pedido);
             if (exito) {
                 resultado = pedido.getId();

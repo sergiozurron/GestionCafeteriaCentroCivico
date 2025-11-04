@@ -33,4 +33,10 @@ public class FactoriaSAImp extends FactoriaSA {
 		return new SAProductoImp();
 	}
 
+	@Override
+	public SAOrden creaSAOrden() {
+		// TODO Auto-generated method stub
+		return new SAOrdenImp();
+	}
+
 }

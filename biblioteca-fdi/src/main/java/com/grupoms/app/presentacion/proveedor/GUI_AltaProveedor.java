@@ -9,6 +9,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -28,7 +29,7 @@ public class GUI_AltaProveedor extends JFrame implements IGUI {
 
 	public GUI_AltaProveedor() {
 		setTitle("[ALTA PROVEEDOR]");
-		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setSize(400, 300);
 		setLocationRelativeTo(null);
 
@@ -88,7 +89,13 @@ public class GUI_AltaProveedor extends JFrame implements IGUI {
 
 	@Override
 	public void actualizar(Context context) {
-		setVisible(true);
+		 if (context.getEvento() == Evento.ALTA_PROVEEDOR) {
+        JOptionPane.showMessageDialog(this, "Proveedor creado con éxito");
+        // Limpiamos los campos para la siguiente entrada
+        campoNombre.setText("");
+        campoTarifa.setText("");
+        campoTiempoEntrega.setText("");
+    }
 	}
 
 }

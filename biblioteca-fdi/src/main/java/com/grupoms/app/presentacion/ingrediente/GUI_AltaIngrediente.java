@@ -34,11 +34,15 @@ public class GUI_AltaIngrediente extends JFrame implements IGUI{
             // Limpia los campos para la siguiente entrada
             nombre.setText("");
             precio.setText("");
+            prov.setText("");
         }
     }
     
     public void initGUI(){
         setLayout(new BorderLayout()); //layout general
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(8, 8, 8, 8);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
 
         JPanel panel = new JPanel(new GridBagLayout()); //panel principal
 
@@ -71,21 +75,25 @@ public class GUI_AltaIngrediente extends JFrame implements IGUI{
             }
         });
 
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(5, 5, 5, 5);        // Espaciado alrededor de los componentes
-        gbc.fill = GridBagConstraints.HORIZONTAL;   // Cada componente se expande horizontalmente
-
-        // Colocación de los componentes en la cuadrícula
         gbc.gridx = 0; gbc.gridy = 0;
         panel.add(labelNombre, gbc);
-
         gbc.gridx = 1;
-        panel.add(labelPrecio, gbc);
+        panel.add(nombre, gbc);
 
-        gbc.gridx = 0; gbc.gridy = 2; gbc.gridwidth = 2;
+        gbc.gridx = 0; gbc.gridy = 1;
+        panel.add(labelPrecio, gbc);
+        gbc.gridx = 1;
+        panel.add(precio, gbc);
+
+        gbc.gridx = 0; gbc.gridy = 2;
+        panel.add(labelProv, gbc);
+        gbc.gridx = 1;
+        panel.add(prov, gbc);
+
+        gbc.gridx = 0; gbc.gridy = 3; 
+        gbc.gridwidth = 2;
         panel.add(crear, gbc);
 
-        // Añade el panel principal al centro del JFrame
         add(panel, BorderLayout.CENTER);
     }
     

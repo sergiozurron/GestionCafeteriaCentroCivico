@@ -51,9 +51,10 @@ public class DAOIngredienteImp implements DAOIngrediente{
             Transaction t = TransactionManager.getInstance().getTransaction();
             Connection c = (Connection) t.getResource();
 
-            String sql = "SELECT id, nombre, precio, activo, proveedor_id FROM ingredientes WHERE id = ?";
+            String sql = "SELECT id, nombre, precio, proveedor_id FROM ingredientes WHERE id = ?";
             try (PreparedStatement ps = c.prepareStatement(sql)) {
                 ps.setInt(1, id);
+                System.out.println("Buscando ingrediente con ID: " + id);
 
                 try (ResultSet rs = ps.executeQuery()) {
                     if (rs.next()) {
@@ -61,7 +62,6 @@ public class DAOIngredienteImp implements DAOIngrediente{
                         ingrediente.setID(rs.getInt("id"));
                         ingrediente.setNombre(rs.getString("nombre"));
                         ingrediente.setPrecio(rs.getDouble("precio"));
-                        ingrediente.setActivo(rs.getBoolean("activo"));
                         ingrediente.setIDProveedor(rs.getInt("proveedor_id"));
                     }
                 }

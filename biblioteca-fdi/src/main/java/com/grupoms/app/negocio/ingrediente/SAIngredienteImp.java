@@ -95,22 +95,35 @@ public class SAIngredienteImp implements SAIngrediente{
     public TIngrediente mostrarIngrediente(Integer ID) {
         if (ID == null || ID <= 0)
             throw new IllegalArgumentException("El ID del ingrediente no es válido.");
-
-        TIngrediente ingrediente = null;
         Transaction t = null;
+        TIngrediente ing = null;
+
         try {
+            // 1. Iniciar transacción
             t = TransactionManager.getInstance().newTransaction();
             t.start();
-            ingrediente = dao.mostrarIngrediente(ID);
+
+            // 2. Consultar el ingrediente
+            ing = dao.mostrarIngrediente(ID);
+            if (ing == null)
+                throw new IllegalArgumentException("El ingrediente con ID " + ID + " no existe.");
+
+            // 3. Commit de la transacción
             t.commit();
+
         } catch (Exception e) {
             e.printStackTrace();
             if (t != null) {
-                try { t.rollback(); } catch(Exception ex) { ex.printStackTrace(); }
+                try { 
+                    t.rollback(); 
+                } catch(Exception ex) { 
+                    ex.printStackTrace(); 
+                }
             }
-            throw new IllegalArgumentException("Error al mostrar el ingrediente con ID: " + ID, e);
         }
-        return ingrediente;
+
+        // 4. Devolver el ingrediente (null si hubo error)
+        return ing;
     }
 
     @Override

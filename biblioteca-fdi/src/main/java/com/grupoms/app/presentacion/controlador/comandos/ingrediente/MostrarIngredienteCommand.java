@@ -11,14 +11,20 @@ public class MostrarIngredienteCommand implements Command{
 
     @Override
     public Context execute(Object data) {
-         if (!(data instanceof TIngrediente)) {
-            return new Context(Evento.MODIFICAR_INGREDIENTE_KO, null);
+       if (!(data instanceof TIngrediente)) {
+            return new Context(Evento.MOSTRAR_INGREDIENTE_KO, null);
         }
 
         TIngrediente ingr = (TIngrediente) data;
         SAIngrediente sa = FactoriaSA.getInstance().creaSAIngrediente();
-        sa.mostrarIngrediente(ingr.getID());
-        return new Context(Evento.MODIFICAR_INGREDIENTE_OK, ingr);
+
+        TIngrediente resultado = sa.mostrarIngrediente(ingr.getID());
+
+        if (resultado != null) {
+            return new Context(Evento.MOSTRAR_INGREDIENTE_OK, resultado);
+        } else {
+            return new Context(Evento.MOSTRAR_INGREDIENTE_KO, null);
+        }
     }
     
 }

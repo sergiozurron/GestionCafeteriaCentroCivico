@@ -95,16 +95,17 @@ public class GUI_MostrarIngrediente extends JFrame implements IGUI {
     @Override
     public void actualizar(Context context) {
         if (context.getEvento() == Evento.MOSTRAR_INGREDIENTE_OK) {
-            TIngrediente ing = (TIngrediente) context.getDatos();
-            if (ing != null) {
-                nombreLabel.setText(ing.getNombre());
-                precioLabel.setText(String.valueOf(ing.getPrecio()));
-                provLabel.setText(String.valueOf(ing.getIDProveedor()));
-            } else {
-                JOptionPane.showMessageDialog(this, "Ingrediente no encontrado");
-            }
-        } else if (context.getEvento() == Evento.MOSTRAR_INGREDIENTE_KO) {
-            JOptionPane.showMessageDialog(this, "Error al cargar el ingrediente");
+        TIngrediente ing = (TIngrediente) context.getDatos();
+        if (ing != null) {
+            nombreLabel.setText(ing.getNombre());
+            precioLabel.setText(String.valueOf(ing.getPrecio()));
+            provLabel.setText(String.valueOf(ing.getIDProveedor()));
+        } else {
+            // Aquí se lanza el mensaje
+            JOptionPane.showMessageDialog(this, "Ingrediente no encontrado");
         }
+    } else if (context.getEvento() == Evento.MOSTRAR_INGREDIENTE_KO) {
+        JOptionPane.showMessageDialog(this, "Error al cargar el ingrediente");
+    }
     }
 }

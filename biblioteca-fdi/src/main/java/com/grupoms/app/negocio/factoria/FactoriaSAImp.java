@@ -3,6 +3,7 @@ package com.grupoms.app.negocio.factoria;
 import com.grupoms.app.negocio.mesa.*;
 import com.grupoms.app.negocio.proveedor.*;
 import com.grupoms.app.negocio.pedido.*;
+import com.grupoms.app.negocio.empleado.*;
 import com.grupoms.app.negocio.ingrediente.*;
 import com.grupoms.app.negocio.producto.*;
 
@@ -35,8 +36,12 @@ public class FactoriaSAImp extends FactoriaSA {
 
 	@Override
 	public SAOrden creaSAOrden() {
-		// TODO Auto-generated method stub
 		return new SAOrdenImp();
+	}
+
+	@Override
+	public SAEmpleado creaSAEmpleado() {
+		return new SAEmpleadoImp();
 	}
 
 }

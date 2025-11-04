@@ -6,6 +6,8 @@ import com.grupoms.app.negocio.pedido.SAOrden;
 import com.grupoms.app.negocio.pedido.SAPedido;
 import com.grupoms.app.negocio.ingrediente.SAIngrediente;
 import com.grupoms.app.negocio.producto.SAProducto;
+import com.grupoms.app.negocio.empleado.SAEmpleado;
+
 
 public abstract class FactoriaSA {
 	
@@ -24,5 +26,5 @@ public abstract class FactoriaSA {
 	public abstract SAIngrediente creaSAIngrediente();
 	public abstract SAProducto creaSAProducto();
     public abstract SAOrden creaSAOrden();
-
+	public abstract SAEmpleado creaSAEmpleado();
 }

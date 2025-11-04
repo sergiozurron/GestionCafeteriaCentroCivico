@@ -4,11 +4,18 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.grupoms.app.presentacion.controlador.Evento;
+import com.grupoms.app.presentacion.controlador.comandos.ingrediente.AltaIngredienteCommand;
+import com.grupoms.app.presentacion.controlador.comandos.ingrediente.BajaIngredienteCommand;
 import com.grupoms.app.presentacion.controlador.comandos.mesa.AltaMesaCommand;
 import com.grupoms.app.presentacion.controlador.comandos.mesa.BajaMesaCommand;
 import com.grupoms.app.presentacion.controlador.comandos.mesa.ModificarMesaCommand;
 import com.grupoms.app.presentacion.controlador.comandos.mesa.MostrarMesaCommand;
 import com.grupoms.app.presentacion.controlador.comandos.mesa.MostrarMesasCommand;
+import com.grupoms.app.presentacion.controlador.comandos.pedido.AltaPedidoCommand;
+import com.grupoms.app.presentacion.controlador.comandos.pedido.ConfirmarPedidoCommand;
+import com.grupoms.app.presentacion.controlador.comandos.pedido.DevolverPedidoCommand;
+import com.grupoms.app.presentacion.controlador.comandos.pedido.MostrarPedidoCommand;
+import com.grupoms.app.presentacion.factoria.FactoriaVistas;
 
 public class FactoryCommandImp extends FactoryCommand {
     private Map<Integer, Command> commands = new HashMap<>();
@@ -16,7 +23,7 @@ public class FactoryCommandImp extends FactoryCommand {
 
     public FactoryCommandImp(){
         //cada comando que añadamos hay que añadirlo aqui
-    	
+    	//COMANDOS
     	//Mesa
         commands.put(Evento.ALTA_MESA, new AltaMesaCommand());
         commands.put(Evento.BAJA_MESA, new BajaMesaCommand());
@@ -24,8 +31,25 @@ public class FactoryCommandImp extends FactoryCommand {
         commands.put(Evento.MOSTRAR_MESA, new MostrarMesaCommand());
         commands.put(Evento.MOSTRAR_LISTA_MESA, new MostrarMesasCommand());
 
+        //Pedido
+        commands.put(Evento.MOSTRAR_PEDIDO, new MostrarPedidoCommand());
+        commands.put(Evento.ALTA_PEDIDO, new AltaPedidoCommand());
+        commands.put(Evento.DEVOLVER_PEDIDO, new DevolverPedidoCommand());
+        commands.put(Evento.CONFIRMAR_PEDIDO, new ConfirmarPedidoCommand());
 
-        //views.put(Evento.ALTA_MESA, FactoriaVistas.GUI_ALTA_MESA);
+        //ingrediente
+        commands.put(Evento.ALTA_INGREDIENTE, new AltaIngredienteCommand());
+        commands.put(Evento.BAJA_INGREDIENTE, new BajaIngredienteCommand());
+
+
+        //VISTAS
+        views.put(Evento.MOSTRAR_PEDIDO, "GUI_MOSTRAR_PEDIDO");
+        views.put(Evento.MOSTRAR_PEDIDO_OK, "GUI_MOSTRAR_PEDIDO");
+        views.put(Evento.MOSTRAR_PEDIDO_KO, "GUI_MOSTRAR_PEDIDO");
+
+        views.put(Evento.ALTA_INGREDIENTE, "GUI_MOSTRAR_PEDIDO");
+        views.put(Evento.ALTA_INGREDIENTE_OK, "GUI_MOSTRAR_PEDIDO");
+        views.put(Evento.ALTA_INGREDIENTE_KO, "GUI_MOSTRAR_PEDIDO");
     }
     @Override
     public Command getCommand(Integer event) {

@@ -18,7 +18,11 @@ public class MostrarPedidoCommand implements Command {
         Integer idPedido = (Integer) data;
         SAPedido saPedido = FactoriaSA.getInstance().creaSAPedido();
 
+
+
         try {
+
+
             TPedido pedido = saPedido.mostrarPedido(idPedido);
 
             if (pedido != null)

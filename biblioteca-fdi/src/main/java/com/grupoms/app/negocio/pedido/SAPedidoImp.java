@@ -155,73 +155,6 @@ public class SAPedidoImp implements SAPedido{
         return resultado;
     }
 
-
-    @Override
-    public Integer vincularProducto(Integer idPedido, Integer idProducto, Integer cantidad) {
-        if (idPedido == null || idPedido <= 0)
-            throw new IllegalArgumentException("El ID del pedido no es válido.");
-        if (idProducto == null || idProducto <= 0)
-            throw new IllegalArgumentException("El ID del producto no es válido.");
-        if (cantidad == null || cantidad <= 0)
-            throw new IllegalArgumentException("La cantidad debe ser mayor a 0.");
-
-        Transaction t = null;
-        Integer idOrden = null;
-        try {
-            t = TransactionManager.getInstance().newTransaction();
-            t.start();
-
-            // verificar que el pedido existe
-            TPedido pedido = dao.mostrarPedido(idPedido);
-            if (pedido == null)
-                throw new IllegalArgumentException("El pedido con ID " + idPedido + " no existe.");
-
-            // y vincular el producto al pedido
-            idOrden = dao.vincularProducto(idPedido, idProducto, cantidad);
-
-            t.commit();
-        } catch (Exception e) {
-            e.printStackTrace();
-            if (t != null) {
-                try { t.rollback(); } catch(Exception ex) { ex.printStackTrace(); }
-            }
-            throw new IllegalArgumentException("Error al vincular producto al pedido.", e);
-        }
-        return idOrden;
-    }
-
-    @Override
-    public Integer desvincularProducto(Integer idPedido, Integer idProducto) {
-        if (idPedido == null || idPedido <= 0)
-            throw new IllegalArgumentException("El ID del pedido no es válido.");
-        if (idProducto == null || idProducto <= 0)
-            throw new IllegalArgumentException("El ID del producto no es válido.");
-
-        Transaction t = null;
-        Integer filasAfectadas = 0;
-        try {
-            t = TransactionManager.getInstance().newTransaction();
-            t.start();
-
-            // verificar que el pedido existe
-            TPedido pedido = dao.mostrarPedido(idPedido);
-            if (pedido == null)
-                throw new IllegalArgumentException("El pedido con ID " + idPedido + " no existe.");
-
-            // y desvincular el producto del pedido
-            filasAfectadas = dao.desvincularProducto(idPedido, idProducto);
-
-            t.commit();
-        } catch (Exception e) {
-            e.printStackTrace();
-            if (t != null) {
-                try { t.rollback(); } catch(Exception ex) { ex.printStackTrace(); }
-            }
-            throw new IllegalArgumentException("Error al desvincular producto del pedido.", e);
-        }
-        return filasAfectadas;
-    }
-
     @Override
     public Set<TPedido> mostrarPedidosPorEmpleado(Integer idEmpleado) {
         if (idEmpleado == null || idEmpleado <= 0)
@@ -284,6 +217,8 @@ public class SAPedidoImp implements SAPedido{
         }
         return listaPedidos;
     }
+
+   
 
     
 }

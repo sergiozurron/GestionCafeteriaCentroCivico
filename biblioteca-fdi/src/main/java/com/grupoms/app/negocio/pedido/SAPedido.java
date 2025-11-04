@@ -14,10 +14,6 @@ public interface SAPedido {
 
     public void devolverPedido(TPedido pedido);
 
-    void vincularProducto(TOrden orden);
-
-    void desvincularProducto(TOrden orden);
-
     public Set<TPedido> mostrarPedidosPorEmpleado(Integer idEmpleado);
 
     public Set<TPedido> mostrarPedidosPorMesa(Integer idMesa);

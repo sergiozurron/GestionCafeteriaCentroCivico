@@ -59,4 +59,16 @@ public class SAOrdenImp implements SAOrden {
         return exito;
     }
 
+    @Override
+    public void vincularProducto(TOrden orden) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'vincularProducto'");
+    }
+
+    @Override
+    public TOrden mostrarOrden(Integer idOrden) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'mostrarOrden'");
+    }
+
 }

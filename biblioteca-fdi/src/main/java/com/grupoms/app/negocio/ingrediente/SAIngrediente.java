@@ -5,7 +5,7 @@ import java.util.Set;
 public interface SAIngrediente{
         public Integer crearIngrediente(TIngrediente ingrediente);
 
-        public Boolean bajaIngrediente(Integer ID);
+        public Boolean bajaIngrediente(TIngrediente ingrediente);
 
         public Boolean modificarIngrediente(TIngrediente ingrediente);
 

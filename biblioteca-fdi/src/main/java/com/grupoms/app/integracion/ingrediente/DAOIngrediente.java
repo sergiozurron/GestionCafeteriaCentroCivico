@@ -16,5 +16,5 @@ public interface DAOIngrediente {
 
     public Boolean modificarIngrediente(TIngrediente tingrediente);
 
-    public Boolean bajaIngrediente(Integer id);
+    public Boolean bajaIngrediente(TIngrediente ingrediente);
 }

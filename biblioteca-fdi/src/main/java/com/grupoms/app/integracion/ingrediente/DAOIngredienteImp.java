@@ -74,9 +74,25 @@ public class DAOIngredienteImp implements DAOIngrediente{
     }
 
     @Override
-    public Boolean bajaIngrediente(Integer id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'bajaIngrediente'");
+    public Boolean bajaIngrediente(TIngrediente ingrediente) {
+        Boolean exito = false;
+         try {
+            Transaction t = TransactionManager.getInstance().getTransaction();
+            Connection c = (Connection) t.getResource();
+
+            String sql = "UPDATE ingrediente SET activo = ? WHERE id = ?";
+            try (PreparedStatement stmt = c.prepareStatement(sql)) {
+    
+                stmt.setBoolean(1, ingrediente.getActivo());
+                stmt.setInt(2, ingrediente.getID());
+
+                stmt.executeUpdate();
+                exito = true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return exito;
     }
 
 

@@ -38,9 +38,30 @@ public class SAIngredienteImp implements SAIngrediente{
     }
 
     @Override
-    public Boolean bajaIngrediente(Integer ID) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'bajaIngrediente'");
+    public Boolean bajaIngrediente(TIngrediente ingrediente) {
+        Transaction t = null;
+        Boolean exito = false;
+
+        try {
+            // 1. Iniciar transacción
+            t = TransactionManager.getInstance().newTransaction();
+            t.start();
+            // 2. Inicializar campos del ingrediente
+            ingrediente.setActivo(false);
+            dao.bajaIngrediente(ingrediente);
+            
+            // 4. Commit
+            t.commit();
+            exito = true;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            if (t != null) {
+                try { t.rollback(); } catch(Exception ex) { ex.printStackTrace(); }
+            }
+        }
+        return exito;
+
     }
 
     @Override

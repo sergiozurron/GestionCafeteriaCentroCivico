@@ -1,5 +1,4 @@
 package com.grupoms.app.negocio.pedido;
-import java.sql.Connection;
 import java.util.Set;
 
 import com.grupoms.app.integracion.Transaction.Transaction;

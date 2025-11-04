@@ -1,14 +1,19 @@
 package com.grupoms.app.integracion.producto;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
+import com.grupoms.app.integracion.Transaction.Transaction;
+import com.grupoms.app.integracion.Transaction.TransactionManager;
 import com.grupoms.app.negocio.producto.TProducto;
+import java.sql.Statement;
 
 public class DAOProductoImp implements DAOProducto {
-    private static final String INSERT = "INSERT INTO PRODUCTOS(nombre, precio, stock, activo) VALUES (?, ?, ?, ?)";
 	private static final String READ_BY_ID = "SELECT * FROM PRODUCTOS WHERE id = ?";
 	private static final String READ_BY_NAME = "SELECT * FROM PRODUCTOS WHERE nombre = ?";
-	private static final String UPDATE = "UPDATE PRODUCTOS SET nombre = ?, precio = ?, stock = ?, activo = ? WHERE id = ?";
 	private static final String ALL = "SELECT * FROM PRODUCTOS";
 
     @Override
@@ -17,12 +22,12 @@ public class DAOProductoImp implements DAOProducto {
         try {
             Transaction t = TransactionManager.getInstance().getTransaction();
             Connection c = (Connection) t.getResource();
-
+			String INSERT = "INSERT INTO PRODUCTOS(nombre, precio, stock, activo) VALUES (?, ?, ?, ?)";
 			try (PreparedStatement ps = c.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS)) {
 
 				ps.setString(1, producto.getNombre());
 				ps.setDouble(2, producto.getPrecio());
-           		ps.setInteger(3, producto.getStock());
+           		ps.setInt(3, producto.getStock());
 				ps.setBoolean(4, producto.getActivo());
 
 				ps.executeUpdate();
@@ -50,20 +55,21 @@ public class DAOProductoImp implements DAOProducto {
         try{
             Transaction t = TransactionManager.getInstance().getTransaction();
             Connection c = (Connection) t.getResource();
+			String UPDATE = "UPDATE PRODUCTOS SET nombre = ?, precio = ?, stock = ?, activo = ? WHERE id = ?";
 			try (PreparedStatement ps = c.prepareStatement(UPDATE)) {
 
 				ps.setString(1, producto.getNombre());
 				ps.setDouble(2, producto.getPrecio());
-           		ps.setInteger(3, producto.getStock());
+           		ps.setInt(3, producto.getStock());
 				ps.setBoolean(4, producto.getActivo());
-				ps.setInteger(5, producto.getId());
+				ps.setInt(5, producto.getId());
 
-				exito = statement.executeUpdate(); // numero de filas afectadas
+				exito = ps.executeUpdate(); // numero de filas afectadas
 			}
 		} catch (SQLException e) {
 	        System.err.println("Error modificando producto: " + e.getMessage());
 		}
-		return exito != -1 ? pedido.getId() : exito;
+		return exito != -1 ? producto.getId() : exito;
 	}
 
 	public TProducto mostrarProducto(Integer id) {

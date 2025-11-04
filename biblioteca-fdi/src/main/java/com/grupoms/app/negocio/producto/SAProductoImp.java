@@ -2,6 +2,8 @@ package com.grupoms.app.negocio.producto;
 
 import java.util.List;
 
+import com.grupoms.app.integracion.Transaction.Transaction;
+import com.grupoms.app.integracion.Transaction.TransactionManager;
 import com.grupoms.app.integracion.factoria.FactoriaDAO;
 import com.grupoms.app.integracion.producto.DAOProducto;
 
@@ -19,7 +21,7 @@ public class SAProductoImp implements SAProducto{
             t.start();
 
             producto.setNombre("");
-            producto.setPrecio(-1);
+            producto.setPrecio(-1.0);
             producto.setStock(-1);
 		    producto.setActivo(true);
 

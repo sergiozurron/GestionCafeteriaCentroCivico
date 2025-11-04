@@ -73,9 +73,9 @@ public class FactoryCommandImp extends FactoryCommand {
         views.put(Evento.MOSTRAR_INGREDIENTE_KO, "GUI_MOSTRAR_INGREDIENTE");
         views.put(Evento.MOSTRAR_INGREDIENTE_OK, "GUI_MOSTRAR_INGREDIENTE");
 
-        views.put(Evento.MOSTRAR_INGREDIENTES, "GUI_MOSTRAR_INGREDIENTE");
+        views.put(Evento.MOSTRAR_INGREDIENTES, "GUI_LISTAR_INGREDIENTES");
         views.put(Evento.MOSTRAR_INGREDIENTES_OK, "GUI_LISTAR_INGREDIENTES");
-        views.put(Evento.MOSTRAR_INGREDIENTES_KO, "GUI_MOSTRAR_INGREDIENTE");
+        views.put(Evento.MOSTRAR_INGREDIENTES_KO, "GUI_LISTAR_INGREDIENTES");
     }
     @Override
     public Command getCommand(Integer event) {

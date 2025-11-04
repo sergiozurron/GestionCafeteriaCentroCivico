@@ -1,6 +1,8 @@
 package com.grupoms.app.presentacion.ingrediente;
 
 import javax.swing.*;
+import java.awt.*;
+import java.util.Set;
 
 import com.grupoms.app.negocio.ingrediente.TIngrediente;
 import com.grupoms.app.presentacion.IGUI;
@@ -8,37 +10,36 @@ import com.grupoms.app.presentacion.controlador.Context;
 import com.grupoms.app.presentacion.controlador.Controlador;
 import com.grupoms.app.presentacion.controlador.Evento;
 
-import java.awt.*;
-import java.util.Set;
+public class GUI_MostrarListaIngredientes extends JFrame implements IGUI {
 
-public class GUI_MostrarListaIngredientes extends JFrame implements IGUI{
-    
     private JTextArea textArea;
     private JButton mostrar;
 
     public GUI_MostrarListaIngredientes() {
-        super("Ingredientes ");
+        super("Mostrar Lista Ingredientes");
         initGUI();
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         pack();
         setLocationRelativeTo(null);
-        setVisible(true);
+        setVisible(true); // Se hace visible de inmediato, como las demás GUIs
     }
 
     private void initGUI() {
-        JPanel panel = new JPanel(new BorderLayout());
-        
-        textArea = new JTextArea(20, 40);
+        JPanel panel = new JPanel(new BorderLayout(10, 10));
+        panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        // Área de texto para mostrar ingredientes
+        textArea = new JTextArea(20, 50);
         textArea.setEditable(false);
         JScrollPane scroll = new JScrollPane(textArea);
 
-        mostrar = new JButton("Mostrar Ingredientes ");
+        // Botón para solicitar la lista de ingredientes activos
+        mostrar = new JButton("Mostrar Ingredientes");
         mostrar.addActionListener(e -> {
-            // Creamos el Context con el evento
+            // Crear Context y llamar al controlador
             Context contexto = new Context();
             contexto.setEvento(Evento.MOSTRAR_INGREDIENTES);
-            contexto.setDato(null); // no necesitamos pasar dato
-            
+            contexto.setDato(null); // No se necesita pasar dato
             Controlador.getInstance().handle(contexto);
         });
 
@@ -50,14 +51,14 @@ public class GUI_MostrarListaIngredientes extends JFrame implements IGUI{
 
     @Override
     public void actualizar(Context context) {
-        if(context.getEvento() == Evento.MOSTRAR_INGREDIENTES_OK) {
+        if (context.getEvento() == Evento.MOSTRAR_INGREDIENTES_OK) {
             Set<TIngrediente> ingredientes = (Set<TIngrediente>) context.getDatos();
-            if(ingredientes.isEmpty()) {
+            if (ingredientes.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "No hay ingredientes activos en la base de datos");
                 textArea.setText("");
             } else {
                 StringBuilder sb = new StringBuilder();
-                for(TIngrediente ing : ingredientes) {
+                for (TIngrediente ing : ingredientes) {
                     sb.append("ID: ").append(ing.getID())
                       .append(", Nombre: ").append(ing.getNombre())
                       .append(", Precio: ").append(ing.getPrecio())
@@ -66,7 +67,7 @@ public class GUI_MostrarListaIngredientes extends JFrame implements IGUI{
                 }
                 textArea.setText(sb.toString());
             }
-        } else if(context.getEvento() == Evento.MOSTRAR_INGREDIENTES_KO) {
+        } else if (context.getEvento() == Evento.MOSTRAR_INGREDIENTES_KO) {
             JOptionPane.showMessageDialog(this, "Error al cargar los ingredientes activos");
         }
     }

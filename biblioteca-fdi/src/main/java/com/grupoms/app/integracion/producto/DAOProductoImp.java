@@ -14,8 +14,7 @@ import com.grupoms.app.negocio.producto.TProducto;
 
 public class DAOProductoImp implements DAOProducto {
 	private static final String READ_BY_ID = "SELECT * FROM PRODUCTOS WHERE id = ?";
-	private static final String READ_BY_NAME = "SELECT * FROM PRODUCTOS WHERE nombre = ?";
-	private static final String ALL = "SELECT * FROM PRODUCTOS";
+    private static final String ALL = "SELECT * FROM PRODUCTOS";
 
     @Override
 	public Integer altaProducto(TProducto producto) {

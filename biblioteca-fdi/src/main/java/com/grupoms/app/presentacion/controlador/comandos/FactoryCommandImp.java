@@ -8,6 +8,7 @@ import com.grupoms.app.presentacion.controlador.comandos.ingrediente.*;
 import com.grupoms.app.presentacion.controlador.comandos.mesa.*;
 import com.grupoms.app.presentacion.controlador.comandos.pedido.*;
 import com.grupoms.app.presentacion.controlador.comandos.empleado.*;
+import com.grupoms.app.presentacion.controlador.comandos.producto.*;
 
 public class FactoryCommandImp extends FactoryCommand {
     private Map<Integer, Command> commands = new HashMap<>();
@@ -37,13 +38,20 @@ public class FactoryCommandImp extends FactoryCommand {
         commands.put(Evento.MOSTRAR_INGREDIENTE, new MostrarIngredienteCommand());
         commands.put(Evento.MOSTRAR_INGREDIENTES, new MostrarListaIngredientes());
 
-
         // Empleado
         commands.put(Evento.ALTA_EMPLEADO, new AltaEmpleadoCommand());
         commands.put(Evento.BAJA_EMPLEADO, new BajaEmpleadoCommand());
         commands.put(Evento.MODIFICAR_EMPLEADO, new ModificarEmpleadoCommand());
         commands.put(Evento.MOSTRAR_EMPLEADO, new MostrarEmpleadoCommand());
         commands.put(Evento.MOSTRAR_EMPLEADOS, new MostrarListaEmpleadosCommand());
+        
+        // Producto
+        commands.put(Evento.ALTA_PRODUCTO, new AltaProductoCommand());
+        commands.put(Evento.BAJA_PRODUCTO, new BajaProductoCommand());
+        commands.put(Evento.MODIFICAR_PRODUCTO, new ModificarProductoCommand());
+        commands.put(Evento.MOSTRAR_PRODUCTO, new MostrarProductoCommand());
+        commands.put(Evento.MOSTRAR_LISTA_PRODUCTO, new MostrarListaProductosCommand());
+
 
         //VISTAS
         views.put(Evento.MOSTRAR_PEDIDO, "GUI_MOSTRAR_PEDIDO");
@@ -69,7 +77,6 @@ public class FactoryCommandImp extends FactoryCommand {
         views.put(Evento.MOSTRAR_INGREDIENTES, "GUI_LISTAR_INGREDIENTES");
         views.put(Evento.MOSTRAR_INGREDIENTES_OK, "GUI_LISTAR_INGREDIENTES");
         views.put(Evento.MOSTRAR_INGREDIENTES_KO, "GUI_LISTAR_INGREDIENTES");
-
 
         views.put(Evento.ALTA_EMPLEADO, "GUI_ALTA_EMPLEADO");
         views.put(Evento.ALTA_EMPLEADO_OK, "GUI_ALTA_EMPLEADO");
@@ -110,6 +117,26 @@ public class FactoryCommandImp extends FactoryCommand {
         views.put(Evento.MOSTRAR_LISTA_MESA, "GUI_LISTAR_MESAS");
         views.put(Evento.MOSTRAR_LISTA_MESA_OK, "GUI_LISTAR_MESAS");
         views.put(Evento.MOSTRAR_LISTA_MESA_KO, "GUI_LISTAR_MESAS");
+        
+        views.put(Evento.ALTA_PRODUCTO, "GUI_ALTA_PRODUCTO");
+        views.put(Evento.ALTA_PRODUCTO_OK, "GUI_ALTA_PRODUCTO");
+        views.put(Evento.ALTA_PRODUCTO_KO, "GUI_ALTA_PRODUCTO");
+
+        views.put(Evento.BAJA_PRODUCTO, "GUI_BAJA_PRODUCTO");
+        views.put(Evento.BAJA_PRODUCTO_OK, "GUI_BAJA_PRODUCTO");
+        views.put(Evento.BAJA_PRODUCTO_KO, "GUI_BAJA_PRODUCTO");
+
+        views.put(Evento.MODIFICAR_PRODUCTO, "GUI_MODIFICAR_PRODUCTO");
+        views.put(Evento.MODIFICAR_PRODUCTO_OK, "GUI_MODIFICAR_PRODUCTO");
+        views.put(Evento.MODIFICAR_PRODUCTO_KO, "GUI_MODIFICAR_PRODUCTO");
+
+        views.put(Evento.MOSTRAR_PRODUCTO, "GUI_MOSTRAR_PRODUCTO");
+        views.put(Evento.MOSTRAR_PRODUCTO_OK, "GUI_MOSTRAR_PRODUCTO");
+        views.put(Evento.MOSTRAR_PRODUCTO_KO, "GUI_MOSTRAR_PRODUCTO");
+
+        views.put(Evento.MOSTRAR_LISTA_PRODUCTO, "GUI_LISTAR_PRODUCTOS");
+        views.put(Evento.MOSTRAR_LISTA_PRODUCTO_OK, "GUI_LISTAR_PRODUCTOS");
+        views.put(Evento.MOSTRAR_LISTA_PRODUCTO_KO, "GUI_LISTAR_PRODUCTOS");
     }
     @Override
     public Command getCommand(Integer event) {

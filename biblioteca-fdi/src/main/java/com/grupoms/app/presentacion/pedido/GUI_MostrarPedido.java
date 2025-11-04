@@ -60,7 +60,7 @@ public class GUI_MostrarPedido extends JFrame implements IGUI{
             try {
                 int idPedido = Integer.parseInt(campoPedido.getText());
                 // Enviar al controlador
-                Context contexto = new Context(Evento.ALTA_PEDIDO, idPedido);
+                Context contexto = new Context(Evento.MOSTRAR_PEDIDO, idPedido);
                 Controlador.getInstance().handle(contexto);
 
             } catch (NumberFormatException ex) {

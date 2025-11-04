@@ -47,7 +47,8 @@ public class DAOProductoImp implements DAOProducto {
 	}
 
     public Integer bajaProducto(Integer id) {
-		
+		        throw new UnsupportedOperationException("Unimplemented method 'mostrarPedidos'");
+
 	}
 
 	public Integer modificarProducto(TProducto producto) {
@@ -73,10 +74,12 @@ public class DAOProductoImp implements DAOProducto {
 	}
 
 	public TProducto mostrarProducto(Integer id) {
+        throw new UnsupportedOperationException("Unimplemented method 'mostrarPedidos'");
 
 	}
 
 	public List<TProducto> mostrarListaProductos() {
-		
+		        throw new UnsupportedOperationException("Unimplemented method 'mostrarPedidos'");
+
 	}
 }

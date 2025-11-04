@@ -46,10 +46,12 @@ public class SAProductoImp implements SAProducto{
     }
 
     public TProducto mostrarProducto(Integer id) {
+        throw new UnsupportedOperationException("Unimplemented method 'mostrarPedidos'");
 
     }
 
     public List<TProducto> mostrarProductos() {
-        
+                throw new UnsupportedOperationException("Unimplemented method 'mostrarPedidos'");
+
     }
 }

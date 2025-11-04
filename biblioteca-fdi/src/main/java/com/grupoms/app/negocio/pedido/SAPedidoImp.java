@@ -72,11 +72,6 @@ public class SAPedidoImp implements SAPedido{
     }
 
     @Override
-    public Integer modificarPedido(TPedido pedido) {
-        
-    }
-
-    @Override
     public TPedido mostrarPedido(Integer idPedido) {
         if (idPedido == null || idPedido <= 0)
             throw new IllegalArgumentException("El ID del pedido no es válido.");
@@ -99,12 +94,6 @@ public class SAPedidoImp implements SAPedido{
 
         }
         return pedido;
-    }
-
-    @Override
-    public Set<TPedido> mostrarPedidos() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'mostrarPedidos'");
     }
 
     @Override
@@ -134,6 +123,13 @@ public class SAPedidoImp implements SAPedido{
     }
 
     @Override
+    public Integer modificarPedido(TPedido pedido) {
+                throw new UnsupportedOperationException("Unimplemented method 'vincularProducto'");
+
+    }
+
+
+    @Override
     public Integer vincularProducto(Integer idPedido, Integer idProducto, Integer cantidad) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'vincularProducto'");
@@ -157,6 +153,11 @@ public class SAPedidoImp implements SAPedido{
         throw new UnsupportedOperationException("Unimplemented method 'mostrarPedidosPorMesa'");
     }
 
+     @Override
+    public Set<TPedido> mostrarPedidos() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'mostrarPedidos'");
+    }
 
     
 }

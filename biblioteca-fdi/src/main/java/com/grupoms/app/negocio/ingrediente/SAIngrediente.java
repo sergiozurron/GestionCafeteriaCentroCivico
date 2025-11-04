@@ -2,8 +2,6 @@ package com.grupoms.app.negocio.ingrediente;
 
 import java.util.Set;
 
-import com.grupoms.app.negocio.pedido.TPedido;
-
 public interface SAIngrediente{
         public Integer crearIngrediente(TIngrediente ingrediente);
 

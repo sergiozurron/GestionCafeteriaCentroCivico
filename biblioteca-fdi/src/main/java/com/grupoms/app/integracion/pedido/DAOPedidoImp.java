@@ -36,6 +36,7 @@ public class DAOPedidoImp implements DAOPedido{
                 try (ResultSet rs = ps.getGeneratedKeys()) {
                     if (rs.next()) {
                         idGenerado = rs.getInt(1);
+                        pedido.setId(idGenerado);
                     }
                 }
             }

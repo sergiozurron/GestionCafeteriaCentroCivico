@@ -7,13 +7,14 @@ public class TIngrediente {
         private String Nombre;
         private Double Precio;
         private Boolean activo;
+        private Integer idProveedor;
 
         //GETTERS
         public Integer getID(){return ID;}
         public Double getPrecio(){return Precio;}
         public String getNombre(){return Nombre;}
-        public Boolean activo(){return activo;}
-
+        public Boolean getActivo(){return activo;}
+        public Integer getIDProveedor(){return idProveedor;}
         //SETTERS
         public void setID(Integer id){
                 this.ID=id;
@@ -29,6 +30,9 @@ public class TIngrediente {
 
         public void setActivo(Boolean activo){
                 this.activo = activo;
+        }
+        public void setIDProveedor(Integer provI) {
+            this.idProveedor=provI;
         }
 
 }

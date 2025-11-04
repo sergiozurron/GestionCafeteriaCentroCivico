@@ -13,6 +13,8 @@ public class GUI_AltaIngrediente extends JFrame implements IGUI{
 
 	private JTextField nombre;
     private JTextField precio;
+    private JTextField prov;
+
     
     private JButton crear;
 
@@ -46,19 +48,22 @@ public class GUI_AltaIngrediente extends JFrame implements IGUI{
         JLabel labelPrecio = new JLabel("Precio:");
         precio = new JTextField(10);
 
+        JLabel labelProv = new JLabel("ID proveedor:");
+        prov = new JTextField(10);
+
         crear = new JButton("Crear Ingrediente");
         crear.addActionListener(e -> {
             try {
                 String nombrerI = nombre.getText();
                 Double precioI = Double.parseDouble(precio.getText());
-
+                Integer provI = Integer.parseInt(prov.getText());
                 // Crear el TPedido directamente aquí
                 TIngrediente ingr = new TIngrediente();
                 ingr.setNombre(nombrerI);
                 ingr.setPrecio(precioI);
-                ingr.setActivo(true);
+                ingr.setIDProveedor(provI);
                 // Enviar al controlador
-                Context contexto = new Context(Evento.ALTA_PEDIDO, ingr);
+                Context contexto = new Context(Evento.ALTA_INGREDIENTE, ingr);
                 Controlador.getInstance().handle(contexto);
 
             } catch (NumberFormatException ex) {

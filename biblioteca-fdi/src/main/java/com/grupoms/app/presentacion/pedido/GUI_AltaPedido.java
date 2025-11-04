@@ -56,10 +56,6 @@ public class GUI_AltaPedido extends JFrame implements IGUI{
                 TPedido pedido = new TPedido();
                 pedido.setIdMesa(idMesa);
                 pedido.setIdEmpleado(idEmpleado);
-                pedido.setTotal(0.0);
-                pedido.setActivo(true);
-                pedido.setEstado("ABIERTO");
-                pedido.setFecha(new java.sql.Date(System.currentTimeMillis()));
 
                 // Enviar al controlador
                 Context contexto = new Context(Evento.ALTA_PEDIDO, pedido);

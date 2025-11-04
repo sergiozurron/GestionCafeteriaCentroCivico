@@ -52,7 +52,8 @@ public class Principal extends JFrame implements IGUI {
          JPanel panelIngrediente = crearPanelCategoria("Ingrerdientes", new String[][]{
             {"Alta Ingrediente", "GUI_ALTA_INGREDIENTE"},
             {"Baja Ingrediente", "GUI_BAJA_INGREDIENTE"},
-            {"Modificar Ingrediente", "GUI_MODIFICAR_INGREDIENTE"}
+            {"Modificar Ingrediente", "GUI_MODIFICAR_INGREDIENTE"},
+            {"Mostrar Ingrediente", "GUI_MOSTRAR_INGREDIENTE"}
         });
 
         panelCentral.add(panelPedidos);

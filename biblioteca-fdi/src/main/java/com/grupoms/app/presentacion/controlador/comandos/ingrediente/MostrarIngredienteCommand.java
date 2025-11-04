@@ -7,21 +7,18 @@ import com.grupoms.app.presentacion.controlador.Context;
 import com.grupoms.app.presentacion.controlador.Evento;
 import com.grupoms.app.presentacion.controlador.comandos.Command;
 
-public class ModificarIngredienteCommand implements Command{
+public class MostrarIngredienteCommand implements Command{
 
     @Override
     public Context execute(Object data) {
-        if (!(data instanceof TIngrediente)) {
+         if (!(data instanceof TIngrediente)) {
             return new Context(Evento.MODIFICAR_INGREDIENTE_KO, null);
         }
 
         TIngrediente ingr = (TIngrediente) data;
         SAIngrediente sa = FactoriaSA.getInstance().creaSAIngrediente();
-
-        
-            sa.modificarIngrediente(ingr);
-            return new Context(Evento.MODIFICAR_INGREDIENTE_OK, ingr);
-        
+        sa.mostrarIngrediente(ingr.getID());
+        return new Context(Evento.MODIFICAR_INGREDIENTE_OK, ingr);
     }
     
 }

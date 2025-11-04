@@ -33,6 +33,7 @@ public class FactoryCommandImp extends FactoryCommand {
         commands.put(Evento.ALTA_INGREDIENTE, new AltaIngredienteCommand());
         commands.put(Evento.BAJA_INGREDIENTE, new BajaIngredienteCommand());
         commands.put(Evento.MODIFICAR_INGREDIENTE, new ModificarIngredienteCommand());
+        commands.put(Evento.MOSTRAR_INGREDIENTE, new MostrarIngredienteCommand());
 
 
 
@@ -65,6 +66,10 @@ public class FactoryCommandImp extends FactoryCommand {
         views.put(Evento.MODIFICAR_MESA, "GUI_MODIFICAR_MESA");
         views.put(Evento.MODIFICAR_MESA_KO, "GUI_MODIFICAR_MESA");
         views.put(Evento.MODIFICAR_MESA_OK, "GUI_MODIFICAR_MESA");
+
+        views.put(Evento.MOSTRAR_INGREDIENTE, "GUI_MOSTRAR_INGREDIENTE");
+        views.put(Evento.MOSTRAR_INGREDIENTE_KO, "GUI_MOSTRAR_INGREDIENTE");
+        views.put(Evento.MOSTRAR_INGREDIENTE_OK, "GUI_MOSTRAR_INGREDIENTE");
     }
     @Override
     public Command getCommand(Integer event) {

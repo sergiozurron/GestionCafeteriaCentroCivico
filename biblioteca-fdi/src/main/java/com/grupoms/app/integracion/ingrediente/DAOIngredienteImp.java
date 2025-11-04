@@ -69,8 +69,26 @@ public class DAOIngredienteImp implements DAOIngrediente{
 
     @Override
     public Boolean modificarIngrediente(TIngrediente tingrediente) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'modificarIngrediente'");
+       Boolean exito = false;
+       try{
+            Transaction t = TransactionManager.getInstance().getTransaction();
+            Connection c= (Connection) t.getResource();
+
+            String sql = "UPDATE ingredientes SET nombre = ?, precio = ?, proveedor_id = ? WHERE id =?"; 
+            try (PreparedStatement st = c.prepareStatement(sql)){
+                st.setString(1,tingrediente.getNombre());
+                st.setDouble(2, tingrediente.getPrecio());
+                st.setInt(3, tingrediente.getIDProveedor());
+                st.setInt(4, tingrediente.getID());
+                
+                int  rows = st.executeUpdate();
+                exito = rows > 0 ? true : false;
+                st.close();
+            }
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+        return exito;
     }
 
     @Override
@@ -87,6 +105,7 @@ public class DAOIngredienteImp implements DAOIngrediente{
                 stmt.setInt(2, ingrediente.getID());
 
                 stmt.executeUpdate();
+                stmt.close();
                 exito = true;
             }
         } catch (Exception e) {

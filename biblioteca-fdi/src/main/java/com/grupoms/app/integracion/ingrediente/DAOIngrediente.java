@@ -4,13 +4,17 @@ import java.util.Set;
 import com.grupoms.app.negocio.ingrediente.*;
 
 public interface DAOIngrediente {
-    public Integer altaIngrediente(TIngrediente ingrediente);
+    public Integer crearIngrediente(TIngrediente ingrediente);
 
     public TIngrediente mostrarIngrediente(Integer id);
 
     public Set<TIngrediente> mostrarListaIngredientes();
+    
+    public Set<TIngrediente> mostrarIngredientePorProducto(Integer idProducto);
 
-    public Integer modificarIngrediente(TIngrediente tingrediente);
+    public Set<TIngrediente> mostrarProveedorPorIngrediente(Integer idProveedor);
 
-    public Integer bajaIngrediente(Integer id);
+    public Boolean modificarIngrediente(TIngrediente tingrediente);
+
+    public Boolean bajaIngrediente(Integer id);
 }

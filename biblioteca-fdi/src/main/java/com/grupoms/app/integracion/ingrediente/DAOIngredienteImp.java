@@ -163,23 +163,23 @@ public class DAOIngredienteImp implements DAOIngrediente{
 
     @Override
     public Boolean modificarIngrediente(TIngrediente tingrediente) {
-        Boolean exito = false;
-        try {
+       Boolean exito = false;
+       try{
             Transaction t = TransactionManager.getInstance().getTransaction();
-            Connection c = (Connection) t.getResource();
+            Connection c= (Connection) t.getResource();
 
-            String sql = "UPDATE ingredientes SET nombre = ?, precio = ?, activo = ?, proveedor_id = ? WHERE id = ?";
-            try (PreparedStatement ps = c.prepareStatement(sql)) {
-                ps.setString(1, tingrediente.getNombre());
-                ps.setDouble(2, tingrediente.getPrecio());
-                ps.setBoolean(3, tingrediente.getActivo());
-                ps.setInt(4, tingrediente.getIDProveedor());
-                ps.setInt(5, tingrediente.getID());
-
-                int filasAfectadas = ps.executeUpdate();
-                exito = (filasAfectadas > 0);
+            String sql = "UPDATE ingredientes SET nombre = ?, precio = ?, proveedor_id = ? WHERE id =?"; 
+            try (PreparedStatement st = c.prepareStatement(sql)){
+                st.setString(1,tingrediente.getNombre());
+                st.setDouble(2, tingrediente.getPrecio());
+                st.setInt(3, tingrediente.getIDProveedor());
+                st.setInt(4, tingrediente.getID());
+                
+                int  rows = st.executeUpdate();
+                exito = rows > 0 ? true : false;
+                st.close();
             }
-        } catch (Exception e) {
+        }catch (Exception e) {
             e.printStackTrace();
         }
         return exito;
@@ -198,8 +198,9 @@ public class DAOIngredienteImp implements DAOIngrediente{
                 stmt.setBoolean(1, ingrediente.getActivo());
                 stmt.setInt(2, ingrediente.getID());
 
-                int filasAfectadas = stmt.executeUpdate();
-                exito = (filasAfectadas > 0);
+                stmt.executeUpdate();
+                stmt.close();
+                exito = true;
             }
         } catch (Exception e) {
             e.printStackTrace();

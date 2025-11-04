@@ -4,6 +4,8 @@ import com.grupoms.app.integracion.ingrediente.DAOIngrediente;
 import com.grupoms.app.integracion.ingrediente.DAOIngredienteImp;
 import com.grupoms.app.integracion.mesa.DAOMesa;
 import com.grupoms.app.integracion.mesa.DAOMesaImp;
+import com.grupoms.app.integracion.pedido.DAOOrden;
+import com.grupoms.app.integracion.pedido.DAOOrdenImp;
 import com.grupoms.app.integracion.pedido.DAOPedido;
 import com.grupoms.app.integracion.pedido.DAOPedidoImp;
 import com.grupoms.app.integracion.proveedor.DAOProveedor;
@@ -41,6 +43,12 @@ public class FactoriaDAOImp extends FactoriaDAO{
     public DAOProducto creaDAOProducto() {
         // TODO Auto-generated method stub
         return new DAOProductoImp();
+    }
+
+    @Override
+    public DAOOrden creaDAOOrden() {
+        // TODO Auto-generated method stub
+        return new DAOOrdenImp();
     }
     
 }

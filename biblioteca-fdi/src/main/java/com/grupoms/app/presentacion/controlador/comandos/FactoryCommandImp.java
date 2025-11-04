@@ -7,6 +7,7 @@ import com.grupoms.app.presentacion.controlador.Evento;
 import com.grupoms.app.presentacion.controlador.comandos.ingrediente.*;
 import com.grupoms.app.presentacion.controlador.comandos.mesa.*;
 import com.grupoms.app.presentacion.controlador.comandos.pedido.*;
+import com.grupoms.app.presentacion.controlador.comandos.empleado.*;
 
 public class FactoryCommandImp extends FactoryCommand {
     private Map<Integer, Command> commands = new HashMap<>();
@@ -37,7 +38,12 @@ public class FactoryCommandImp extends FactoryCommand {
         commands.put(Evento.MOSTRAR_INGREDIENTES, new MostrarListaIngredientes());
 
 
-
+        // Empleado
+        commands.put(Evento.ALTA_EMPLEADO, new AltaEmpleadoCommand());
+        commands.put(Evento.BAJA_EMPLEADO, new BajaEmpleadoCommand());
+        commands.put(Evento.MODIFICAR_EMPLEADO, new ModificarEmpleadoCommand());
+        commands.put(Evento.MOSTRAR_EMPLEADO, new MostrarEmpleadoCommand());
+        commands.put(Evento.MOSTRAR_EMPLEADOS, new MostrarListaEmpleadosCommand());
 
         //VISTAS
         views.put(Evento.MOSTRAR_PEDIDO, "GUI_MOSTRAR_PEDIDO");
@@ -76,6 +82,27 @@ public class FactoryCommandImp extends FactoryCommand {
         views.put(Evento.MOSTRAR_INGREDIENTES, "GUI_LISTAR_INGREDIENTES");
         views.put(Evento.MOSTRAR_INGREDIENTES_OK, "GUI_LISTAR_INGREDIENTES");
         views.put(Evento.MOSTRAR_INGREDIENTES_KO, "GUI_LISTAR_INGREDIENTES");
+
+
+        views.put(Evento.ALTA_EMPLEADO, "GUI_ALTA_EMPLEADO");
+        views.put(Evento.ALTA_EMPLEADO_OK, "GUI_ALTA_EMPLEADO");
+        views.put(Evento.ALTA_EMPLEADO_KO, "GUI_ALTA_EMPLEADO");
+
+        views.put(Evento.BAJA_EMPLEADO, "GUI_BAJA_EMPLEADO");
+        views.put(Evento.BAJA_EMPLEADO_OK, "GUI_BAJA_EMPLEADO");
+        views.put(Evento.BAJA_EMPLEADO_KO, "GUI_BAJA_EMPLEADO");
+
+        views.put(Evento.MODIFICAR_EMPLEADO, "GUI_MODIFICAR_EMPLEADO");
+        views.put(Evento.MODIFICAR_EMPLEADO_OK, "GUI_MODIFICAR_EMPLEADO");
+        views.put(Evento.MODIFICAR_EMPLEADO_KO, "GUI_MODIFICAR_EMPLEADO");
+
+        views.put(Evento.MOSTRAR_EMPLEADO, "GUI_MOSTRAR_EMPLEADO");
+        views.put(Evento.MOSTRAR_EMPLEADO_OK, "GUI_MOSTRAR_EMPLEADO");
+        views.put(Evento.MOSTRAR_EMPLEADO_KO, "GUI_MOSTRAR_EMPLEADO");
+
+        views.put(Evento.MOSTRAR_EMPLEADOS, "GUI_LISTAR_EMPLEADOS");
+        views.put(Evento.MOSTRAR_EMPLEADOS_OK, "GUI_LISTAR_EMPLEADOS");
+        views.put(Evento.MOSTRAR_EMPLEADOS_KO, "GUI_LISTAR_EMPLEADOS");
     }
     @Override
     public Command getCommand(Integer event) {

@@ -58,10 +58,19 @@ public class Principal extends JFrame implements IGUI {
 
         });
 
+        JPanel panelEmpleado = crearPanelCategoria("Empleados", new String[][]{
+            {"Alta Empleado", "GUI_ALTA_EMPLEADO"},
+            {"Baja Empleado", "GUI_BAJA_EMPLEADO"},
+            {"Modificar Empleado", "GUI_MODIFICAR_EMPLEADO"},
+            {"Mostrar Empleado", "GUI_MOSTRAR_EMPLEADO"},
+            {"Mostrar Lista Empleados", "GUI_LISTAR_EMPLEADOS"}
+        });
+
         panelCentral.add(panelPedidos);
         panelCentral.add(panelMesas);
         panelCentral.add(panelProveedores);
         panelCentral.add(panelIngrediente);
+        panelCentral.add(panelEmpleado);
 
 
         add(panelCentral, BorderLayout.CENTER);

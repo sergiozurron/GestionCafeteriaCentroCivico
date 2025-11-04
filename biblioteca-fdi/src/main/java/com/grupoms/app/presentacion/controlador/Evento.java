@@ -118,6 +118,27 @@ public class Evento {
     public static final int BAJA_ORDEN_OK = 206;
 
 
+	// Empleado
+	public static final int ALTA_EMPLEADO           = 220;
+	public static final int ALTA_EMPLEADO_OK        = 221;
+	public static final int ALTA_EMPLEADO_KO        = 222;
+
+	public static final int BAJA_EMPLEADO           = 223;
+	public static final int BAJA_EMPLEADO_OK        = 224;
+	public static final int BAJA_EMPLEADO_KO        = 225;
+
+	public static final int MODIFICAR_EMPLEADO      = 226;
+	public static final int MODIFICAR_EMPLEADO_OK   = 227;
+	public static final int MODIFICAR_EMPLEADO_KO   = 228;
+
+	public static final int MOSTRAR_EMPLEADO        = 229;
+	public static final int MOSTRAR_EMPLEADO_OK     = 230;
+	public static final int MOSTRAR_EMPLEADO_KO     = 231;
+
+	public static final int MOSTRAR_EMPLEADOS       = 232;
+	public static final int MOSTRAR_EMPLEADOS_OK    = 233;
+	public static final int MOSTRAR_EMPLEADOS_KO    = 234;
+
 
 
 }

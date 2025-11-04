@@ -37,7 +37,10 @@ public class Principal extends JFrame implements IGUI {
         // --- Sección Mesas ---
         JPanel panelMesas = crearPanelCategoria("Mesas", new String[][]{
             {"Alta Mesa", "GUI_ALTA_MESA"},
-            {"Mostrar Mesa", "GUI_MOSTRAR_MESA"}
+            {"Mostrar Mesa", "GUI_MOSTRAR_MESA"},
+            {"Baja Mesa", "GUI_BAJA_MESA"},
+            {"Modificar Mesa", "GUI_MODIFICAR_MESA"}
+
         });
 
         // --- Sección Proveedores ---

@@ -39,7 +39,8 @@ public class GUI_MostrarPedido extends JFrame implements IGUI{
                 );
                 break;
             case Evento.MOSTRAR_PEDIDO_KO:
-                JOptionPane.showMessageDialog(this, "No se ha encontrado el pedido con ese ID");
+                String msg = (String) context.getDatos();
+                JOptionPane.showMessageDialog(this, msg, "Error", JOptionPane.ERROR_MESSAGE);
                 break;
         }
     }
@@ -64,7 +65,7 @@ public class GUI_MostrarPedido extends JFrame implements IGUI{
                 Controlador.getInstance().handle(contexto);
 
             } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(this, "Error: los campos numéricos no son válidos");
+                JOptionPane.showMessageDialog(this, "Error: el ID debe ser un número entero");
             }
         });
 

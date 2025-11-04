@@ -1,7 +1,7 @@
 package com.grupoms.app;
 
 import javax.swing.*;
-
+import java.awt.*;
 import com.grupoms.app.presentacion.IGUI;
 import com.grupoms.app.presentacion.controlador.Context;
 import com.grupoms.app.presentacion.factoria.FactoriaVistas;
@@ -11,48 +11,80 @@ public class Principal extends JFrame implements IGUI {
     public Principal() {
         setTitle("Gestión Cafetería");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(800, 600);
+        setSize(900, 600);
         setLocationRelativeTo(null);
+        setLayout(new BorderLayout(15, 15));
 
-        JMenuBar menuBar = new JMenuBar();
+        // --- Título superior ---
+        JLabel titulo = new JLabel("Gestión de la Cafetería", SwingConstants.CENTER);
+        titulo.setFont(new Font("Segoe UI", Font.BOLD, 26));
+        titulo.setBorder(BorderFactory.createEmptyBorder(20, 0, 10, 0));
+        add(titulo, BorderLayout.NORTH);
 
-        // MENÚ PEDIDOS
-        JMenu menuPedidos = new JMenu("Pedidos");
+        // --- Panel principal con botones organizados ---
+        JPanel panelCentral = new JPanel(new GridLayout(1, 3, 20, 20));
+        panelCentral.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
 
-        JMenuItem altaPedido = new JMenuItem("Alta Pedido");
-        altaPedido.addActionListener(e -> abrirVista("GUI_ALTA_PEDIDO"));
-        menuPedidos.add(altaPedido);
+        // --- Sección Pedidos ---
+        JPanel panelPedidos = crearPanelCategoria("Pedidos", new String[][]{
+            {"Alta Pedido", "GUI_ALTA_PEDIDO"},
+            {"Mostrar Pedido", "GUI_MOSTRAR_PEDIDO"},
+            {"Devolver Pedido", "GUI_DEVOLVER_PEDIDO"},
+            {"Confirmar Pedido", "GUI_CONFIRMAR_PEDIDO"}
+        });
 
-        JMenuItem mostrarPedido = new JMenuItem("Mostrar Pedido");
-        mostrarPedido.addActionListener(e -> abrirVista("GUI_MOSTRAR_PEDIDO"));
-        menuPedidos.add(mostrarPedido);
+        // --- Sección Mesas ---
+        JPanel panelMesas = crearPanelCategoria("Mesas", new String[][]{
+            {"Alta Mesa", "GUI_ALTA_MESA"},
+            {"Mostrar Mesa", "GUI_MOSTRAR_MESA"}
+        });
 
-        JMenuItem devolverPedido = new JMenuItem("Devolver Pedido");
-        devolverPedido.addActionListener(e -> abrirVista("GUI_DEVOLVER_PEDIDO"));
-        menuPedidos.add(devolverPedido);
+        // --- Sección Proveedores ---
+        JPanel panelProveedores = crearPanelCategoria("Proveedores", new String[][]{
+            {"Alta Proveedor", "GUI_ALTA_PROVEEDOR"},
+            {"Mostrar Proveedor", "GUI_MOSTRAR_PROVEEDOR"}
+        });
 
-        JMenuItem confirmarPedido = new JMenuItem("Confirmar Pedido");
-        confirmarPedido.addActionListener(e -> abrirVista("GUI_CONFIRMAR_PEDIDO"));
-        menuPedidos.add(confirmarPedido);
+         JPanel panelIngrediente = crearPanelCategoria("Ingrerdientes", new String[][]{
+            {"Alta Ingrediente", "GUI_ALTA_INGREDIENTE"},
+            {"Baja Ingrediente", "GUI_BAJA_INGREDIENTE"}
+        });
 
-        // MENÚ MESAS
-        JMenu menuMesas = new JMenu("Mesas");
-        JMenuItem altaMesa = new JMenuItem("Alta Mesa");
-        altaMesa.addActionListener(e -> abrirVista("GUI_ALTA_MESA"));
-        menuMesas.add(altaMesa);
+        panelCentral.add(panelPedidos);
+        panelCentral.add(panelMesas);
+        panelCentral.add(panelProveedores);
+        panelCentral.add(panelIngrediente);
 
-        // MENÚ PROVEEDORES
-        JMenu menuProveedores = new JMenu("Proveedores");
-        JMenuItem altaProveedor = new JMenuItem("Alta Proveedor");
-        altaProveedor.addActionListener(e -> abrirVista("GUI_ALTA_PROVEEDOR"));
-        menuProveedores.add(altaProveedor);
 
-        menuBar.add(menuPedidos);
-        menuBar.add(menuMesas);
-        menuBar.add(menuProveedores);
-        setJMenuBar(menuBar);
+        add(panelCentral, BorderLayout.CENTER);
+
+        // --- Pie de página ---
+        JLabel footer = new JLabel("Gestión Cafetería - GrupoMS", SwingConstants.CENTER);
+        footer.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        footer.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
+        add(footer, BorderLayout.SOUTH);
 
         setVisible(true);
+    }
+
+    private JPanel crearPanelCategoria(String titulo, String[][] opciones) {
+        JPanel panel = new JPanel(new BorderLayout(10, 10));
+        panel.setBorder(BorderFactory.createTitledBorder(
+                BorderFactory.createLineBorder(new Color(150, 150, 150), 1, true),
+                titulo
+        ));
+
+        JPanel botonesPanel = new JPanel(new GridLayout(opciones.length, 1, 8, 8));
+        for (String[] opcion : opciones) {
+            JButton boton = new JButton(opcion[0]);
+            boton.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+            boton.setFocusPainted(false);
+            boton.addActionListener(e -> abrirVista(opcion[1]));
+            botonesPanel.add(boton);
+        }
+
+        panel.add(botonesPanel, BorderLayout.CENTER);
+        return panel;
     }
 
     private void abrirVista(String nombreVista) {

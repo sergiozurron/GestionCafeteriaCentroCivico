@@ -4,13 +4,17 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.grupoms.app.presentacion.IGUI;
+import com.grupoms.app.presentacion.pedido.*;
 
 public class FactoriaVistas {
+
 
     private static FactoriaVistas instance;
     private Map<String, IGUI> vistas = new HashMap<>();
 
-    private FactoriaVistas() {}
+    private FactoriaVistas() {
+
+    }
 
     public static FactoriaVistas getInstance() {
         if (instance == null)

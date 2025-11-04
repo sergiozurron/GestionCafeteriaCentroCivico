@@ -1,11 +1,12 @@
+
 package com.grupoms.app.presentacion.mesa;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ItemEvent;
 import com.grupoms.app.negocio.mesa.TMesa;
-import com.grupoms.app.negocio.mesa.TSala;
-import com.grupoms.app.negocio.mesa.TTerraza;
+import com.grupoms.app.negocio.mesa.TMesaSala;
+import com.grupoms.app.negocio.mesa.TMesaTerraza;
 import com.grupoms.app.presentacion.IGUI;
 import com.grupoms.app.presentacion.controlador.Context;
 import com.grupoms.app.presentacion.controlador.Controlador;
@@ -110,22 +111,22 @@ public class GUI_AltaMesa extends JFrame implements IGUI {
         crear = new JButton("Crear Mesa");
         crear.addActionListener(e -> {
             try {
-                TMesa mesa = new TMesa();
+                TMesa mesa;
+                if(rbtnTerraza.isSelected())
+                	mesa = new TMesaTerraza();
+                else
+                	mesa = new TMesaSala();
                 mesa.setNumero(Integer.parseInt(numero.getText()));
                 mesa.setUbicacion(ubicacion.getText());
                 mesa.setCapacidad(Integer.parseInt(capacidad.getText()));
                 mesa.setActivo(true);
 
                 if (rbtnSala.isSelected()) {
-                    TSala sala = new TSala();
-                    sala.setReservada(salaReservada.isSelected());
-                    sala.setPrivacidad(salaPrivacidad.getText());
-                    mesa.setSala(sala);
+                    mesa.setReservada(salaReservada.isSelected());
+                    mesa.setPrivacidad(salaPrivacidad.getText());
                 } else if (rbtnTerraza.isSelected()) {
-                    TTerraza terraza = new TTerraza();
-                    terraza.setCubierta(terrazaCubierta.isSelected());
-                    terraza.setSuplemento(Double.parseDouble(terrazaSuplemento.getText()));
-                    mesa.setTerraza(terraza);
+                    mesa.setCubierta(terrazaCubierta.isSelected());
+                    mesa.setSuplemento(Double.parseDouble(terrazaSuplemento.getText()));
                 }
 
                 Context contexto = new Context(Evento.ALTA_MESA, mesa);

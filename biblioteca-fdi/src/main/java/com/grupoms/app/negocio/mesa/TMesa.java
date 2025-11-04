@@ -1,11 +1,16 @@
 package com.grupoms.app.negocio.mesa;
 
-public class TMesa {
+public abstract class TMesa {
 	private Integer id;
 	private String ubicacion;
-	private Integer numero;
+	private Integer numero, capacidad;
 	private Boolean activo;
+	private String tipo;
 	
+	public TMesa(String tipo){
+		this.tipo = tipo;
+	}
+
 	public Integer getId() {
 		return id;
 	}
@@ -37,20 +42,30 @@ public class TMesa {
 	public void setActivo(Boolean activo) {
 		this.activo = activo;
 	}
-
-    public void setCapacidad(int int1) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'setCapacidad'");
-    }
-
-    public void setSala(TSala sala) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'setSala'");
-    }
-
-    public void setTerraza(TTerraza terraza) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'setTerraza'");
-    }
 	
+	public String getTipo() {
+		return tipo;
+	}
+
+	public void setTipo(String tipo) {
+		this.tipo = tipo;
+	}
+	
+	public Integer getCapacidad() {
+		return capacidad;
+	}
+	
+	public void setCapacidad(Integer capacidad) {
+		this.capacidad = capacidad;
+	}
+	
+	public abstract Double getSuplemento();
+	public abstract void setSuplemento(Double suplemento);
+	public abstract Boolean getCubierta();
+	public abstract void setCubierta(Boolean cubierta);
+	
+	public abstract Boolean getReservada();
+	public abstract void setReservada(Boolean reservada);
+	public abstract String getPrivacidad();
+	public abstract void setPrivacidad(String privacidad);
 }

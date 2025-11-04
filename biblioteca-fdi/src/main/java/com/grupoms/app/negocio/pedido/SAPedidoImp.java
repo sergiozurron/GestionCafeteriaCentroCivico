@@ -123,39 +123,164 @@ public class SAPedidoImp implements SAPedido{
 
     @Override
     public Integer modificarPedido(TPedido pedido) {
-                throw new UnsupportedOperationException("Unimplemented method 'vincularProducto'");
+        if (pedido == null || pedido.getId() == null)
+            throw new IllegalArgumentException("El pedido no puede ser nulo y debe tener ID.");
 
+        Transaction t = null;
+        Integer resultado = -1;
+        try {
+            t = TransactionManager.getInstance().newTransaction();
+            t.start();
+
+            // verificar que el pedido existe
+            TPedido pedidoExistente = dao.mostrarPedido(pedido.getId());
+            if (pedidoExistente == null)
+                throw new IllegalArgumentException("El pedido con ID " + pedido.getId() + " no existe.");
+
+            Boolean exito = dao.modificarPedido(pedido);
+            if (exito) {
+                resultado = pedido.getId();
+            }
+
+            t.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+            if (t != null) {
+                try { t.rollback(); } catch(Exception ex) { ex.printStackTrace(); }
+            }
+            throw new IllegalArgumentException("Error al modificar el pedido.", e);
+        }
+        return resultado;
     }
 
 
     @Override
     public Integer vincularProducto(Integer idPedido, Integer idProducto, Integer cantidad) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'vincularProducto'");
+        if (idPedido == null || idPedido <= 0)
+            throw new IllegalArgumentException("El ID del pedido no es válido.");
+        if (idProducto == null || idProducto <= 0)
+            throw new IllegalArgumentException("El ID del producto no es válido.");
+        if (cantidad == null || cantidad <= 0)
+            throw new IllegalArgumentException("La cantidad debe ser mayor a 0.");
+
+        Transaction t = null;
+        Integer idOrden = null;
+        try {
+            t = TransactionManager.getInstance().newTransaction();
+            t.start();
+
+            // verificar que el pedido existe
+            TPedido pedido = dao.mostrarPedido(idPedido);
+            if (pedido == null)
+                throw new IllegalArgumentException("El pedido con ID " + idPedido + " no existe.");
+
+            // y vincular el producto al pedido
+            idOrden = dao.vincularProducto(idPedido, idProducto, cantidad);
+
+            t.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+            if (t != null) {
+                try { t.rollback(); } catch(Exception ex) { ex.printStackTrace(); }
+            }
+            throw new IllegalArgumentException("Error al vincular producto al pedido.", e);
+        }
+        return idOrden;
     }
 
     @Override
     public Integer desvincularProducto(Integer idPedido, Integer idProducto) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'desvincularProducto'");
+        if (idPedido == null || idPedido <= 0)
+            throw new IllegalArgumentException("El ID del pedido no es válido.");
+        if (idProducto == null || idProducto <= 0)
+            throw new IllegalArgumentException("El ID del producto no es válido.");
+
+        Transaction t = null;
+        Integer filasAfectadas = 0;
+        try {
+            t = TransactionManager.getInstance().newTransaction();
+            t.start();
+
+            // verificar que el pedido existe
+            TPedido pedido = dao.mostrarPedido(idPedido);
+            if (pedido == null)
+                throw new IllegalArgumentException("El pedido con ID " + idPedido + " no existe.");
+
+            // y desvincular el producto del pedido
+            filasAfectadas = dao.desvincularProducto(idPedido, idProducto);
+
+            t.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+            if (t != null) {
+                try { t.rollback(); } catch(Exception ex) { ex.printStackTrace(); }
+            }
+            throw new IllegalArgumentException("Error al desvincular producto del pedido.", e);
+        }
+        return filasAfectadas;
     }
 
     @Override
     public Set<TPedido> mostrarPedidosPorEmpleado(Integer idEmpleado) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'mostrarPedidosPorEmpleado'");
+        if (idEmpleado == null || idEmpleado <= 0)
+            throw new IllegalArgumentException("El ID del empleado no es válido.");
+
+        Set<TPedido> listaPedidos = null;
+        Transaction t = null;
+        try {
+            t = TransactionManager.getInstance().newTransaction();
+            t.start();
+            listaPedidos = dao.mostrarPedidosPorEmpleado(idEmpleado);
+            t.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+            if (t != null) {
+                try { t.rollback(); } catch(Exception ex) { ex.printStackTrace(); }
+            }
+            throw new IllegalArgumentException("Error al mostrar pedidos del empleado con ID: " + idEmpleado, e);
+        }
+        return listaPedidos;
     }
 
     @Override
     public Set<TPedido> mostrarPedidosPorMesa(Integer idMesa) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'mostrarPedidosPorMesa'");
+        if (idMesa == null || idMesa <= 0)
+            throw new IllegalArgumentException("El ID de la mesa no es válido.");
+
+        Set<TPedido> listaPedidos = null;
+        Transaction t = null;
+        try {
+            t = TransactionManager.getInstance().newTransaction();
+            t.start();
+            listaPedidos = dao.mostrarPedidosPorMesa(idMesa);
+            t.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+            if (t != null) {
+                try { t.rollback(); } catch(Exception ex) { ex.printStackTrace(); }
+            }
+            throw new IllegalArgumentException("Error al mostrar pedidos de la mesa con ID: " + idMesa, e);
+        }
+        return listaPedidos;
     }
 
      @Override
     public Set<TPedido> mostrarPedidos() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'mostrarPedidos'");
+        Set<TPedido> listaPedidos = null;
+        Transaction t = null;
+        try {
+            t = TransactionManager.getInstance().newTransaction();
+            t.start();
+            listaPedidos = dao.mostrarPedidos();
+            t.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+            if (t != null) {
+                try { t.rollback(); } catch(Exception ex) { ex.printStackTrace(); }
+            }
+            throw new IllegalArgumentException("Error al mostrar la lista de pedidos.", e);
+        }
+        return listaPedidos;
     }
 
     

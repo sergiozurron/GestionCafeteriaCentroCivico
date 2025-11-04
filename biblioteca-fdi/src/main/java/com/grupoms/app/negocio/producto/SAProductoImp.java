@@ -38,20 +38,18 @@ public class SAProductoImp implements SAProducto{
     }
 
     public void bajaProducto(Integer id) {
-
+        throw new UnsupportedOperationException("Unimplemented method 'bajaProducto'");
     }
 
     public void modificarProducto(TProducto producto) {
-
+        throw new UnsupportedOperationException("Unimplemented method 'modificarProducto'");
     }
 
     public TProducto mostrarProducto(Integer id) {
-        throw new UnsupportedOperationException("Unimplemented method 'mostrarPedidos'");
-
+        throw new UnsupportedOperationException("Unimplemented method 'mostrarProducto'");
     }
 
     public List<TProducto> mostrarProductos() {
-                throw new UnsupportedOperationException("Unimplemented method 'mostrarPedidos'");
-
+        throw new UnsupportedOperationException("Unimplemented method 'mostrarProductos'");
     }
 }

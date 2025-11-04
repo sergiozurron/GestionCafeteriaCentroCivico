@@ -3,44 +3,33 @@ package com.grupoms.app.presentacion.mesa;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ItemEvent;
-
 import com.grupoms.app.negocio.mesa.TMesa;
 import com.grupoms.app.negocio.mesa.TSala;
 import com.grupoms.app.negocio.mesa.TTerraza;
-import com.grupoms.app.negocio.pedido.TPedido;
 import com.grupoms.app.presentacion.IGUI;
 import com.grupoms.app.presentacion.controlador.Context;
 import com.grupoms.app.presentacion.controlador.Controlador;
 import com.grupoms.app.presentacion.controlador.Evento;
 
 public class GUI_AltaMesa extends JFrame implements IGUI {
-    
-	private JTextField numero;
-    private JTextField ubicacion;
-    private JTextField capacidad;
 
-    private JRadioButton rbtnSala;
-    private JRadioButton rbtnTerraza;
-    private JPanel panelSala;
-    private JPanel panelTerraza;
-
-    // Campos Sala
-    private JCheckBox salaReservada;
-    private JTextField salaPrivacidad;
-
-    // Campos Terraza
-    private JCheckBox terrazaCubierta;
-    private JTextField terrazaSuplemento;
+    private JTextField numero, ubicacion, capacidad;
+    private JRadioButton rbtnSala, rbtnTerraza;
+    private JPanel panelSala, panelTerraza;
+    private JCheckBox salaReservada, terrazaCubierta;
+    private JLabel lblPrivacidad, lblSuplemento;
+    private JTextField salaPrivacidad, terrazaSuplemento;
     private JButton crear;
 
-    public GUI_AltaMesa(){
-       super("Alta Mesa");
-       initGUI(); //iniciamos el front por asi ddecirlo
-       setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); //destruye la ventana sin cerrar la app
-       pack(); //ajusta
-       setLocationRelativeTo(null); //centra
-       setVisible(true); //es visible
+    public GUI_AltaMesa() {
+        super("Alta Mesa");
+        initGUI();
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        pack();
+        setLocationRelativeTo(null);
+        setVisible(true);
     }
+
     @Override
     public void actualizar(Context context) {
         if (context.getEvento() == Evento.ALTA_MESA) {
@@ -58,70 +47,64 @@ public class GUI_AltaMesa extends JFrame implements IGUI {
             panelTerraza.setVisible(false);
         }
     }
-    
-    public void initGUI(){
-        setLayout(new BorderLayout()); //layout general
 
-        JPanel panel = new JPanel(new GridBagLayout()); //panel principal
+    private void initGUI() {
+        setLayout(new BorderLayout());
+        JPanel panel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5,5,5,5);
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        //CAMPOS COMUNES
 
         JLabel labelNumero = new JLabel("Número:");
         numero = new JTextField(10);
-
         JLabel labelUbicacion = new JLabel("Ubicación:");
         ubicacion = new JTextField(10);
-
         JLabel labelCapacidad = new JLabel("Capacidad:");
         capacidad = new JTextField(10);
 
-        //TIPO DE MESA
         rbtnSala = new JRadioButton("Sala");
         rbtnTerraza = new JRadioButton("Terraza");
         ButtonGroup grupoTipo = new ButtonGroup();
         grupoTipo.add(rbtnSala);
         grupoTipo.add(rbtnTerraza);
 
-
-        //SALA
         panelSala = new JPanel(new GridBagLayout());
         salaReservada = new JCheckBox("Reservada");
+        lblPrivacidad = new JLabel("Nivel privacidad:");
         salaPrivacidad = new JTextField(10);
-
         gbc.gridx = 0; gbc.gridy = 0;
         panelSala.add(salaReservada, gbc);
+        gbc.gridx = 0; gbc.gridy = 1;
+        panelSala.add(lblPrivacidad, gbc);
         gbc.gridx = 1;
         panelSala.add(salaPrivacidad, gbc);
-
         panelSala.setVisible(false);
-        
+
+        panelTerraza = new JPanel(new GridBagLayout());
+        terrazaCubierta = new JCheckBox("Cubierta");
+        lblSuplemento = new JLabel("Suplemento:");
+        terrazaSuplemento = new JTextField(10);
+        gbc.gridx = 0; gbc.gridy = 0;
+        panelTerraza.add(terrazaCubierta, gbc);
+        gbc.gridx = 0; gbc.gridy = 1;
+        panelTerraza.add(lblSuplemento, gbc);
+        gbc.gridx = 1;
+        panelTerraza.add(terrazaSuplemento, gbc);
+        panelTerraza.setVisible(false);
+
         rbtnSala.addItemListener(e -> {
             panelSala.setVisible(e.getStateChange() == ItemEvent.SELECTED);
             panelTerraza.setVisible(false);
             pack();
         });
 
-        //TERRAZA
-
-        panelTerraza = new JPanel(new GridBagLayout());
-        terrazaCubierta = new JCheckBox("Cubierta");
-        terrazaSuplemento = new JTextField(10);
-
-        gbc.gridx = 0; gbc.gridy = 0;
-        panelTerraza.add(terrazaCubierta, gbc);
-        gbc.gridx = 1;
-        panelTerraza.add(terrazaSuplemento, gbc);
-
-        panelTerraza.setVisible(false);
         rbtnTerraza.addItemListener(e -> {
             panelTerraza.setVisible(e.getStateChange() == ItemEvent.SELECTED);
             panelSala.setVisible(false);
             pack();
         });
 
-        crear = new JButton("Crear Pedido");
+        crear = new JButton("Crear Mesa");
         crear.addActionListener(e -> {
             try {
                 TMesa mesa = new TMesa();
@@ -150,7 +133,7 @@ public class GUI_AltaMesa extends JFrame implements IGUI {
             }
         });
 
-       int y = 0;
+        int y = 0;
         gbc.gridx = 0; gbc.gridy = y;
         panel.add(labelNumero, gbc);
         gbc.gridx = 1;

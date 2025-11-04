@@ -12,7 +12,10 @@ import com.grupoms.app.presentacion.controlador.Evento;
 public class GUI_BajaIngrediente extends JFrame implements IGUI{
     
     private JTextField campoID;
-    private JButton devolver;
+    private JButton mostrar;
+    private JLabel nombreLabel;
+    private JLabel precioLabel;
+    private JLabel provLabel;
 
     @Override
     public void actualizar(Context context) {
@@ -32,39 +35,65 @@ public class GUI_BajaIngrediente extends JFrame implements IGUI{
     }
 
     public void initGUI(){
-         setLayout(new BorderLayout());
         JPanel panel = new JPanel(new GridBagLayout());
-        setLayout(new BorderLayout()); //layout general
-
-        JLabel labelIdPedido = new JLabel("ID Ingrediente:");
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(5, 5, 5, 5);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        JLabel labelID = new JLabel("ID Ingrediente:");
         campoID = new JTextField(10);
 
-        devolver = new JButton("Baja Ingrediente");
-        devolver.addActionListener(e->{
-            try{
-                int ing = Integer.parseInt(campoID.getText());
+        mostrar = new JButton("Mostrar Ingrediente");
+        mostrar.addActionListener(e -> {
+            try {
+                int id = Integer.parseInt(campoID.getText());
                 TIngrediente ingrediente = new TIngrediente();
-                ingrediente.setID(ing);
+                ingrediente.setID(id);
 
-                Context contexto = new Context(Evento.BAJA_INGREDIENTE,ingrediente);
+                Context contexto = new Context();
+                contexto.setEvento(Evento.MOSTRAR_INGREDIENTE);
+                contexto.setDato(ingrediente);
+
                 Controlador.getInstance().handle(contexto);
 
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(this, "Error: el ID debe ser numérico");
             }
         });
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(5, 5, 5, 5);
-        gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        gbc.gridx = 0; gbc.gridy = 0;
-        panel.add(labelIdPedido, gbc);
+        // Labels para mostrar datos
+        nombreLabel = new JLabel();
+        precioLabel = new JLabel();
+        provLabel = new JLabel();
 
+        int y = 0;
+
+        gbc.gridx = 0; gbc.gridy = y;
+        panel.add(labelID, gbc);
         gbc.gridx = 1;
         panel.add(campoID, gbc);
 
-        gbc.gridx = 0; gbc.gridy = 1; gbc.gridwidth = 2;
-        panel.add(devolver, gbc);
+        y++;
+        gbc.gridx = 0; gbc.gridy = y; gbc.gridwidth = 2;
+        panel.add(mostrar, gbc);
+
+        y++;
+        gbc.gridwidth = 1;
+        gbc.gridx = 0; gbc.gridy = y;
+        panel.add(new JLabel("Nombre:"), gbc);
+        gbc.gridx = 1;
+        panel.add(nombreLabel, gbc);
+
+        y++;
+        gbc.gridx = 0; gbc.gridy = y;
+        panel.add(new JLabel("Precio:"), gbc);
+        gbc.gridx = 1;
+        panel.add(precioLabel, gbc);
+
+        y++;
+        gbc.gridx = 0; gbc.gridy = y;
+        panel.add(new JLabel("Proveedor:"), gbc);
+        gbc.gridx = 1;
+        panel.add(provLabel, gbc);
 
         add(panel, BorderLayout.CENTER);
     }

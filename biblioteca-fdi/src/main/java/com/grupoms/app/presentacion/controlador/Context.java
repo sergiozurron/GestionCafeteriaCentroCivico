@@ -25,4 +25,8 @@ public class Context {
 	public Object getDatos() {
 		return datos;
 	}
+
+	public void setDato(Object dato){
+		this.datos = dato;
+	}
 }

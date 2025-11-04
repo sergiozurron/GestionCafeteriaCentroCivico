@@ -11,18 +11,22 @@ public class ConfirmarPedidoCommand implements Command{
 
     @Override
     public Context execute(Object data) {
-       if (!(data instanceof TPedido)) {
-            return new Context(Evento.CONFIRMAR_PEDIDO_OK, null);
+      if (!(data instanceof TPedido)) {
+            return new Context(Evento.CONFIRMAR_PEDIDO_KO, "El objeto recibido no es un TPedido válido.");
         }
 
         TPedido pedido = (TPedido) data;
         SAPedido sa = FactoriaSA.getInstance().creaSAPedido();
 
         try {
-            sa.confirmarPedido(pedido);
-            return new Context(Evento.CONFIRMAR_PEDIDO_OK, pedido);
-        } catch (IllegalArgumentException e) {
-            return new Context(Evento.CONFIRMAR_PEDIDO_KO, null);
+            Boolean ok = sa.confirmarPedido(pedido);
+            if (ok)
+                return new Context(Evento.CONFIRMAR_PEDIDO_OK, pedido);
+            else
+                return new Context(Evento.CONFIRMAR_PEDIDO_KO, "No se pudo confirmar el pedido.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Context(Evento.CONFIRMAR_PEDIDO_KO, e.getMessage());
         }
     }    
 }

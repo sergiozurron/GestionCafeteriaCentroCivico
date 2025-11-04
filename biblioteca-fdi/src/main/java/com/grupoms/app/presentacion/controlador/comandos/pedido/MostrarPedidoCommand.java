@@ -11,15 +11,25 @@ public class MostrarPedidoCommand implements Command {
 
     @Override
     public Context execute(Object data) {
-        int id = (int) data;
+        if (!(data instanceof Integer)) {
+            return new Context(Evento.MOSTRAR_PEDIDO_KO, "El parámetro debe ser un ID de pedido (Integer).");
+        }
+
+        Integer idPedido = (Integer) data;
         SAPedido saPedido = FactoriaSA.getInstance().creaSAPedido();
 
-        TPedido pedido = saPedido.mostrarPedido(id);
+        try {
+            TPedido pedido = saPedido.mostrarPedido(idPedido);
 
-        if (pedido != null)
-            return new Context(Evento.MOSTRAR_PEDIDO_OK, pedido);
-        else
-            return new Context(Evento.MOSTRAR_PEDIDO_KO, null);
+            if (pedido != null)
+                return new Context(Evento.MOSTRAR_PEDIDO_OK, pedido);
+            else
+                return new Context(Evento.MOSTRAR_PEDIDO_KO, "No se encontró ningún pedido con ese ID.");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Context(Evento.MOSTRAR_PEDIDO_KO, e.getMessage());
+        }
     }
     
 }

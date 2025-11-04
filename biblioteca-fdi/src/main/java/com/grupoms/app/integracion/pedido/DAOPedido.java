@@ -8,7 +8,7 @@ import java.util.Set;
 public interface DAOPedido{
     public Integer altaPedido(TPedido pedido);
 
-    public Integer modificarPedido(TPedido pedido);
+    public Boolean modificarPedido(TPedido pedido);
 
     public TPedido mostrarPedido(Integer idPedido);
 

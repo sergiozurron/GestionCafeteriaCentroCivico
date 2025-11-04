@@ -12,7 +12,7 @@ public class DevolverPedidoCommand implements Command {
     @Override
     public Context execute(Object data) {
      if (!(data instanceof TPedido)) {
-            return new Context(Evento.DEVOLVER_PEDIDO_KO, null);
+            return new Context(Evento.DEVOLVER_PEDIDO_KO, "El objeto recibido no es un TPedido válido.");
         }
 
         TPedido pedido = (TPedido) data;
@@ -21,8 +21,9 @@ public class DevolverPedidoCommand implements Command {
         try {
             sa.devolverPedido(pedido);
             return new Context(Evento.DEVOLVER_PEDIDO_OK, pedido);
-        } catch (IllegalArgumentException e) {
-            return new Context(Evento.DEVOLVER_PEDIDO_KO, null);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Context(Evento.DEVOLVER_PEDIDO_KO, e.getMessage());
         }
     }
     

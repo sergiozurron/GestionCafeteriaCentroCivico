@@ -11,18 +11,19 @@ public class AltaPedidoCommand implements Command{
 
     @Override
     public Context execute(Object data) {
-        if (!(data instanceof TPedido)) {
-            return new Context(Evento.ALTA_PEDIDO_KO, null);
+       if (!(data instanceof TPedido)) {
+            return new Context(Evento.ALTA_PEDIDO_KO, "El objeto recibido no es un TPedido válido.");
         }
 
         TPedido pedido = (TPedido) data;
         SAPedido sa = FactoriaSA.getInstance().creaSAPedido();
 
         try {
-            sa.altaPedido(pedido);
-            return new Context(Evento.ALTA_PEDIDO_OK, pedido);
-        } catch (IllegalArgumentException e) {
-            return new Context(Evento.ALTA_PEDIDO_KO, null);
+            Integer idGenerado = sa.altaPedido(pedido);
+            return new Context(Evento.ALTA_PEDIDO_OK, idGenerado);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Context(Evento.ALTA_PEDIDO_KO, e.getMessage());
         }
     }
     

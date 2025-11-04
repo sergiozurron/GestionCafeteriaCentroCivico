@@ -4,7 +4,7 @@ import java.util.Set;
 public interface SAPedido {
     public Integer altaPedido(TPedido pedido);
 
-    public void confirmarPedido(TPedido pedido);
+    public Boolean confirmarPedido(TPedido pedido);
 
     public Integer modificarPedido(TPedido pedido);
 

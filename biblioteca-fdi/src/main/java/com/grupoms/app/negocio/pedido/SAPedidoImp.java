@@ -3,6 +3,7 @@ import java.util.Set;
 
 import com.grupoms.app.integracion.Transaction.Transaction;
 import com.grupoms.app.integracion.Transaction.TransactionManager;
+import com.grupoms.app.integracion.factoria.FactoriaDAO;
 import com.grupoms.app.integracion.pedido.*;
 
 public class SAPedidoImp implements SAPedido{
@@ -15,7 +16,9 @@ public class SAPedidoImp implements SAPedido{
         Integer idGenerado = null;
 
         try {
-            // 1. Iniciar transacción
+            if (pedido == null)
+                throw new IllegalArgumentException("El pedido no puede ser nulo.");
+
             t = TransactionManager.getInstance().newTransaction();
             t.start();
             // 2. Inicializar campos del pedido
@@ -41,14 +44,21 @@ public class SAPedidoImp implements SAPedido{
     }
 
     @Override
-    public void confirmarPedido(TPedido pedido) {
+    public Boolean confirmarPedido(TPedido pedido) {
        Transaction t = null;
+       Boolean exito = false;
        try{
+         if (pedido == null || pedido.getId() == null)
+            throw new IllegalArgumentException("El pedido no puede ser nulo y debe tener ID.");
+
         t = TransactionManager.getInstance().getTransaction();
         t.start();
+
         pedido.setEstado("EN PREPARACION");
-        dao.modificarPedido(pedido);
+
+        dao.modificarPedido(pedido);  
         t.commit();
+        exito = true;
        }catch (Exception e) {
             e.printStackTrace();
             try {
@@ -56,7 +66,9 @@ public class SAPedidoImp implements SAPedido{
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
+            throw new IllegalArgumentException("Error al confirmar el pedido.", e);
         }
+        return exito;
     }
 
     @Override
@@ -66,9 +78,13 @@ public class SAPedidoImp implements SAPedido{
 
     @Override
     public TPedido mostrarPedido(Integer idPedido) {
-        TPedido pedido = null;
-        Transaction t = TransactionManager.getInstance().getTransaction();
+        if (idPedido == null || idPedido <= 0)
+            throw new IllegalArgumentException("El ID del pedido no es válido.");
+        
+            TPedido pedido = null;
+        Transaction t = null;
         try{
+            t = TransactionManager.getInstance().getTransaction();
             t.start();
             pedido = dao.mostrarPedido(idPedido);
             t.commit();
@@ -79,6 +95,8 @@ public class SAPedidoImp implements SAPedido{
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
+            throw new IllegalArgumentException("Error al mostrar el pedido con ID: " + idPedido, e);
+
         }
         return pedido;
     }
@@ -93,10 +111,14 @@ public class SAPedidoImp implements SAPedido{
     public void devolverPedido(TPedido pedido) {
         Transaction t = TransactionManager.getInstance().getTransaction();
         try {
+            if (pedido == null || pedido.getId() == null)
+                throw new IllegalArgumentException("El pedido no puede ser nulo y debe tener ID.");
             t.start();
 
             // Llamada al DAO para cambiar estado y activo
-            dao.devolverPedido(pedido);
+            pedido.setActivo(false);
+            pedido.setEstado("DEVUELTO");
+            dao.modificarPedido(pedido);
 
             t.commit();
         } catch (Exception e) {
@@ -106,6 +128,8 @@ public class SAPedidoImp implements SAPedido{
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
+            throw new IllegalArgumentException("Error al devolver el pedido.", e);
+
         }
     }
 

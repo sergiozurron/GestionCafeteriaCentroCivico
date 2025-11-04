@@ -1,5 +1,7 @@
 package com.grupoms.app.integracion.factoria;
 
+import com.grupoms.app.integracion.empleado.DAOEmpleado;
+import com.grupoms.app.integracion.empleado.DAOEmpleadoImp;
 import com.grupoms.app.integracion.ingrediente.DAOIngrediente;
 import com.grupoms.app.integracion.ingrediente.DAOIngredienteImp;
 import com.grupoms.app.integracion.mesa.DAOMesa;
@@ -43,6 +45,11 @@ public class FactoriaDAOImp extends FactoriaDAO{
     public DAOProducto creaDAOProducto() {
         // TODO Auto-generated method stub
         return new DAOProductoImp();
+    }
+
+    public DAOEmpleado creaDAOEmpleado() {
+        // TODO Auto-generated method stub
+        return new DAOEmpleadoImp(); 
     }
 
     @Override

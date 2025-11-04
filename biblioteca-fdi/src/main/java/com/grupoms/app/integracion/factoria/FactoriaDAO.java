@@ -6,6 +6,7 @@ import com.grupoms.app.integracion.pedido.DAOPedido;
 import com.grupoms.app.integracion.proveedor.DAOProveedor;
 import com.grupoms.app.integracion.ingrediente.DAOIngrediente;
 import com.grupoms.app.integracion.producto.DAOProducto;
+import com.grupoms.app.integracion.empleado.DAOEmpleado;
 
 
 public abstract class FactoriaDAO {
@@ -21,7 +22,7 @@ public abstract class FactoriaDAO {
 	
 	public abstract DAOProveedor creaDAOProveedor();
 	public abstract DAOPedido creaDAOPedido ();
-	//public abstract DAOEmpleado creaDAOEmpleado();
+	public abstract DAOEmpleado creaDAOEmpleado();
 	public abstract DAOIngrediente creaDAOIngrediente();
 	public abstract DAOMesa creaDAOMesa();
 	public abstract DAOProducto creaDAOProducto();

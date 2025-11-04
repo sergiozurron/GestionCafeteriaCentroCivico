@@ -48,6 +48,10 @@ public class Evento {
 	public static final int ALTA_PEDIDO = 31;
 	public static final int ALTA_PEDIDO_OK = 32;
 	public static final int ALTA_PEDIDO_KO = 33;
+
+	public static final int CONFIRMAR_PEDIDO = 34;
+	public static final int CONFIRMAR_PEDIDO_OK = 35;
+    public static final int CONFIRMAR_PEDIDO_KO = 36;
 	
 	public static final int MODIFICAR_PEDIDO = 37;
 	public static final int MODIFICAR_PEDIDO_OK = 38;
@@ -58,7 +62,9 @@ public class Evento {
 	public static final int MOSTRAR_PEDIDO_KO = 42;
 
 	public static final int DEVOLVER_PEDIDO =43;
-    public static final int CONFIRMAR_PEDIDO = 44;
+    public static final int DEVOLVER_PEDIDO_OK = 44;
+    public static final int DEVOLVER_PEDIDO_KO = 45;
+
 	
 
 }

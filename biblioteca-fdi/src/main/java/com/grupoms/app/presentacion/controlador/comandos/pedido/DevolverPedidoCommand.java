@@ -11,10 +11,14 @@ public class DevolverPedidoCommand implements Command {
 
     @Override
     public Context execute(Object data) {
-       TPedido pedido = (TPedido) data;
-       SAPedido sa = FactoriaSA.getInstance().creaSAPedido();
-       sa.devolverPedido(pedido);
-       return new Context(Evento.DEVOLVER_PEDIDO, pedido);
+      TPedido pedido = (TPedido) data;
+        try{
+            FactoriaSA.getInstance().creaSAPedido().confirmarPedido(pedido);
+        }catch(IllegalArgumentException e){
+            System.out.println(e.getMessage());
+            return new Context(Evento.DEVOLVER_PEDIDO_KO,null);
+        }
+        return new Context(Evento.DEVOLVER_PEDIDO_OK,null);
     }
     
 }

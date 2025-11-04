@@ -1,8 +1,6 @@
 package com.grupoms.app;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Toolkit;
+
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -12,12 +10,10 @@ import javax.swing.JMenuItem;
 
 import com.grupoms.app.presentacion.IGUI;
 import com.grupoms.app.presentacion.controlador.Context;
-import com.grupoms.app.presentacion.controlador.Evento;
 import com.grupoms.app.presentacion.factoria.FactoriaVistas;
 
 public class Principal extends JFrame implements IGUI{
 
-    private JButton buttonPedido;
 
     @Override
     public void actualizar(Context context) {

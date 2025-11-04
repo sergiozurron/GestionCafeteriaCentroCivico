@@ -4,11 +4,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.grupoms.app.presentacion.controlador.Evento;
-import com.grupoms.app.presentacion.mesa.AltaMesaCommand;
-import com.grupoms.app.presentacion.mesa.BajaMesaCommand;
-import com.grupoms.app.presentacion.mesa.ModificarMesaCommand;
-import com.grupoms.app.presentacion.mesa.MostrarMesaCommand;
-import com.grupoms.app.presentacion.mesa.MostrarMesasCommand;
+import com.grupoms.app.presentacion.controlador.comandos.mesa.AltaMesaCommand;
+import com.grupoms.app.presentacion.controlador.comandos.mesa.BajaMesaCommand;
+import com.grupoms.app.presentacion.controlador.comandos.mesa.ModificarMesaCommand;
+import com.grupoms.app.presentacion.controlador.comandos.mesa.MostrarMesaCommand;
+import com.grupoms.app.presentacion.controlador.comandos.mesa.MostrarMesasCommand;
 
 public class FactoryCommandImp extends FactoryCommand {
     private Map<Integer, Command> commands = new HashMap<>();

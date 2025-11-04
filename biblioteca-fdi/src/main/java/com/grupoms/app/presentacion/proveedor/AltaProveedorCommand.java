@@ -11,7 +11,7 @@ public class AltaProveedorCommand implements Command {
 	@Override
 	public Context execute(Object data) {
 		TProveedor proveedor = (TProveedor) data;
-		int idProveedor = FactoriaSA.getInstancia().creaSAProveedor().altaProveedor(proveedor);
+		int idProveedor = FactoriaSA.getInstance().creaSAProveedor().altaProveedor(proveedor);
 		if (idProveedor == -1)
 			return new Context(Evento.ALTA_PROVEEDOR_KO, null);
 		return new Context(Evento.ALTA_PROVEEDOR_OK, idProveedor);

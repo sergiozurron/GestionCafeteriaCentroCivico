@@ -3,7 +3,6 @@ import java.util.Set;
 
 import com.grupoms.app.integracion.Transaction.Transaction;
 import com.grupoms.app.integracion.Transaction.TransactionManager;
-import com.grupoms.app.integracion.factoria.FactoriaDAO;
 import com.grupoms.app.integracion.pedido.*;
 
 public class SAPedidoImp implements SAPedido{

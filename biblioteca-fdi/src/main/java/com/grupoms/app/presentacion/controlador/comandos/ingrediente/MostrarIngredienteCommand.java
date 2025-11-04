@@ -10,21 +10,22 @@ import com.grupoms.app.presentacion.controlador.comandos.Command;
 public class MostrarIngredienteCommand implements Command{
 
     @Override
-    public Context execute(Object data) {
-       if (!(data instanceof TIngrediente)) {
-            return new Context(Evento.MOSTRAR_INGREDIENTE_KO, null);
-        }
-
-        TIngrediente ingr = (TIngrediente) data;
-        SAIngrediente sa = FactoriaSA.getInstance().creaSAIngrediente();
-
-        TIngrediente resultado = sa.mostrarIngrediente(ingr.getID());
-
-        if (resultado != null) {
-            return new Context(Evento.MOSTRAR_INGREDIENTE_OK, resultado);
-        } else {
-            return new Context(Evento.MOSTRAR_INGREDIENTE_KO, null);
-        }
+public Context execute(Object data) {
+    if (!(data instanceof TIngrediente)) {
+        return new Context(Evento.MOSTRAR_INGREDIENTE_KO, null);
     }
+
+    TIngrediente ingr = (TIngrediente) data;
+    SAIngrediente sa = FactoriaSA.getInstance().creaSAIngrediente();
+
+    try {
+        TIngrediente resultado = sa.mostrarIngrediente(ingr.getID());
+        return new Context(Evento.MOSTRAR_INGREDIENTE_OK, resultado);
+    } catch (Exception e) {
+        // Cualquier excepción se traduce en KO
+        return new Context(Evento.MOSTRAR_INGREDIENTE_KO, null);
+    }
+}
+
     
 }

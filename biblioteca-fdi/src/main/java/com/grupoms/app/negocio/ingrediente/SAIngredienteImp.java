@@ -120,6 +120,7 @@ public class SAIngredienteImp implements SAIngrediente{
                     ex.printStackTrace(); 
                 }
             }
+            throw new RuntimeException(e.getMessage(), e);
         }
 
         // 4. Devolver el ingrediente (null si hubo error)

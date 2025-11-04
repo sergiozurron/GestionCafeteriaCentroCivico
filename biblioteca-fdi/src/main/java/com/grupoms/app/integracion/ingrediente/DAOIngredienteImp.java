@@ -46,11 +46,14 @@ public class DAOIngredienteImp implements DAOIngrediente{
 
     @Override
     public TIngrediente mostrarIngrediente(Integer id) {
+        Transaction t = TransactionManager.getInstance().getTransaction();
+        if(t == null) {
+            throw new IllegalStateException("No hay transacción activa al mostrar ingrediente");
+        }
+        Connection c = (Connection) t.getResource();
         TIngrediente ingrediente = null;
         try {
-            Transaction t = TransactionManager.getInstance().getTransaction();
-            Connection c = (Connection) t.getResource();
-
+            
             String sql = "SELECT id, nombre, precio, proveedor_id FROM ingredientes WHERE id = ?";
             try (PreparedStatement ps = c.prepareStatement(sql)) {
                 ps.setInt(1, id);
@@ -63,6 +66,10 @@ public class DAOIngredienteImp implements DAOIngrediente{
                         ingrediente.setNombre(rs.getString("nombre"));
                         ingrediente.setPrecio(rs.getDouble("precio"));
                         ingrediente.setIDProveedor(rs.getInt("proveedor_id"));
+                    }
+                    else{
+                        throw new IllegalArgumentException("Ingrediente no encontrado en la base de datos");
+
                     }
                 }
             }

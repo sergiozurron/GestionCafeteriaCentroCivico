@@ -4,7 +4,6 @@ import javax.swing.*;
 import java.awt.*;
 
 import com.grupoms.app.negocio.ingrediente.TIngrediente;
-import com.grupoms.app.negocio.pedido.TPedido;
 import com.grupoms.app.presentacion.IGUI;
 import com.grupoms.app.presentacion.controlador.Context;
 import com.grupoms.app.presentacion.controlador.Controlador;

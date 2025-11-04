@@ -74,4 +74,8 @@ public class Evento {
     public static final int BAJA_INGREDIENTE_KO = 64;
     public static final int BAJA_INGREDIENTE_OK = 65;
 
+    public static final int MODIFICAR_INGREDIENTE = 66;
+    public static final Integer MODIFICAR_INGREDIENTE_OK = 67;
+    public static final Integer MODIFICAR_INGREDIENTE_KO = 68;
+
 }

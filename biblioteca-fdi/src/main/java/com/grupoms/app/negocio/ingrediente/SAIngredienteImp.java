@@ -66,8 +66,29 @@ public class SAIngredienteImp implements SAIngrediente{
 
     @Override
     public Boolean modificarIngrediente(TIngrediente ingrediente) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'modificarIngrediente'");
+        Transaction t = null;
+        Boolean exito = false;
+        TIngrediente ing = null;
+
+        try {
+            // 1. Iniciar transacción
+            t = TransactionManager.getInstance().newTransaction();
+            t.start();
+            ing = dao.mostrarIngrediente(ingrediente.getID());
+            if (ing == null)
+                throw new IllegalArgumentException("El ingrediente con ID " + ingrediente.getID() + " no existe.");
+            
+            exito = dao.modificarIngrediente(ingrediente);
+            t.commit();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            if (t != null) {
+                try { t.rollback(); } catch(Exception ex) { ex.printStackTrace(); }
+            }
+        }
+
+        return exito;
     }
 
     @Override

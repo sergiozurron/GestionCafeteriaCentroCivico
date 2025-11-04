@@ -28,13 +28,16 @@ public class GUI_ModificarIngrediente  extends JFrame implements IGUI{
     }
     @Override
     public void actualizar(Context context) {
-          if (context.getEvento() == Evento.ALTA_INGREDIENTE) {
+          if (context.getEvento() == Evento.MODIFICAR_INGREDIENTE_OK) {
             // Muestra mensaje de éxito
             JOptionPane.showMessageDialog(this, "Ingrediente modificado con éxito");
             // Limpia los campos para la siguiente entrada
             nombre.setText("");
             precio.setText("");
             prov.setText("");
+        }else if(context.getEvento() == Evento.MODIFICAR_INGREDIENTE_KO){
+            JOptionPane.showMessageDialog(this, "No se ha podido modificar el ingrediente");
+
         }
     }
     

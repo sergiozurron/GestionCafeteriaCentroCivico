@@ -75,8 +75,11 @@ public class Evento {
     public static final int BAJA_INGREDIENTE_OK = 65;
 
     public static final int MODIFICAR_INGREDIENTE = 66;
-    public static final Integer MODIFICAR_INGREDIENTE_OK = 67;
-    public static final Integer MODIFICAR_INGREDIENTE_KO = 68;
+    public static final int MODIFICAR_INGREDIENTE_OK = 67;
+    public static final int MODIFICAR_INGREDIENTE_KO = 68;
+
+	public static final int MOSTRAR_INGREDIENTE_OK = 69;
+    public static final int MOSTRAR_INGREDIENTE_KO = 70;
 
 	//ORDEN
     public static final int ANADIR_PRODUCTO = 201;
@@ -86,6 +89,8 @@ public class Evento {
     public static final int QUITAR_PRODUCTO = 204;
     public static final int BAJA_ORDEN_KO = 205;
     public static final int BAJA_ORDEN_OK = 206;
+
+
 
 
 }

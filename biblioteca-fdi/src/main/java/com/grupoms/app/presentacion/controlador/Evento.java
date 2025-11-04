@@ -66,9 +66,8 @@ public class Evento {
     public static final int DEVOLVER_PEDIDO_KO = 45;
 
 	//INGREDIENTE
-    public static final int ALTA_INGREDIENTE_OK = 60;
-    public static final int ALTA_INGREDIENTE_KO = 61;
-
-	
+    public static final int ALTA_INGREDIENTE_OK = 61;
+    public static final int ALTA_INGREDIENTE_KO = 62;
+    public static final int ALTA_INGREDIENTE = 60;
 
 }

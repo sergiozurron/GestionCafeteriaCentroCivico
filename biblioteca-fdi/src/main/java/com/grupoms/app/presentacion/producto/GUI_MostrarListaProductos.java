@@ -1,14 +1,10 @@
 package com.grupoms.app.presentacion.producto;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 
 import java.awt.*;
-import java.lang.reflect.Array;
 import java.util.Set;
 
-import com.grupoms.app.negocio.ingrediente.TIngrediente;
-import com.grupoms.app.negocio.mesa.TMesa;
 import com.grupoms.app.negocio.producto.TProducto;
 import com.grupoms.app.presentacion.IGUI;
 import com.grupoms.app.presentacion.controlador.Context;

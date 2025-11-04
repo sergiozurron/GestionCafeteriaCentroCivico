@@ -15,12 +15,12 @@ public class BajaIngredienteCommand implements Command{
             return new Context(Evento.BAJA_INGREDIENTE_KO, null);
         }
 
-        TIngrediente pedido = (TIngrediente) data;
+        TIngrediente ingr = (TIngrediente) data;
         SAIngrediente sa = FactoriaSA.getInstance().creaSAIngrediente();
 
         try {
-            sa.bajaIngrediente(pedido.getID());
-            return new Context(Evento.BAJA_INGREDIENTE_OK, pedido);
+            sa.bajaIngrediente(ingr);
+            return new Context(Evento.BAJA_INGREDIENTE_OK, ingr);
         } catch (IllegalArgumentException e) {
             return new Context(Evento.BAJA_INGREDIENTE_KO, null);
         }

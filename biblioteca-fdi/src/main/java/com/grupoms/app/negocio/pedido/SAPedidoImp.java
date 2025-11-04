@@ -66,8 +66,21 @@ public class SAPedidoImp implements SAPedido{
 
     @Override
     public TPedido mostrarPedido(Integer idPedido) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'mostrarPedido'");
+        TPedido pedido = null;
+        Transaction t = TransactionManager.getInstance().getTransaction();
+        try{
+            t.start();
+            pedido = dao.mostrarPedido(idPedido);
+            t.commit();
+        }catch(Exception e){
+          e.printStackTrace();
+            try {
+                if (t != null) t.rollback(); // rollback si falla algo
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+        return pedido;
     }
 
     @Override

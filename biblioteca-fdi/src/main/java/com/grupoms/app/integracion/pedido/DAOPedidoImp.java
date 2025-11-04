@@ -21,14 +21,14 @@ public class DAOPedidoImp implements DAOPedido{
             Connection c = (Connection) t.getResource();
 
             // Insert en la tabla pedido
-            String sql = "INSERT INTO pedido (idMesa, idEmpleado, total, estado, activo, fecha) VALUES (?, ?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO pedidos (fecha, total_factura, estado, activo, empleado_id, mesa_id) VALUES (?, ?, ?, ?, ?, ?)";
             try (PreparedStatement ps = c.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-                ps.setInt(1, pedido.getIdMesa());
-                ps.setInt(2, pedido.getIdEmpleado());
-                ps.setDouble(3, pedido.getTotal());
-                ps.setString(4, pedido.getEstado());
-                ps.setBoolean(5, pedido.getActivo());
-                ps.setDate(6, new java.sql.Date(pedido.getFecha().getTime()));
+                ps.setInt(6, pedido.getIdMesa());
+                ps.setInt(5, pedido.getIdEmpleado());
+                ps.setDouble(2, pedido.getTotal());
+                ps.setString(3, pedido.getEstado());
+                ps.setBoolean(4, pedido.getActivo());
+                ps.setDate(1, new java.sql.Date(pedido.getFecha().getTime()));
 
                 ps.executeUpdate();
 
@@ -53,7 +53,7 @@ public class DAOPedidoImp implements DAOPedido{
         try{
             Transaction t = TransactionManager.getInstance().getTransaction();
             Connection c = (Connection) t.getResource();
-            String sql = "UPDATE pedido SET total = ?, estado = ?, activo = ? WHERE id = ?";
+            String sql = "UPDATE pedidos SET total_factura = ?, estado = ?, activo = ? WHERE id = ?";
             try (PreparedStatement statement = c.prepareStatement(sql)) {
                 statement.setDouble(1, pedido.getTotal());
                 statement.setString(2, pedido.getEstado());
@@ -70,8 +70,32 @@ public class DAOPedidoImp implements DAOPedido{
 
     @Override
     public TPedido mostrarPedido(Integer idPedido) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'mostrarPedido'");
+         TPedido pedido = null;
+    try {
+        Transaction t = TransactionManager.getInstance().getTransaction();
+        Connection c = (Connection) t.getResource();
+
+        String sql = "SELECT * FROM pedidos WHERE id = ?";
+        try (PreparedStatement stmt = c.prepareStatement(sql)) {
+            stmt.setInt(1, idPedido);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    pedido = new TPedido();
+                    pedido.setId(rs.getInt("id"));
+                    pedido.setIdMesa(rs.getInt("mesa_id"));
+                    pedido.setIdEmpleado(rs.getInt("empleado_id"));
+                    pedido.setEstado(rs.getString("estado"));
+                    pedido.setFecha(rs.getDate("fecha"));
+                    pedido.setTotal(rs.getDouble("total_factura"));
+                    pedido.setActivo(rs.getBoolean("activo"));
+                }
+            }
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+    return pedido;
     }
 
     @Override
@@ -86,7 +110,7 @@ public class DAOPedidoImp implements DAOPedido{
         Transaction t = TransactionManager.getInstance().getTransaction();
         Connection c = (Connection) t.getResource();
 
-        String sql = "UPDATE pedido SET estado = ?, activo = ? WHERE id = ?";
+        String sql = "UPDATE pedidos SET estado = ?, activo = ? WHERE id = ?";
         try (PreparedStatement stmt = c.prepareStatement(sql)) {
             stmt.setString(1, "DEVUELTO");
             stmt.setBoolean(2, false);

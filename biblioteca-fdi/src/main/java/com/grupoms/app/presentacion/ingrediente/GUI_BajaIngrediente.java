@@ -1,29 +1,30 @@
-package com.grupoms.app.presentacion.pedido;
+package com.grupoms.app.presentacion.ingrediente;
 
 import javax.swing.*;
 import java.awt.*;
 
+import com.grupoms.app.negocio.ingrediente.TIngrediente;
 import com.grupoms.app.negocio.pedido.TPedido;
 import com.grupoms.app.presentacion.IGUI;
 import com.grupoms.app.presentacion.controlador.Context;
 import com.grupoms.app.presentacion.controlador.Controlador;
 import com.grupoms.app.presentacion.controlador.Evento;
 
-public class GUI_DevolverPedido extends JFrame implements IGUI{
-
+public class GUI_BajaIngrediente extends JFrame implements IGUI{
+    
     private JTextField campoID;
     private JButton devolver;
 
     @Override
     public void actualizar(Context context) {
         if(context.getEvento() == Evento.DEVOLVER_PEDIDO){
-            JOptionPane.showMessageDialog(this,"Pedido devuelto con exito");
+            JOptionPane.showMessageDialog(this,"Ingrediente dado de baja con exito");
             campoID.setText("");
         }
     }
 
-    public GUI_DevolverPedido(){
-        super("Devolver Pedido");
+    public GUI_BajaIngrediente(){
+        super("Baja Ingrediente");
         initGUI();
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         pack();
@@ -36,17 +37,17 @@ public class GUI_DevolverPedido extends JFrame implements IGUI{
         JPanel panel = new JPanel(new GridBagLayout());
         setLayout(new BorderLayout()); //layout general
 
-        JLabel labelIdPedido = new JLabel("ID Pedido:");
+        JLabel labelIdPedido = new JLabel("ID Ingrediente:");
         campoID = new JTextField(10);
 
-        devolver = new JButton("Devolver Pedido");
+        devolver = new JButton("Baja Ingrediente");
         devolver.addActionListener(e->{
             try{
-                 int idPedido = Integer.parseInt(campoID.getText());
-                TPedido pedido = new TPedido();
-                pedido.setId(idPedido);
+                int ing = Integer.parseInt(campoID.getText());
+                TIngrediente ingrediente = new TIngrediente();
+                ingrediente.setID(ing);
 
-                Context contexto = new Context(Evento.DEVOLVER_PEDIDO, pedido);
+                Context contexto = new Context(Evento.BAJA_INGREDIENTE,ingrediente);
                 Controlador.getInstance().handle(contexto);
 
             } catch (NumberFormatException ex) {
@@ -68,5 +69,6 @@ public class GUI_DevolverPedido extends JFrame implements IGUI{
 
         add(panel, BorderLayout.CENTER);
     }
-    
 }
+    
+

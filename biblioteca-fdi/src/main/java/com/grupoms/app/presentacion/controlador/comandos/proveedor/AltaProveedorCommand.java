@@ -1,4 +1,4 @@
-package com.grupoms.app.presentacion.proveedor;
+package com.grupoms.app.presentacion.controlador.comandos.proveedor;
 
 import com.grupoms.app.negocio.factoria.FactoriaSA;
 import com.grupoms.app.negocio.proveedor.TProveedor;

@@ -37,5 +37,20 @@ public class TMesa {
 	public void setActivo(Boolean activo) {
 		this.activo = activo;
 	}
+
+    public void setCapacidad(int int1) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setCapacidad'");
+    }
+
+    public void setSala(TSala sala) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setSala'");
+    }
+
+    public void setTerraza(TTerraza terraza) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setTerraza'");
+    }
 	
 }

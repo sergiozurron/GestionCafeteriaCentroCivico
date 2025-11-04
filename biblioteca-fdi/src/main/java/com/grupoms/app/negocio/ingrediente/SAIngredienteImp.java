@@ -93,26 +93,87 @@ public class SAIngredienteImp implements SAIngrediente{
 
     @Override
     public TIngrediente mostrarIngrediente(Integer ID) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'mostrarIngrediente'");
+        if (ID == null || ID <= 0)
+            throw new IllegalArgumentException("El ID del ingrediente no es válido.");
+
+        TIngrediente ingrediente = null;
+        Transaction t = null;
+        try {
+            t = TransactionManager.getInstance().newTransaction();
+            t.start();
+            ingrediente = dao.mostrarIngrediente(ID);
+            t.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+            if (t != null) {
+                try { t.rollback(); } catch(Exception ex) { ex.printStackTrace(); }
+            }
+            throw new IllegalArgumentException("Error al mostrar el ingrediente con ID: " + ID, e);
+        }
+        return ingrediente;
     }
 
     @Override
     public Set<TIngrediente> mostrarListaIngredientes() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'mostrarListaIngredientes'");
+        Set<TIngrediente> listaIngredientes = null;
+        Transaction t = null;
+        try {
+            t = TransactionManager.getInstance().newTransaction();
+            t.start();
+            listaIngredientes = dao.mostrarListaIngredientes();
+            t.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+            if (t != null) {
+                try { t.rollback(); } catch(Exception ex) { ex.printStackTrace(); }
+            }
+            throw new IllegalArgumentException("Error al mostrar la lista de ingredientes.", e);
+        }
+        return listaIngredientes;
     }
 
     @Override
     public Set<TIngrediente> mostrarIngredientePorProducto(Integer IDProducto) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'mostrarIngredientePorProducto'");
+        if (IDProducto == null || IDProducto <= 0)
+            throw new IllegalArgumentException("El ID del producto no es válido.");
+
+        Set<TIngrediente> listaIngredientes = null;
+        Transaction t = null;
+        try {
+            t = TransactionManager.getInstance().newTransaction();
+            t.start();
+            listaIngredientes = dao.mostrarIngredientePorProducto(IDProducto);
+            t.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+            if (t != null) {
+                try { t.rollback(); } catch(Exception ex) { ex.printStackTrace(); }
+            }
+            throw new IllegalArgumentException("Error al mostrar ingredientes del producto con ID: " + IDProducto, e);
+        }
+        return listaIngredientes;
     }
 
     @Override
     public Set<TIngrediente> mostrarProveedorPorIngrediente(TIngrediente ingrediente) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'mostrarProveedorPorIngrediente'");
+        if (ingrediente == null || ingrediente.getIDProveedor() == null || ingrediente.getIDProveedor() <= 0)
+            throw new IllegalArgumentException("El ingrediente debe tener un ID de proveedor válido.");
+
+        Set<TIngrediente> listaIngredientes = null;
+        Transaction t = null;
+        try {
+            t = TransactionManager.getInstance().newTransaction();
+            t.start();
+            listaIngredientes = dao.mostrarProveedorPorIngrediente(ingrediente.getIDProveedor());
+            t.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+            if (t != null) {
+                try { t.rollback(); } catch(Exception ex) { ex.printStackTrace(); }
+            }
+            throw new IllegalArgumentException("Error al mostrar ingredientes del proveedor con ID: " + ingrediente.getIDProveedor(), e);
+        }
+        return listaIngredientes;
     }
 
     @Override

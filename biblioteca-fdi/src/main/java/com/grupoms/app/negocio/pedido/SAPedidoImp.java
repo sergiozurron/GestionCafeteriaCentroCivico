@@ -21,7 +21,7 @@ public class SAPedidoImp implements SAPedido{
             t = TransactionManager.getInstance().newTransaction();
             t.start();
 
-            pedido.setEstado("Abierto");
+            pedido.setEstado("ABIERTO");
             pedido.setTotal(0.0);
             pedido.setActivo(true);
             pedido.setFecha(new java.sql.Date(System.currentTimeMillis()));

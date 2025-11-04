@@ -24,11 +24,6 @@ public class AltaPedidoCommand implements Command{
             Integer idPedido = saPedido.altaPedido(pedido);
             pedido.setId(idPedido);
 
-            // Crear la orden asociada
-            SAOrden saOrden = FactoriaSA.getInstance().creaSAOrden();
-            TOrden orden = new TOrden();
-            orden.setPedidoID(idPedido);
-            saOrden.altaOrden(orden);
 
             return new Context(Evento.ALTA_PEDIDO_OK, pedido);
         } catch (Exception e) {

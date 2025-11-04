@@ -58,22 +58,9 @@ public class FactoryCommandImp extends FactoryCommand {
         views.put(Evento.MODIFICAR_INGREDIENTE_OK, "GUI_MODIFICAR_INGREDIENTE");
         views.put(Evento.MODIFICAR_INGREDIENTE_KO, "GUI_MODIFICAR_INGREDIENTE");
 
-        views.put(Evento.ALTA_MESA, "GUI_ALTA_MESA");
-        views.put(Evento.ALTA_MESA_OK, "GUI_ALTA_MESA");
-        views.put(Evento.ALTA_MESA_KO, "GUI_ALTA_MESA");
-
         views.put(Evento.MODIFICAR_PEDIDO, "GUI_MODIFICAR_PEDIDO");
         views.put(Evento.MODIFICAR_PEDIDO_OK, "GUI_MODIFICAR_PEDIDO");
         views.put(Evento.MODIFICAR_PEDIDO_KO, "GUI_MODIFICAR_PEDIDO");
-
-        views.put(Evento.BAJA_MESA, "GUI_BAJA_MESA");
-        views.put(Evento.BAJA_MESA_KO, "GUI_BAJA_MESA");
-        views.put(Evento.BAJA_MESA_OK, "GUI_BAJA_MESA");
-
-
-        views.put(Evento.MODIFICAR_MESA, "GUI_MODIFICAR_MESA");
-        views.put(Evento.MODIFICAR_MESA_KO, "GUI_MODIFICAR_MESA");
-        views.put(Evento.MODIFICAR_MESA_OK, "GUI_MODIFICAR_MESA");
 
         views.put(Evento.MOSTRAR_INGREDIENTE, "GUI_MOSTRAR_INGREDIENTE");
         views.put(Evento.MOSTRAR_INGREDIENTE_KO, "GUI_MOSTRAR_INGREDIENTE");
@@ -103,6 +90,26 @@ public class FactoryCommandImp extends FactoryCommand {
         views.put(Evento.MOSTRAR_EMPLEADOS, "GUI_LISTAR_EMPLEADOS");
         views.put(Evento.MOSTRAR_EMPLEADOS_OK, "GUI_LISTAR_EMPLEADOS");
         views.put(Evento.MOSTRAR_EMPLEADOS_KO, "GUI_LISTAR_EMPLEADOS");
+        
+        views.put(Evento.ALTA_MESA, "GUI_ALTA_MESA");
+        views.put(Evento.ALTA_MESA_OK, "GUI_ALTA_MESA");
+        views.put(Evento.ALTA_MESA_KO, "GUI_ALTA_MESA");
+       
+        views.put(Evento.BAJA_MESA, "GUI_BAJA_MESA");
+        views.put(Evento.BAJA_MESA_OK, "GUI_BAJA_MESA");
+        views.put(Evento.BAJA_MESA_KO, "GUI_BAJA_MESA");
+        
+        views.put(Evento.MODIFICAR_MESA, "GUI_MODIFICAR_MESA");
+        views.put(Evento.MODIFICAR_MESA_OK, "GUI_MODIFICAR_MESA");
+        views.put(Evento.MODIFICAR_MESA_KO, "GUI_MODIFICAR_MESA");
+        
+        views.put(Evento.MOSTRAR_MESA, "GUI_MOSTRAR_MESA");
+        views.put(Evento.MOSTRAR_MESA_OK, "GUI_MOSTRAR_MESA");
+        views.put(Evento.MOSTRAR_MESA_KO, "GUI_MOSTRAR_MESA");
+        
+        views.put(Evento.MOSTRAR_LISTA_MESA, "GUI_LISTAR_MESAS");
+        views.put(Evento.MOSTRAR_LISTA_MESA_OK, "GUI_LISTAR_MESAS");
+        views.put(Evento.MOSTRAR_LISTA_MESA_KO, "GUI_LISTAR_MESAS");
     }
     @Override
     public Command getCommand(Integer event) {

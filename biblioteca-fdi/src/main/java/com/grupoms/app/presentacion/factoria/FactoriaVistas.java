@@ -9,10 +9,10 @@ public class FactoriaVistas {
 
 
     private static FactoriaVistas instance;
-    private Map<String, IGUI> vistas = new HashMap<>();
+    private Map<String, IGUI> vistas;
 
     private FactoriaVistas() {
-
+    	vistas = new HashMap<>();
     }
 
     public static FactoriaVistas getInstance() {

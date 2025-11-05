@@ -137,22 +137,19 @@ public class SAIngredienteImp implements SAIngrediente{
             t.start();
 
             Set<TIngrediente> todos = dao.mostrarListaIngredientes();
-             for(TIngrediente ing : todos) {
+            for(TIngrediente ing : todos) {
                 if(ing.getActivo()) {
                     listaIngredientes.add(ing);
                 }
             }
 
-            if(listaIngredientes.isEmpty()) {
-                throw new IllegalArgumentException("No hay ingredientes activos en la base de datos");
-            }
             t.commit();
         } catch (Exception e) {
             e.printStackTrace();
             if (t != null) {
                 try { t.rollback(); } catch(Exception ex) { ex.printStackTrace(); }
             }
-            throw new IllegalArgumentException("Error al mostrar la lista de ingredientes.", e);
+            listaIngredientes = null;
         }
         return listaIngredientes;
     }

@@ -50,12 +50,12 @@ public class Principal extends JFrame implements IGUI {
         });
 
         // --- Sección Ingredientes ---
-        JPanel panelIngrediente = crearPanelCategoria("Ingrerdientes", new String[][]{
+        JPanel panelIngrediente = crearPanelCategoria("Ingredientes", new String[][]{
             {"Alta Ingrediente", "GUI_ALTA_INGREDIENTE"},
             {"Baja Ingrediente", "GUI_BAJA_INGREDIENTE"},
             {"Modificar Ingrediente", "GUI_MODIFICAR_INGREDIENTE"},
             {"Mostrar Ingrediente", "GUI_MOSTRAR_INGREDIENTE"},
-            {"Mostrar Lista Ingredientes", "GUI_LISTAR_INGREDIENTES"}
+            {"Mostrar Lista Ingrediente", "GUI_LISTAR_INGREDIENTE"}
 
         });
 
@@ -65,7 +65,7 @@ public class Principal extends JFrame implements IGUI {
             {"Baja Empleado", "GUI_BAJA_EMPLEADO"},
             {"Modificar Empleado", "GUI_MODIFICAR_EMPLEADO"},
             {"Mostrar Empleado", "GUI_MOSTRAR_EMPLEADO"},
-            {"Mostrar Lista Empleados", "GUI_LISTAR_EMPLEADOS"}
+            {"Mostrar Lista Empleados", "GUI_LISTAR_EMPLEADO"}
         });
 
         // --- Sección Productos ---
@@ -74,7 +74,7 @@ public class Principal extends JFrame implements IGUI {
             {"Baja Producto", "GUI_BAJA_PRODUCTO"},
             {"Modificar Producto", "GUI_MODIFICAR_PRODUCTO"},
             {"Mostrar Producto", "GUI_MOSTRAR_PRODUCTO"},
-            {"Mostrar Lista Productos", "GUI_LISTAR_PRODUCTOS"}
+            {"Mostrar Lista Productos", "GUI_LISTAR_PRODUCTO"}
         });
 
         panelCentral.add(panelPedidos);
@@ -117,10 +117,15 @@ public class Principal extends JFrame implements IGUI {
     }
 
     private void abrirVista(String nombreVista) {
-        IGUI vista = FactoriaVistas.getInstance().creaVista(nombreVista);
-        if (vista != null)
-            vista.actualizar(new Context());
+    IGUI vista = FactoriaVistas.getInstance().creaVista(nombreVista);
+    if (vista != null) {
+        if (vista instanceof JFrame)
+            ((JFrame) vista).setVisible(true);  // 🔥 Fuerza que se muestre
+        vista.actualizar(new Context());
+    } else {
+        JOptionPane.showMessageDialog(this, "No se pudo abrir la vista: " + nombreVista);
     }
+}
 
     @Override
     public void actualizar(Context context) {}

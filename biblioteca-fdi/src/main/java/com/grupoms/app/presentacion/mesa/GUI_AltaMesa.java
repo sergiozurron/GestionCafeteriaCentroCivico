@@ -3,7 +3,6 @@ package com.grupoms.app.presentacion.mesa;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ItemEvent;
 import com.grupoms.app.negocio.mesa.TMesa;
 import com.grupoms.app.negocio.mesa.TMesaSala;
 import com.grupoms.app.negocio.mesa.TMesaTerraza;

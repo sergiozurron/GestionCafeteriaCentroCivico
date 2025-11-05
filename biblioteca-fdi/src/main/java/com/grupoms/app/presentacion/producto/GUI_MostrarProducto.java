@@ -73,7 +73,15 @@ public class GUI_MostrarProducto extends JFrame implements IGUI{
                           "Nombre: " + producto.getNombre() + "\n" +
                           "Precio: " + producto.getPrecio() + "\n" +
                           "Stock: " + producto.getStock() + "\n" +
-                          "Tipo: " + producto.getTipo();
+                          "Tipo: " + producto.getTipo() + "\n" +
+                          "Activo: " + (producto.getActivo() ? "Sí" : "No");
+                          
+            if (producto.getTipo().equals("Bebida")) {
+                info += "\nTamaño: " + producto.getTamanho();
+            } else if (producto.getTipo().equals("Comida")) {
+                info += "\nTiempo de Preparación: " + ((TComida) producto).getTiempoPreparacion() + 
+                        "\nCalorías: " + producto.getCalorias();
+            }
             JOptionPane.showMessageDialog(this, info, "Información del Producto", JOptionPane.INFORMATION_MESSAGE);
         } else if (context.getEvento() == Evento.MOSTRAR_PRODUCTO_KO) {
             JOptionPane.showMessageDialog(this, "Producto no encontrado", "Error", JOptionPane.ERROR_MESSAGE);

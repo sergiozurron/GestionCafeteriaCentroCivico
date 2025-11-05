@@ -41,4 +41,16 @@ public abstract class TProducto {
         this.activo = activo;
     }
     public void setTipo(String tipo) {this.tipo = tipo;}
+
+    public abstract Integer getTamanho();
+
+    public abstract Integer getCalorias();
+
+    public abstract Integer getTiempoPreparacion();
+
+    public abstract void setTamanho(Integer int1);
+
+    public abstract void setCalorias(Integer int1);
+
+    public abstract void setTiempoPreparacion(Integer int1);
 }

@@ -19,6 +19,14 @@ public class GUI_AltaProducto extends JFrame implements IGUI {
     private JRadioButton bebidaButton;
     private JRadioButton comidaButton;
     private JButton crear;
+    private JPanel panelBebida;
+    private JPanel panelComida;
+    private JLabel labelTamanho;
+    private JTextField campoTamanho;
+    private JLabel labelTiempoPreparacion;
+    private JTextField campoTiempoPreparacion;
+    private JLabel labelCalorias;
+    private JTextField campoCalorias;
 
     public GUI_AltaProducto(){
        super("Alta Producto");
@@ -52,6 +60,42 @@ public class GUI_AltaProducto extends JFrame implements IGUI {
         tipoGroup.add(bebidaButton);
         tipoGroup.add(comidaButton);
 
+        panelBebida = new JPanel(new GridBagLayout());
+        labelTamanho = new JLabel("Tamaño:");
+        campoTamanho = new JTextField(10);
+        gbc.gridx = 0; gbc.gridy = 1;
+        panelBebida.add(labelTamanho, gbc);
+        gbc.gridx = 1;
+        panelBebida.add(campoTamanho, gbc);
+        panelBebida.setVisible(false);
+
+        panelComida = new JPanel(new GridBagLayout());
+        labelTiempoPreparacion = new JLabel("Suplemento:");
+        campoTiempoPreparacion = new JTextField(10);
+        labelCalorias = new JLabel("Calorías:");
+        campoCalorias = new JTextField(10);
+        gbc.gridx = 0; gbc.gridy = 1;
+        panelComida.add(labelTiempoPreparacion, gbc);
+        gbc.gridx = 1;
+        panelComida.add(campoTiempoPreparacion, gbc);
+        gbc.gridx = 0; gbc.gridy = 2;
+        panelComida.add(labelCalorias, gbc);
+        gbc.gridx = 1;
+        panelComida.add(campoCalorias, gbc);
+        panelComida.setVisible(false);
+
+        bebidaButton.addActionListener(e -> {
+            panelBebida.setVisible(true);
+            panelComida.setVisible(false);
+            pack();
+        });
+
+        comidaButton.addActionListener(e -> {
+            panelComida.setVisible(true);
+            panelBebida.setVisible(false);
+            pack();
+        });
+
         crear = new JButton("Crear Producto");
         crear.addActionListener(e -> crearProducto());
 
@@ -61,6 +105,10 @@ public class GUI_AltaProducto extends JFrame implements IGUI {
         gbc.gridx = 1; panel.add(campoPrecio, gbc);
         gbc.gridx = 0; gbc.gridy = 1; panel.add(labelStock, gbc);
         gbc.gridx = 1; panel.add(campoStock, gbc);
+        gbc.gridx = 0; gbc.gridy = 2; panel.add(bebidaButton, gbc);
+        gbc.gridx = 1; panel.add(comidaButton, gbc);
+        gbc.gridx = 0; gbc.gridy = 3; gbc.gridwidth = 2; panel.add(panelBebida, gbc);
+        gbc.gridx = 0; gbc.gridy = 4; gbc.gridwidth = 2; panel.add(panelComida, gbc);
         gbc.gridx = 0; gbc.gridy = 2; gbc.gridwidth = 2; panel.add(crear, gbc);
 
         add(panel, BorderLayout.CENTER);
@@ -75,8 +123,11 @@ public class GUI_AltaProducto extends JFrame implements IGUI {
             TProducto producto;
             if (bebidaButton.isSelected()) {
                 producto = new TBebida();
+                producto.setTamanho(Integer.parseInt(campoTamanho.getText()));
             } else /*if (comidaButton.isSelected())*/ {
                 producto = new TComida();
+                producto.setCalorias(Integer.parseInt(campoCalorias.getText()));
+                producto.setTiempoPreparacion(Integer.parseInt(campoTiempoPreparacion.getText()));
             }
             producto.setNombre(nombre);
             producto.setPrecio(precio);

@@ -13,7 +13,7 @@ public class SAMesaImp implements SAMesa{
 
 	@Override
 	public Integer altaMesa(TMesa mesa) {
-		 Transaction t = null;
+		Transaction t = null;
         Integer idGenerado = null;
 
         try {
@@ -23,7 +23,7 @@ public class SAMesaImp implements SAMesa{
             // 2. Inicializar campos del ingrediente
             mesa.setActivo(true);
             idGenerado = daoMesa.altaMesa(mesa);
-            
+            mesa.setId(idGenerado);
             // 4. Commit
             t.commit();
 
@@ -47,7 +47,6 @@ public class SAMesaImp implements SAMesa{
             t = TransactionManager.getInstance().newTransaction();
             t.start();
             // 2. Inicializar campos del ingrediente
-            mesa.setActivo(false);
             daoMesa.bajaMesa(mesa.getId());
             
             // 4. Commit

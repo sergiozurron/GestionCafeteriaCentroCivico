@@ -28,9 +28,9 @@ public class Evento {
 	public static final int ALTA_MESA_OK = 17;
 	public static final int ALTA_MESA_KO = 18;
 	
-	public static final int BAJA_MESA = 16;
-	public static final int BAJA_MESA_OK = 17;
-	public static final int BAJA_MESA_KO = 18;
+	public static final int BAJA_MESA = 250;
+	public static final int BAJA_MESA_OK = 251;
+	public static final int BAJA_MESA_KO = 252;
 
 	public static final int MODIFICAR_MESA = 19;
 	public static final int MODIFICAR_MESA_OK = 20;

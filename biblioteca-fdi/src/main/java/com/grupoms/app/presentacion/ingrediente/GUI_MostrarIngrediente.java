@@ -13,6 +13,7 @@ public class GUI_MostrarIngrediente extends JFrame implements IGUI {
 
     private JTextField campoID;
     private JButton mostrar;
+
     private JLabel nombreLabel;
     private JLabel precioLabel;
     private JLabel provLabel;
@@ -23,7 +24,7 @@ public class GUI_MostrarIngrediente extends JFrame implements IGUI {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         pack();
         setLocationRelativeTo(null);
-        
+        setVisible(true);
     }
 
     private void initGUI() {
@@ -94,13 +95,19 @@ public class GUI_MostrarIngrediente extends JFrame implements IGUI {
 
     @Override
     public void actualizar(Context context) {
-    	if (context == null)
-    		setVisible(true);
-       else if (context.getEvento() == Evento.MOSTRAR_INGREDIENTE_OK) {
+    	
+    if (context.getEvento() == Evento.MOSTRAR_INGREDIENTE_OK) {
         TIngrediente ing = (TIngrediente) context.getDatos();
-        nombreLabel.setText(ing.getNombre());
-        precioLabel.setText(String.valueOf(ing.getPrecio()));
-        provLabel.setText(String.valueOf(ing.getIDProveedor()));
+        if(ing!=null){
+            nombreLabel.setText(ing.getNombre());
+            precioLabel.setText(String.valueOf(ing.getPrecio()));
+            provLabel.setText(String.valueOf(ing.getIDProveedor()));
+        }
+        else{
+            nombreLabel.setText("");
+        precioLabel.setText("");
+        provLabel.setText("");
+        }
     } else if (context.getEvento() == Evento.MOSTRAR_INGREDIENTE_KO) {
         JOptionPane.showMessageDialog(this, "Ingrediente no encontrado en la base de datos");
         nombreLabel.setText("");
@@ -109,3 +116,4 @@ public class GUI_MostrarIngrediente extends JFrame implements IGUI {
     }
     }
 }
+

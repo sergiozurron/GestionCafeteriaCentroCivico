@@ -47,37 +47,31 @@ public class DAOIngredienteImp implements DAOIngrediente{
 
     @Override
     public TIngrediente mostrarIngrediente(Integer id) {
-        Transaction t = TransactionManager.getInstance().getTransaction();
-        if(t == null) {
-            throw new IllegalStateException("No hay transacción activa al mostrar ingrediente");
-        }
-        Connection c = (Connection) t.getResource();
-        TIngrediente ingrediente = null;
-        try {
-            
-            String sql = "SELECT id, nombre, precio, proveedor_id FROM ingredientes WHERE id = ?";
+        TIngrediente ingr = null;
+        try{
+            Transaction t = TransactionManager.getInstance().getTransaction();
+            if (t==null)
+                throw new IllegalStateException("No hay transaccion activa");
+            Connection c = (Connection) t.getResource();
+
+            String sql = "SELECT id, nombre, precio, activo, proveedor_id FROM ingredientes WHERE id = ?";
             try (PreparedStatement ps = c.prepareStatement(sql)) {
-                ps.setInt(1, id);
-                System.out.println("Buscando ingrediente con ID: " + id);
+            ps.setInt(1, id);
 
-                try (ResultSet rs = ps.executeQuery()) {
-                    if (rs.next()) {
-                        ingrediente = new TIngrediente();
-                        ingrediente.setID(rs.getInt("id"));
-                        ingrediente.setNombre(rs.getString("nombre"));
-                        ingrediente.setPrecio(rs.getDouble("precio"));
-                        ingrediente.setIDProveedor(rs.getInt("proveedor_id"));
-                    }
-                    else{
-                        throw new IllegalArgumentException("Ingrediente no encontrado en la base de datos");
-
-                    }
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    ingr = new TIngrediente();
+                    ingr.setID(rs.getInt("id"));
+                    ingr.setNombre(rs.getString("nombre"));
+                    ingr.setPrecio(rs.getDouble("precio"));
+                    ingr.setIDProveedor(rs.getInt("proveedor_id"));
                 }
             }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
-        return ingrediente;
+    }catch(Exception e){
+        e.printStackTrace();
+    }
+        return ingr;  
     }
 
     @Override
@@ -174,9 +168,8 @@ public class DAOIngredienteImp implements DAOIngrediente{
                 stmt.setBoolean(1, ingrediente.getActivo());
                 stmt.setInt(2, ingrediente.getID());
 
-                stmt.executeUpdate();
-                stmt.close();
-                exito = true;
+                int rows = stmt.executeUpdate();
+                exito = rows > 0;
             }
         } catch (Exception e) {
             e.printStackTrace();

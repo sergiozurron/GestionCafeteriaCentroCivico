@@ -11,20 +11,26 @@ public class MostrarIngredienteCommand implements Command{
 
     @Override
 public Context execute(Object data) {
-    if (!(data instanceof TIngrediente)) {
-        return new Context(Evento.MOSTRAR_INGREDIENTE_KO, null);
-    }
+    Integer id = null;
 
-    TIngrediente ingr = (TIngrediente) data;
-    SAIngrediente sa = FactoriaSA.getInstance().creaSAIngrediente();
+        if (data instanceof Integer) {
+            id = (Integer) data;
+        } else if (data instanceof TIngrediente) {
+            id = ((TIngrediente) data).getID();
+        } else {
+            return new Context(Evento.MOSTRAR_INGREDIENTE_KO, null);
+        }
 
-    try {
-        TIngrediente resultado = sa.mostrarIngrediente(ingr.getID());
-        return new Context(Evento.MOSTRAR_INGREDIENTE_OK, resultado);
-    } catch (Exception e) {
-        // Cualquier excepción se traduce en KO
-        return new Context(Evento.MOSTRAR_INGREDIENTE_KO, null);
-    }
+        SAIngrediente sa = FactoriaSA.getInstance().creaSAIngrediente();
+
+        try {
+            TIngrediente emp = sa.mostrarIngrediente(id);
+            return (emp != null)
+                ? new Context(Evento.MOSTRAR_INGREDIENTE_OK, emp)
+                : new Context(Evento.MOSTRAR_INGREDIENTE_KO, null);
+        } catch (IllegalArgumentException e) {
+            return new Context(Evento.MOSTRAR_INGREDIENTE_KO, null);
+        }
 }
 
     

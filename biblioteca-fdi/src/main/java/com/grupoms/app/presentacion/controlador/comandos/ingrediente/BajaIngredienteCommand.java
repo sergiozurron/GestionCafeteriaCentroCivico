@@ -19,8 +19,10 @@ public class BajaIngredienteCommand implements Command{
         SAIngrediente sa = FactoriaSA.getInstance().creaSAIngrediente();
 
         try {
-            sa.bajaIngrediente(ingr);
-            return new Context(Evento.BAJA_INGREDIENTE_OK, ingr);
+            Boolean ok = sa.bajaIngrediente(ingr);
+            return ok
+                ? new Context(Evento.BAJA_INGREDIENTE_OK, ingr)
+                : new Context(Evento.BAJA_INGREDIENTE_KO, null);
         } catch (IllegalArgumentException e) {
             return new Context(Evento.BAJA_INGREDIENTE_KO, null);
         }

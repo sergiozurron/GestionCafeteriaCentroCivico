@@ -47,7 +47,9 @@ public class SAIngredienteImp implements SAIngrediente{
             // 1. Iniciar transacción
             t = TransactionManager.getInstance().newTransaction();
             t.start();
-            // 2. Inicializar campos del ingrediente
+
+            if (ingrediente == null || ingrediente.getID() == null || ingrediente.getID() <= 0)
+                throw new IllegalArgumentException("El ingrediente debe tener un ID válido para dar de baja.");
             ingrediente.setActivo(false);
             dao.bajaIngrediente(ingrediente);
             
@@ -106,8 +108,6 @@ public class SAIngredienteImp implements SAIngrediente{
 
             // 2. Consultar el ingrediente
             ing = dao.mostrarIngrediente(ID);
-            if (ing == null)
-                throw new IllegalArgumentException("El ingrediente con ID " + ID + " no existe.");
 
             // 3. Commit de la transacción
             t.commit();
@@ -115,13 +115,8 @@ public class SAIngredienteImp implements SAIngrediente{
         } catch (Exception e) {
             e.printStackTrace();
             if (t != null) {
-                try { 
-                    t.rollback(); 
-                } catch(Exception ex) { 
-                    ex.printStackTrace(); 
-                }
+                        try { t.rollback(); } catch (Exception ex) { ex.printStackTrace(); }
             }
-            throw new RuntimeException(e.getMessage(), e);
         }
 
         // 4. Devolver el ingrediente (null si hubo error)

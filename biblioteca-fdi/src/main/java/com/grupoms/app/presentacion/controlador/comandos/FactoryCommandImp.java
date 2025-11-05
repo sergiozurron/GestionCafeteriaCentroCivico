@@ -9,7 +9,7 @@ import com.grupoms.app.presentacion.controlador.comandos.mesa.*;
 import com.grupoms.app.presentacion.controlador.comandos.pedido.*;
 import com.grupoms.app.presentacion.controlador.comandos.empleado.*;
 import com.grupoms.app.presentacion.controlador.comandos.producto.*;
-import com.grupoms.app.presentacion.controlador.comandos.proveedor.AltaProveedorCommand;
+import com.grupoms.app.presentacion.controlador.comandos.proveedor.*;
 import com.grupoms.app.presentacion.factoria.FactoriaVistas;
 
 public class FactoryCommandImp extends FactoryCommand {
@@ -59,6 +59,10 @@ public class FactoryCommandImp extends FactoryCommand {
         
         // Proveedor
         commands.put(Evento.ALTA_PROVEEDOR, new AltaProveedorCommand());
+        commands.put(Evento.BAJA_PROVEEDOR, new BajaProveedorCommand());
+        commands.put(Evento.MODIFICAR_PROVEEDOR, new ModificarProveedorCommand());
+        commands.put(Evento.MOSTRAR_PROVEEDOR, new MostrarProveedorCommand());
+        commands.put(Evento.MOSTRAR_LISTA_PROVEEDOR, new MostrarListaProveedoresCommand());
 
 
         //VISTAS
@@ -91,6 +95,10 @@ public class FactoryCommandImp extends FactoryCommand {
         views.put(Evento.MOSTRAR_LISTA_PRODUCTO, FactoriaVistas.GUI_LISTAR_PRODUCTOS);
         
         views.put(Evento.ALTA_PROVEEDOR, FactoriaVistas.GUI_ALTA_PROVEEDOR);
+        views.put(Evento.BAJA_PROVEEDOR, FactoriaVistas.GUI_BAJA_PROVEEDOR);
+        views.put(Evento.MODIFICAR_PROVEEDOR, FactoriaVistas.GUI_MODIFICAR_PROVEEDOR);
+        views.put(Evento.MOSTRAR_PROVEEDOR, FactoriaVistas.GUI_MOSTRAR_PROVEEDOR);
+        views.put(Evento.MOSTRAR_LISTA_PROVEEDOR, FactoriaVistas.GUI_LISTAR_PROVEEDORES);
     }
     @Override
     public Command getCommand(Integer event) {

@@ -3,6 +3,7 @@ package com.grupoms.app.presentacion.ingrediente;
 import javax.swing.*;
 import java.awt.*;
 
+import com.grupoms.app.negocio.empleado.TEmpleado;
 import com.grupoms.app.negocio.ingrediente.TIngrediente;
 import com.grupoms.app.presentacion.IGUI;
 import com.grupoms.app.presentacion.controlador.Context;
@@ -11,50 +12,48 @@ import com.grupoms.app.presentacion.controlador.Evento;
 
 public class GUI_BajaIngrediente extends JFrame implements IGUI{
     
-    private JTextField campoID;
-    private JButton mostrar;
-    private JLabel nombreLabel;
-    private JLabel precioLabel;
-    private JLabel provLabel;
+    private JTextField idEmpleado;
+    private JButton baja;
 
-    @Override
-    public void actualizar(Context context) {
-    	if (context == null)
-    		setVisible(true);
-        if(context.getEvento() == Evento.DEVOLVER_PEDIDO){
-            JOptionPane.showMessageDialog(this,"Ingrediente dado de baja con exito");
-            campoID.setText("");
-        }
-    }
-
-    public GUI_BajaIngrediente(){
+    public GUI_BajaIngrediente() {
         super("Baja Ingrediente");
         initGUI();
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         pack();
         setLocationRelativeTo(null);
-        
     }
 
-    public void initGUI(){
+    @Override
+    public void actualizar(Context context) {
+    	if (context == null)
+    		setVisible(true);
+    	else if (context.getEvento() == Evento.BAJA_INGREDIENTE_OK) {
+            JOptionPane.showMessageDialog(this, "Empleado dado de baja con éxito");
+            idEmpleado.setText("");
+        } else if (context.getEvento() == Evento.BAJA_INGREDIENTE_KO) {
+            JOptionPane.showMessageDialog(this, "Error al dar de baja al empleado");
+        }
+    }
+
+    private void initGUI() {
+        setLayout(new BorderLayout());
         JPanel panel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(5, 5, 5, 5);
+        gbc.insets = new Insets(5,5,5,5);
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        JLabel labelID = new JLabel("ID Ingrediente:");
-        campoID = new JTextField(10);
 
-        mostrar = new JButton("Mostrar Ingrediente");
-        mostrar.addActionListener(e -> {
+        JLabel labelEmpleado = new JLabel("ID Ingrediente:");
+        idEmpleado = new JTextField(10);
+        
+        baja = new JButton("Baja Ingrediente");
+        baja.addActionListener(e -> {
             try {
-                int id = Integer.parseInt(campoID.getText());
-                TIngrediente ingrediente = new TIngrediente();
-                ingrediente.setID(id);
+                int id = Integer.parseInt(idEmpleado.getText().trim());
+                TIngrediente empleado = new TIngrediente();
+                empleado.setID(id);
+                empleado.setActivo(false); // baja lógica
 
-                Context contexto = new Context();
-                contexto.setEvento(Evento.MOSTRAR_INGREDIENTE);
-                contexto.setDato(ingrediente);
-
+                Context contexto = new Context(Evento.BAJA_INGREDIENTE, empleado);
                 Controlador.getInstance().handle(contexto);
 
             } catch (NumberFormatException ex) {
@@ -62,40 +61,15 @@ public class GUI_BajaIngrediente extends JFrame implements IGUI{
             }
         });
 
-        // Labels para mostrar datos
-        nombreLabel = new JLabel();
-        precioLabel = new JLabel();
-        provLabel = new JLabel();
-
         int y = 0;
-
         gbc.gridx = 0; gbc.gridy = y;
-        panel.add(labelID, gbc);
+        panel.add(labelEmpleado, gbc);
         gbc.gridx = 1;
-        panel.add(campoID, gbc);
+        panel.add(idEmpleado, gbc);
 
         y++;
         gbc.gridx = 0; gbc.gridy = y; gbc.gridwidth = 2;
-        panel.add(mostrar, gbc);
-
-        y++;
-        gbc.gridwidth = 1;
-        gbc.gridx = 0; gbc.gridy = y;
-        panel.add(new JLabel("Nombre:"), gbc);
-        gbc.gridx = 1;
-        panel.add(nombreLabel, gbc);
-
-        y++;
-        gbc.gridx = 0; gbc.gridy = y;
-        panel.add(new JLabel("Precio:"), gbc);
-        gbc.gridx = 1;
-        panel.add(precioLabel, gbc);
-
-        y++;
-        gbc.gridx = 0; gbc.gridy = y;
-        panel.add(new JLabel("Proveedor:"), gbc);
-        gbc.gridx = 1;
-        panel.add(provLabel, gbc);
+        panel.add(baja, gbc);
 
         add(panel, BorderLayout.CENTER);
     }

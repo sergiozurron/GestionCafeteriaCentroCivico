@@ -217,6 +217,38 @@ public class DAOIngredienteImp implements DAOIngrediente{
         return exito;
     }
 
+    @Override
+    public Set<TIngrediente> listarIngredientesPorProducto(Integer idProducto) throws Exception {
+        Set<TIngrediente> lista = new HashSet<>();
+        try {
+            Transaction t = TransactionManager.getInstance().getTransaction();
+            Connection c = (Connection) t.getResource();
+            String sql = "SELECT i.id, i.nombre, i.precio, i.activo, i.proveedor_id " +
+                     "FROM ingredientes i " +
+                     "JOIN producto_ingrediente pi ON i.id = pi.id_ingrediente " +
+                     "WHERE pi.id_producto = ?";
+            PreparedStatement ps = c.prepareStatement(sql);
+            ps.setInt(1,idProducto);
+            ResultSet rs = ps.executeQuery();
 
-    
+            while (rs.next()) {
+                TIngrediente ing = new TIngrediente();
+                ing.setID(rs.getInt("id"));
+                ing.setNombre(rs.getString("nombre"));
+                ing.setPrecio(rs.getDouble("precio"));
+                ing.setActivo(rs.getBoolean("activo"));
+                ing.setIDProveedor(rs.getInt("proveedor_id"));
+                lista.add(ing);
+            }
+
+            rs.close();
+            ps.close();
+
+            return lista;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new Exception("Error al listar ingredientes por producto: " + e.getMessage());
+        }
+    }
+   
 }

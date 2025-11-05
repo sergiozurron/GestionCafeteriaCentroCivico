@@ -40,12 +40,19 @@ public class FactoriaVistas {
             if (partes.length < 3)
                 throw new IllegalArgumentException("Formato de nombreVista inválido: " + nombreVista);
 
-            String comando = partes[1];
-            String entidad = partes[2];
+        String comando = capitalize(partes[1]);
 
-            String nombreClase =
-                "com.grupoms.app.presentacion." + entidad + ".GUI_" +
-                capitalize(comando) + capitalize(entidad);
+        // juntar el resto como entidad compuesta (por ejemplo INGREDIENTE_PRODUCTO → IngredienteProducto)
+        StringBuilder entidadBuilder = new StringBuilder();
+        for (int i = 2; i < partes.length; i++) {
+            entidadBuilder.append(capitalize(partes[i].toLowerCase()));
+        }
+        String entidad = entidadBuilder.toString();
+
+        String nombreClase =
+            "com.grupoms.app.presentacion." +
+            partes[2].toLowerCase() + // paquete base
+            ".GUI_" + comando + entidad;
 
             Class<?> clazz = Class.forName(nombreClase);
 

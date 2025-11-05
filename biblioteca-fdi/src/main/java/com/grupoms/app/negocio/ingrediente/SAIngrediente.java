@@ -19,4 +19,5 @@ public interface SAIngrediente{
 
         public void vincularProducto(Integer idIngrediente, Integer idProducto, Integer cantidad);
 
+
 }

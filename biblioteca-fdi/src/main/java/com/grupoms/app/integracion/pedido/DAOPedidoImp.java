@@ -102,7 +102,7 @@ public class DAOPedidoImp implements DAOPedido{
     }
 
     @Override
-    public Set<TPedido> mostrarPedidos() {
+    public Set<TPedido> mostrarListaPedidos() {
         Set<TPedido> lista = new HashSet<>();
 
         try {

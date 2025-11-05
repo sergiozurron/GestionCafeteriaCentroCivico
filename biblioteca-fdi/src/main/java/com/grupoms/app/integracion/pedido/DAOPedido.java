@@ -12,7 +12,7 @@ public interface DAOPedido{
 
     public TPedido mostrarPedido(Integer idPedido);
 
-    public Set<TPedido> mostrarPedidos();
+    public Set<TPedido> mostrarListaPedidos();
 
     public void devolverPedido(TPedido pedido);
 

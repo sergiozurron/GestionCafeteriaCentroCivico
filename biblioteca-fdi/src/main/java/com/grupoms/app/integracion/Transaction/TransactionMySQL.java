@@ -1,52 +1,42 @@
 package com.grupoms.app.integracion.Transaction;
 
-import java.io.FileInputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.util.Properties;
+import java.sql.SQLException;
 
 public class TransactionMySQL implements Transaction {
 
-    private Connection conexion;
+	private Connection conexion;
 
-    public TransactionMySQL() throws Exception {
-        Properties prop = new Properties();
-        prop.load(new FileInputStream("config/dbconfig.properties"));
+	public TransactionMySQL() throws SQLException {
+		conexion = DriverManager.getConnection(System.getenv("MS_DB_URL"), System.getenv("MS_DB_USER"),
+				System.getenv("MS_DB_PASSWORD"));
+	}
 
-        String host = prop.getProperty("host");
-        String port = prop.getProperty("port");
-        String db = prop.getProperty("dbname");
-        String user = prop.getProperty("user");
-        String password = prop.getProperty("password");
+	@Override
+	public void start() throws Exception {
+		conexion.setAutoCommit(false);
+	}
 
-        String url = "jdbc:mysql://" + host + ":" + port + "/" + db + "?user=" + user
-                + "&password=" + password + "&useSSL=false&serverTimezone=Europe/Madrid";
+	@Override
+	public void commit() throws Exception {
+		conexion.commit();
+		conexion.close();
+		TransactionManager.getInstance().deleteTransaction();
+	}
 
-        conexion = DriverManager.getConnection(url);
-    }
+	@Override
+	public void rollback() throws Exception {
+		conexion.rollback();
+	}
 
-    @Override
-    public void start() throws Exception {
-        conexion.setAutoCommit(false);
-    }
+	@Override
+	public Connection getConnection() {
+		return conexion;
+	}
 
-    @Override
-    public void commit() throws Exception {
-        conexion.commit();
-    }
-
-    @Override
-    public void rollback() throws Exception {
-        conexion.rollback();
-    }
-
-    @Override
-    public Connection getConnection() {
-        return conexion;
-    }
-
-    @Override
-    public Object getResource() {
-       return conexion;
-    }
+	@Override
+	public Object getResource() {
+		return conexion;
+	}
 }

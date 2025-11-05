@@ -14,8 +14,15 @@ public class SAProveedorImpl implements SAProveedor {
 			DAOProveedor daoProveedor = FactoriaDAO.getInstancia().creaDAOProveedor();
 			tx.start();
 			TProveedor proveedorExistente = daoProveedor.buscaPorNombre(tProveedor.getNombre());
-			if (proveedorExistente != null && proveedorExistente.getActivo()) {
-				return -1;
+			if (proveedorExistente != null) {
+				if (proveedorExistente.getActivo()) {
+					tx.commit();
+					return -1;
+				}
+				proveedorExistente.setActivo(true);
+				daoProveedor.actualiza(proveedorExistente);
+				tx.commit();
+				return proveedorExistente.getId();
 			}
 			tProveedor.setActivo(true);
 			daoProveedor.crea(tProveedor);

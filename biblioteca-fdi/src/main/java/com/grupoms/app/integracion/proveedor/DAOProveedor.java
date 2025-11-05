@@ -8,4 +8,5 @@ public interface DAOProveedor {
 	TProveedor buscaPorNombre(String nombre);
 	TProveedor buscaPorId(int id);
 	void eliminaTodos();
+	void actualiza(TProveedor proveedor);
 }

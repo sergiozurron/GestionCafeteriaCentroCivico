@@ -1,15 +1,17 @@
 package com.grupoms.app.integracion.Transaction;
 
-public interface TransactionManager {
+public abstract class TransactionManager {
+	
+	private static TransactionManager instance;
 
-    Transaction newTransaction() throws Exception;
-
-    Transaction getTransaction();
-
-    void deleteTransaction() throws Exception;
-
-    static TransactionManager getInstance() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getInstance'");
+    public static synchronized TransactionManager getInstance() {
+    			if (instance == null) {
+			instance = new TransactionManagerImp();
+		}
+		return instance;
     }
+    
+    public abstract Transaction newTransaction() throws Exception;
+    public abstract Transaction getTransaction();
+    public abstract void deleteTransaction() throws Exception;
 }

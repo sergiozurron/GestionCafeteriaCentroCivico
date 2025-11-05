@@ -26,29 +26,35 @@ public class FactoriaVistas {
      * Ejemplo: "GUI_MOSTRAR_PEDIDO" → com.grupoms.app.presentacion.pedido.GUI_MostrarPedido
      */
    public IGUI creaVista(String nombreVista) {
-        try {
-            String[] partes = nombreVista.toLowerCase().split("_");
-            if (partes.length < 3)
-                throw new IllegalArgumentException("Formato de nombreVista inválido: " + nombreVista);
+    try {
+        String[] partes = nombreVista.split("_");
+        if (partes.length < 3)
+            throw new IllegalArgumentException("Formato de nombreVista inválido: " + nombreVista);
 
-            String comando = partes[1];
-            String entidad = partes[2];
+        String comando = capitalize(partes[1]);
 
-            String nombreClase =
-                "com.grupoms.app.presentacion." + entidad + ".GUI_" +
-                capitalize(comando) + capitalize(entidad);
-
-            Class<?> clazz = Class.forName(nombreClase);
-
-            // Siempre nueva instancia
-            return (IGUI) clazz.getDeclaredConstructor().newInstance();
-
-        } catch (Exception e) {
-            System.err.println("No se pudo crear la vista: " + nombreVista);
-            e.printStackTrace();
-            return null;
+        // juntar el resto como entidad compuesta (por ejemplo INGREDIENTE_PRODUCTO → IngredienteProducto)
+        StringBuilder entidadBuilder = new StringBuilder();
+        for (int i = 2; i < partes.length; i++) {
+            entidadBuilder.append(capitalize(partes[i].toLowerCase()));
         }
+        String entidad = entidadBuilder.toString();
+
+        String nombreClase =
+            "com.grupoms.app.presentacion." +
+            partes[2].toLowerCase() + // paquete base
+            ".GUI_" + comando + entidad;
+
+        Class<?> clazz = Class.forName(nombreClase);
+        return (IGUI) clazz.getDeclaredConstructor().newInstance();
+
+    } catch (Exception e) {
+        System.err.println("No se pudo crear la vista: " + nombreVista);
+        e.printStackTrace();
+        return null;
     }
+}
+
 
 
 

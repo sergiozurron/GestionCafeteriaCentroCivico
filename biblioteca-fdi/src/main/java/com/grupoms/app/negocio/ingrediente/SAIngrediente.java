@@ -13,10 +13,11 @@ public interface SAIngrediente{
 
         public Set<TIngrediente> mostrarListaIngredientes();
 
-        public Set<TIngrediente> mostrarIngredientePorProducto(Integer IDProducto);
+        public Set<TIngrediente> listarIngredientesPorProducto(Integer IDProducto);
 
         public Set<TIngrediente> mostrarProveedorPorIngrediente(TIngrediente ingrediente);
 
         public void vincularProducto(Integer idIngrediente, Integer idProducto, Integer cantidad);
+
 
 }

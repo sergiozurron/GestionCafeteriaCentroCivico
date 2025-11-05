@@ -155,26 +155,37 @@ public class SAIngredienteImp implements SAIngrediente{
     }
 
     @Override
-    public Set<TIngrediente> mostrarIngredientePorProducto(Integer IDProducto) {
-        if (IDProducto == null || IDProducto <= 0)
-            throw new IllegalArgumentException("El ID del producto no es válido.");
-
-        Set<TIngrediente> listaIngredientes = null;
-        Transaction t = null;
+    public Set<TIngrediente> listarIngredientesPorProducto(Integer idProducto) {
+        Set<TIngrediente> listaIngredientes = new HashSet<>();
+        Transaction t =null;
         try {
             t = TransactionManager.getInstance().newTransaction();
+
             t.start();
-            listaIngredientes = dao.mostrarIngredientePorProducto(IDProducto);
+
+
+            listaIngredientes = dao.listarIngredientesPorProducto(idProducto);
+
+            // Filtramos solo activos
+            listaIngredientes.removeIf(ing -> !ing.getActivo());
+
+            if (listaIngredientes.isEmpty()) {
+                t.rollback();
+                System.out.println("[INFO] No hay ingredientes activos en la base de datos.");
+                return new HashSet<>(); // Devolvemos set vacío para la GUI
+            }
+
             t.commit();
+
         } catch (Exception e) {
             e.printStackTrace();
-            if (t != null) {
-                try { t.rollback(); } catch(Exception ex) { ex.printStackTrace(); }
-            }
-            throw new IllegalArgumentException("Error al mostrar ingredientes del producto con ID: " + IDProducto, e);
+            try { if (t != null) t.rollback(); } catch (Exception ex) { ex.printStackTrace(); }
+            throw new RuntimeException("Error en SA al mostrar lista de ingredientes.", e);
         }
+
         return listaIngredientes;
     }
+
 
     @Override
     public Set<TIngrediente> mostrarProveedorPorIngrediente(TIngrediente ingrediente) {

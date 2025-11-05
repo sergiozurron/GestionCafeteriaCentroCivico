@@ -37,6 +37,7 @@ public class FactoryCommandImp extends FactoryCommand {
         commands.put(Evento.MODIFICAR_INGREDIENTE, new ModificarIngredienteCommand());
         commands.put(Evento.MOSTRAR_INGREDIENTE, new MostrarIngredienteCommand());
         commands.put(Evento.MOSTRAR_INGREDIENTES, new MostrarListaIngredientes());
+        commands.put(Evento.LISTAR_INGREDIENTES_POR_PRODUCTO, new ListarIngredientesPorProductoCommand());
 
         // Empleado
         commands.put(Evento.ALTA_EMPLEADO, new AltaEmpleadoCommand());

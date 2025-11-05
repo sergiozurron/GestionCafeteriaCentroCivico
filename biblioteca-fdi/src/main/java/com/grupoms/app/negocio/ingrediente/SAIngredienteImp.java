@@ -169,7 +169,7 @@ public class SAIngredienteImp implements SAIngrediente{
             t.start();
 
 
-            listaIngredientes = dao.listarIngredientesPorProducto(idProducto);
+            listaIngredientes = dao.listarIngredientesPorProducto(IDProducto);
 
             // Filtramos solo activos
             listaIngredientes.removeIf(ing -> !ing.getActivo());
@@ -177,7 +177,7 @@ public class SAIngredienteImp implements SAIngrediente{
             if (listaIngredientes.isEmpty()) {
                 t.rollback();
                 System.out.println("[INFO] No hay ingredientes activos en la base de datos.");
-                return new HashSet<>(); // Devolvemos set vacío para la GUI
+                return new ArrayList<>(); // Devolvemos set vacío para la GUI
             }
 
             t.commit();

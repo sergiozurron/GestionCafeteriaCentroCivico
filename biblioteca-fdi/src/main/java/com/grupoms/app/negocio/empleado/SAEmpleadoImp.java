@@ -1,7 +1,6 @@
 package com.grupoms.app.negocio.empleado;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 import com.grupoms.app.integracion.Transaction.Transaction;

@@ -108,38 +108,6 @@ public class DAOIngredienteImp implements DAOIngrediente{
         return listaIngredientes;
     }
 
-    @Override
-    public List<TIngrediente> mostrarIngredientePorProducto(Integer idProducto) {
-        List<TIngrediente> listaIngredientes = new ArrayList<>();
-        try {
-            Transaction t = TransactionManager.getInstance().getTransaction();
-            Connection c = (Connection) t.getResource();
-
-            String sql = "SELECT i.id, i.nombre, i.precio, i.activo, i.proveedor_id " +
-                        "FROM ingredientes i " +
-                        "INNER JOIN entradas_recetas er ON i.id = er.ingrediente_id " +
-                        "WHERE er.producto_id = ?";
-
-            try (PreparedStatement ps = c.prepareStatement(sql)) {
-                ps.setInt(1, idProducto);
-
-                try (ResultSet rs = ps.executeQuery()) {
-                    while (rs.next()) {
-                        TIngrediente ingrediente = new TIngrediente();
-                        ingrediente.setID(rs.getInt("id"));
-                        ingrediente.setNombre(rs.getString("nombre"));
-                        ingrediente.setPrecio(rs.getDouble("precio"));
-                        ingrediente.setActivo(rs.getBoolean("activo"));
-                        ingrediente.setIDProveedor(rs.getInt("proveedor_id"));
-                        listaIngredientes.add(ingrediente);
-                    }
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return listaIngredientes;
-    }
 
     @Override
     public List<TIngrediente> mostrarProveedorPorIngrediente(Integer idProveedor) {
@@ -218,8 +186,8 @@ public class DAOIngredienteImp implements DAOIngrediente{
     }
 
     @Override
-    public Set<TIngrediente> listarIngredientesPorProducto(Integer idProducto) throws Exception {
-        Set<TIngrediente> lista = new HashSet<>();
+    public List<TIngrediente> listarIngredientesPorProducto(Integer idProducto) throws Exception {
+        List<TIngrediente> lista = new ArrayList<>();
         try {
             Transaction t = TransactionManager.getInstance().getTransaction();
             Connection c = (Connection) t.getResource();

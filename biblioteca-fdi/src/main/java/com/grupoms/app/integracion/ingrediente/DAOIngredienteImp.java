@@ -186,14 +186,16 @@ public class DAOIngredienteImp implements DAOIngrediente{
 
     @Override
     public List<TIngrediente> listarIngredientesPorProducto(Integer idProducto) throws Exception {
+        Transaction t = TransactionManager.getInstance().getTransaction();
+        if(t == null) {
+            throw new IllegalStateException("No hay transacción activa al mostrar los ingredientes");
+        }
         List<TIngrediente> lista = new ArrayList<>();
-        try {
-            Transaction t = TransactionManager.getInstance().getTransaction();
-            Connection c = (Connection) t.getResource();
+        try (Connection c = (Connection) t.getResource()) {
             String sql = "SELECT i.id, i.nombre, i.precio, i.activo, i.proveedor_id " +
-                     "FROM ingredientes i " +
-                     "JOIN producto_ingrediente pi ON i.id = pi.id_ingrediente " +
-                     "WHERE pi.id_producto = ?";
+                    "FROM ingredientes i " +
+                    "JOIN producto_ingrediente pi ON i.id = pi.id_ingrediente " +
+                    "WHERE pi.id_producto = ?";
             PreparedStatement ps = c.prepareStatement(sql);
             ps.setInt(1,idProducto);
             ResultSet rs = ps.executeQuery();
@@ -210,7 +212,6 @@ public class DAOIngredienteImp implements DAOIngrediente{
 
             rs.close();
             ps.close();
-
             return lista;
         } catch (Exception e) {
             e.printStackTrace();

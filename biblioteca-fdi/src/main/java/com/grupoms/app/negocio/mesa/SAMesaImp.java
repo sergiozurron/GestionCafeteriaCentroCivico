@@ -2,6 +2,8 @@ package com.grupoms.app.negocio.mesa;
 
 import java.util.List;
 
+import com.grupoms.app.integracion.Transaction.Transaction;
+import com.grupoms.app.integracion.Transaction.TransactionManager;
 import com.grupoms.app.integracion.factoria.FactoriaDAO;
 import com.grupoms.app.integracion.mesa.DAOMesa;
 
@@ -9,25 +11,48 @@ public class SAMesaImp implements SAMesa{
 	private DAOMesa daoMesa = FactoriaDAO.getInstancia().creaDAOMesa();
 	
 	@Override
-	public int altaMesa(TMesa mesa) {
-		
-		TMesa mesaExistente = daoMesa.mostrarMesa(mesa.getId());
-		if (mesaExistente != null && mesaExistente.getActivo()) {
-			return -1;
+	public Integer altaMesa(TMesa mesa) {
+		Transaction t =null;
+		Integer idGenerado =null;
+		try{
+			t = TransactionManager.getInstance().newTransaction();
+			t.start();
+			mesa.setActivo(true);
+			idGenerado = daoMesa.altaMesa(mesa);
+			t.commit();
+		}catch(Exception e){
+			e.printStackTrace();
+			if(t!=null){
+                try { t.rollback(); } catch(Exception ex) { ex.printStackTrace(); }
+			}
 		}
-		mesa.setActivo(true);
-		daoMesa.altaMesa(mesa);
-		return mesa.getId();
+		return idGenerado;
 	}
 	
 	@Override
-	public void bajaMesa(Integer id) {
-		TMesa mesaExistente = daoMesa.mostrarMesa(id);
-		if(mesaExistente == null || !mesaExistente.getActivo()) {
-			throw new IllegalArgumentException("No existe esa mesa");
-		}
-		mesaExistente.setActivo(false);
-		daoMesa.bajaMesa(id);
+	public Boolean bajaMesa(TMesa mesa) {
+		Transaction t = null;
+        Boolean exito = false;
+		
+        try {
+            // 1. Iniciar transacción
+            t = TransactionManager.getInstance().newTransaction();
+            t.start();
+            // 2. Inicializar campos del ingrediente
+            mesa.setActivo(false);
+            daoMesa.bajaIngrediente(mesa);
+            
+            // 4. Commit
+            t.commit();
+            exito = true;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            if (t != null) {
+                try { t.rollback(); } catch(Exception ex) { ex.printStackTrace(); }
+            }
+        }
+        return exito;
 	}
 	
 	@Override

@@ -1,6 +1,6 @@
 package com.grupoms.app.negocio.mesa;
 
-public abstract class TMesa {
+public  class TMesa {
 	private Integer id;
 	private String ubicacion;
 	private Integer numero, capacidad;
@@ -59,13 +59,4 @@ public abstract class TMesa {
 		this.capacidad = capacidad;
 	}
 	
-	public abstract Double getSuplemento();
-	public abstract void setSuplemento(Double suplemento);
-	public abstract Boolean getCubierta();
-	public abstract void setCubierta(Boolean cubierta);
-	
-	public abstract Boolean getReservada();
-	public abstract void setReservada(Boolean reservada);
-	public abstract String getPrivacidad();
-	public abstract void setPrivacidad(String privacidad);
 }

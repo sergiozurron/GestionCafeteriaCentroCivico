@@ -1,11 +1,21 @@
 package com.grupoms.app.negocio.mesa;
 
 public class TMesaSala extends TMesa{
+	private Integer id;
 	private Boolean reservada;
 	private String privacidad;
 	
+
 	public TMesaSala() {
 		super("Sala");
+	}
+	
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
 	}
 
 	public Boolean getReservada() {
@@ -23,26 +33,5 @@ public class TMesaSala extends TMesa{
 	public void setPrivacidad(String privacidad) {
 		this.privacidad = privacidad;
 	}
-
-	@Override
-	public Double getSuplemento() {
-		
-		return null;
-	}
-
-	@Override
-	public Boolean getCubierta() {
-		
-		return null;
-	}
-
-	@Override
-	public void setSuplemento(Double suplemento) {
-	}
-
-	@Override
-	public void setCubierta(Boolean cubierta) {
-	}
-	
 }
 

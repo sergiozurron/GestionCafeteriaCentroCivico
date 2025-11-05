@@ -35,7 +35,9 @@ public class GUI_ListarMesa extends JFrame implements IGUI {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         pack();
         setLocationRelativeTo(null);
-        
+
+        Context contexto = new Context(Evento.MOSTRAR_LISTA_MESA, null);
+        Controlador.getInstance().handle(contexto);
     }
 
     @Override
@@ -75,7 +77,7 @@ public class GUI_ListarMesa extends JFrame implements IGUI {
         modeloTabla = new DefaultTableModel(columnas, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
-                return false; 
+                return false;
             }
         };
 
@@ -83,8 +85,7 @@ public class GUI_ListarMesa extends JFrame implements IGUI {
         JScrollPane scroll = new JScrollPane(tablaMesas);
         add(scroll, BorderLayout.CENTER);
 
-        Context contexto = new Context(Evento.MOSTRAR_LISTA_MESA, null);
-        Controlador.getInstance().handle(contexto);
+        setVisible(true);
     }
 
     private void actualizarTabla() {

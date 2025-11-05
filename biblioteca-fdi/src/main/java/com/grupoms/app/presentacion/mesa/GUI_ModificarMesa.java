@@ -29,14 +29,12 @@ public class GUI_ModificarMesa extends JFrame implements IGUI{
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         pack();
         setLocationRelativeTo(null);
-        
+        setVisible(true);
     }
 
     @Override
     public void actualizar(Context context) {
-    	if (context == null)
-    		setVisible(true);
-        else if (context.getEvento() == Evento.MODIFICAR_MESA_OK) {
+        if (context.getEvento() == Evento.MODIFICAR_MESA_OK) {
             JOptionPane.showMessageDialog(this, "Mesa modificada con éxito");
             numero.setText("");
             ubicacion.setText("");
@@ -123,29 +121,31 @@ public class GUI_ModificarMesa extends JFrame implements IGUI{
                  	mesa = new TMesaTerraza();
                  else
                  	mesa = new TMesaSala();
-                mesa.setId(Integer.parseInt(id.getText())); // <-- ahora se usa el ID
+                mesa.setId(Integer.parseInt(id.getText())); 
                 mesa.setNumero(Integer.parseInt(numero.getText()));
                 mesa.setUbicacion(ubicacion.getText());
                 mesa.setCapacidad(Integer.parseInt(capacidad.getText()));
                 mesa.setActivo(true);
 
                 if (rbtnSala.isSelected()) {
-                    mesa.setReservada(salaReservada.isSelected());
-                    mesa.setPrivacidad(salaPrivacidad.getText());
+                	TMesaSala mesaS = (TMesaSala) mesa;
+                    mesaS.setReservada(salaReservada.isSelected());
+                    mesaS.setPrivacidad(salaPrivacidad.getText());
+                    Context contexto = new Context(Evento.ALTA_MESA, mesaS);
+                    Controlador.getInstance().handle(contexto);
                 } else if (rbtnTerraza.isSelected()) {
-                    mesa.setCubierta(terrazaCubierta.isSelected());
-                    mesa.setSuplemento(Double.parseDouble(terrazaSuplemento.getText()));
+                	TMesaTerraza mesaT = (TMesaTerraza) mesa;
+                    mesaT.setCubierta(terrazaCubierta.isSelected());
+                    mesaT.setSuplemento(Double.parseDouble(terrazaSuplemento.getText()));
+                    Context contexto = new Context(Evento.ALTA_MESA, mesaT);
+                    Controlador.getInstance().handle(contexto);
                 }
-
-                Context contexto = new Context(Evento.MODIFICAR_MESA, mesa);
-                Controlador.getInstance().handle(contexto);
 
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(this, "Error: los campos numéricos no son válidos");
             }
         });
 
-        // --- Agregar los componentes al panel con GridBagLayout ---
         int y = 0;
 
         // Campo ID

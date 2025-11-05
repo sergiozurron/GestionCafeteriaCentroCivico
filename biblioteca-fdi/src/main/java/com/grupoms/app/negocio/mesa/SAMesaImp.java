@@ -67,9 +67,34 @@ public class SAMesaImp implements SAMesa{
 
 	@Override
 	public Boolean modificarMesa(TMesa mesa) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'modificarMesa'");
+	    Transaction t = null;
+	    Boolean exito = false;
+
+	    if (mesa == null || mesa.getId() == null || mesa.getId() <= 0)
+	        throw new IllegalArgumentException("La mesa a modificar no es válida.");
+
+	    try {
+	        t = TransactionManager.getInstance().newTransaction();
+	        t.start();
+
+	        TMesa existente = daoMesa.mostrarMesa(mesa.getId());
+	        if (existente == null || !existente.getActivo())
+	            throw new IllegalArgumentException("No existe una mesa activa con ID " + mesa.getId());
+
+	        daoMesa.modificarMesa(mesa);
+
+	        t.commit();
+	        exito = true;
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        if (t != null) {
+	            try { t.rollback(); } catch(Exception ex) { ex.printStackTrace(); }
+	        }
+	    }
+	    return exito;
 	}
+
+
 
 	@Override
 	public TMesa mostrarMesa(Integer ID) {

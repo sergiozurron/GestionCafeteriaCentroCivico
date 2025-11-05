@@ -38,6 +38,29 @@ public class DAOMesaImp implements DAOMesa {
             "FROM MESAS m " +
             "LEFT JOIN SALAS s ON m.sala_id = s.id " +
             "LEFT JOIN TERRAZAS t ON m.terraza_id = t.id";
+    
+    private static final String DELETE_MESA = "DELETE FROM MESA";
+    private static final String DELETE_SALA = "DELETE FROM SALA";
+    private static final String DELETE_TERRAZA = "DELETE FROM TERRAZA";
+
+    public void eliminaTodas() throws SQLException {
+    	try {
+            Transaction t = TransactionManager.getInstance().getTransaction();
+            Connection c = (Connection) t.getResource();
+            try (PreparedStatement ps = c.prepareStatement(DELETE_MESA)) {
+                ps.executeUpdate();
+            }
+            try (PreparedStatement ps = c.prepareStatement(DELETE_SALA)) {
+                ps.executeUpdate();
+            }
+            try (PreparedStatement ps = c.prepareStatement(DELETE_TERRAZA)) {
+                ps.executeUpdate();
+            }
+        } catch (SQLException e) {
+            System.err.println("Error al borrar todas las mesa: " + e.getMessage());
+        }
+    }
+
 
     @Override
     public Integer altaMesa(TMesa mesa) {

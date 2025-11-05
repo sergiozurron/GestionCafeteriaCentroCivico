@@ -206,7 +206,7 @@ public class SAPedidoImp implements SAPedido{
         try {
             t = TransactionManager.getInstance().newTransaction();
             t.start();
-            listaPedidos = dao.mostrarPedidos();
+            listaPedidos = dao.mostrarListaPedidos();
             t.commit();
         } catch (Exception e) {
             e.printStackTrace();

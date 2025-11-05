@@ -1,0 +1,1 @@
+SELECT * FROM proveedor WHERE nombre = 'Juan';

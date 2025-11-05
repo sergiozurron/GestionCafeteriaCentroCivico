@@ -4,13 +4,18 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+import com.grupoms.app.integracion.DBConfig;
+
 public class TransactionMySQL implements Transaction {
 
 	private Connection conexion;
 
 	public TransactionMySQL() throws SQLException {
-		conexion = DriverManager.getConnection(System.getenv("MS_DB_URL"), System.getenv("MS_DB_USER"),
-				System.getenv("MS_DB_PASSWORD"));
+		  conexion = DriverManager.getConnection(
+                DBConfig.getUrl(),
+                DBConfig.getUser(),
+                DBConfig.getPassword()
+        );
 	}
 
 	@Override
@@ -28,6 +33,8 @@ public class TransactionMySQL implements Transaction {
 	@Override
 	public void rollback() throws Exception {
 		conexion.rollback();
+		conexion.close();
+		TransactionManager.getInstance().deleteTransaction();
 	}
 
 	@Override

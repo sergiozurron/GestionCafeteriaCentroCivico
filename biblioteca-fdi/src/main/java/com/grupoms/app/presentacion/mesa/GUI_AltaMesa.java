@@ -3,6 +3,8 @@ package com.grupoms.app.presentacion.mesa;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ItemEvent;
+
 import com.grupoms.app.negocio.mesa.TMesa;
 import com.grupoms.app.negocio.mesa.TMesaSala;
 import com.grupoms.app.negocio.mesa.TMesaTerraza;
@@ -96,18 +98,17 @@ public class GUI_AltaMesa extends JFrame implements IGUI {
         gbc.gridx = 1;
         panelTerraza.add(terrazaSuplemento, gbc);
         panelTerraza.setVisible(false);
+        rbtnSala.addItemListener(e -> {
+            panelSala.setVisible(e.getStateChange() == ItemEvent.SELECTED);
+            panelTerraza.setVisible(false);
+            pack();
+        });
 
-//        rbtnSala.addItemListener(e -> {
-//            panelSala.setVisible(e.getStateChange() == ItemEvent.SELECTED);
-//            panelTerraza.setVisible(false);
-//            pack();
-//        });
-//
-//        rbtnTerraza.addItemListener(e -> {
-//            panelTerraza.setVisible(e.getStateChange() == ItemEvent.SELECTED);
-//            panelSala.setVisible(false);
-//            pack();
-//        });
+        rbtnTerraza.addItemListener(e -> {
+            panelTerraza.setVisible(e.getStateChange() == ItemEvent.SELECTED);
+            panelSala.setVisible(false);
+            pack();
+        });
 
         crear = new JButton("Crear Mesa");
         crear.addActionListener(e -> {

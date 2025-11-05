@@ -23,6 +23,9 @@ public class SAMesaImp implements SAMesa{
             // 2. Inicializar campos del ingrediente
             mesa.setActivo(true);
             idGenerado = daoMesa.altaMesa(mesa);
+			if (idGenerado == -1) {
+                throw new RuntimeException("No se pudo dar de alta la mesa");
+            }
             mesa.setId(idGenerado);
             // 4. Commit
             t.commit();

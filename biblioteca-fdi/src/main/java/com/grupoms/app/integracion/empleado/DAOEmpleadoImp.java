@@ -47,7 +47,7 @@ public class DAOEmpleadoImp implements DAOEmpleado {
     public TEmpleado mostrarEmpleado(Integer id) {
         TEmpleado empleado = null;
 
-    try {
+        try {
         // Obtener la transacción activa
         Transaction t = TransactionManager.getInstance().getTransaction();
         if (t == null) {

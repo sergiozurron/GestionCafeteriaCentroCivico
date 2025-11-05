@@ -74,21 +74,18 @@ public class SAPedidoImp implements SAPedido{
         if (idPedido == null || idPedido <= 0)
             throw new IllegalArgumentException("El ID del pedido no es válido.");
         
-            TPedido pedido = null;
+        TPedido pedido = null;
         Transaction t = null;
         try{
-            t = TransactionManager.getInstance().getTransaction();
+            t = TransactionManager.getInstance().newTransaction();
             t.start();
             pedido = dao.mostrarPedido(idPedido);
             t.commit();
         }catch(Exception e){
-          e.printStackTrace();
-            try {
-                if (t != null) t.rollback(); // rollback si falla algo
-            } catch (Exception ex) {
-                ex.printStackTrace();
+            e.printStackTrace();
+            if (t != null) {
+                        try { t.rollback(); } catch (Exception ex) { ex.printStackTrace(); }
             }
-            throw new IllegalArgumentException("Error al mostrar el pedido con ID: " + idPedido, e);
 
         }
         return pedido;

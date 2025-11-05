@@ -109,33 +109,34 @@ public Integer altaPedido(TPedido pedido) {
 
     @Override
     public TPedido mostrarPedido(Integer idPedido) {
-         TPedido pedido = null;
-    try {
-        Transaction t = TransactionManager.getInstance().getTransaction();
-        Connection c = (Connection) t.getResource();
+        TPedido pedido = null;
+        try {
+            Transaction t = TransactionManager.getInstance().getTransaction();
+            if (t==null)
+                throw new IllegalStateException("No hay transaccion activa");
+            Connection c = (Connection) t.getResource();
 
-         String sql = "SELECT id, fecha, total_factura, estado, activo, empleado_id, mesa_id " +
-                         "FROM pedidos WHERE id = ?";
-        try (PreparedStatement ps = c.prepareStatement(sql)) {
-            ps.setInt(1, idPedido);
+            String sql = "SELECT id, fecha, total_factura, estado, activo, empleado_id, mesa_id FROM pedidos WHERE id = ?";
+            try (PreparedStatement ps = c.prepareStatement(sql)) {
+                ps.setInt(1, idPedido);
 
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    pedido = new TPedido();
-                    pedido.setId(rs.getInt("id"));
-                    pedido.setFecha(rs.getDate("fecha"));
-                    pedido.setTotal(rs.getDouble("total_factura"));
-                    pedido.setEstado(rs.getString("estado"));
-                    pedido.setActivo(rs.getBoolean("activo"));
-                    pedido.setIdEmpleado(rs.getInt("empleado_id"));
-                    pedido.setIdMesa(rs.getInt("mesa_id"));
+                try (ResultSet rs = ps.executeQuery()) {
+                    if (rs.next()) {
+                        pedido = new TPedido();
+                        pedido.setId(rs.getInt("id"));
+                        pedido.setFecha(rs.getDate("fecha"));
+                        pedido.setTotal(rs.getDouble("total_factura"));
+                        pedido.setEstado(rs.getString("estado"));
+                        pedido.setActivo(rs.getBoolean("activo"));
+                        pedido.setIdEmpleado(rs.getInt("empleado_id"));
+                        pedido.setIdMesa(rs.getInt("mesa_id"));
+                    }
                 }
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-    } catch (Exception e) {
-        e.printStackTrace();
-    }
-    return pedido;
+        return pedido;
     }
 
     @Override

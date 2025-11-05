@@ -22,7 +22,7 @@ public class FactoryCommandImp extends FactoryCommand {
         commands.put(Evento.BAJA_MESA, new BajaMesaCommand());
         commands.put(Evento.MODIFICAR_MESA, new ModificarMesaCommand());
         commands.put(Evento.MOSTRAR_MESA, new MostrarMesaCommand());
-        commands.put(Evento.MOSTRAR_LISTA_MESA, new MostrarMesasCommand());
+        commands.put(Evento.MOSTRAR_LISTA_MESA, new MostrarListaMesasCommand());
 
         //Pedido
         commands.put(Evento.MOSTRAR_PEDIDO, new MostrarPedidoCommand());
@@ -125,9 +125,9 @@ public class FactoryCommandImp extends FactoryCommand {
         views.put(Evento.MOSTRAR_MESA_OK, "GUI_MOSTRAR_MESA");
         views.put(Evento.MOSTRAR_MESA_KO, "GUI_MOSTRAR_MESA");
         
-        views.put(Evento.MOSTRAR_LISTA_MESA, "GUI_LISTAR_MESAS");
-        views.put(Evento.MOSTRAR_LISTA_MESA_OK, "GUI_LISTAR_MESAS");
-        views.put(Evento.MOSTRAR_LISTA_MESA_KO, "GUI_LISTAR_MESAS");
+        views.put(Evento.MOSTRAR_LISTA_MESA, "GUI_LISTAR_MESA");
+        views.put(Evento.MOSTRAR_LISTA_MESA_OK, "GUI_LISTAR_MESA");
+        views.put(Evento.MOSTRAR_LISTA_MESA_KO, "GUI_LISTAR_MESA");
         
         views.put(Evento.ALTA_PRODUCTO, "GUI_ALTA_PRODUCTO");
         views.put(Evento.ALTA_PRODUCTO_OK, "GUI_ALTA_PRODUCTO");

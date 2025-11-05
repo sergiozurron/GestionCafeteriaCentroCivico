@@ -7,6 +7,6 @@ public interface SAMesa {
 	void bajaMesa(Integer id);
 	void modificarMesa(TMesa mesa);
 	TMesa mostrarMesa(Integer id);
-	public List<TMesa> mostrarMesas();
+	public List<TMesa> mostrarListaMesa();
 
 }

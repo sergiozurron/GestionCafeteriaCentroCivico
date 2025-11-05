@@ -5,10 +5,9 @@ import java.util.List;
 import com.grupoms.app.negocio.mesa.TMesa;
 
 public interface DAOMesa {
-	Integer crea(TMesa mesa);
-	TMesa buscaPorNumero(Integer numero);
-	TMesa buscarPorId(Integer id);
-	void eliminaTodos();
-	void update(TMesa mesa);
-	List<TMesa> mostrarTodos();
+	Integer altaMesa(TMesa mesa);
+	TMesa mostrarMesa(Integer id);
+	void modificarMesa(TMesa mesa);
+	List<TMesa> mostrarListaMesa();
+	void bajaMesa(Integer id);
 }

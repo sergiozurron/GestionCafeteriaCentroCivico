@@ -10,7 +10,7 @@ import com.grupoms.app.presentacion.controlador.Controlador;
 import com.grupoms.app.presentacion.controlador.Evento;
 
 import java.awt.*;
-import java.util.Set;
+import java.util.List;
 
 public class GUI_ListarIngrediente extends JFrame implements IGUI {
 
@@ -71,7 +71,7 @@ public class GUI_ListarIngrediente extends JFrame implements IGUI {
     		setVisible(true);
         else if (context.getEvento() == Evento.MOSTRAR_INGREDIENTES_OK) {
             modeloTabla.setRowCount(0); // limpia la tabla
-            Set<TIngrediente> ingredientes = (Set<TIngrediente>) context.getDatos();
+            List<TIngrediente> ingredientes = (List<TIngrediente>) context.getDatos();
 
             if (ingredientes == null || ingredientes.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "No hay ingredientes activos en la base de datos.");

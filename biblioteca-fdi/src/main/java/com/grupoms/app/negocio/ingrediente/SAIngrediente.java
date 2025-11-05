@@ -1,6 +1,6 @@
 package com.grupoms.app.negocio.ingrediente;
 
-import java.util.Set;
+import java.util.List;
 
 public interface SAIngrediente{
         public Integer crearIngrediente(TIngrediente ingrediente);
@@ -11,11 +11,11 @@ public interface SAIngrediente{
 
         public TIngrediente mostrarIngrediente(Integer ID);
 
-        public Set<TIngrediente> mostrarListaIngredientes();
+        public List<TIngrediente> mostrarListaIngredientes();
 
-        public Set<TIngrediente> mostrarIngredientePorProducto(Integer IDProducto);
+        public List<TIngrediente> mostrarIngredientePorProducto(Integer IDProducto);
 
-        public Set<TIngrediente> mostrarProveedorPorIngrediente(TIngrediente ingrediente);
+        public List<TIngrediente> mostrarProveedorPorIngrediente(TIngrediente ingrediente);
 
         public void vincularProducto(Integer idIngrediente, Integer idProducto, Integer cantidad);
 

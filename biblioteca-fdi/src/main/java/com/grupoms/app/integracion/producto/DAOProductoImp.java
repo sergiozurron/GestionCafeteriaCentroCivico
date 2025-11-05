@@ -148,5 +148,6 @@ public class DAOProductoImp implements DAOProducto {
 	        System.err.println("Error mostrando lista de productos: " + e.getMessage());
 		}
 		return listaProductos;
+		
 	}
 }

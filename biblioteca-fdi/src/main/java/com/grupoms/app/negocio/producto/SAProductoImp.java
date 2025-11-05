@@ -146,7 +146,7 @@ public class SAProductoImp implements SAProducto{
             if (t != null) {
                 try { t.rollback(); } catch(Exception ex) { ex.printStackTrace(); }
             }
-            throw new IllegalArgumentException("Error al mostrar la lista de ingredientes.", e);
+            throw new IllegalArgumentException("Error al mostrar la lista de productos.", e);
         }
         return productos;
     }

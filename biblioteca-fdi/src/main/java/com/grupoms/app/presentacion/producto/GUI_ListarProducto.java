@@ -26,8 +26,7 @@ public class GUI_ListarProducto extends JFrame implements IGUI {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         initGUI();
         setVisible(true);
-        Context contexto = new Context(Evento.MOSTRAR_LISTA_PRODUCTO, null);
-            Controlador.getInstance().handle(contexto);
+
     }
 
     private void initGUI() {
@@ -46,11 +45,18 @@ public class GUI_ListarProducto extends JFrame implements IGUI {
         JScrollPane scrollPane = new JScrollPane(tabla);
 
         // --- Botón para cargar productos ---
- //       botonCargar = new JButton("Cargar Productos");
- //       botonCargar.addActionListener(e -> {
- //           Context contexto = new Context(Evento.MOSTRAR_LISTA_PRODUCTO, null);
- //           Controlador.getInstance().handle(contexto);
-  //      });
+        botonCargar = new JButton("Cargar Productos");
+        botonCargar.addActionListener(e -> {
+            try {
+                Context contexto = new Context(Evento.MOSTRAR_LISTA_PRODUCTO, null);
+                Controlador.getInstance().handle(contexto);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(this, "Error al cargar productos: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+        panelPrincipal.add(botonCargar, BorderLayout.SOUTH);
+
 
         panelPrincipal.add(scrollPane, BorderLayout.CENTER);
         panelPrincipal.add(botonCargar, BorderLayout.SOUTH);
@@ -66,7 +72,7 @@ public class GUI_ListarProducto extends JFrame implements IGUI {
             Set<TProducto> productos = (Set<TProducto>) context.getDatos();
 
             if (productos == null || productos.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "No hay productos activos en la base de datos.");
+                JOptionPane.showMessageDialog(this, "No hay productos activos en la base de datos.", "Sin datos", JOptionPane.INFORMATION_MESSAGE);
                 return;
             }
 
@@ -83,7 +89,7 @@ public class GUI_ListarProducto extends JFrame implements IGUI {
             }
         } 
         else if (context.getEvento() == Evento.MOSTRAR_LISTA_PRODUCTO_KO) {
-            JOptionPane.showMessageDialog(this, "Error al cargar los productos.");
+            JOptionPane.showMessageDialog(this, "Error al cargar los productos " + context.getDatos(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 }

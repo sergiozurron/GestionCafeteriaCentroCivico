@@ -2,17 +2,16 @@ package com.grupoms.app.presentacion.factoria;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import com.grupoms.app.presentacion.IGUI;
+import javax.swing.JFrame;
 
 public class FactoriaVistas {
 
-
     private static FactoriaVistas instance;
-    private Map<String, IGUI> vistas;
+    private Map<String, IGUI> vistas; // almacena instancias únicas de vistas
 
     private FactoriaVistas() {
-    	vistas = new HashMap<>();
+        vistas = new HashMap<>();
     }
 
     public static FactoriaVistas getInstance() {
@@ -22,10 +21,20 @@ public class FactoriaVistas {
     }
 
     /**
-     * Crea o devuelve una vista (GUI) según el nombre que se pasa.
-     * Ejemplo: "GUI_MOSTRAR_PEDIDO" → com.grupoms.app.presentacion.pedido.GUI_MostrarPedido
+     * Devuelve una vista única (singleton) por nombre.
+     * Si ya existe, devuelve la misma instancia.
+     * Si no existe, la crea y la guarda.
      */
-   public IGUI creaVista(String nombreVista) {
+    public IGUI creaVista(String nombreVista) {
+        if (vistas.containsKey(nombreVista)) {
+            IGUI vistaExistente = vistas.get(nombreVista);
+            // Asegurarse de que la ventana JFrame esté visible
+            if (vistaExistente instanceof JFrame) {
+                ((JFrame) vistaExistente).setVisible(true);
+            }
+            return vistaExistente;
+        }
+
         try {
             String[] partes = nombreVista.toLowerCase().split("_");
             if (partes.length < 3)
@@ -40,18 +49,21 @@ public class FactoriaVistas {
 
             Class<?> clazz = Class.forName(nombreClase);
 
-            // Siempre nueva instancia
-            return (IGUI) clazz.getDeclaredConstructor().newInstance();
+            // Crear nueva instancia y guardarla
+            IGUI vista = (IGUI) clazz.getDeclaredConstructor().newInstance();
+            vistas.put(nombreVista, vista);
+
+            if (vista instanceof JFrame) {
+                ((JFrame) vista).setVisible(true);
+            }
+
+            return vista;
 
         } catch (Exception e) {
-            System.err.println("No se pudo crear la vista: " + nombreVista);
             e.printStackTrace();
             return null;
         }
     }
-
-
-
 
     private String capitalize(String str) {
         if (str == null || str.isEmpty()) return str;

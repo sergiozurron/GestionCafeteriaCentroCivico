@@ -1,6 +1,6 @@
 package com.grupoms.app.negocio.empleado;
 
-import java.util.Set;
+import java.util.List;
 
 public interface SAEmpleado {
     Integer crearEmpleado(TEmpleado empleado);
@@ -11,5 +11,5 @@ public interface SAEmpleado {
 
     TEmpleado mostrarEmpleado(Integer id);
 
-    Set<TEmpleado> mostrarListaEmpleados();
+    List<TEmpleado> mostrarListaEmpleados();
 }

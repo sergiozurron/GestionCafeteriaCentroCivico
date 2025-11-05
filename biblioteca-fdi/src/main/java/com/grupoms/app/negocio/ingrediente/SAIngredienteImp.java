@@ -1,7 +1,7 @@
 package com.grupoms.app.negocio.ingrediente;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.grupoms.app.integracion.Transaction.Transaction;
 import com.grupoms.app.integracion.Transaction.TransactionManager;
@@ -129,37 +129,39 @@ public class SAIngredienteImp implements SAIngrediente{
     }
 
     @Override
-    public Set<TIngrediente> mostrarListaIngredientes() {
-        Set<TIngrediente> listaIngredientes = new HashSet<>();
+    public List<TIngrediente> mostrarListaIngredientes() {
+        List<TIngrediente> listaIngredientes = new ArrayList<>();
         Transaction t = null;
         try {
             t = TransactionManager.getInstance().newTransaction();
             t.start();
 
-            Set<TIngrediente> todos = dao.mostrarListaIngredientes();
+            List<TIngrediente> todos = dao.mostrarListaIngredientes();
             for(TIngrediente ing : todos) {
                 if(ing.getActivo()) {
                     listaIngredientes.add(ing);
                 }
             }
-
+            if (listaIngredientes.isEmpty()) {
+                throw new IllegalArgumentException("No hay ingredientes activos en la base de datos.");
+            }
             t.commit();
         } catch (Exception e) {
             e.printStackTrace();
             if (t != null) {
                 try { t.rollback(); } catch(Exception ex) { ex.printStackTrace(); }
             }
-            listaIngredientes = null;
+            throw new IllegalArgumentException("Error al mostrar la lista de ingredientes", e);
         }
         return listaIngredientes;
     }
 
     @Override
-    public Set<TIngrediente> mostrarIngredientePorProducto(Integer IDProducto) {
+    public List<TIngrediente> mostrarIngredientePorProducto(Integer IDProducto) {
         if (IDProducto == null || IDProducto <= 0)
             throw new IllegalArgumentException("El ID del producto no es válido.");
 
-        Set<TIngrediente> listaIngredientes = null;
+        List<TIngrediente> listaIngredientes = null;
         Transaction t = null;
         try {
             t = TransactionManager.getInstance().newTransaction();
@@ -177,11 +179,11 @@ public class SAIngredienteImp implements SAIngrediente{
     }
 
     @Override
-    public Set<TIngrediente> mostrarProveedorPorIngrediente(TIngrediente ingrediente) {
+    public List<TIngrediente> mostrarProveedorPorIngrediente(TIngrediente ingrediente) {
         if (ingrediente == null || ingrediente.getIDProveedor() == null || ingrediente.getIDProveedor() <= 0)
             throw new IllegalArgumentException("El ingrediente debe tener un ID de proveedor válido.");
 
-        Set<TIngrediente> listaIngredientes = null;
+        List<TIngrediente> listaIngredientes = null;
         Transaction t = null;
         try {
             t = TransactionManager.getInstance().newTransaction();

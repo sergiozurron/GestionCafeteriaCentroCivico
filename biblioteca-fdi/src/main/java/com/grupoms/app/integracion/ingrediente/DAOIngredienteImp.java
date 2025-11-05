@@ -3,9 +3,11 @@ package com.grupoms.app.integracion.ingrediente;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 import com.grupoms.app.integracion.Transaction.Transaction;
 import com.grupoms.app.integracion.Transaction.TransactionManager;
@@ -80,8 +82,8 @@ public class DAOIngredienteImp implements DAOIngrediente{
     }
 
     @Override
-    public Set<TIngrediente> mostrarListaIngredientes() throws Exception{
-        Set<TIngrediente> listaIngredientes = new HashSet<>();
+    public List<TIngrediente> mostrarListaIngredientes() throws Exception{
+        List<TIngrediente> listaIngredientes = new ArrayList<>();
         try {
             Transaction t = TransactionManager.getInstance().getTransaction();
             Connection c = (Connection) t.getResource();
@@ -100,15 +102,15 @@ public class DAOIngredienteImp implements DAOIngrediente{
                     listaIngredientes.add(ingrediente);
                 }
             }
-        } catch (Exception e) {
-           throw new Exception("Error al obtener la lista de ingredientes"+ e.getMessage());
+        } catch (SQLException e) {
+            System.err.println("Error mostrando la lista de ingredientes: "+e.getMessage());
         }
         return listaIngredientes;
     }
 
     @Override
-    public Set<TIngrediente> mostrarIngredientePorProducto(Integer idProducto) {
-        Set<TIngrediente> listaIngredientes = new HashSet<>();
+    public List<TIngrediente> mostrarIngredientePorProducto(Integer idProducto) {
+        List<TIngrediente> listaIngredientes = new ArrayList<>();
         try {
             Transaction t = TransactionManager.getInstance().getTransaction();
             Connection c = (Connection) t.getResource();
@@ -140,8 +142,8 @@ public class DAOIngredienteImp implements DAOIngrediente{
     }
 
     @Override
-    public Set<TIngrediente> mostrarProveedorPorIngrediente(Integer idProveedor) {
-        Set<TIngrediente> listaIngredientes = new HashSet<>();
+    public List<TIngrediente> mostrarProveedorPorIngrediente(Integer idProveedor) {
+        List<TIngrediente> listaIngredientes = new ArrayList<>();
         try {
             Transaction t = TransactionManager.getInstance().getTransaction();
             Connection c = (Connection) t.getResource();

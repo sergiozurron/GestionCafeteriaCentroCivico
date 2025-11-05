@@ -1,6 +1,6 @@
 package com.grupoms.app.integracion.ingrediente;
 
-import java.util.Set;
+import java.util.List;
 import com.grupoms.app.negocio.ingrediente.*;
 
 public interface DAOIngrediente {
@@ -8,11 +8,11 @@ public interface DAOIngrediente {
 
     public TIngrediente mostrarIngrediente(Integer id);
 
-    public Set<TIngrediente> mostrarListaIngredientes() throws Exception;
+    public List<TIngrediente> mostrarListaIngredientes() throws Exception;
     
-    public Set<TIngrediente> mostrarIngredientePorProducto(Integer idProducto);
+    public List<TIngrediente> mostrarIngredientePorProducto(Integer idProducto);
 
-    public Set<TIngrediente> mostrarProveedorPorIngrediente(Integer idProveedor);
+    public List<TIngrediente> mostrarProveedorPorIngrediente(Integer idProveedor);
 
     public Boolean modificarIngrediente(TIngrediente tingrediente);
 

@@ -1,7 +1,8 @@
 package com.grupoms.app.negocio.empleado;
 
+import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 import com.grupoms.app.integracion.Transaction.Transaction;
 import com.grupoms.app.integracion.Transaction.TransactionManager;
@@ -146,8 +147,8 @@ public class SAEmpleadoImp implements SAEmpleado {
     }
 
     @Override
-    public Set<TEmpleado> mostrarListaEmpleados() {
-        Set<TEmpleado> listaEmpleadosActivos = new HashSet<>();
+    public List<TEmpleado> mostrarListaEmpleados() {
+        List<TEmpleado> listaEmpleadosActivos = new ArrayList<>();
         Transaction t = null;
 
         try {
@@ -156,9 +157,9 @@ public class SAEmpleadoImp implements SAEmpleado {
             t.start();
 
             // 2. Obtener todos y filtrar activos
-            Set<TEmpleado> todos = dao.mostrarListaEmpleados();
+            List<TEmpleado> todos = dao.mostrarListaEmpleados();
             for (TEmpleado e : todos) {
-                if (e.getActivo() != null && e.getActivo()) {
+                if (e.getActivo()) {
                     listaEmpleadosActivos.add(e);
                 }
             }

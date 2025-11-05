@@ -28,8 +28,7 @@ public class GUI_ListarIngrediente extends JFrame implements IGUI {
         initGUI();
         setVisible(true);
 
-        Context contexto = new Context(Evento.MOSTRAR_INGREDIENTES, null);
-        Controlador.getInstance().handle(contexto);
+
     }
 
     private void initGUI() {
@@ -47,11 +46,16 @@ public class GUI_ListarIngrediente extends JFrame implements IGUI {
         JScrollPane scrollPane = new JScrollPane(tabla);
 
         // --- Botón para cargar ingredientes ---
-//        botonCargar = new JButton("Cargar Ingredientes");
-//        botonCargar.addActionListener(e -> {
-//            Context contexto = new Context(Evento.MOSTRAR_INGREDIENTES, null);
-//            Controlador.getInstance().handle(contexto);
-//        });
+        botonCargar = new JButton("Cargar Ingredientes");
+        botonCargar.addActionListener(e -> {
+           try {
+                Context contexto = new Context(Evento.MOSTRAR_INGREDIENTES, null);
+                Controlador.getInstance().handle(contexto);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(this, "Error al cargar ingredientes: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        });
 
         panelPrincipal.add(scrollPane, BorderLayout.CENTER);
         panelPrincipal.add(botonCargar, BorderLayout.SOUTH);
@@ -63,7 +67,6 @@ public class GUI_ListarIngrediente extends JFrame implements IGUI {
     public void actualizar(Context context) {
         if (context.getEvento() == Evento.MOSTRAR_INGREDIENTES_OK) {
             modeloTabla.setRowCount(0); // limpia la tabla
-            @SuppressWarnings("unchecked")
             Set<TIngrediente> ingredientes = (Set<TIngrediente>) context.getDatos();
 
             if (ingredientes == null || ingredientes.isEmpty()) {

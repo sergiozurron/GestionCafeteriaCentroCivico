@@ -1,6 +1,6 @@
 package com.grupoms.app.integracion.empleado;
 
-import java.util.Set;
+import java.util.List;
 import com.grupoms.app.negocio.empleado.*;
 
 public interface DAOEmpleado {
@@ -8,7 +8,7 @@ public interface DAOEmpleado {
 
     public TEmpleado mostrarEmpleado(Integer id);
 
-    public Set<TEmpleado> mostrarListaEmpleados() throws Exception;
+    public List<TEmpleado> mostrarListaEmpleados() throws Exception;
 
     public Boolean modificarEmpleado(TEmpleado empleado);
 

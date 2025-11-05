@@ -26,8 +26,7 @@ public class GUI_ListarEmpleado extends JFrame implements IGUI {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         initGUI();
         setVisible(true);
-        Context contexto = new Context(Evento.MOSTRAR_EMPLEADOS, null);
-        Controlador.getInstance().handle(contexto);
+
     }
 
     private void initGUI() {
@@ -45,11 +44,16 @@ public class GUI_ListarEmpleado extends JFrame implements IGUI {
         JScrollPane scrollPane = new JScrollPane(tabla);
 
         // --- Botón para cargar empleados para no saturar con cargas automaticas
-      //  botonCargar = new JButton("Cargar Empleados");
-       // botonCargar.addActionListener(e -> {
-         //   Context contexto = new Context(Evento.MOSTRAR_EMPLEADOS, null);
-           // Controlador.getInstance().handle(contexto);
-        //});
+        botonCargar = new JButton("Cargar Empleados");
+        botonCargar.addActionListener(e -> {
+          try {
+                Context contexto = new Context(Evento.MOSTRAR_EMPLEADOS, null);
+                Controlador.getInstance().handle(contexto);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(this, "Error al cargar productos: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        });
 
         panelPrincipal.add(scrollPane, BorderLayout.CENTER);
         panelPrincipal.add(botonCargar, BorderLayout.SOUTH);

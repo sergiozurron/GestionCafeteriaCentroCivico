@@ -3,9 +3,10 @@ package com.grupoms.app.integracion.empleado;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.grupoms.app.integracion.Transaction.Transaction;
 import com.grupoms.app.integracion.Transaction.TransactionManager;
@@ -76,15 +77,15 @@ public class DAOEmpleadoImp implements DAOEmpleado {
     }
 
     @Override
-    public Set<TEmpleado> mostrarListaEmpleados() throws Exception {
-        Set<TEmpleado> lista = new HashSet<>();
+    public List<TEmpleado> mostrarListaEmpleados() throws Exception {
+        List<TEmpleado> lista = new ArrayList<>();
         try {
             Transaction t = TransactionManager.getInstance().getTransaction();
             Connection c = (Connection) t.getResource();
 
             String sql = "SELECT id, nombre, activo, donde_atiende, sueldo FROM empleados";
             try (PreparedStatement ps = c.prepareStatement(sql)) {
-                try (ResultSet rs = ps.executeQuery()) {
+                ResultSet rs = ps.executeQuery();
                     while (rs.next()) {
                         TEmpleado e = new TEmpleado();
                         e.setID(rs.getInt("id"));
@@ -94,10 +95,10 @@ public class DAOEmpleadoImp implements DAOEmpleado {
                         e.setSueldo(rs.getDouble("sueldo"));
                         lista.add(e);
                     }
-                }
+                
             }
-        } catch (Exception e) {
-            throw new Exception("Error al obtener la lista de empleados: " + e.getMessage());
+        } catch (SQLException e) {
+            System.err.println("Error mostrando la lista de empleados: "+ e.getMessage());
         }
         return lista;
     }

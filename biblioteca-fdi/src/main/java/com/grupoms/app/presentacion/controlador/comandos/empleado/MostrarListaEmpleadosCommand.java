@@ -1,6 +1,6 @@
 package com.grupoms.app.presentacion.controlador.comandos.empleado;
 
-import java.util.Set;
+import java.util.List;
 
 import com.grupoms.app.negocio.empleado.SAEmpleado;
 import com.grupoms.app.negocio.empleado.TEmpleado;
@@ -16,11 +16,9 @@ public class MostrarListaEmpleadosCommand implements Command {
         SAEmpleado sa = FactoriaSA.getInstance().creaSAEmpleado();
 
         try {
-            Set<TEmpleado> lista = sa.mostrarListaEmpleados();
-            return (lista != null)
-                ? new Context(Evento.MOSTRAR_EMPLEADOS_OK, lista)
-                : new Context(Evento.MOSTRAR_EMPLEADOS_KO, null);
-        } catch (IllegalArgumentException e) {
+            List<TEmpleado> lista = sa.mostrarListaEmpleados();
+           return new Context(Evento.MOSTRAR_EMPLEADOS_OK,lista);
+        } catch (Exception e) {
             return new Context(Evento.MOSTRAR_EMPLEADOS_KO, null);
         }
     }

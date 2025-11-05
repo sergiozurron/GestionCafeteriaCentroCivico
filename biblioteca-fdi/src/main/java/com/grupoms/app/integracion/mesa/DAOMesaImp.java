@@ -10,6 +10,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.grupoms.app.integracion.Transaction.Transaction;
+import com.grupoms.app.integracion.Transaction.TransactionManager;
 import com.grupoms.app.negocio.mesa.TMesa;
 import com.grupoms.app.negocio.mesa.TMesaSala;
 import com.grupoms.app.negocio.mesa.TMesaTerraza;
@@ -20,16 +22,20 @@ public class DAOMesaImp implements DAOMesa{
 	private static final String INSERT_TERRAZA = "INSERT INTO MESAS(tipo, suplemento, cubierta) VALUES (?, ?, ?)";
 	private static final String INSERT_SALA = "INSERT INTO MESAS(tipo, reservada, privacidad) VALUES (?, ?, ?)";
 	private static final String READ_BY_ID = "SELECT * FROM MESAS WHERE id = ?";
-	private static final String DESACTIVAR_MESA = "UPDATE MESAS SET activo = false WHERE id = ?";
+	private static final String DESACTIVAR_MESA = "UPDATE MESAS SET activo = ? WHERE id = ?";
 	private static final String UPDATE_TERRAZA = "UPDATE MESAS SET ubicacion = ?, numero = ?, capacidad = ?, activo = ?, suplemento = ?, cubierta = ? WHERE id = ?";
 	private static final String UPDATE_SALA = "UPDATE MESAS SET ubicacion = ?, numero = ?, capacidad = ?, activo = ?, reservada = ?, privacidad = ? WHERE id = ?";
 	private static final String ALL = "SELECT * FROM MESAS";
 	
 	@Override
 	public Integer altaMesa(TMesa mesa) {
-		try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS)) {
 
-			ps.setString(1, mesa.getUbicacion());
+		try {
+			Transaction t = TransactionManager.getInstance().getTransaction();
+			Connection c = (Connection)t.getResource();
+
+			try (PreparedStatement ps = c.prepareStatement(INSERT)){
+				ps.setString(1, mesa.getUbicacion());
 			ps.setInt(2, mesa.getNumero());
 			ps.setInt(3, mesa.getCapacidad());
 			ps.setBoolean(4, mesa.getActivo());
@@ -39,45 +45,44 @@ public class DAOMesaImp implements DAOMesa{
 			ResultSet rs = ps.getGeneratedKeys();
 			rs.next();
 			mesa.setId(rs.getInt(1));
-			
 			if("Terraza".equals(mesa.getTipo())) {
-				PreparedStatement stmt2 = conn.prepareStatement(INSERT_TERRAZA, Statement.RETURN_GENERATED_KEYS);
+				PreparedStatement stmt2 = c.prepareStatement(INSERT_TERRAZA, Statement.RETURN_GENERATED_KEYS);
 
 				stmt2.setString(1, mesa.getTipo());
 				stmt2.setDouble(2, mesa.getSuplemento());
 				stmt2.setBoolean(3, mesa.getCubierta());		
 			}
 			else {
-				PreparedStatement stmt2 = conn.prepareStatement(INSERT_SALA, Statement.RETURN_GENERATED_KEYS);
+				PreparedStatement stmt2 = c.prepareStatement(INSERT_SALA, Statement.RETURN_GENERATED_KEYS);
 				stmt2.setString(1, mesa.getTipo());
 				stmt2.setBoolean(2, mesa.getReservada());
 				stmt2.setString(3, mesa.getPrivacidad());
 			}
 			ps.executeUpdate();
 
-		} catch (SQLException e) {
+			}
+		}catch (SQLException e) {
 	        System.err.println("Error dando de alta mesa: " + e.getMessage());
 		}
 		return mesa.getId();
+		
 	}
 	
 	@Override
 	public void bajaMesa(Integer id) {
-	    try (Connection conn = getConnection();
-	         PreparedStatement ps = conn.prepareStatement(DESACTIVAR_MESA)) {
-	        
-	        ps.setInt(1, id);
-	        int ok = ps.executeUpdate();
+		try{
+			Transaction t=  TransactionManager.getInstance().getTransaction();
+			Connection c = (Connection)t.getResource();
+			try(PreparedStatement ps = c.prepareStatement(DESACTIVAR_MESA)){
+				ps.setInt(2,id);
+				ps.setBoolean(1,false);
+				ps.executeUpdate();
+				ps.close();
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}  
 
-	        if (ok == 0) {
-	            System.err.println("No se encontró ninguna mesa con id " + id);
-	        } else {
-	            System.out.println("Mesa con id " + id + " desactivada correctamente.");
-	        }
-
-	    } catch (SQLException e) {
-	        System.err.println("Error al dar de baja la mesa: " + e.getMessage());
-	    }
 	}
 
 
@@ -193,8 +198,5 @@ public class DAOMesaImp implements DAOMesa{
 
 	}
 
-	private Connection getConnection() throws SQLException {
-		return DriverManager.getConnection(System.getenv("MS_DB_URL"), System.getenv("MS_DB_USERNAME"),
-				System.getenv("MS_DB_PASSWORD"));
-	}
+
 }

@@ -25,18 +25,14 @@ public class GUI_ListarProveedores extends JFrame implements IGUI {
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		initGUI();
+		setVisible(true);
 	}
 
 	private void initGUI() {
 		JPanel panelPrincipal = new JPanel(new BorderLayout());
 
 		// Configuración de la tabla
-		modeloTabla = new DefaultTableModel() {
-			@Override
-			public boolean isCellEditable(int row, int column) {
-				return false; // Tabla no editable
-			}
-		};
+		modeloTabla = new DefaultTableModel();
 		modeloTabla.addColumn("ID");
 		modeloTabla.addColumn("Nombre");
 		modeloTabla.addColumn("Tarifa");
@@ -44,7 +40,6 @@ public class GUI_ListarProveedores extends JFrame implements IGUI {
 		modeloTabla.addColumn("Activo");
 
 		tabla = new JTable(modeloTabla);
-		tabla.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		JScrollPane scrollPane = new JScrollPane(tabla);
 
 		// Botón para cargar proveedores
@@ -69,19 +64,13 @@ public class GUI_ListarProveedores extends JFrame implements IGUI {
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
 	public void actualizar(Context context) {
-		if (context == null) {
-			setVisible(true);
-		} else if (context.getEvento() == Evento.MOSTRAR_LISTA_PROVEEDOR_OK) {
+
+		 if (context.getEvento() == Evento.MOSTRAR_LISTA_PROVEEDOR_OK) {
 			modeloTabla.setRowCount(0); // Limpiar la tabla
 
-			Object datos = context.getDatos();
-			List<TProveedor> proveedores = null;
-
-			if (datos instanceof List<?>) {
-				proveedores = (List<TProveedor>) datos;
-			}
+			
+			List<TProveedor> proveedores = (List<TProveedor>)context.getDatos();
 
 			if (proveedores == null || proveedores.isEmpty()) {
 				JOptionPane.showMessageDialog(this,

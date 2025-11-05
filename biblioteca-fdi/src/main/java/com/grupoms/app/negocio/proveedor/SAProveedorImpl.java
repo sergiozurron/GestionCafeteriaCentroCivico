@@ -9,6 +9,8 @@ import com.grupoms.app.integracion.factoria.FactoriaDAO;
 import com.grupoms.app.integracion.proveedor.DAOProveedor;
 
 public class SAProveedorImpl implements SAProveedor {
+	DAOProveedor daoProveedor = FactoriaDAO.getInstancia().creaDAOProveedor();
+
 
 	@Override
 	public Integer altaProveedor(TProveedor tProveedor) {
@@ -170,7 +172,7 @@ public class SAProveedorImpl implements SAProveedor {
 		Transaction tx = null;
 		try {
 			tx = TransactionManager.getInstance().newTransaction();
-			DAOProveedor daoProveedor = FactoriaDAO.getInstancia().creaDAOProveedor();
+
 			tx.start();
 
 			List<TProveedor> todos = daoProveedor.listar();

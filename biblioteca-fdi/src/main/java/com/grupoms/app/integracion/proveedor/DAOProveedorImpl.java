@@ -128,7 +128,6 @@ public class DAOProveedorImpl implements DAOProveedor {
 			}
 		} catch (SQLException e) {
 			System.err.println("Error al listar proveedores: " + e.getMessage());
-			e.printStackTrace();
 		}
 		return listaProveedores;
 	}

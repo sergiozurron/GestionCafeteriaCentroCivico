@@ -65,11 +65,9 @@ public class GUI_ListarIngrediente extends JFrame implements IGUI {
 
     @Override
     public void actualizar(Context context) {
-        SwingUtilities.invokeLater(() -> {
+        
           
-    	if (context == null)
-    		setVisible(true);
-        else if (context.getEvento() == Evento.MOSTRAR_INGREDIENTES_OK) {
+    	if (context.getEvento() == Evento.MOSTRAR_INGREDIENTES_OK) {
             modeloTabla.setRowCount(0); // limpia la tabla
             List<TIngrediente> ingredientes = (List<TIngrediente>) context.getDatos();
 
@@ -92,6 +90,6 @@ public class GUI_ListarIngrediente extends JFrame implements IGUI {
         else if (context.getEvento() == Evento.MOSTRAR_INGREDIENTES_KO) {
             JOptionPane.showMessageDialog(this, "Error al cargar los ingredientes.");
         }
-        });
+
     }
 }

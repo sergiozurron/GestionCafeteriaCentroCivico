@@ -25,6 +25,7 @@ public class GUI_MostrarEmpleado extends JFrame implements IGUI {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         pack();
         setLocationRelativeTo(null);
+        setVisible(true);  // Aseguramos que la ventana se vea
     }
 
     private void initGUI() {
@@ -45,7 +46,7 @@ public class GUI_MostrarEmpleado extends JFrame implements IGUI {
 
                 Context contexto = new Context();
                 contexto.setEvento(Evento.MOSTRAR_EMPLEADO);
-                contexto.setDato(emp); // seguimos tu patrón de setDato
+                contexto.setDato(emp);
 
                 Controlador.getInstance().handle(contexto);
 
@@ -101,23 +102,35 @@ public class GUI_MostrarEmpleado extends JFrame implements IGUI {
 
     @Override
     public void actualizar(Context context) {
-    	if (context == null)
-    		setVisible(true);
-    	else if (context.getEvento() == Evento.MOSTRAR_EMPLEADO_OK) {
-            // Tu ejemplo usa getDatos(); mantenemos ese nombre para encajar con tu API
-            TEmpleado emp = (TEmpleado) context.getDatos();
-            nombreLabel.setText(emp.getNombre() != null ? emp.getNombre() : "");
-            dondeAtiendeLabel.setText(emp.getDondeAtiende() != null ? emp.getDondeAtiende() : "");
-            sueldoLabel.setText(emp.getSueldo() != null ? String.valueOf(emp.getSueldo()) : "");
-            Boolean act = emp.getActivo();
-            activoLabel.setText(act != null && act ? "Sí" : "No");
-
-        } else if (context.getEvento() == Evento.MOSTRAR_EMPLEADO_KO) {
-            JOptionPane.showMessageDialog(this, "Empleado no encontrado en la base de datos");
-            nombreLabel.setText("");
-            dondeAtiendeLabel.setText("");
-            sueldoLabel.setText("");
-            activoLabel.setText("");
+        if (context == null) {
+            return;
         }
+
+        // Ejecutar en el hilo de Swing para evitar problemas de actualización
+        SwingUtilities.invokeLater(() -> {
+            if (context.getEvento() == Evento.MOSTRAR_EMPLEADO_OK) {
+                TEmpleado emp = (TEmpleado) context.getDatos();
+                if (emp != null) {
+                    nombreLabel.setText(emp.getNombre() != null ? emp.getNombre() : "N/A");
+                    dondeAtiendeLabel.setText(emp.getDondeAtiende() != null ? emp.getDondeAtiende() : "N/A");
+                    sueldoLabel.setText(emp.getSueldo() != null ? String.valueOf(emp.getSueldo()) : "0.00");
+                    Boolean act = emp.getActivo();
+                    activoLabel.setText(act != null && act ? "Sí" : "No");
+                } else {
+                    limpiarLabels();
+                }
+            } else if (context.getEvento() == Evento.MOSTRAR_EMPLEADO_KO) {
+                JOptionPane.showMessageDialog(this, "Empleado no encontrado en la base de datos");
+                limpiarLabels();
+            }
+        });
+    }
+
+    // Método para limpiar los labels
+    private void limpiarLabels() {
+        nombreLabel.setText("");
+        dondeAtiendeLabel.setText("");
+        sueldoLabel.setText("");
+        activoLabel.setText("");
     }
 }

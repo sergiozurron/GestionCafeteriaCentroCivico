@@ -115,34 +115,32 @@ public class SAEmpleadoImp implements SAEmpleado {
 
     @Override
     public TEmpleado mostrarEmpleado(Integer ID) {
-        if (ID == null || ID <= 0)
-            throw new IllegalArgumentException("El ID del empleado no es válido.");
+       if (ID == null || ID <= 0)
+        throw new IllegalArgumentException("El ID del empleado no es válido.");
 
-        Transaction t = null;
-        TEmpleado emp = null;
+    Transaction t = null;
+    TEmpleado emp = null;
 
-        try {
-            // 1. Iniciar transacción
-            t = TransactionManager.getInstance().newTransaction();
-            t.start();
+    try {
+        // Iniciar transacción
+        t = TransactionManager.getInstance().newTransaction();
+        t.start();
 
-            // 2. Consultar
-            emp = dao.mostrarEmpleado(ID);
-            if (emp == null)
-                throw new IllegalArgumentException("El empleado con ID " + ID + " no existe.");
+        // Consultar empleado
+        emp = dao.mostrarEmpleado(ID);
 
-            // 3. Commit
-            t.commit();
+        // Commit si todo va bien
+        t.commit();
 
-        } catch (Exception e) {
-            e.printStackTrace();
-            if (t != null) {
-                try { t.rollback(); } catch (Exception ex) { ex.printStackTrace(); }
-            }
-            throw new RuntimeException(e.getMessage(), e);
+    } catch (Exception e) {
+        e.printStackTrace();
+        if (t != null) {
+            try { t.rollback(); } catch (Exception ex) { ex.printStackTrace(); }
         }
+        // No relanzamos excepción: dejamos que el Command decida qué hacer
+    }
 
-        return emp;
+    return emp; 
     }
 
     @Override

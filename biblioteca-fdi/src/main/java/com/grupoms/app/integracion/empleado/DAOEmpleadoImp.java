@@ -45,35 +45,38 @@ public class DAOEmpleadoImp implements DAOEmpleado {
 
     @Override
     public TEmpleado mostrarEmpleado(Integer id) {
+        TEmpleado empleado = null;
+
+    try {
+        // Obtener la transacción activa
         Transaction t = TransactionManager.getInstance().getTransaction();
         if (t == null) {
             throw new IllegalStateException("No hay transacción activa al mostrar empleado");
         }
         Connection c = (Connection) t.getResource();
 
-        TEmpleado empleado = null;
-        try {
-            String sql = "SELECT id, nombre, activo, donde_atiende, sueldo FROM empleados WHERE id = ?";
-            try (PreparedStatement ps = c.prepareStatement(sql)) {
-                ps.setInt(1, id);
+        String sql = "SELECT id, nombre, activo, donde_atiende, sueldo FROM empleados WHERE id = ?";
+        try (PreparedStatement ps = c.prepareStatement(sql)) {
+            ps.setInt(1, id);
 
-                try (ResultSet rs = ps.executeQuery()) {
-                    if (rs.next()) {
-                        empleado = new TEmpleado();
-                        empleado.setID(rs.getInt("id"));
-                        empleado.setNombre(rs.getString("nombre"));
-                        empleado.setActivo(rs.getBoolean("activo"));
-                        empleado.setDondeAtiende(rs.getString("donde_atiende"));
-                        empleado.setSueldo(rs.getDouble("sueldo"));
-                    } else {
-                        throw new IllegalArgumentException("Empleado no encontrado en la base de datos");
-                    }
-                }
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    empleado = new TEmpleado();
+                    empleado.setID(rs.getInt("id"));
+                    empleado.setNombre(rs.getString("nombre"));
+                    empleado.setActivo(rs.getBoolean("activo"));
+                    empleado.setDondeAtiende(rs.getString("donde_atiende"));
+                    empleado.setSueldo(rs.getDouble("sueldo"));
+                } 
+                // Si no hay fila, empleado seguirá siendo null
             }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
-        return empleado;
+    } catch (Exception e) {
+        e.printStackTrace();
+        // No lanzamos excepción, simplemente retornamos null
+    }
+
+    return empleado;
     }
 
     @Override

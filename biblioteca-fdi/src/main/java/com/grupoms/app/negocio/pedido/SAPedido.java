@@ -1,4 +1,5 @@
 package com.grupoms.app.negocio.pedido;
+import java.util.List;
 import java.util.Set;
 
 public interface SAPedido {
@@ -10,11 +11,11 @@ public interface SAPedido {
 
     public TPedido mostrarPedido(Integer idPedido);
 
-    public Set<TPedido> mostrarPedidos();
+    public List<TPedido> mostrarPedidos();
 
     public void devolverPedido(TPedido pedido);
 
-    public Set<TPedido> mostrarPedidosPorEmpleado(Integer idEmpleado);
+    public List<TPedido> mostrarPedidosPorEmpleado(Integer idEmpleado);
 
-    public Set<TPedido> mostrarPedidosPorMesa(Integer idMesa);
+    public List<TPedido> mostrarPedidosPorMesa(Integer idMesa);
 }

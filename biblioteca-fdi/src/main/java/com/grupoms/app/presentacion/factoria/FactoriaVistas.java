@@ -19,7 +19,7 @@ public class FactoriaVistas {
     public static final String GUI_MOSTRAR_PEDIDO = "GUI_MostrarPedido";
     public static final String GUI_DEVOLVER_PEDIDO = "GUI_DevolverPedido";
     public static final String GUI_MODIFICAR_PEDIDO = "GUI_ModificarPedido";
-    public static final String GUI_LISTAR_PEDIDOS = "GUI_ListarPedidos";
+    public static final String GUI_LISTAR_PEDIDO = "GUI_ListarPedido";
 
     public static final String GUI_ALTA_PROVEEDOR = "GUI_AltaProveedor";
     public static final String GUI_BAJA_PROVEEDOR = "GUI_BajaProveedor";
@@ -65,7 +65,7 @@ public class FactoriaVistas {
         vistas.put(GUI_MOSTRAR_PEDIDO, GUI_MostrarPedido::new);
         vistas.put(GUI_DEVOLVER_PEDIDO, GUI_DevolverPedido::new);
         vistas.put(GUI_MODIFICAR_PEDIDO, GUI_ModificarPedido::new);
-        vistas.put(GUI_LISTAR_PEDIDOS, GUI_ListarPedido::new);
+        vistas.put(GUI_LISTAR_PEDIDO, GUI_ListarPedido::new);
 
         // Proveedores
         vistas.put(GUI_ALTA_PROVEEDOR, GUI_AltaProveedor::new);

@@ -3,7 +3,9 @@ package com.grupoms.app.integracion.pedido;
 
 import java.sql.*;
 import java.util.Set;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 
 import com.grupoms.app.integracion.Transaction.Transaction;
 import com.grupoms.app.integracion.Transaction.TransactionManager;
@@ -140,8 +142,8 @@ public Integer altaPedido(TPedido pedido) {
     }
 
     @Override
-    public Set<TPedido> mostrarListaPedidos() {
-        Set<TPedido> lista = new HashSet<>();
+    public List<TPedido> mostrarListaPedidos() {
+        List<TPedido> lista = new ArrayList<>();
 
         try {
             Transaction t = TransactionManager.getInstance().getTransaction();
@@ -166,7 +168,7 @@ public Integer altaPedido(TPedido pedido) {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println("Error mostrando la lista de pedidos: "+e.getMessage());
         }
 
         return lista;
@@ -192,8 +194,8 @@ public Integer altaPedido(TPedido pedido) {
     }
 
     @Override
-    public Set<TPedido> mostrarPedidosPorEmpleado(Integer idEmpleado) {
-        Set<TPedido> lista = new HashSet<>();
+    public List<TPedido> mostrarPedidosPorEmpleado(Integer idEmpleado) {
+        List<TPedido> lista = new ArrayList<>();
 
         try {
             Transaction t = TransactionManager.getInstance().getTransaction();
@@ -227,8 +229,8 @@ public Integer altaPedido(TPedido pedido) {
     }
 
     @Override
-    public Set<TPedido> mostrarPedidosPorMesa(Integer idMesa) {
-        Set<TPedido> lista = new HashSet<>();
+    public List<TPedido> mostrarPedidosPorMesa(Integer idMesa) {
+        List<TPedido> lista = new ArrayList<>();
 
         try {
             Transaction t = TransactionManager.getInstance().getTransaction();

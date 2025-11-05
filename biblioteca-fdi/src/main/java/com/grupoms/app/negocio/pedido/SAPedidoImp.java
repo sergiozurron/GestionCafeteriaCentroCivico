@@ -1,4 +1,6 @@
 package com.grupoms.app.negocio.pedido;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import com.grupoms.app.integracion.Transaction.Transaction;
@@ -153,11 +155,11 @@ public class SAPedidoImp implements SAPedido{
     }
 
     @Override
-    public Set<TPedido> mostrarPedidosPorEmpleado(Integer idEmpleado) {
+    public List<TPedido> mostrarPedidosPorEmpleado(Integer idEmpleado) {
         if (idEmpleado == null || idEmpleado <= 0)
             throw new IllegalArgumentException("El ID del empleado no es válido.");
 
-        Set<TPedido> listaPedidos = null;
+        List<TPedido> listaPedidos = null;
         Transaction t = null;
         try {
             t = TransactionManager.getInstance().newTransaction();
@@ -175,11 +177,11 @@ public class SAPedidoImp implements SAPedido{
     }
 
     @Override
-    public Set<TPedido> mostrarPedidosPorMesa(Integer idMesa) {
+    public List<TPedido> mostrarPedidosPorMesa(Integer idMesa) {
         if (idMesa == null || idMesa <= 0)
             throw new IllegalArgumentException("El ID de la mesa no es válido.");
 
-        Set<TPedido> listaPedidos = null;
+        List<TPedido> listaPedidos = null;
         Transaction t = null;
         try {
             t = TransactionManager.getInstance().newTransaction();
@@ -197,13 +199,19 @@ public class SAPedidoImp implements SAPedido{
     }
 
      @Override
-    public Set<TPedido> mostrarPedidos() {
-        Set<TPedido> listaPedidos = null;
+    public List<TPedido> mostrarPedidos() {
+        List<TPedido> listaPedidos = new ArrayList<>();
         Transaction t = null;
         try {
             t = TransactionManager.getInstance().newTransaction();
             t.start();
-            listaPedidos = dao.mostrarListaPedidos();
+            List<TPedido> todos = dao.mostrarListaPedidos();
+            for(TPedido p: todos){
+                listaPedidos.add(p);
+            }
+            if(listaPedidos.isEmpty())
+                throw new IllegalArgumentException("No hay pedidos en la base de datos.");
+
             t.commit();
         } catch (Exception e) {
             e.printStackTrace();

@@ -148,5 +148,9 @@ public class Evento {
 	public static final int MOSTRAR_EMPLEADOS_OK    = 233;
 	public static final int MOSTRAR_EMPLEADOS_KO    = 234;
 
+    public static final int MOSTRAR_PEDIDOS = 235;
+    public static final int MOSTRAR_PEDIDOS_OK = 236;
+    public static final int MOSTRAR_PEDIDOS_KO = 237;
+
 
 }

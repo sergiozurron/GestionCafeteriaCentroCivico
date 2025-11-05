@@ -38,14 +38,12 @@ public class GUI_MostrarMesa extends JFrame implements IGUI {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         pack();
         setLocationRelativeTo(null);
-        
+        setVisible(true);
     }
 
     @Override
     public void actualizar(Context context) {
-    	if (context == null)
-    		setVisible(true);
-        else if (context.getEvento() == Evento.MOSTRAR_MESA_OK) {
+    	if (context.getEvento() == Evento.MOSTRAR_MESA_OK) {
             TMesa mesa = (TMesa) context.getDatos();
             JOptionPane.showMessageDialog(this, "Mesa mostrada con éxito");
             actualizarTabla(mesa);

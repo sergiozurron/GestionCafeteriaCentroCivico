@@ -25,8 +25,6 @@ public class GUI_ListarProducto extends JFrame implements IGUI {
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         initGUI();
-        
-
     }
 
     private void initGUI() {
@@ -79,14 +77,29 @@ public class GUI_ListarProducto extends JFrame implements IGUI {
             }
 
             for (TProducto p : productos) {
-                Object[] fila = {
-                    p.getId(),
-                    p.getNombre(),
-                    p.getPrecio(),
-                    p.getStock(),
-                    p.getTipo(),
-                    p.getActivo() ? "Sí" : "No"
-                };
+                Object[] fila;
+                if (p.getTipo().equals("Bebida")) {
+                    fila = new Object[] {
+                        p.getId(),
+                        p.getNombre(),
+                        p.getPrecio(),
+                        p.getStock(),
+                        p.getTipo(),
+                        p.getActivo() ? "Sí" : "No",
+                        p.getTamanho()
+                    };
+                } else /*if (p.getTipo().equals("Comida"))*/ {
+                    fila = new Object[] {
+                        p.getId(),
+                        p.getNombre(),
+                        p.getPrecio(),
+                        p.getStock(),
+                        p.getTipo(),
+                        p.getActivo() ? "Sí" : "No",
+                        p.getTiempoPreparacion(),
+                        p.getCalorias()
+                    };
+                }
                 modeloTabla.addRow(fila);
             }
         } 

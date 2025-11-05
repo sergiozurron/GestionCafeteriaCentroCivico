@@ -12,11 +12,11 @@ public class BajaMesaCommand implements Command{
 	public Context execute(Object data) {
 		TMesa mesa = (TMesa) data;
 		try {
-		FactoriaSA.getInstance().creaSAMesa().bajaMesa(mesa.getId());
+		FactoriaSA.getInstance().creaSAMesa().bajaMesa(mesa);
 		} catch (IllegalArgumentException e) {
 			System.out.println(e.getMessage());
 			return new Context(Evento.BAJA_MESA_KO, null);
 		}
-		return new Context(Evento.BAJA_MESA_OK, mesa.getId());
+		return new Context(Evento.BAJA_MESA_OK, mesa);
 	}
 }

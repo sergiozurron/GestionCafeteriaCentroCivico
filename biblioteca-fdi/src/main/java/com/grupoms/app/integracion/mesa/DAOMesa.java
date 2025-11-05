@@ -9,5 +9,5 @@ public interface DAOMesa {
 	TMesa mostrarMesa(Integer id);
 	void modificarMesa(TMesa mesa);
 	List<TMesa> mostrarListaMesa();
-	void bajaMesa(Integer id);
+	void bajaMesa(Integer mesa);
 }

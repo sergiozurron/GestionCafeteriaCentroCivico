@@ -101,7 +101,7 @@ public class DAOEmpleadoImp implements DAOEmpleado {
                 
             }
         } catch (SQLException e) {
-            System.err.println("Error mostrando la lista de empleados: "+ e.getMessage());
+            e.printStackTrace();
         }
         return lista;
     }

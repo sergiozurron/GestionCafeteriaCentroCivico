@@ -3,7 +3,7 @@ package com.grupoms.app.presentacion.empleado;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.util.Set;
+import java.util.List;
 
 import com.grupoms.app.negocio.empleado.TEmpleado;
 import com.grupoms.app.presentacion.IGUI;
@@ -25,7 +25,7 @@ public class GUI_ListarEmpleado extends JFrame implements IGUI {
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         initGUI();
-
+        setVisible(true); // Aseguramos que la ventana se vea
     }
 
     private void initGUI() {
@@ -42,15 +42,15 @@ public class GUI_ListarEmpleado extends JFrame implements IGUI {
         tabla = new JTable(modeloTabla);
         JScrollPane scrollPane = new JScrollPane(tabla);
 
-        // --- Botón para cargar empleados para no saturar con cargas automaticas
+        // --- Botón para cargar empleados ---
         botonCargar = new JButton("Cargar Empleados");
         botonCargar.addActionListener(e -> {
-          try {
+            try {
                 Context contexto = new Context(Evento.MOSTRAR_EMPLEADOS, null);
                 Controlador.getInstance().handle(contexto);
             } catch (Exception ex) {
                 ex.printStackTrace();
-                JOptionPane.showMessageDialog(this, "Error al cargar productos: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Error al cargar empleados: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
         });
 
@@ -63,30 +63,34 @@ public class GUI_ListarEmpleado extends JFrame implements IGUI {
     @Override
     @SuppressWarnings("unchecked")
     public void actualizar(Context context) {
-    	if (context == null)
-    		setVisible(true);
-    	else if (context.getEvento() == Evento.MOSTRAR_EMPLEADOS_OK) {
-            modeloTabla.setRowCount(0); // limpia la tabla
-            Set<TEmpleado> empleados = (Set<TEmpleado>) context.getDatos();
+        SwingUtilities.invokeLater(() -> {
+            if (context == null) {
+                setVisible(true);
+            } else if (context.getEvento() == Evento.MOSTRAR_EMPLEADOS_OK) {
+                modeloTabla.setRowCount(0); // limpia la tabla
+                List<TEmpleado> empleados = (List<TEmpleado>) context.getDatos();
 
-            if (empleados == null || empleados.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "No hay empleados activos en la base de datos.");
-                return;
-            }
+                if (empleados == null || empleados.isEmpty()) {
+                    JOptionPane.showMessageDialog(this, "No hay empleados activos en la base de datos.");
+                    return;
+                }
 
-            for (TEmpleado emp : empleados) {
-                Object[] fila = {
-                    emp.getID(),
-                    emp.getNombre(),
-                    emp.getDondeAtiende(),
-                    emp.getSueldo(),
-                    (emp.getActivo() != null && emp.getActivo()) ? "Sí" : "No"
-                };
-                modeloTabla.addRow(fila);
+                for (TEmpleado emp : empleados) {
+                    if (emp != null) {
+                        Object[] fila = {
+                            emp.getID() != null ? emp.getID() : 0,
+                            emp.getNombre() != null ? emp.getNombre() : "N/A",
+                            emp.getDondeAtiende() != null ? emp.getDondeAtiende() : "N/A",
+                            emp.getSueldo() != null ? emp.getSueldo() : 0.0,
+                            (emp.getActivo() != null && emp.getActivo()) ? "Sí" : "No"
+                        };
+                        modeloTabla.addRow(fila);
+                    }
+                }
+            } else if (context.getEvento() == Evento.MOSTRAR_EMPLEADOS_KO) {
+                JOptionPane.showMessageDialog(this, "Error al cargar los empleados.");
+                modeloTabla.setRowCount(0);
             }
-        } 
-        else if (context.getEvento() == Evento.MOSTRAR_EMPLEADOS_KO) {
-            JOptionPane.showMessageDialog(this, "Error al cargar los empleados.");
-        }
+        });
     }
 }

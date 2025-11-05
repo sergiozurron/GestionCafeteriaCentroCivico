@@ -56,7 +56,9 @@ public class Principal extends JFrame implements IGUI {
             {"Modificar Ingrediente", "GUI_MODIFICAR_INGREDIENTE"},
             {"Mostrar Ingrediente", "GUI_MOSTRAR_INGREDIENTE"},
             {"Mostrar Lista Ingrediente", "GUI_LISTAR_INGREDIENTE"},
-            {"Mostrar Lista Ingredientes por Producto", "GUI_LISTAR_INGREDIENTE_PRODUCTO"}
+            {"Mostrar Lista Ingredientes por Producto", "GUI_LISTAR_INGREDIENTE_PRODUCTO"},
+            {"Mostrar Lista Ingredientes por Proveedor", "GUI_LISTAR_INGREDIENTE_PROVEEDOR"},
+
 
         });
 

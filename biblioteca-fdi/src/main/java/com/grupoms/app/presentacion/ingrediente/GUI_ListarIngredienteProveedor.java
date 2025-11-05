@@ -34,7 +34,7 @@ public class GUI_ListarIngredienteProveedor extends JFrame implements IGUI{
 
         // Parte superior: campo para ID de producto
         JPanel panelBusqueda = new JPanel(new FlowLayout());
-        panelBusqueda.add(new JLabel("ID del Producto:"));
+        panelBusqueda.add(new JLabel("ID del Proveedor:"));
         campoIDProducto = new JTextField(10);
         panelBusqueda.add(campoIDProducto);
 

@@ -38,6 +38,8 @@ public class FactoryCommandImp extends FactoryCommand {
         commands.put(Evento.MOSTRAR_INGREDIENTE, new MostrarIngredienteCommand());
         commands.put(Evento.MOSTRAR_INGREDIENTES, new MostrarListaIngredientes());
         commands.put(Evento.LISTAR_INGREDIENTES_POR_PRODUCTO, new ListarIngredientesPorProductoCommand());
+        commands.put(Evento.LISTAR_INGREDIENTES_POR_PROVEEDOR, new ListarIngredientesPorProveedorCommand());
+        
 
         // Empleado
         commands.put(Evento.ALTA_EMPLEADO, new AltaEmpleadoCommand());
@@ -78,6 +80,14 @@ public class FactoryCommandImp extends FactoryCommand {
         views.put(Evento.MOSTRAR_INGREDIENTES, "GUI_LISTAR_INGREDIENTE");
         views.put(Evento.MOSTRAR_INGREDIENTES_OK, "GUI_LISTAR_INGREDIENTE");
         views.put(Evento.MOSTRAR_INGREDIENTES_KO, "GUI_LISTAR_INGREDIENTE");
+
+        views.put(Evento.LISTAR_INGREDIENTES_POR_PROVEEDOR, "GUI_LISTAR_INGREDIENTE_PROVEEDOR");
+        views.put(Evento.LISTAR_INGREDIENTES_POR_PROVEEDOR_OK, "GUI_LISTAR_INGREDIENTE_PROVEEDOR");
+        views.put(Evento.LISTAR_INGREDIENTES_POR_PROVEEDOR_KO, "GUI_LISTAR_INGREDIENTE_PROVEEDOR");
+
+        views.put(Evento.LISTAR_INGREDIENTES_POR_PRODUCTO, "GUI_LISTAR_INGREDIENTE_PRODUCTO");
+        views.put(Evento.LISTAR_INGREDIENTES_POR_PRODUCTO_OK, "GUI_LISTAR_INGREDIENTE_PRODUCTO");
+        views.put(Evento.LISTAR_INGREDIENTES_POR_PRODUCTO_KO, "GUI_LISTAR_INGREDIENTE_PRODUCTO");
 
         views.put(Evento.ALTA_EMPLEADO, "GUI_ALTA_EMPLEADO");
         views.put(Evento.ALTA_EMPLEADO_OK, "GUI_ALTA_EMPLEADO");

@@ -92,6 +92,8 @@ public class Evento {
 
 	public static final int LISTAR_INGREDIENTES_POR_PROVEEDOR_OK = 78;
     public static final int LISTAR_INGREDIENTES_POR_PROVEEDOR_KO = 79;
+	public static final int LISTAR_INGREDIENTES_POR_PROVEEDOR = 80;
+
 
 	// Producto
 	public static final int ALTA_PRODUCTO = 101;

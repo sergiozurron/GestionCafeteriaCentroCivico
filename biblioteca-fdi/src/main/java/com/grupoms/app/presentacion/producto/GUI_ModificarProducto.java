@@ -27,7 +27,7 @@ public class GUI_ModificarProducto extends JFrame implements IGUI {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); //destruye la ventana sin cerrar la app
         pack(); //ajusta
         setLocationRelativeTo(null); //centra
-        setVisible(true); //es visible
+         //es visible
     }
 
     private void initGUI() {
@@ -96,8 +96,8 @@ public class GUI_ModificarProducto extends JFrame implements IGUI {
 
     @Override
     public void actualizar(Context context) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'actualizar'");
+    	if (context == null)
+    		setVisible(true);
     }
     
 }

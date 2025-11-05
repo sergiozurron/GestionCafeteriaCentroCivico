@@ -25,7 +25,6 @@ public class GUI_MostrarEmpleado extends JFrame implements IGUI {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         pack();
         setLocationRelativeTo(null);
-        setVisible(true);
     }
 
     private void initGUI() {
@@ -102,7 +101,9 @@ public class GUI_MostrarEmpleado extends JFrame implements IGUI {
 
     @Override
     public void actualizar(Context context) {
-        if (context.getEvento() == Evento.MOSTRAR_EMPLEADO_OK) {
+    	if (context == null)
+    		setVisible(true);
+    	else if (context.getEvento() == Evento.MOSTRAR_EMPLEADO_OK) {
             // Tu ejemplo usa getDatos(); mantenemos ese nombre para encajar con tu API
             TEmpleado emp = (TEmpleado) context.getDatos();
             nombreLabel.setText(emp.getNombre() != null ? emp.getNombre() : "");

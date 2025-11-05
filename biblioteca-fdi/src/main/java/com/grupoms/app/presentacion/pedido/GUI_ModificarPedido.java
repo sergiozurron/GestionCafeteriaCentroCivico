@@ -22,7 +22,7 @@ public class GUI_ModificarPedido extends JFrame implements IGUI{
         setSize(400, 250);
         setLocationRelativeTo(null);
         initGUI();
-        setVisible(true);
+        
     }
 
     private void initGUI() {
@@ -86,7 +86,9 @@ public class GUI_ModificarPedido extends JFrame implements IGUI{
 
     @Override
     public void actualizar(Context context) {
-        if (context.getEvento() == Evento.MODIFICAR_PEDIDO) {
+    	if (context == null)
+    		setVisible(true);
+        else if (context.getEvento() == Evento.MODIFICAR_PEDIDO) {
             JOptionPane.showMessageDialog(this, "Pedido modificado con éxito");
             campoIdPedido.setText("");
             campoMesa.setText("");

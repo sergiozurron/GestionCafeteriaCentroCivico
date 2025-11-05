@@ -16,6 +16,8 @@ public class GUI_DevolverPedido extends JFrame implements IGUI{
 
     @Override
     public void actualizar(Context context) {
+    	if (context == null)
+    		setVisible(true);
         if(context.getEvento() == Evento.DEVOLVER_PEDIDO){
             JOptionPane.showMessageDialog(this,"Pedido devuelto con exito");
             campoID.setText("");
@@ -28,7 +30,7 @@ public class GUI_DevolverPedido extends JFrame implements IGUI{
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         pack();
         setLocationRelativeTo(null);
-        setVisible(true);
+        
     }
 
     public void initGUI(){

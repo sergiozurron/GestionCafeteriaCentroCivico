@@ -28,12 +28,14 @@ public class GUI_AltaMesa extends JFrame implements IGUI {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         pack();
         setLocationRelativeTo(null);
-        setVisible(true);
+        
     }
 
     @Override
     public void actualizar(Context context) {
-        if (context.getEvento() == Evento.ALTA_MESA_OK) {
+    	if (context == null)
+    		setVisible(true);
+        else if (context.getEvento() == Evento.ALTA_MESA_OK) {
             JOptionPane.showMessageDialog(this, "Mesa creada con éxito");
             numero.setText("");
             ubicacion.setText("");
@@ -96,17 +98,17 @@ public class GUI_AltaMesa extends JFrame implements IGUI {
         panelTerraza.add(terrazaSuplemento, gbc);
         panelTerraza.setVisible(false);
 
-        rbtnSala.addItemListener(e -> {
-            panelSala.setVisible(e.getStateChange() == ItemEvent.SELECTED);
-            panelTerraza.setVisible(false);
-            pack();
-        });
-
-        rbtnTerraza.addItemListener(e -> {
-            panelTerraza.setVisible(e.getStateChange() == ItemEvent.SELECTED);
-            panelSala.setVisible(false);
-            pack();
-        });
+//        rbtnSala.addItemListener(e -> {
+//            panelSala.setVisible(e.getStateChange() == ItemEvent.SELECTED);
+//            panelTerraza.setVisible(false);
+//            pack();
+//        });
+//
+//        rbtnTerraza.addItemListener(e -> {
+//            panelTerraza.setVisible(e.getStateChange() == ItemEvent.SELECTED);
+//            panelSala.setVisible(false);
+//            pack();
+//        });
 
         crear = new JButton("Crear Mesa");
         crear.addActionListener(e -> {

@@ -23,7 +23,7 @@ public class GUI_MostrarProducto extends JFrame implements IGUI{
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); //destruye la ventana sin cerrar la app
         pack(); //ajusta
         setLocationRelativeTo(null); //centra
-        setVisible(true); //es visible
+         //es visible
     }
 
     private void initGUI() {
@@ -65,7 +65,9 @@ public class GUI_MostrarProducto extends JFrame implements IGUI{
 
     @Override
     public void actualizar(Context context) {
-        if (context.getEvento() == Evento.MOSTRAR_PRODUCTO_OK) {
+    	if (context == null)
+    		setVisible(true);
+        else if (context.getEvento() == Evento.MOSTRAR_PRODUCTO_OK) {
             TProducto producto = (TProducto) context.getDatos();
             String info = "ID: " + producto.getId() + "\n" +
                           "Nombre: " + producto.getNombre() + "\n" +

@@ -10,13 +10,9 @@ public class ControladorImpl extends Controlador {
 	public void handle(Context context) {
 		FactoryCommand factory = FactoryCommand.getInstance();
 		Command command = factory.getCommand(context.getEvento());
-
-		if (command != null) {
-			Context respuesta = command.execute(context.getDatos());
-			String vista = factory.getView(context.getEvento());
-			if (vista != null)
-				FactoriaVistas.getInstance().creaVista(vista).actualizar(respuesta);
-		}
+		Context respuesta = command.execute(context.getDatos());
+		String vista = factory.getView(context.getEvento());
+		FactoriaVistas.getInstance().creaVista(vista).actualizar(respuesta);
 	}
 
 }

@@ -25,7 +25,7 @@ public class GUI_BajaProducto extends JFrame implements IGUI {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); //destruye la ventana sin cerrar la app
         pack(); //ajusta
         setLocationRelativeTo(null); //centra
-        setVisible(true); //es visible
+         //es visible
     }
 
     void initGUI() {
@@ -68,7 +68,9 @@ public class GUI_BajaProducto extends JFrame implements IGUI {
 
     @Override
     public void actualizar(Context context) {
-        if (context.getEvento() == Evento.BAJA_PRODUCTO_OK) {
+    	if (context == null)
+    		setVisible(true);
+        else if (context.getEvento() == Evento.BAJA_PRODUCTO_OK) {
             JOptionPane.showMessageDialog(this, "Producto dado de baja con éxito");
             idProd.setText("");
         } else if (context.getEvento() == Evento.BAJA_PRODUCTO_KO) {

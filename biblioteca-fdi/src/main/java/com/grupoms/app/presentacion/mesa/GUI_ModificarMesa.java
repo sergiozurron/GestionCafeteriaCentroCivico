@@ -29,12 +29,14 @@ public class GUI_ModificarMesa extends JFrame implements IGUI{
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         pack();
         setLocationRelativeTo(null);
-        setVisible(true);
+        
     }
 
     @Override
     public void actualizar(Context context) {
-        if (context.getEvento() == Evento.MODIFICAR_MESA_OK) {
+    	if (context == null)
+    		setVisible(true);
+        else if (context.getEvento() == Evento.MODIFICAR_MESA_OK) {
             JOptionPane.showMessageDialog(this, "Mesa modificada con éxito");
             numero.setText("");
             ubicacion.setText("");

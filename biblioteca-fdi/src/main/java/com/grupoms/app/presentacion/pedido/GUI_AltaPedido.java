@@ -26,7 +26,7 @@ public class GUI_AltaPedido extends JFrame implements IGUI {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         pack();
         setLocationRelativeTo(null);
-        setVisible(true);
+        
     }
 
     private void initGUI() {
@@ -178,7 +178,9 @@ public class GUI_AltaPedido extends JFrame implements IGUI {
 
     @Override
     public void actualizar(Context context) {
-        if (context.getEvento() == Evento.ALTA_PEDIDO) {
+    	if (context == null)
+    		setVisible(true);
+    	else if (context.getEvento() == Evento.ALTA_PEDIDO) {
             JOptionPane.showMessageDialog(this, "Pedido creado con éxito");
             pedidoIdTemp = ((TPedido) context.getDatos()).getId();
             campoMesa.setText("");

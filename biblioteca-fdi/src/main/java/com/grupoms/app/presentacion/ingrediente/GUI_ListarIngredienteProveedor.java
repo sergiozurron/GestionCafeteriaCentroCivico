@@ -26,7 +26,7 @@ public class GUI_ListarIngredienteProveedor extends JFrame implements IGUI{
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         initGUI();
-        setVisible(true);
+        
     }
 
     private void initGUI() {
@@ -68,7 +68,9 @@ public class GUI_ListarIngredienteProveedor extends JFrame implements IGUI{
 
     @SuppressWarnings("unchecked")
     public void actualizar(Context context) {
-        if (context.getEvento() == Evento.LISTAR_INGREDIENTES_POR_PROVEEDOR_OK) {
+    	if (context == null)
+    		setVisible(true);
+        else if (context.getEvento() == Evento.LISTAR_INGREDIENTES_POR_PROVEEDOR_OK) {
             modeloTabla.setRowCount(0);
             Set<TIngrediente> ingredientes = (Set<TIngrediente>) context.getDatos();
             if (ingredientes == null || ingredientes.isEmpty()) {

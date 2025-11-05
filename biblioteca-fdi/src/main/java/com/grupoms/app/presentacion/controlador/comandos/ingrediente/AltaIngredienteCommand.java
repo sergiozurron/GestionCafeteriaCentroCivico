@@ -20,8 +20,10 @@ public class AltaIngredienteCommand implements Command{
         SAIngrediente sa = FactoriaSA.getInstance().creaSAIngrediente();
 
         try {
-            sa.crearIngrediente(ingr);
-            return new Context(Evento.ALTA_INGREDIENTE_OK, ingr);
+            Integer id = sa.crearIngrediente(ingr);
+            return (id != null)
+                ? new Context(Evento.ALTA_INGREDIENTE_OK, ingr)
+                : new Context(Evento.ALTA_EMPLEADO_KO, null);
         } catch (IllegalArgumentException e) {
             return new Context(Evento.ALTA_INGREDIENTE_KO, null);
         }

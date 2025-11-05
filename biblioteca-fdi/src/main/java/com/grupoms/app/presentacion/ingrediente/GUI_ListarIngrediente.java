@@ -26,7 +26,7 @@ public class GUI_ListarIngrediente extends JFrame implements IGUI {
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         initGUI();
-        
+        setVisible(true);
 
 
     }
@@ -65,6 +65,8 @@ public class GUI_ListarIngrediente extends JFrame implements IGUI {
 
     @Override
     public void actualizar(Context context) {
+        SwingUtilities.invokeLater(() -> {
+          
     	if (context == null)
     		setVisible(true);
         else if (context.getEvento() == Evento.MOSTRAR_INGREDIENTES_OK) {
@@ -90,5 +92,6 @@ public class GUI_ListarIngrediente extends JFrame implements IGUI {
         else if (context.getEvento() == Evento.MOSTRAR_INGREDIENTES_KO) {
             JOptionPane.showMessageDialog(this, "Error al cargar los ingredientes.");
         }
+        });
     }
 }

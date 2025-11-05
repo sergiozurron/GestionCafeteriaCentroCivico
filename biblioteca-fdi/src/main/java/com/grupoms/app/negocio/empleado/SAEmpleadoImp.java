@@ -161,10 +161,6 @@ public class SAEmpleadoImp implements SAEmpleado {
                 }
             }
 
-            if (listaEmpleadosActivos.isEmpty()) {
-                throw new IllegalArgumentException("No hay empleados activos en la base de datos");
-            }
-
             // 3. Commit
             t.commit();
 
@@ -173,7 +169,6 @@ public class SAEmpleadoImp implements SAEmpleado {
             if (t != null) {
                 try { t.rollback(); } catch (Exception ex) { ex.printStackTrace(); }
             }
-            throw new IllegalArgumentException("Error al mostrar la lista de empleados.", e);
         }
 
         return listaEmpleadosActivos;

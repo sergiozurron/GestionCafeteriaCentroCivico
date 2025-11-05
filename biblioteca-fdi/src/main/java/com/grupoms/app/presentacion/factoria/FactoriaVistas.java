@@ -50,7 +50,7 @@ public class FactoriaVistas {
     public static final String GUI_ALTA_EMPLEADO = "GUI_AltaEmpleado";
     public static final String GUI_BAJA_EMPLEADO = "GUI_BajaEmpleado";
     public static final String GUI_MOSTRAR_EMPLEADO = "GUI_VerEmpleado";
-    public static final String GUI_LISTAR_EMPLEADOS = "GUI_ListarEmpleados";
+    public static final String GUI_LISTAR_EMPLEADOS = "GUI_ListarEmpleado";
     public static final String GUI_MODIFICAR_EMPLEADO = "GUI_ModificarEmpleado";
 
     // Singleton

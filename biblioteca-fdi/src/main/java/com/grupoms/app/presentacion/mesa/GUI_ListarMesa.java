@@ -22,14 +22,14 @@ import com.grupoms.app.presentacion.controlador.Context;
 import com.grupoms.app.presentacion.controlador.Controlador;
 import com.grupoms.app.presentacion.controlador.Evento;
 
-public class GUI_MostrarListaMesa extends JFrame implements IGUI {
+public class GUI_ListarMesa extends JFrame implements IGUI {
 
     private JButton baja;
     private List<TMesa> listaMesas;
     private JTable tablaMesas;
     private DefaultTableModel modeloTabla;
 
-    public GUI_MostrarListaMesa() {
+    public GUI_ListarMesa() {
         super("Mostrar Lista de Mesas");
         initGUI();
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

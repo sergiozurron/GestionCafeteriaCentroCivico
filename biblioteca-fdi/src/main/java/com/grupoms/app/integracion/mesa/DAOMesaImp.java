@@ -20,13 +20,13 @@ public class DAOMesaImp implements DAOMesa{
 	private static final String INSERT_TERRAZA = "INSERT INTO MESAS(tipo, suplemento, cubierta) VALUES (?, ?, ?)";
 	private static final String INSERT_SALA = "INSERT INTO MESAS(tipo, reservada, privacidad) VALUES (?, ?, ?)";
 	private static final String READ_BY_ID = "SELECT * FROM MESAS WHERE id = ?";
-	private static final String READ_BY_NUMBER = "SELECT * FROM MESAS WHERE numero = ?";
+	private static final String DESACTIVAR_MESA = "UPDATE MESAS SET activo = false WHERE id = ?";
 	private static final String UPDATE_TERRAZA = "UPDATE MESAS SET ubicacion = ?, numero = ?, capacidad = ?, activo = ?, suplemento = ?, cubierta = ? WHERE id = ?";
 	private static final String UPDATE_SALA = "UPDATE MESAS SET ubicacion = ?, numero = ?, capacidad = ?, activo = ?, reservada = ?, privacidad = ? WHERE id = ?";
 	private static final String ALL = "SELECT * FROM MESAS";
 	
 	@Override
-	public Integer crea(TMesa mesa) {
+	public Integer altaMesa(TMesa mesa) {
 		try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS)) {
 
 			ps.setString(1, mesa.getUbicacion());
@@ -60,48 +60,29 @@ public class DAOMesaImp implements DAOMesa{
 		}
 		return mesa.getId();
 	}
-
+	
 	@Override
-	public TMesa buscaPorNumero(Integer numero) {
-		try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(READ_BY_NUMBER)) {
-			ps.setInt(1, numero);
+	public void bajaMesa(Integer id) {
+	    try (Connection conn = getConnection();
+	         PreparedStatement ps = conn.prepareStatement(DESACTIVAR_MESA)) {
+	        
+	        ps.setInt(1, id);
+	        int ok = ps.executeUpdate();
 
-			try (ResultSet rs = ps.executeQuery()) {
-				if (rs.next()) {
-					String tipo = rs.getString("tipo");
-					if("Terraza".equals(tipo)) {
-						TMesa mesa = new TMesaTerraza();
-						mesa.setId(rs.getInt("id"));
-						mesa.setUbicacion(rs.getString("ubicacion"));
-						mesa.setNumero(rs.getInt("numero"));
-						mesa.setCapacidad(rs.getInt("capacidad"));
-						mesa.setActivo(rs.getBoolean("activo"));
-						mesa.setCubierta(rs.getBoolean("cubierta"));
-						mesa.setSuplemento(rs.getDouble("suplemento"));
-						return mesa;
-					}
-					else {
-						TMesa mesa = new TMesaSala();
-						mesa.setId(rs.getInt("id"));
-						mesa.setUbicacion(rs.getString("ubicacion"));
-						mesa.setNumero(rs.getInt("numero"));
-						mesa.setCapacidad(rs.getInt("capacidad"));
-						mesa.setActivo(rs.getBoolean("activo"));
-						mesa.setReservada(rs.getBoolean("reservada"));
-						mesa.setPrivacidad(rs.getString("privacidad"));
-						return mesa;
-					}
+	        if (ok == 0) {
+	            System.err.println("No se encontró ninguna mesa con id " + id);
+	        } else {
+	            System.out.println("Mesa con id " + id + " desactivada correctamente.");
+	        }
 
-				}
-			}
-		} catch (SQLException e) {
-	        System.err.println("Error encontrando mesa: " + e.getMessage());
-		}
-		return null;
+	    } catch (SQLException e) {
+	        System.err.println("Error al dar de baja la mesa: " + e.getMessage());
+	    }
 	}
 
+
 	@Override
-	public TMesa buscarPorId(Integer id) {
+	public TMesa mostrarMesa(Integer id) {
 		try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(READ_BY_ID)) {
 			ps.setInt(1, id);
 
@@ -137,18 +118,10 @@ public class DAOMesaImp implements DAOMesa{
 		}
 		return null;
 	}
+	
 
 	@Override
-	public void eliminaTodos() {
-		try (Connection conn = getConnection(); Statement stmt = conn.createStatement()) {
-			stmt.executeUpdate("DELETE FROM MESAS");
-		} catch (SQLException e) {
-	        System.err.println("Error eliminando todas las mesas: " + e.getMessage());
-		}		
-	}
-	
-	@Override
-	public List<TMesa> mostrarTodos(){
+	public List<TMesa> mostrarListaMesa(){
 	    List<TMesa> lista = new ArrayList<>();
 
 	    try (Connection conn = getConnection();
@@ -190,7 +163,7 @@ public class DAOMesaImp implements DAOMesa{
 	}
 	
 	@Override
-	public void update(TMesa mesa) {
+	public void modificarMesa(TMesa mesa) {
 
 	    try (Connection conn = getConnection();
 	         PreparedStatement ps = conn.prepareStatement(UPDATE_TERRAZA)) {

@@ -11,27 +11,28 @@ public class SAMesaImp implements SAMesa{
 	@Override
 	public int altaMesa(TMesa mesa) {
 		
-		TMesa mesaExistente = daoMesa.buscaPorNumero(mesa.getNumero());
+		TMesa mesaExistente = daoMesa.mostrarMesa(mesa.getId());
 		if (mesaExistente != null && mesaExistente.getActivo()) {
 			return -1;
 		}
 		mesa.setActivo(true);
-		daoMesa.crea(mesa);
+		daoMesa.altaMesa(mesa);
 		return mesa.getId();
 	}
 	
 	@Override
 	public void bajaMesa(Integer id) {
-		TMesa mesaExistente = daoMesa.buscarPorId(id);
+		TMesa mesaExistente = daoMesa.mostrarMesa(id);
 		if(mesaExistente == null || !mesaExistente.getActivo()) {
 			throw new IllegalArgumentException("No existe esa mesa");
 		}
 		mesaExistente.setActivo(false);
+		daoMesa.bajaMesa(id);
 	}
 	
 	@Override
 	public void modificarMesa(TMesa mesa) {
-		TMesa mesaExistente = daoMesa.buscarPorId(mesa.getId());
+		TMesa mesaExistente = daoMesa.mostrarMesa(mesa.getId());
 		
 		if (mesaExistente != null && mesaExistente.getActivo()) {
 			throw new IllegalArgumentException("No existe esa mesa");
@@ -40,12 +41,12 @@ public class SAMesaImp implements SAMesa{
 		mesaExistente.setNumero(mesa.getNumero());
 		mesaExistente.setUbicacion(mesa.getUbicacion());
 		mesaExistente.setActivo(mesa.getActivo());
-		daoMesa.update(mesaExistente);
+		daoMesa.modificarMesa(mesaExistente);
 	}
 	
 	@Override
 	public TMesa mostrarMesa(Integer id) {
-		TMesa mesaExistente = daoMesa.buscarPorId(id);
+		TMesa mesaExistente = daoMesa.mostrarMesa(id);
 		if (mesaExistente != null && mesaExistente.getActivo()) {
 			throw new IllegalArgumentException("No existe esa mesa");
 		}
@@ -53,8 +54,8 @@ public class SAMesaImp implements SAMesa{
 	}
 	
 	@Override
-	public List<TMesa> mostrarMesas(){
-		return daoMesa.mostrarTodos();
+	public List<TMesa> mostrarListaMesa(){
+		return daoMesa.mostrarListaMesa();
 	}
 
 }

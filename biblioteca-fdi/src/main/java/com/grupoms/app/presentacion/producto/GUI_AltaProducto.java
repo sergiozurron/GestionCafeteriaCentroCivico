@@ -26,7 +26,7 @@ public class GUI_AltaProducto extends JFrame implements IGUI {
        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); //destruye la ventana sin cerrar la app
        pack(); //ajusta
        setLocationRelativeTo(null); //centra
-       setVisible(true); //es visible
+        //es visible
     }
 
     private void initGUI() {
@@ -92,7 +92,9 @@ public class GUI_AltaProducto extends JFrame implements IGUI {
 
     @Override
     public void actualizar(Context context) {
-        if (context.getEvento() == Evento.ALTA_PRODUCTO_OK) {
+    	if (context == null)
+    		setVisible(true);
+        else if (context.getEvento() == Evento.ALTA_PRODUCTO_OK) {
             JOptionPane.showMessageDialog(this, "Producto creado con éxito");
             campoNombre.setText("");
             campoPrecio.setText("");

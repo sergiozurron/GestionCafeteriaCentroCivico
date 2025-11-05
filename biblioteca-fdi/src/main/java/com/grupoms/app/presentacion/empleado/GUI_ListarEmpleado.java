@@ -25,7 +25,6 @@ public class GUI_ListarEmpleado extends JFrame implements IGUI {
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         initGUI();
-        setVisible(true);
 
     }
 
@@ -64,7 +63,9 @@ public class GUI_ListarEmpleado extends JFrame implements IGUI {
     @Override
     @SuppressWarnings("unchecked")
     public void actualizar(Context context) {
-        if (context.getEvento() == Evento.MOSTRAR_EMPLEADOS_OK) {
+    	if (context == null)
+    		setVisible(true);
+    	else if (context.getEvento() == Evento.MOSTRAR_EMPLEADOS_OK) {
             modeloTabla.setRowCount(0); // limpia la tabla
             Set<TEmpleado> empleados = (Set<TEmpleado>) context.getDatos();
 

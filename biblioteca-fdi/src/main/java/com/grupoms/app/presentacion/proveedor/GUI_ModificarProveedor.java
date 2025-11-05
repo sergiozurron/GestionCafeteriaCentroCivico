@@ -1,11 +1,11 @@
-package com.grupoms.app.presentacion.pedido;
+package com.grupoms.app.presentacion.proveedor;
 
 import javax.swing.JFrame;
 
 import com.grupoms.app.presentacion.IGUI;
 import com.grupoms.app.presentacion.controlador.Context;
 
-public class GUI_ListarPedido extends JFrame implements IGUI {
+public class GUI_ModificarProveedor extends JFrame implements IGUI {
 
 	private static final long serialVersionUID = 1L;
 
@@ -14,5 +14,5 @@ public class GUI_ListarPedido extends JFrame implements IGUI {
 		if (context == null)
     		setVisible(true);
 	}
-    
+
 }

@@ -33,12 +33,14 @@ public class GUI_BajaMesa extends JFrame implements IGUI{
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         pack();
         setLocationRelativeTo(null);
-        setVisible(true);
+        
     }
 
     @Override
     public void actualizar(Context context) {
-        if (context.getEvento() == Evento.BAJA_MESA_OK) {
+    	if (context == null)
+    		setVisible(true);
+        else if (context.getEvento() == Evento.BAJA_MESA_OK) {
             JOptionPane.showMessageDialog(this, "Mesa dada de baja con éxito");
             idMesa.setText("");
         } else if (context.getEvento() == Evento.BAJA_MESA_KO) {

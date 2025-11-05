@@ -24,11 +24,13 @@ public class GUI_AltaIngrediente extends JFrame implements IGUI{
        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); //destruye la ventana sin cerrar la app
        pack(); //ajusta
        setLocationRelativeTo(null); //centra
-       setVisible(true); //es visible
+        //es visible
     }
     @Override
     public void actualizar(Context context) {
-          if (context.getEvento() == Evento.ALTA_INGREDIENTE) {
+    	if (context == null)
+    		setVisible(true);
+          else if (context.getEvento() == Evento.ALTA_INGREDIENTE) {
             // Muestra mensaje de éxito
             JOptionPane.showMessageDialog(this, "Ingrediente creado con éxito");
             // Limpia los campos para la siguiente entrada

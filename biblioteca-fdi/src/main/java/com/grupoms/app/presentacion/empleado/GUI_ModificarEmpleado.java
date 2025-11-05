@@ -25,12 +25,13 @@ public class GUI_ModificarEmpleado extends JFrame implements IGUI {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         pack();
         setLocationRelativeTo(null);
-        setVisible(true);
     }
 
     @Override
     public void actualizar(Context context) {
-        if (context.getEvento() == Evento.MODIFICAR_EMPLEADO_OK) {
+    	if (context == null)
+    		setVisible(true);
+    	else if (context.getEvento() == Evento.MODIFICAR_EMPLEADO_OK) {
             JOptionPane.showMessageDialog(this, "Empleado modificado con éxito");
             // limpiar campos
             id.setText("");

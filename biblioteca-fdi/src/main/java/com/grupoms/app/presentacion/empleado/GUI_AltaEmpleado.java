@@ -23,12 +23,13 @@ public class GUI_AltaEmpleado extends JFrame implements IGUI {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         pack();
         setLocationRelativeTo(null);
-        setVisible(true);
     }
 
     @Override
     public void actualizar(Context context) {
-        if (context.getEvento() == Evento.ALTA_EMPLEADO) {
+    	if (context == null)
+    		setVisible(true);
+		else if (context.getEvento() == Evento.ALTA_EMPLEADO_OK) {
             JOptionPane.showMessageDialog(this, "Empleado creado con éxito");
             // limpiar campos
             nombre.setText("");

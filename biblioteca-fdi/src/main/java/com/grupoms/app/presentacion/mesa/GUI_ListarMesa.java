@@ -35,13 +35,15 @@ public class GUI_ListarMesa extends JFrame implements IGUI {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         pack();
         setLocationRelativeTo(null);
-        setVisible(true);
+        
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public void actualizar(Context context) {
-        if (context.getEvento() == Evento.MOSTRAR_LISTA_MESA_OK) {
+    	if (context == null)
+    		setVisible(true);
+        else if (context.getEvento() == Evento.MOSTRAR_LISTA_MESA_OK) {
             listaMesas = (List<TMesa>) context.getDatos();
             JOptionPane.showMessageDialog(this, "Lista de mesas mostrada con éxito");
             actualizarTabla();

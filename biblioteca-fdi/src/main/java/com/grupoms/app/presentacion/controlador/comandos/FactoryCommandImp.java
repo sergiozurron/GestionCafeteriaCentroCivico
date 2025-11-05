@@ -9,12 +9,14 @@ import com.grupoms.app.presentacion.controlador.comandos.mesa.*;
 import com.grupoms.app.presentacion.controlador.comandos.pedido.*;
 import com.grupoms.app.presentacion.controlador.comandos.empleado.*;
 import com.grupoms.app.presentacion.controlador.comandos.producto.*;
+import com.grupoms.app.presentacion.controlador.comandos.proveedor.AltaProveedorCommand;
+import com.grupoms.app.presentacion.factoria.FactoriaVistas;
 
 public class FactoryCommandImp extends FactoryCommand {
     private Map<Integer, Command> commands = new HashMap<>();
 	private Map<Integer, String> views = new HashMap<>();
 
-    public FactoryCommandImp(){
+    protected FactoryCommandImp(){
         //cada comando que añadamos hay que añadirlo aqui
     	//COMANDOS
     	//Mesa
@@ -54,100 +56,41 @@ public class FactoryCommandImp extends FactoryCommand {
         commands.put(Evento.MODIFICAR_PRODUCTO, new ModificarProductoCommand());
         commands.put(Evento.MOSTRAR_PRODUCTO, new MostrarProductoCommand());
         commands.put(Evento.MOSTRAR_LISTA_PRODUCTO, new MostrarListaProductosCommand());
+        
+        // Proveedor
+        commands.put(Evento.ALTA_PROVEEDOR, new AltaProveedorCommand());
 
 
         //VISTAS
-        views.put(Evento.MOSTRAR_PEDIDO, "GUI_MOSTRAR_PEDIDO");
-        views.put(Evento.MOSTRAR_PEDIDO_OK, "GUI_MOSTRAR_PEDIDO");
-        views.put(Evento.MOSTRAR_PEDIDO_KO, "GUI_MOSTRAR_PEDIDO");
+        views.put(Evento.MOSTRAR_PEDIDO, FactoriaVistas.GUI_MOSTRAR_PEDIDO);
+        views.put(Evento.MODIFICAR_PEDIDO, FactoriaVistas.GUI_MODIFICAR_PEDIDO);
 
-        views.put(Evento.ALTA_INGREDIENTE, "GUI_ALTA_INGREDIENTE");
-        views.put(Evento.ALTA_INGREDIENTE_OK, "GUI_ALTA_INGREDIENTE");
-        views.put(Evento.ALTA_INGREDIENTE_KO, "GUI_ALTA_INGREDIENTE");
+        views.put(Evento.ALTA_INGREDIENTE, FactoriaVistas.GUI_ALTA_INGREDIENTE);
+        views.put(Evento.MODIFICAR_INGREDIENTE, FactoriaVistas.GUI_MODIFICAR_INGREDIENTE);
+        views.put(Evento.MOSTRAR_INGREDIENTE, FactoriaVistas.GUI_MOSTRAR_INGREDIENTE);
+        views.put(Evento.MOSTRAR_INGREDIENTES, FactoriaVistas.GUI_LISTAR_INGREDIENTES);
+        views.put(Evento.LISTAR_INGREDIENTES_POR_PROVEEDOR, FactoriaVistas.GUI_MOSTRAR_INGREDIENTES_PROVEEDOR);
+        views.put(Evento.LISTAR_INGREDIENTES_POR_PRODUCTO, FactoriaVistas.GUI_MOSTRAR_INGREDIENTES_PRODUCTO);
 
-        views.put(Evento.MODIFICAR_INGREDIENTE, "GUI_MODIFICAR_INGREDIENTE");
-        views.put(Evento.MODIFICAR_INGREDIENTE_OK, "GUI_MODIFICAR_INGREDIENTE");
-        views.put(Evento.MODIFICAR_INGREDIENTE_KO, "GUI_MODIFICAR_INGREDIENTE");
-
-        views.put(Evento.MODIFICAR_PEDIDO, "GUI_MODIFICAR_PEDIDO");
-        views.put(Evento.MODIFICAR_PEDIDO_OK, "GUI_MODIFICAR_PEDIDO");
-        views.put(Evento.MODIFICAR_PEDIDO_KO, "GUI_MODIFICAR_PEDIDO");
-
-        views.put(Evento.MOSTRAR_INGREDIENTE, "GUI_MOSTRAR_INGREDIENTE");
-        views.put(Evento.MOSTRAR_INGREDIENTE_KO, "GUI_MOSTRAR_INGREDIENTE");
-        views.put(Evento.MOSTRAR_INGREDIENTE_OK, "GUI_MOSTRAR_INGREDIENTE");
-
-        views.put(Evento.MOSTRAR_INGREDIENTES, "GUI_LISTAR_INGREDIENTE");
-        views.put(Evento.MOSTRAR_INGREDIENTES_OK, "GUI_LISTAR_INGREDIENTE");
-        views.put(Evento.MOSTRAR_INGREDIENTES_KO, "GUI_LISTAR_INGREDIENTE");
-
-        views.put(Evento.LISTAR_INGREDIENTES_POR_PROVEEDOR, "GUI_LISTAR_INGREDIENTE_PROVEEDOR");
-        views.put(Evento.LISTAR_INGREDIENTES_POR_PROVEEDOR_OK, "GUI_LISTAR_INGREDIENTE_PROVEEDOR");
-        views.put(Evento.LISTAR_INGREDIENTES_POR_PROVEEDOR_KO, "GUI_LISTAR_INGREDIENTE_PROVEEDOR");
-
-        views.put(Evento.LISTAR_INGREDIENTES_POR_PRODUCTO, "GUI_LISTAR_INGREDIENTE_PRODUCTO");
-        views.put(Evento.LISTAR_INGREDIENTES_POR_PRODUCTO_OK, "GUI_LISTAR_INGREDIENTE_PRODUCTO");
-        views.put(Evento.LISTAR_INGREDIENTES_POR_PRODUCTO_KO, "GUI_LISTAR_INGREDIENTE_PRODUCTO");
-
-        views.put(Evento.ALTA_EMPLEADO, "GUI_ALTA_EMPLEADO");
-        views.put(Evento.ALTA_EMPLEADO_OK, "GUI_ALTA_EMPLEADO");
-        views.put(Evento.ALTA_EMPLEADO_KO, "GUI_ALTA_EMPLEADO");
-
-        views.put(Evento.BAJA_EMPLEADO, "GUI_BAJA_EMPLEADO");
-        views.put(Evento.BAJA_EMPLEADO_OK, "GUI_BAJA_EMPLEADO");
-        views.put(Evento.BAJA_EMPLEADO_KO, "GUI_BAJA_EMPLEADO");
-
-        views.put(Evento.MODIFICAR_EMPLEADO, "GUI_MODIFICAR_EMPLEADO");
-        views.put(Evento.MODIFICAR_EMPLEADO_OK, "GUI_MODIFICAR_EMPLEADO");
-        views.put(Evento.MODIFICAR_EMPLEADO_KO, "GUI_MODIFICAR_EMPLEADO");
-
-        views.put(Evento.MOSTRAR_EMPLEADO, "GUI_MOSTRAR_EMPLEADO");
-        views.put(Evento.MOSTRAR_EMPLEADO_OK, "GUI_MOSTRAR_EMPLEADO");
-        views.put(Evento.MOSTRAR_EMPLEADO_KO, "GUI_MOSTRAR_EMPLEADO");
-
-        views.put(Evento.MOSTRAR_EMPLEADOS, "GUI_LISTAR_EMPLEADO");
-        views.put(Evento.MOSTRAR_EMPLEADOS_OK, "GUI_LISTAR_EMPLEADO");
-        views.put(Evento.MOSTRAR_EMPLEADOS_KO, "GUI_LISTAR_EMPLEADO");
+        views.put(Evento.ALTA_EMPLEADO, FactoriaVistas.GUI_ALTA_EMPLEADO);
+        views.put(Evento.BAJA_EMPLEADO, FactoriaVistas.GUI_BAJA_EMPLEADO);
+        views.put(Evento.MODIFICAR_EMPLEADO, FactoriaVistas.GUI_MODIFICAR_EMPLEADO);
+        views.put(Evento.MOSTRAR_EMPLEADO, FactoriaVistas.GUI_MOSTRAR_EMPLEADO);
+        views.put(Evento.MOSTRAR_EMPLEADOS, FactoriaVistas.GUI_LISTAR_EMPLEADOS);
         
-        views.put(Evento.ALTA_MESA, "GUI_ALTA_MESA");
-        views.put(Evento.ALTA_MESA_OK, "GUI_ALTA_MESA");
-        views.put(Evento.ALTA_MESA_KO, "GUI_ALTA_MESA");
-       
-        views.put(Evento.BAJA_MESA, "GUI_BAJA_MESA");
-        views.put(Evento.BAJA_MESA_OK, "GUI_BAJA_MESA");
-        views.put(Evento.BAJA_MESA_KO, "GUI_BAJA_MESA");
+        views.put(Evento.ALTA_MESA, FactoriaVistas.GUI_ALTA_MESA);
+        views.put(Evento.BAJA_MESA, FactoriaVistas.GUI_BAJA_MESA);
+        views.put(Evento.MODIFICAR_MESA, FactoriaVistas.GUI_MODIFICAR_MESA);
+        views.put(Evento.MOSTRAR_MESA, FactoriaVistas.GUI_MOSTRAR_MESA);
+        views.put(Evento.MOSTRAR_LISTA_MESA, FactoriaVistas.GUI_LISTAR_MESAS);
         
-        views.put(Evento.MODIFICAR_MESA, "GUI_MODIFICAR_MESA");
-        views.put(Evento.MODIFICAR_MESA_OK, "GUI_MODIFICAR_MESA");
-        views.put(Evento.MODIFICAR_MESA_KO, "GUI_MODIFICAR_MESA");
+        views.put(Evento.ALTA_PRODUCTO, FactoriaVistas.GUI_ALTA_PRODUCTO);
+        views.put(Evento.BAJA_PRODUCTO, FactoriaVistas.GUI_BAJA_PRODUCTO);
+        views.put(Evento.MODIFICAR_PRODUCTO, FactoriaVistas.GUI_MODIFICAR_PRODUCTO);
+        views.put(Evento.MOSTRAR_PRODUCTO, FactoriaVistas.GUI_MOSTRAR_PRODUCTO);
+        views.put(Evento.MOSTRAR_LISTA_PRODUCTO, FactoriaVistas.GUI_LISTAR_PRODUCTOS);
         
-        views.put(Evento.MOSTRAR_MESA, "GUI_MOSTRAR_MESA");
-        views.put(Evento.MOSTRAR_MESA_OK, "GUI_MOSTRAR_MESA");
-        views.put(Evento.MOSTRAR_MESA_KO, "GUI_MOSTRAR_MESA");
-        
-        views.put(Evento.MOSTRAR_LISTA_MESA, "GUI_LISTAR_MESA");
-        views.put(Evento.MOSTRAR_LISTA_MESA_OK, "GUI_LISTAR_MESA");
-        views.put(Evento.MOSTRAR_LISTA_MESA_KO, "GUI_LISTAR_MESA");
-        
-        views.put(Evento.ALTA_PRODUCTO, "GUI_ALTA_PRODUCTO");
-        views.put(Evento.ALTA_PRODUCTO_OK, "GUI_ALTA_PRODUCTO");
-        views.put(Evento.ALTA_PRODUCTO_KO, "GUI_ALTA_PRODUCTO");
-
-        views.put(Evento.BAJA_PRODUCTO, "GUI_BAJA_PRODUCTO");
-        views.put(Evento.BAJA_PRODUCTO_OK, "GUI_BAJA_PRODUCTO");
-        views.put(Evento.BAJA_PRODUCTO_KO, "GUI_BAJA_PRODUCTO");
-
-        views.put(Evento.MODIFICAR_PRODUCTO, "GUI_MODIFICAR_PRODUCTO");
-        views.put(Evento.MODIFICAR_PRODUCTO_OK, "GUI_MODIFICAR_PRODUCTO");
-        views.put(Evento.MODIFICAR_PRODUCTO_KO, "GUI_MODIFICAR_PRODUCTO");
-
-        views.put(Evento.MOSTRAR_PRODUCTO, "GUI_MOSTRAR_PRODUCTO");
-        views.put(Evento.MOSTRAR_PRODUCTO_OK, "GUI_MOSTRAR_PRODUCTO");
-        views.put(Evento.MOSTRAR_PRODUCTO_KO, "GUI_MOSTRAR_PRODUCTO");
-
-        views.put(Evento.MOSTRAR_LISTA_PRODUCTO, "GUI_LISTAR_PRODUCTO");
-        views.put(Evento.MOSTRAR_LISTA_PRODUCTO_OK, "GUI_LISTAR_PRODUCTO");
-        views.put(Evento.MOSTRAR_LISTA_PRODUCTO_KO, "GUI_LISTAR_PRODUCTO");
+        views.put(Evento.ALTA_PROVEEDOR, FactoriaVistas.GUI_ALTA_PROVEEDOR);
     }
     @Override
     public Command getCommand(Integer event) {

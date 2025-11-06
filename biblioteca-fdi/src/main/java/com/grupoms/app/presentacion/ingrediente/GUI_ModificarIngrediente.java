@@ -24,13 +24,11 @@ public class GUI_ModificarIngrediente  extends JFrame implements IGUI{
        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); //destruye la ventana sin cerrar la app
        pack(); //ajusta
        setLocationRelativeTo(null); //centra
-        //es visible
+        setVisible(true);//es visible
     }
     @Override
     public void actualizar(Context context) {
-    	if (context == null)
-    		setVisible(true);
-          else if (context.getEvento() == Evento.MODIFICAR_INGREDIENTE_OK) {
+    	if (context.getEvento() == Evento.MODIFICAR_INGREDIENTE_OK) {
             // Muestra mensaje de éxito
             JOptionPane.showMessageDialog(this, "Ingrediente modificado con éxito");
             // Limpia los campos para la siguiente entrada
@@ -62,7 +60,7 @@ public class GUI_ModificarIngrediente  extends JFrame implements IGUI{
         JLabel labelProv = new JLabel("ID proveedor:");
         prov = new JTextField(10);
 
-        crear = new JButton("Crear Ingrediente");
+        crear = new JButton("Modificar Ingrediente");
         crear.addActionListener(e -> {
             try {
                 String nombrerI = nombre.getText();
@@ -85,24 +83,24 @@ public class GUI_ModificarIngrediente  extends JFrame implements IGUI{
         });
 
         gbc.gridx = 0; gbc.gridy = 0;
+        panel.add(labelId, gbc);
+        gbc.gridx = 1;
+        panel.add(id, gbc);
+
+        gbc.gridx = 0; gbc.gridy = 1;
         panel.add(labelNombre, gbc);
         gbc.gridx = 1;
         panel.add(nombre, gbc);
 
-        gbc.gridx = 0; gbc.gridy = 1;
+        gbc.gridx = 0; gbc.gridy = 2;
         panel.add(labelPrecio, gbc);
         gbc.gridx = 1;
         panel.add(precio, gbc);
 
-        gbc.gridx = 0; gbc.gridy = 2;
+        gbc.gridx = 0; gbc.gridy = 3;
         panel.add(labelProv, gbc);
         gbc.gridx = 1;
         panel.add(prov, gbc);
-
-        gbc.gridx = 0; gbc.gridy = 3;
-        panel.add(labelId, gbc);
-        gbc.gridx = 1;
-        panel.add(id, gbc);
 
         gbc.gridx = 0; gbc.gridy = 4; 
         gbc.gridwidth = 2;

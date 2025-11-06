@@ -1,6 +1,5 @@
 package com.grupoms.app.negocio.pedido;
 import java.util.List;
-import java.util.Set;
 
 public interface SAPedido {
     public Integer altaPedido(TPedido pedido);

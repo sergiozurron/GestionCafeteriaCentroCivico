@@ -3,7 +3,6 @@ package com.grupoms.app.presentacion.ingrediente;
 import javax.swing.*;
 import java.awt.*;
 
-import com.grupoms.app.negocio.empleado.TEmpleado;
 import com.grupoms.app.negocio.ingrediente.TIngrediente;
 import com.grupoms.app.presentacion.IGUI;
 import com.grupoms.app.presentacion.controlador.Context;

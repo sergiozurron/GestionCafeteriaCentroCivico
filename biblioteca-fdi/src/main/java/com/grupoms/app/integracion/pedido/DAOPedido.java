@@ -3,7 +3,6 @@ package com.grupoms.app.integracion.pedido;
 import com.grupoms.app.negocio.pedido.TPedido;
 
 import java.util.List;
-import java.util.Set;
 
 
 public interface DAOPedido{

@@ -2,6 +2,7 @@ package com.grupoms.app.presentacion.producto;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ItemEvent;
 
 import com.grupoms.app.negocio.producto.TBebida;
 import com.grupoms.app.negocio.producto.TComida;
@@ -13,38 +14,30 @@ import com.grupoms.app.presentacion.controlador.Evento;
 
 public class GUI_AltaProducto extends JFrame implements IGUI {
 
-    private JTextField campoNombre;
-    private JTextField campoPrecio;
-    private JTextField campoStock;
-    private JRadioButton bebidaButton;
-    private JRadioButton comidaButton;
+    private JTextField campoNombre, campoPrecio, campoStock;
+    private JRadioButton bebidaButton, comidaButton;
     private JButton crear;
-    private JPanel panelBebida;
-    private JPanel panelComida;
-    private JLabel labelTamanho;
-    private JTextField campoTamanho;
-    private JLabel labelTiempoPreparacion;
-    private JTextField campoTiempoPreparacion;
-    private JLabel labelCalorias;
-    private JTextField campoCalorias;
+    private JPanel panelBebida, panelComida;
+    private JLabel labelTamanho, labelTiempoPreparacion, labelCalorias;
+    private JTextField campoTamanho, campoTiempoPreparacion, campoCalorias;
 
-    public GUI_AltaProducto(){
-       super("Alta Producto");
-       initGUI();
-       setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); //destruye la ventana sin cerrar la app
-       pack(); //ajusta
-       setLocationRelativeTo(null); //centra
-        //es visible
+    public GUI_AltaProducto() {
+        super("Alta Producto");
+        initGUI();
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        pack();
+        setLocationRelativeTo(null);
+        setVisible(true);
     }
 
     private void initGUI() {
         setLayout(new BorderLayout());
-
         JPanel panel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5,5,5,5);
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
+        // Campos principales
         JLabel labelNombre = new JLabel("Nombre:");
         campoNombre = new JTextField(10);
 
@@ -54,62 +47,92 @@ public class GUI_AltaProducto extends JFrame implements IGUI {
         JLabel labelStock = new JLabel("Stock:");
         campoStock = new JTextField(10);
 
+        // Radio buttons
         bebidaButton = new JRadioButton("Bebida");
         comidaButton = new JRadioButton("Comida");
-        ButtonGroup tipoGroup = new ButtonGroup();
-        tipoGroup.add(bebidaButton);
-        tipoGroup.add(comidaButton);
+        ButtonGroup grupoTipo = new ButtonGroup();
+        grupoTipo.add(bebidaButton);
+        grupoTipo.add(comidaButton);
 
+        // Panel Bebida
         panelBebida = new JPanel(new GridBagLayout());
         labelTamanho = new JLabel("Tamaño:");
         campoTamanho = new JTextField(10);
-        gbc.gridx = 0; gbc.gridy = 1;
+        gbc.gridx = 0; gbc.gridy = 0;
         panelBebida.add(labelTamanho, gbc);
         gbc.gridx = 1;
         panelBebida.add(campoTamanho, gbc);
         panelBebida.setVisible(false);
 
+        // Panel Comida
         panelComida = new JPanel(new GridBagLayout());
-        labelTiempoPreparacion = new JLabel("Suplemento:");
+        labelTiempoPreparacion = new JLabel("Tiempo de preparación:");
         campoTiempoPreparacion = new JTextField(10);
         labelCalorias = new JLabel("Calorías:");
         campoCalorias = new JTextField(10);
-        gbc.gridx = 0; gbc.gridy = 1;
+        gbc.gridx = 0; gbc.gridy = 0;
         panelComida.add(labelTiempoPreparacion, gbc);
         gbc.gridx = 1;
         panelComida.add(campoTiempoPreparacion, gbc);
-        gbc.gridx = 0; gbc.gridy = 2;
+        gbc.gridx = 0; gbc.gridy = 1;
         panelComida.add(labelCalorias, gbc);
         gbc.gridx = 1;
         panelComida.add(campoCalorias, gbc);
         panelComida.setVisible(false);
 
-        bebidaButton.addActionListener(e -> {
-            panelBebida.setVisible(true);
+        // Listeners para mostrar panel correspondiente
+        bebidaButton.addItemListener(e -> {
+            panelBebida.setVisible(e.getStateChange() == ItemEvent.SELECTED);
             panelComida.setVisible(false);
             pack();
         });
 
-        comidaButton.addActionListener(e -> {
-            panelComida.setVisible(true);
+        comidaButton.addItemListener(e -> {
+            panelComida.setVisible(e.getStateChange() == ItemEvent.SELECTED);
             panelBebida.setVisible(false);
             pack();
         });
 
+        // Botón Crear Producto
         crear = new JButton("Crear Producto");
         crear.addActionListener(e -> crearProducto());
 
-        gbc.gridx = 0; gbc.gridy = 0; panel.add(labelNombre, gbc);
-        gbc.gridx = 1; panel.add(campoNombre, gbc);
-        gbc.gridx = 0; gbc.gridy = 1; panel.add(labelPrecio, gbc);
-        gbc.gridx = 1; panel.add(campoPrecio, gbc);
-        gbc.gridx = 0; gbc.gridy = 1; panel.add(labelStock, gbc);
-        gbc.gridx = 1; panel.add(campoStock, gbc);
-        gbc.gridx = 0; gbc.gridy = 2; panel.add(bebidaButton, gbc);
-        gbc.gridx = 1; panel.add(comidaButton, gbc);
-        gbc.gridx = 0; gbc.gridy = 3; gbc.gridwidth = 2; panel.add(panelBebida, gbc);
-        gbc.gridx = 0; gbc.gridy = 4; gbc.gridwidth = 2; panel.add(panelComida, gbc);
-        gbc.gridx = 0; gbc.gridy = 2; gbc.gridwidth = 2; panel.add(crear, gbc);
+        // Ubicación en el panel principal
+        int y = 0;
+        gbc.gridx = 0; gbc.gridy = y;
+        panel.add(labelNombre, gbc);
+        gbc.gridx = 1;
+        panel.add(campoNombre, gbc);
+
+        y++;
+        gbc.gridx = 0; gbc.gridy = y;
+        panel.add(labelPrecio, gbc);
+        gbc.gridx = 1;
+        panel.add(campoPrecio, gbc);
+
+        y++;
+        gbc.gridx = 0; gbc.gridy = y;
+        panel.add(labelStock, gbc);
+        gbc.gridx = 1;
+        panel.add(campoStock, gbc);
+
+        y++;
+        gbc.gridx = 0; gbc.gridy = y;
+        panel.add(bebidaButton, gbc);
+        gbc.gridx = 1;
+        panel.add(comidaButton, gbc);
+
+        y++;
+        gbc.gridx = 0; gbc.gridy = y; gbc.gridwidth = 2;
+        panel.add(panelBebida, gbc);
+
+        y++;
+        gbc.gridx = 0; gbc.gridy = y; gbc.gridwidth = 2;
+        panel.add(panelComida, gbc);
+
+        y++;
+        gbc.gridx = 0; gbc.gridy = y; gbc.gridwidth = 2;
+        panel.add(crear, gbc);
 
         add(panel, BorderLayout.CENTER);
     }
@@ -117,18 +140,21 @@ public class GUI_AltaProducto extends JFrame implements IGUI {
     private void crearProducto() {
         try {
             String nombre = campoNombre.getText();
-            Double precio = Double.parseDouble(campoPrecio.getText());
+            double precio = Double.parseDouble(campoPrecio.getText());
             int stock = Integer.parseInt(campoStock.getText());
 
             TProducto producto;
             if (bebidaButton.isSelected()) {
-                producto = new TBebida();
-                producto.setTamanho(Integer.parseInt(campoTamanho.getText()));
-            } else /*if (comidaButton.isSelected())*/ {
-                producto = new TComida();
-                producto.setCalorias(Integer.parseInt(campoCalorias.getText()));
-                producto.setTiempoPreparacion(Integer.parseInt(campoTiempoPreparacion.getText()));
+                TBebida bebida = new TBebida();
+                bebida.setTamanho(Integer.parseInt(campoTamanho.getText()));
+                producto = bebida;
+            } else {
+                TComida comida = new TComida();
+                comida.setTiempoPreparacion(Integer.parseInt(campoTiempoPreparacion.getText()));
+                comida.setCalorias(Integer.parseInt(campoCalorias.getText()));
+                producto = comida;
             }
+
             producto.setNombre(nombre);
             producto.setPrecio(precio);
             producto.setStock(stock);
@@ -143,13 +169,20 @@ public class GUI_AltaProducto extends JFrame implements IGUI {
 
     @Override
     public void actualizar(Context context) {
-    	if (context == null)
-    		setVisible(true);
+        if (context == null)
+            setVisible(true);
         else if (context.getEvento() == Evento.ALTA_PRODUCTO_OK) {
             JOptionPane.showMessageDialog(this, "Producto creado con éxito");
             campoNombre.setText("");
             campoPrecio.setText("");
             campoStock.setText("");
+            campoTamanho.setText("");
+            campoTiempoPreparacion.setText("");
+            campoCalorias.setText("");
+            bebidaButton.setSelected(false);
+            comidaButton.setSelected(false);
+            panelBebida.setVisible(false);
+            panelComida.setVisible(false);
         } else if (context.getEvento() == Evento.ALTA_PRODUCTO_KO) {
             JOptionPane.showMessageDialog(this, "Error al crear el producto", "Error", JOptionPane.ERROR_MESSAGE);
         }

@@ -15,13 +15,19 @@ public class AltaProductoCommand implements Command {
         if (!(data instanceof TProducto)) {
             return new Context(Evento.ALTA_PRODUCTO_KO, null);
         }
+        
 
         TProducto producto = (TProducto) data;
         SAProducto saProducto = FactoriaSA.getInstance().creaSAProducto();
         try {
-            saProducto.altaProducto(producto);
-            return new Context(Evento.ALTA_PRODUCTO_OK, producto);
-        } catch (Exception e) {
+            Integer idGenerado = saProducto.altaProducto(producto);
+            if(idGenerado != null &&idGenerado >0){
+                producto.setId(idGenerado);
+                return new Context(Evento.ALTA_PRODUCTO_OK, producto);
+            }
+            else
+                return new Context(Evento.ALTA_PRODUCTO_KO, null);
+        } catch (IllegalArgumentException e) {
             return new Context(Evento.ALTA_PRODUCTO_KO, null);
         }
     }

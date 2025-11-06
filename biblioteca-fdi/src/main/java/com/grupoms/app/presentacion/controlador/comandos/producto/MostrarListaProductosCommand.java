@@ -16,7 +16,7 @@ public class MostrarListaProductosCommand implements Command {
     public Context execute(Object data) {
         SAProducto saProducto = FactoriaSA.getInstance().creaSAProducto();
         try {
-            List<TProducto> productos = saProducto.mostrarProductos();
+            List<TProducto> productos = saProducto.mostrarListaProductos();
             return new Context(Evento.MOSTRAR_LISTA_PRODUCTO_OK, productos);
         } catch (Exception e) {
             return new Context(Evento.MOSTRAR_LISTA_PRODUCTO_KO, null);

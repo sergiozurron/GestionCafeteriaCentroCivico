@@ -2,35 +2,41 @@ package com.grupoms.app.negocio.producto;
 
 public class TComida extends TProducto {
 
-    Integer calorias;
-    Integer tiempoPreparacion;
+    private Integer calorias;
+    private Integer tiempoPreparacion;
 
     public TComida() {
         super("Comida");
     }
 
+    @Override
     public Integer getCalorias() {
         return calorias;
     }
 
-    public Integer getTiempoPreparacion() {
-        return tiempoPreparacion;
-    }
-
+    @Override
     public void setCalorias(Integer calorias) {
         this.calorias = calorias;
     }
 
+    @Override
+    public Integer getTiempoPreparacion() {
+        return tiempoPreparacion;
+    }
+
+    @Override
     public void setTiempoPreparacion(Integer tiempoPreparacion) {
         this.tiempoPreparacion = tiempoPreparacion;
     }
 
+    // Las comidas no tienen tamaño
     @Override
-    public void setTamanho(Integer int1) {
-        
-    }
-
     public Integer getTamanho() {
         return null;
+    }
+
+    @Override
+    public void setTamanho(Integer tamanho) {
+        // No aplica para comidas
     }
 }

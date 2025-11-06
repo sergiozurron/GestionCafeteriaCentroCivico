@@ -10,4 +10,5 @@ public interface DAOProducto {
     public Integer modificarProducto(TProducto producto);
     public TProducto mostrarProducto(Integer id);
     public List<TProducto> mostrarListaProductos();
+    void eliminaTodas();
 }

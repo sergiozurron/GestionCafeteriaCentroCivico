@@ -1,6 +1,5 @@
 package com.grupoms.app.negocio.proveedor;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.grupoms.app.integracion.Transaction.Transaction;
@@ -9,8 +8,6 @@ import com.grupoms.app.integracion.factoria.FactoriaDAO;
 import com.grupoms.app.integracion.proveedor.DAOProveedor;
 
 public class SAProveedorImpl implements SAProveedor {
-	DAOProveedor daoProveedor = FactoriaDAO.getInstancia().creaDAOProveedor();
-
 
 	@Override
 	public Integer altaProveedor(TProveedor tProveedor) {
@@ -20,12 +17,6 @@ public class SAProveedorImpl implements SAProveedor {
 			tx = TransactionManager.getInstance().newTransaction();
 			DAOProveedor daoProveedor = FactoriaDAO.getInstancia().creaDAOProveedor();
 			tx.start();
-
-			// Validaciones
-			if (tProveedor == null || tProveedor.getNombre() == null || tProveedor.getNombre().trim().isEmpty()) {
-				tx.rollback();
-				return -1;
-			}
 
 			TProveedor proveedorExistente = daoProveedor.buscaPorNombre(tProveedor.getNombre());
 			if (proveedorExistente != null) {
@@ -63,21 +54,11 @@ public class SAProveedorImpl implements SAProveedor {
 			DAOProveedor daoProveedor = FactoriaDAO.getInstancia().creaDAOProveedor();
 			tx.start();
 
-			// Validaciones
-			if (tProveedor == null || tProveedor.getId() == null || tProveedor.getId() <= 0) {
-				throw new IllegalArgumentException("El proveedor debe tener un ID válido para dar de baja.");
-			}
-
 			// Verificar existencia
 			TProveedor proveedorExistente = daoProveedor.buscaPorId(tProveedor.getId());
-			if (proveedorExistente == null) {
+			if (proveedorExistente == null || !proveedorExistente.getActivo()) {
 				tx.commit();
 				return false;
-			}
-
-			if (!proveedorExistente.getActivo()) {
-				tx.commit();
-				return false; // Ya está inactivo
 			}
 
 			// Baja lógica
@@ -103,11 +84,6 @@ public class SAProveedorImpl implements SAProveedor {
 			DAOProveedor daoProveedor = FactoriaDAO.getInstancia().creaDAOProveedor();
 			tx.start();
 
-			// Validaciones
-			if (tProveedor == null || tProveedor.getId() == null || tProveedor.getId() <= 0) {
-				throw new IllegalArgumentException("El proveedor debe tener un ID válido para modificar.");
-			}
-
 			// Verificar existencia
 			TProveedor proveedorExistente = daoProveedor.buscaPorId(tProveedor.getId());
 			if (proveedorExistente == null) {
@@ -118,7 +94,7 @@ public class SAProveedorImpl implements SAProveedor {
 			// Verificar nombre único si se cambió
 			if (!proveedorExistente.getNombre().equals(tProveedor.getNombre())) {
 				TProveedor otroPorNombre = daoProveedor.buscaPorNombre(tProveedor.getNombre());
-				if (otroPorNombre != null && !otroPorNombre.getId().equals(tProveedor.getId())) {
+				if (otroPorNombre != null) {
 					tx.commit();
 					return false; // Nombre duplicado
 				}
@@ -139,61 +115,11 @@ public class SAProveedorImpl implements SAProveedor {
 
 	@Override
 	public TProveedor mostrarProveedor(Integer id) {
-		if (id == null || id <= 0) {
-			throw new IllegalArgumentException("El ID del proveedor no es válido.");
-		}
-
-		Transaction tx = null;
-		TProveedor proveedor = null;
-		try {
-			tx = TransactionManager.getInstance().newTransaction();
-			DAOProveedor daoProveedor = FactoriaDAO.getInstancia().creaDAOProveedor();
-			tx.start();
-
-			proveedor = daoProveedor.buscaPorId(id);
-			if (proveedor == null) {
-				throw new IllegalArgumentException("El proveedor con ID " + id + " no existe.");
-			}
-
-			tx.commit();
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (tx != null) {
-				try { tx.rollback(); } catch (Exception ex) { ex.printStackTrace(); }
-			}
-			throw new RuntimeException(e.getMessage(), e);
-		}
-		return proveedor;
+		return FactoriaDAO.getInstancia().creaDAOProveedor().buscaPorId(id);
 	}
 
 	@Override
 	public List<TProveedor> mostrarListaProveedores() {
-		List<TProveedor> listaProveedoresActivos = new ArrayList<>();
-		Transaction tx = null;
-		try {
-			tx = TransactionManager.getInstance().newTransaction();
-
-			tx.start();
-
-			List<TProveedor> todos = daoProveedor.listar();
-			for (TProveedor p : todos) {
-				if (p.getActivo()) {
-					listaProveedoresActivos.add(p);
-				}
-			}
-
-			if (listaProveedoresActivos.isEmpty()) {
-				throw new IllegalArgumentException("No hay proveedores activos en la base de datos");
-			}
-
-			tx.commit();
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (tx != null) {
-				try { tx.rollback(); } catch (Exception ex) { ex.printStackTrace(); }
-			}
-			throw new IllegalArgumentException("Error al mostrar la lista de proveedores.", e);
-		}
-		return listaProveedoresActivos;
+		return FactoriaDAO.getInstancia().creaDAOProveedor().listar();
 	}
 }

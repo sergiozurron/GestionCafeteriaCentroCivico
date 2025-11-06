@@ -15,7 +15,7 @@ public class DAOOrdenImp implements DAOOrden {
     public Integer altaOrden(TOrden orden) throws Exception {
         Integer idGenerado = null;
         Connection conn = (Connection) TransactionManager.getInstance().getTransaction().getResource();
-
+        
         String sql = "INSERT INTO ordenes (pedido_id, producto_id, cantidad, precio_venta) VALUES (?, ?, ?, ?)";
         try (PreparedStatement ps = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
             ps.setInt(1, orden.getPedidoId());

@@ -52,6 +52,7 @@ public class FactoriaVistas {
     public static final String GUI_MOSTRAR_EMPLEADO = "GUI_VerEmpleado";
     public static final String GUI_LISTAR_EMPLEADOS = "GUI_ListarEmpleado";
     public static final String GUI_MODIFICAR_EMPLEADO = "GUI_ModificarEmpleado";
+    public static final String GUI_ALTA_ORDEN = "GUI_AnyadirProducto";
 
     // Singleton
     private static FactoriaVistas instance;
@@ -66,6 +67,8 @@ public class FactoriaVistas {
         vistas.put(GUI_DEVOLVER_PEDIDO, GUI_DevolverPedido::new);
         vistas.put(GUI_MODIFICAR_PEDIDO, GUI_ModificarPedido::new);
         vistas.put(GUI_LISTAR_PEDIDO, GUI_ListarPedido::new);
+        vistas.put(GUI_ALTA_ORDEN, GUI_AnyadirProducto::new);
+
 
         // Proveedores
         vistas.put(GUI_ALTA_PROVEEDOR, GUI_AltaProveedor::new);

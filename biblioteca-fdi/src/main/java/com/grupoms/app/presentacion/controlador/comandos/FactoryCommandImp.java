@@ -19,6 +19,10 @@ public class FactoryCommandImp extends FactoryCommand {
     protected FactoryCommandImp(){
         //cada comando que añadamos hay que añadirlo aqui
     	//COMANDOS
+        //Orden
+        commands.put(Evento.ALTA_ORDEN, new AltaOrdenCommand());
+        commands.put(Evento.BAJA_ORDEN, new AltaOrdenCommand());
+
     	//Mesa
         commands.put(Evento.ALTA_MESA, new AltaMesaCommand());
         commands.put(Evento.BAJA_MESA, new BajaMesaCommand());
@@ -72,7 +76,6 @@ public class FactoryCommandImp extends FactoryCommand {
         views.put(Evento.ALTA_PEDIDO, FactoriaVistas.GUI_ALTA_PEDIDO);
         views.put(Evento.DEVOLVER_PEDIDO, FactoriaVistas.GUI_DEVOLVER_PEDIDO);
         views.put(Evento.MOSTRAR_PEDIDOS, FactoriaVistas.GUI_LISTAR_PEDIDO);
-
 
         views.put(Evento.ALTA_INGREDIENTE, FactoriaVistas.GUI_ALTA_INGREDIENTE);
         views.put(Evento.MODIFICAR_INGREDIENTE, FactoriaVistas.GUI_MODIFICAR_INGREDIENTE);

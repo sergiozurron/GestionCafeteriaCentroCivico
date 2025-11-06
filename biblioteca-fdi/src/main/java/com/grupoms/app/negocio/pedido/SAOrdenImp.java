@@ -17,12 +17,13 @@ public class SAOrdenImp implements SAOrden {
         try {
             if (orden == null || orden.getPedidoId() == null)
                 throw new IllegalArgumentException("La orden y el pedido asociado no pueden ser nulos");
-
+                
             t = TransactionManager.getInstance().newTransaction();
             t.start();
 
+            orden.setPrecioVenta(0.0);
             idGenerado = dao.altaOrden(orden);
-
+            
             t.commit();
         } catch (Exception e) {
             e.printStackTrace();

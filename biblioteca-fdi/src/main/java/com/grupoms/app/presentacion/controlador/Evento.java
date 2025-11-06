@@ -118,11 +118,11 @@ public class Evento {
 
 
 	//ORDEN
-    public static final int ANADIR_PRODUCTO = 201;
+    public static final int ALTA_ORDEN = 201;
 	public static final int ALTA_ORDEN_KO = 202;
     public static final int ALTA_ORDEN_OK = 203;
 
-    public static final int QUITAR_PRODUCTO = 204;
+    public static final int BAJA_ORDEN = 204;
     public static final int BAJA_ORDEN_KO = 205;
     public static final int BAJA_ORDEN_OK = 206;
 
@@ -151,6 +151,7 @@ public class Evento {
     public static final int MOSTRAR_PEDIDOS = 235;
     public static final int MOSTRAR_PEDIDOS_OK = 236;
     public static final int MOSTRAR_PEDIDOS_KO = 237;
+
 
 
 }

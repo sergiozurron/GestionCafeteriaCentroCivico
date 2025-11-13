@@ -12,13 +12,15 @@ public class BajaProductoCommand implements Command {
     public Context execute(Object data) {
         TProducto p = (TProducto) data;
         try{
-            FactoriaSA.getInstance().creaSAProducto().bajaProducto(p);
-    
+            Boolean resultado = FactoriaSA.getInstance().creaSAProducto().bajaProducto(p);
+            if (resultado == null || !resultado) {
+                return new Context(Evento.BAJA_PRODUCTO_KO, null);
+            }
+            return new Context(Evento.BAJA_PRODUCTO_OK, p);
         }catch (IllegalArgumentException e) {
 			System.out.println(e.getMessage());
 			return new Context(Evento.BAJA_PRODUCTO_KO, null);
 		}
-		return new Context(Evento.BAJA_PRODUCTO_OK, p);
     }
     
 }

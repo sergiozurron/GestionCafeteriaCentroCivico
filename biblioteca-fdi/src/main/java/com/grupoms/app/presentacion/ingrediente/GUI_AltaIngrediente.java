@@ -28,15 +28,17 @@ public class GUI_AltaIngrediente extends JFrame implements IGUI{
     }
     @Override
     public void actualizar(Context context) {
-    	if (context == null)
+    	if (context == null) {
     		setVisible(true);
-          else if (context.getEvento() == Evento.ALTA_INGREDIENTE) {
+        } else if (context.getEvento() == Evento.ALTA_INGREDIENTE_OK) {
             // Muestra mensaje de éxito
             JOptionPane.showMessageDialog(this, "Ingrediente creado con éxito");
             // Limpia los campos para la siguiente entrada
             nombre.setText("");
             precio.setText("");
             prov.setText("");
+        } else if (context.getEvento() == Evento.ALTA_INGREDIENTE_KO) {
+            JOptionPane.showMessageDialog(this, "Error al crear el ingrediente", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
     

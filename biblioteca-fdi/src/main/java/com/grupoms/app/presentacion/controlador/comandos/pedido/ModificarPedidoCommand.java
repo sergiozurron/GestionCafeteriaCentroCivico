@@ -19,10 +19,11 @@ public class ModificarPedidoCommand implements Command{
         SAPedido saPedido = FactoriaSA.getInstance().creaSAPedido();
 
         try {
-            Integer idPedido = saPedido.modificarPedido(pedido);
-            pedido.setId(idPedido);
-
-
+            Integer resultado = saPedido.modificarPedido(pedido);
+            if (resultado == null || resultado <= 0) {
+                return new Context(Evento.MODIFICAR_PEDIDO_KO, null);
+            }
+            pedido.setId(resultado);
             return new Context(Evento.MODIFICAR_PEDIDO_OK, pedido);
         } catch (Exception e) {
             return new Context(Evento.MODIFICAR_PEDIDO_KO, null);

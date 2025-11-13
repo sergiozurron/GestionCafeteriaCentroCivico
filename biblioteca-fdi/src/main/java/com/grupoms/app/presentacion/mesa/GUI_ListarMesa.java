@@ -47,10 +47,9 @@ public class GUI_ListarMesa extends JFrame implements IGUI {
     		setVisible(true);
         else if (context.getEvento() == Evento.MOSTRAR_LISTA_MESA_OK) {
             listaMesas = (List<TMesa>) context.getDatos();
-            JOptionPane.showMessageDialog(this, "Lista de mesas mostrada con éxito");
             actualizarTabla();
         } else if (context.getEvento() == Evento.MOSTRAR_LISTA_MESA_KO) {
-            JOptionPane.showMessageDialog(this, "Error al mostrar lista de mesas");
+            JOptionPane.showMessageDialog(this, "Error al mostrar lista de mesas", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 

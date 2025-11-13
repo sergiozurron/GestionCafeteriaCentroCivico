@@ -61,13 +61,6 @@ public class GUI_AltaPedido extends JFrame implements IGUI {
             Context contexto = new Context(Evento.ALTA_PEDIDO, pedido);
             Controlador.getInstance().handle(contexto);
 
-            // Mostramos el ID del pedido creado
-            Integer idPedido = pedido.getId();
-            if (idPedido != null) {
-                JOptionPane.showMessageDialog(this, "Pedido creado con éxito.\nID del pedido: " + idPedido);
-            } else {
-                JOptionPane.showMessageDialog(this, "Pedido creado, pero no se pudo obtener el ID.");
-            }
 
         } catch (NumberFormatException ex) {
             JOptionPane.showMessageDialog(this, "Error: los campos numéricos no son válidos");

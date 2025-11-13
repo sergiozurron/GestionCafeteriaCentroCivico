@@ -11,7 +11,7 @@ import com.grupoms.app.presentacion.controlador.Evento;
 
 public class GUI_BajaIngrediente extends JFrame implements IGUI{
     
-    private JTextField idEmpleado;
+    private JTextField idIngrediente;
     private JButton baja;
 
     public GUI_BajaIngrediente() {
@@ -27,10 +27,10 @@ public class GUI_BajaIngrediente extends JFrame implements IGUI{
     	if (context == null)
     		setVisible(true);
     	else if (context.getEvento() == Evento.BAJA_INGREDIENTE_OK) {
-            JOptionPane.showMessageDialog(this, "Empleado dado de baja con éxito");
-            idEmpleado.setText("");
+            JOptionPane.showMessageDialog(this, "Ingrediente dado de baja con éxito");
+            idIngrediente.setText("");
         } else if (context.getEvento() == Evento.BAJA_INGREDIENTE_KO) {
-            JOptionPane.showMessageDialog(this, "Error al dar de baja al empleado");
+            JOptionPane.showMessageDialog(this, "Error al dar de baja el ingrediente");
         }
     }
 
@@ -41,18 +41,18 @@ public class GUI_BajaIngrediente extends JFrame implements IGUI{
         gbc.insets = new Insets(5,5,5,5);
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        JLabel labelEmpleado = new JLabel("ID Ingrediente:");
-        idEmpleado = new JTextField(10);
-        
+        JLabel labelIngrediente = new JLabel("ID Ingrediente:");
+        idIngrediente = new JTextField(10);
+
         baja = new JButton("Baja Ingrediente");
         baja.addActionListener(e -> {
             try {
-                int id = Integer.parseInt(idEmpleado.getText().trim());
-                TIngrediente empleado = new TIngrediente();
-                empleado.setID(id);
-                empleado.setActivo(false); // baja lógica
+                int id = Integer.parseInt(idIngrediente.getText().trim());
+                TIngrediente ingrediente = new TIngrediente();
+                ingrediente.setID(id);
+                ingrediente.setActivo(false); // baja lógica
 
-                Context contexto = new Context(Evento.BAJA_INGREDIENTE, empleado);
+                Context contexto = new Context(Evento.BAJA_INGREDIENTE, ingrediente);
                 Controlador.getInstance().handle(contexto);
 
             } catch (NumberFormatException ex) {
@@ -62,9 +62,9 @@ public class GUI_BajaIngrediente extends JFrame implements IGUI{
 
         int y = 0;
         gbc.gridx = 0; gbc.gridy = y;
-        panel.add(labelEmpleado, gbc);
+        panel.add(labelIngrediente, gbc);
         gbc.gridx = 1;
-        panel.add(idEmpleado, gbc);
+        panel.add(idIngrediente, gbc);
 
         y++;
         gbc.gridx = 0; gbc.gridy = y; gbc.gridwidth = 2;

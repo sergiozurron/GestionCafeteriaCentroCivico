@@ -19,7 +19,10 @@ public class AltaOrdenCommand implements Command {
         SAOrden saOrden = FactoriaSA.getInstance().creaSAOrden();
 
         try {
-            saOrden.altaOrden(orden);
+            Integer resultado = saOrden.altaOrden(orden);
+            if (resultado == null || resultado <= 0) {
+                return new Context(Evento.ALTA_ORDEN_KO, null);
+            }
             return new Context(Evento.ALTA_ORDEN_OK, orden);
         } catch (Exception e) {
             return new Context(Evento.ALTA_ORDEN_KO, null);

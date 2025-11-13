@@ -4,6 +4,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.grupoms.app.integracion.DBConfig;
 import com.grupoms.app.integracion.Transaction.Transaction;
 import com.grupoms.app.integracion.Transaction.TransactionManager;
 import com.grupoms.app.negocio.producto.TBebida;
@@ -65,25 +66,24 @@ public class DAOProductoImp implements DAOProducto {
 
     @Override
     public Integer bajaProducto(Integer id) {
-        int exito = -1;
         try {
             Transaction t = TransactionManager.getInstance().getTransaction();
             Connection c = (Connection) t.getResource();
 
             try (PreparedStatement ps = c.prepareStatement(DESACTIVAR_PRODUCTO)) {
                 ps.setInt(1, id);
-                exito = ps.executeUpdate();
+                int rows = ps.executeUpdate();
+                return rows > 0 ? id : -1;
             }
 
         } catch (SQLException e) {
             System.err.println("Error dando de baja producto: " + e.getMessage());
         }
-        return exito > 0 ? id : -1;
+        return -1;
     }
 
     @Override
     public Integer modificarProducto(TProducto producto) {
-        int exito = -1;
         try {
             Transaction t = TransactionManager.getInstance().getTransaction();
             Connection c = (Connection) t.getResource();
@@ -106,13 +106,14 @@ public class DAOProductoImp implements DAOProducto {
 
                 ps.setInt(8, producto.getId());
 
-                exito = ps.executeUpdate();
+                int rows = ps.executeUpdate();
+                return rows > 0 ? producto.getId() : -1;
             }
 
         } catch (SQLException e) {
             System.err.println("Error modificando producto: " + e.getMessage());
         }
-        return exito > 0 ? producto.getId() : -1;
+        return -1;
     }
 
     @Override
@@ -208,6 +209,35 @@ public class DAOProductoImp implements DAOProducto {
 
         } catch (SQLException e) {
             System.err.println("Error eliminando todos los productos: " + e.getMessage());
+        }
+    }
+
+    private Connection getConnection() throws SQLException {
+        Transaction tx = getTransaction();
+        if (tx == null) {
+            return DriverManager.getConnection(DBConfig.getUrl(), DBConfig.getUser(), DBConfig.getPassword());
+        }
+        return (Connection) tx.getResource();
+    }
+
+    private void closeConnection(Connection conn) {
+        if (conn == null) {
+            return;
+        }
+        try {
+            if (getTransaction() == null) {
+                conn.close();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private Transaction getTransaction() {
+        try {
+            return TransactionManager.getInstance().getTransaction();
+        } catch (IllegalStateException e) {
+            return null;
         }
     }
 }

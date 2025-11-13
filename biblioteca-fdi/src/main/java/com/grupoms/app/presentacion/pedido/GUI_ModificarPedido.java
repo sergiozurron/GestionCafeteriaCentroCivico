@@ -86,13 +86,15 @@ public class GUI_ModificarPedido extends JFrame implements IGUI{
 
     @Override
     public void actualizar(Context context) {
-    	if (context == null)
+    	if (context == null) {
     		setVisible(true);
-        else if (context.getEvento() == Evento.MODIFICAR_PEDIDO) {
+        } else if (context.getEvento() == Evento.MODIFICAR_PEDIDO_OK) {
             JOptionPane.showMessageDialog(this, "Pedido modificado con éxito");
             campoIdPedido.setText("");
             campoMesa.setText("");
             campoEmpleado.setText("");
+        } else if (context.getEvento() == Evento.MODIFICAR_PEDIDO_KO) {
+            JOptionPane.showMessageDialog(this, "Error al modificar el pedido", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 }

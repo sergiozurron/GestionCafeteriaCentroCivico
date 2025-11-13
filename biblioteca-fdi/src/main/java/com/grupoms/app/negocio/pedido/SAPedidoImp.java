@@ -50,7 +50,7 @@ public class SAPedidoImp implements SAPedido{
          if (pedido == null || pedido.getId() == null)
             throw new IllegalArgumentException("El pedido no puede ser nulo y debe tener ID.");
 
-        t = TransactionManager.getInstance().getTransaction();
+        t = TransactionManager.getInstance().newTransaction();
         t.start();
 
         pedido.setEstado("EN PREPARACION");
@@ -94,10 +94,12 @@ public class SAPedidoImp implements SAPedido{
 
     @Override
     public void devolverPedido(TPedido pedido) {
-        Transaction t = TransactionManager.getInstance().getTransaction();
+        Transaction t = null;
         try {
             if (pedido == null || pedido.getId() == null)
                 throw new IllegalArgumentException("El pedido no puede ser nulo y debe tener ID.");
+
+            t = TransactionManager.getInstance().newTransaction();
             t.start();
 
             // Llamada al DAO para cambiar estado y activo

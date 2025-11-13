@@ -12,11 +12,14 @@ public class ModificarMesaCommand implements Command{
 	public Context execute(Object data) {
 		TMesa mesa = (TMesa) data;
 		try {
-		FactoriaSA.getInstance().creaSAMesa().modificarMesa(mesa);
+			Boolean resultado = FactoriaSA.getInstance().creaSAMesa().modificarMesa(mesa);
+			if (resultado == null || !resultado) {
+				return new Context(Evento.MODIFICAR_MESA_KO, null);
+			}
+			return new Context(Evento.MODIFICAR_MESA_OK, mesa.getId());
 		} catch (IllegalArgumentException e) {
 			System.out.println(e.getMessage());
 			return new Context(Evento.MODIFICAR_MESA_KO, null);
 		}
-		return new Context(Evento.MODIFICAR_MESA_OK, mesa.getId());
 	}
 }

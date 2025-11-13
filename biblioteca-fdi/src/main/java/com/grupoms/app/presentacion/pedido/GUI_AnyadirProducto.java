@@ -72,10 +72,6 @@ public class GUI_AnyadirProducto extends JFrame implements IGUI {
             Context contexto = new Context(Evento.ALTA_ORDEN, orden);
             Controlador.getInstance().handle(contexto);
 
-            JOptionPane.showMessageDialog(this, "Producto añadido al pedido correctamente");
-            campoProducto.setText("");
-            campoCantidad.setText("");
-
         } catch (NumberFormatException ex) {
             JOptionPane.showMessageDialog(this, "Los campos deben ser numéricos");
         }
@@ -83,7 +79,14 @@ public class GUI_AnyadirProducto extends JFrame implements IGUI {
 
     @Override
     public void actualizar(Context context) {
-        // En este caso no necesitamos actualizar la GUI desde el controlador
-        // ya que mostramos el mensaje directamente en agregarProducto()
+        if (context == null)
+            setVisible(true);
+        else if (context.getEvento() == Evento.ALTA_ORDEN_OK) {
+            JOptionPane.showMessageDialog(this, "Producto añadido al pedido correctamente");
+            campoProducto.setText("");
+            campoCantidad.setText("");
+        } else if (context.getEvento() == Evento.ALTA_ORDEN_KO) {
+            JOptionPane.showMessageDialog(this, "Error: No se pudo añadir el producto al pedido", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 }

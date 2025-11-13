@@ -20,8 +20,10 @@ public class AltaPedidoCommand implements Command{
 
         try {
             Integer idPedido = saPedido.altaPedido(pedido);
+            if (idPedido == null || idPedido <= 0) {
+                return new Context(Evento.ALTA_PEDIDO_KO, null);
+            }
             pedido.setId(idPedido);
-
 
             return new Context(Evento.ALTA_PEDIDO_OK, pedido);
         } catch (Exception e) {

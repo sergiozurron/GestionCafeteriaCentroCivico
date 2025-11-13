@@ -18,10 +18,14 @@ public class ModificarIngredienteCommand implements Command{
         TIngrediente ingr = (TIngrediente) data;
         SAIngrediente sa = FactoriaSA.getInstance().creaSAIngrediente();
 
-        
-            sa.modificarIngrediente(ingr);
-            return new Context(Evento.MODIFICAR_INGREDIENTE_OK, ingr);
-        
+        try {
+            Boolean ok = sa.modificarIngrediente(ingr);
+            return ok
+                ? new Context(Evento.MODIFICAR_INGREDIENTE_OK, ingr)
+                : new Context(Evento.MODIFICAR_INGREDIENTE_KO, null);
+        } catch (IllegalArgumentException e) {
+            return new Context(Evento.MODIFICAR_INGREDIENTE_KO, null);
+        }
     }
     
 }

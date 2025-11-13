@@ -18,9 +18,11 @@ public class GUI_DevolverPedido extends JFrame implements IGUI{
     public void actualizar(Context context) {
     	if (context == null)
     		setVisible(true);
-        if(context.getEvento() == Evento.DEVOLVER_PEDIDO){
-            JOptionPane.showMessageDialog(this,"Pedido devuelto con exito");
+        else if(context.getEvento() == Evento.DEVOLVER_PEDIDO_OK){
+            JOptionPane.showMessageDialog(this,"Pedido devuelto con éxito");
             campoID.setText("");
+        } else if(context.getEvento() == Evento.DEVOLVER_PEDIDO_KO){
+            JOptionPane.showMessageDialog(this, "Error: No se pudo devolver el pedido", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 

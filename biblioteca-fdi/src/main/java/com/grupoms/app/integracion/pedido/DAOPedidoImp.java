@@ -5,6 +5,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.grupoms.app.integracion.DBConfig;
 import com.grupoms.app.integracion.Transaction.Transaction;
 import com.grupoms.app.integracion.Transaction.TransactionManager;
 import com.grupoms.app.negocio.pedido.TPedido;
@@ -12,76 +13,36 @@ import com.grupoms.app.negocio.pedido.TPedido;
 public class DAOPedidoImp implements DAOPedido{
 
     @Override
-public Integer altaPedido(TPedido pedido) {
-    Integer idGenerado = null;
-    Connection c = null;
-    boolean transaccionPropia = false;
-
-    try {
-        // Intentamos obtener la conexión de la transacción
-        Transaction t = null;
+    public Integer altaPedido(TPedido pedido) {
+        Integer idGenerado = null;
         try {
-            t = TransactionManager.getInstance().getTransaction();
-            c = (Connection) t.getResource();
-        } catch (IllegalStateException e) {
-            // No hay transacción: abrimos conexión directa
-            String url = System.getenv("MS_DB_URL");
-            String user = System.getenv("MS_DB_USER");
-            String pass = System.getenv("MS_DB_PASSWORD");
-            c = DriverManager.getConnection(url, user, pass);
-            c.setAutoCommit(false); // manejamos commit nosotros
-            transaccionPropia = true;
-        }
+            Transaction t = TransactionManager.getInstance().getTransaction();
+            Connection c = (Connection) t.getResource();
 
-        // Insert en la tabla pedidos
-        String sql = "INSERT INTO pedidos (fecha, total_factura, estado, activo, empleado_id, mesa_id) VALUES (?, ?, ?, ?, ?, ?)";
-        try (PreparedStatement ps = c.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            ps.setTimestamp(1, new Timestamp(pedido.getFecha().getTime()));
-            ps.setDouble(2, pedido.getTotal());
-            ps.setString(3, pedido.getEstado());
-            ps.setBoolean(4, pedido.getActivo());
-            ps.setInt(5, pedido.getIdEmpleado());
-            ps.setInt(6, pedido.getIdMesa());
+            String sql = "INSERT INTO pedidos (fecha, total_factura, estado, activo, empleado_id, mesa_id) VALUES (?, ?, ?, ?, ?, ?)";
+            try (PreparedStatement ps = c.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+                ps.setTimestamp(1, new Timestamp(pedido.getFecha().getTime()));
+                ps.setDouble(2, pedido.getTotal());
+                ps.setString(3, pedido.getEstado());
+                ps.setBoolean(4, pedido.getActivo());
+                ps.setInt(5, pedido.getIdEmpleado());
+                ps.setInt(6, pedido.getIdMesa());
 
-            ps.executeUpdate();
+                ps.executeUpdate();
 
-            try (ResultSet rs = ps.getGeneratedKeys()) {
-                if (rs.next()) {
-                    idGenerado = rs.getInt(1);
-                    pedido.setId(idGenerado);
+                try (ResultSet rs = ps.getGeneratedKeys()) {
+                    if (rs.next()) {
+                        idGenerado = rs.getInt(1);
+                        pedido.setId(idGenerado);
+                    }
                 }
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
-        // Commit si abrimos nuestra propia conexión
-        if (transaccionPropia) {
-            c.commit();
-        }
-
-    } catch (SQLException e) {
-        // Rollback si abrimos nuestra propia conexión
-        if (transaccionPropia && c != null) {
-            try {
-                c.rollback();
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-            }
-        }
-        throw new RuntimeException("Error insertando pedido", e);
-    } finally {
-        // Cerramos conexión solo si es propia
-        if (transaccionPropia && c != null) {
-            try {
-                c.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
+        return idGenerado;
     }
 
-    return idGenerado;
-}
-    
     @Override
     public Boolean modificarPedido(TPedido pedido) {
         boolean act=false;
@@ -259,6 +220,35 @@ public Integer altaPedido(TPedido pedido) {
         }
 
         return lista;
+    }
+
+    private Connection getConnection() throws SQLException {
+        Transaction tx = getTransaction();
+        if (tx == null) {
+            return DriverManager.getConnection(DBConfig.getUrl(), DBConfig.getUser(), DBConfig.getPassword());
+        }
+        return (Connection) tx.getResource();
+    }
+
+    private void closeConnection(Connection conn) {
+        if (conn == null) {
+            return;
+        }
+        try {
+            if (getTransaction() == null) {
+                conn.close();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private Transaction getTransaction() {
+        try {
+            return TransactionManager.getInstance().getTransaction();
+        } catch (IllegalStateException e) {
+            return null;
+        }
     }
 
 }

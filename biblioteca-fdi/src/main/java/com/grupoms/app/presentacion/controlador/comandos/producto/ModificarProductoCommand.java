@@ -19,7 +19,10 @@ public class ModificarProductoCommand implements Command {
         TProducto producto = (TProducto) data;
         SAProducto saProducto = FactoriaSA.getInstance().creaSAProducto();
         try {
-            saProducto.modificarProducto(producto);
+            Boolean resultado = saProducto.modificarProducto(producto);
+            if (resultado == null || !resultado) {
+                return new Context(Evento.MODIFICAR_PRODUCTO_KO, null);
+            }
             return new Context(Evento.MODIFICAR_PRODUCTO_OK, producto);
         } catch (Exception e) {
             return new Context(Evento.MODIFICAR_PRODUCTO_KO, null);

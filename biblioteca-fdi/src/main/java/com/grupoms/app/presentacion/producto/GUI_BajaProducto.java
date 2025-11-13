@@ -4,7 +4,6 @@ import javax.swing.*;
 import java.awt.*;
 
 import com.grupoms.app.negocio.producto.TBebida;
-import com.grupoms.app.negocio.producto.TComida;
 import com.grupoms.app.negocio.producto.TProducto;
 import com.grupoms.app.presentacion.IGUI;
 import com.grupoms.app.presentacion.controlador.Context;
@@ -13,19 +12,15 @@ import com.grupoms.app.presentacion.controlador.Evento;
 
 public class GUI_BajaProducto extends JFrame implements IGUI {
 
-
     private JTextField idProd;
     private JButton baja;
-    private JComboBox<String> tipoProd;
-
 
     public GUI_BajaProducto() {
         super("Baja Producto");
         initGUI();
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); //destruye la ventana sin cerrar la app
-        pack(); //ajusta
-        setLocationRelativeTo(null); //centra
-         //es visible
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        pack();
+        setLocationRelativeTo(null);
     }
 
     void initGUI() {
@@ -51,13 +46,11 @@ public class GUI_BajaProducto extends JFrame implements IGUI {
 
     void bajaProducto() {
         try {
-            String tipo = (String) tipoProd.getSelectedItem();
-            TProducto tProducto;
-            if ("Bebida".equalsIgnoreCase(tipo)) {
-                tProducto = new TBebida();
-            } else {
-                tProducto = new TComida();
-            }
+            int id = Integer.parseInt(idProd.getText().trim());
+            TProducto tProducto = new TBebida(); // antes habia un combobox, pero no use usaba (?)
+            tProducto.setId(id);
+            tProducto.setActivo(false);
+
             Context contexto = new Context(Evento.BAJA_PRODUCTO, tProducto);
             Controlador.getInstance().handle(contexto);
 

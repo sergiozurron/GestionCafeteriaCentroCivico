@@ -45,10 +45,9 @@ public class GUI_MostrarMesa extends JFrame implements IGUI {
     public void actualizar(Context context) {
     	if (context.getEvento() == Evento.MOSTRAR_MESA_OK) {
             TMesa mesa = (TMesa) context.getDatos();
-            JOptionPane.showMessageDialog(this, "Mesa mostrada con éxito");
             actualizarTabla(mesa);
         } else if (context.getEvento() == Evento.MOSTRAR_MESA_KO) {
-            JOptionPane.showMessageDialog(this, "Error al mostrar la mesa");
+            JOptionPane.showMessageDialog(this, "Error al mostrar la mesa", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 

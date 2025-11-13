@@ -131,13 +131,13 @@ public class GUI_ModificarMesa extends JFrame implements IGUI{
                 	TMesaSala mesaS = (TMesaSala) mesa;
                     mesaS.setReservada(salaReservada.isSelected());
                     mesaS.setPrivacidad(salaPrivacidad.getText());
-                    Context contexto = new Context(Evento.ALTA_MESA, mesaS);
+                    Context contexto = new Context(Evento.MODIFICAR_MESA, mesaS);
                     Controlador.getInstance().handle(contexto);
                 } else if (rbtnTerraza.isSelected()) {
                 	TMesaTerraza mesaT = (TMesaTerraza) mesa;
                     mesaT.setCubierta(terrazaCubierta.isSelected());
                     mesaT.setSuplemento(Double.parseDouble(terrazaSuplemento.getText()));
-                    Context contexto = new Context(Evento.ALTA_MESA, mesaT);
+                    Context contexto = new Context(Evento.MODIFICAR_MESA, mesaT);
                     Controlador.getInstance().handle(contexto);
                 }
 

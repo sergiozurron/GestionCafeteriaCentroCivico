@@ -1,6 +1,7 @@
 package com.grupoms.app.integracion.ingrediente;
 
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -8,6 +9,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.grupoms.app.integracion.DBConfig;
 import com.grupoms.app.integracion.Transaction.Transaction;
 import com.grupoms.app.integracion.Transaction.TransactionManager;
 import com.grupoms.app.negocio.ingrediente.TIngrediente;
@@ -211,5 +213,34 @@ public class DAOIngredienteImp implements DAOIngrediente{
             throw new Exception("Error al listar ingredientes por producto: " + e.getMessage());
         }
     }
-   
+
+    private Connection getConnection() throws SQLException {
+        Transaction tx = getTransaction();
+        if (tx == null) {
+            return DriverManager.getConnection(DBConfig.getUrl(), DBConfig.getUser(), DBConfig.getPassword());
+        }
+        return (Connection) tx.getResource();
+    }
+
+    private void closeConnection(Connection conn) {
+        if (conn == null) {
+            return;
+        }
+        try {
+            if (getTransaction() == null) {
+                conn.close();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private Transaction getTransaction() {
+        try {
+            return TransactionManager.getInstance().getTransaction();
+        } catch (IllegalStateException e) {
+            return null;
+        }
+    }
+
 }

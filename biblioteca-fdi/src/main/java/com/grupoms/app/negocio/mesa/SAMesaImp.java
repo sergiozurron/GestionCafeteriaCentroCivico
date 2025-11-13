@@ -17,17 +17,14 @@ public class SAMesaImp implements SAMesa{
         Integer idGenerado = null;
 
         try {
-            // 1. Iniciar transacción
             t = TransactionManager.getInstance().newTransaction();
             t.start();
-            // 2. Inicializar campos del ingrediente
             mesa.setActivo(true);
             idGenerado = daoMesa.altaMesa(mesa);
 			if (idGenerado == -1) {
                 throw new RuntimeException("No se pudo dar de alta la mesa");
             }
             mesa.setId(idGenerado);
-            // 4. Commit
             t.commit();
 
         } catch (Exception e) {
@@ -46,11 +43,16 @@ public class SAMesaImp implements SAMesa{
         Boolean exito = false;
 
         try {
-            // 1. Iniciar transacción
             t = TransactionManager.getInstance().newTransaction();
             t.start();
-            // 2. Inicializar campos del ingrediente
-            daoMesa.bajaMesa(mesa.getId());
+            
+            if(mesa == null || mesa.getId() == null || mesa.getId() <= 0)
+            	throw new IllegalArgumentException("La mesa debe tener un id válido para dar de baja.");
+            
+            
+            mesa.setActivo(false);
+            
+            daoMesa.bajaMesa(mesa);
             
             // 4. Commit
             t.commit();
@@ -81,10 +83,9 @@ public class SAMesaImp implements SAMesa{
 	        if (existente == null || !existente.getActivo())
 	            throw new IllegalArgumentException("No existe una mesa activa con ID " + mesa.getId());
 
-	        daoMesa.modificarMesa(mesa);
+	        exito = daoMesa.modificarMesa(mesa);
 
 	        t.commit();
-	        exito = true;
 	    } catch (Exception e) {
 	        e.printStackTrace();
 	        if (t != null) {

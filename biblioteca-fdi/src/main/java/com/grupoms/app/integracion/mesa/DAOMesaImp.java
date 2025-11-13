@@ -25,7 +25,7 @@ public class DAOMesaImp implements DAOMesa {
 			"LEFT JOIN TERRAZAS t ON m.terraza_id = t.id " +
 			"WHERE m.id = ?";
 	
-	private static final String DESACTIVAR_MESA = "UPDATE MESAS SET activo = false WHERE id = ?";
+	private static final String DESACTIVAR_MESA = "UPDATE MESAS SET activo = ? WHERE id = ?";
 
     private static final String UPDATE_MESA = "UPDATE MESAS SET numero = ?, ubicacion = ?, capacidad = ?, activo = ? WHERE id = ?";
 
@@ -64,6 +64,7 @@ public class DAOMesaImp implements DAOMesa {
 
     @Override
     public Integer altaMesa(TMesa mesa) {
+    	Integer idGenerado = null;
         try {
             Transaction t = TransactionManager.getInstance().getTransaction();
             Connection c = (Connection) t.getResource();
@@ -106,34 +107,46 @@ public class DAOMesaImp implements DAOMesa {
                 ps.executeUpdate();
 
                 ResultSet rs = ps.getGeneratedKeys();
-                if (rs.next()) mesa.setId(rs.getInt(1));
+                if (rs.next()) {
+                	idGenerado = rs.getInt(1);
+                	mesa.setId(idGenerado);
+                }
             }
 
         } catch (SQLException e) {
             System.err.println("Error dando de alta mesa: " + e.getMessage());
         }
 
-        return mesa.getId();
+        return idGenerado;
     }
 
     @Override
-    public void bajaMesa(Integer id) {
+    public Boolean bajaMesa(TMesa mesa) {
+    	boolean ok = false;
         try {
             Transaction t = TransactionManager.getInstance().getTransaction();
             Connection c = (Connection) t.getResource();
+            
             try (PreparedStatement ps = c.prepareStatement(DESACTIVAR_MESA)) {
-                ps.setInt(1, id);
-                ps.executeUpdate();
+            	ps.setBoolean(1, mesa.getActivo());
+                ps.setInt(2, mesa.getId());
+                int rows = ps.executeUpdate();
+                
+                ok = rows > 0;
             }
         } catch (SQLException e) {
             System.err.println("Error al dar de baja la mesa: " + e.getMessage());
         }
+        return ok;
     }
 
     @Override
     public TMesa mostrarMesa(Integer id) {
         try {
             Transaction t = TransactionManager.getInstance().getTransaction();
+            if (t == null) {
+                throw new IllegalStateException("No hay transacción activa al mostrar mesa");
+            }
             Connection c = (Connection) t.getResource();
 
             try (PreparedStatement ps = c.prepareStatement(READ_BY_ID)) {
@@ -221,7 +234,8 @@ public class DAOMesaImp implements DAOMesa {
     }
 
     @Override
-    public void modificarMesa(TMesa mesa) {
+    public Boolean modificarMesa(TMesa mesa) {
+    	Boolean ok = false;
         try {
             Transaction t = TransactionManager.getInstance().getTransaction();
             Connection c = (Connection) t.getResource();
@@ -234,6 +248,7 @@ public class DAOMesaImp implements DAOMesa {
                 ps.setInt(5, mesa.getId());
                 ps.executeUpdate();
             }
+            int rows = 0;
 
             if (mesa instanceof TMesaSala) {
                 TMesaSala mesaS = (TMesaSala) mesa;
@@ -241,7 +256,7 @@ public class DAOMesaImp implements DAOMesa {
                     ps.setBoolean(1, mesaS.getReservada());
                     ps.setString(2, mesaS.getPrivacidad());
                     ps.setInt(3, mesaS.getId());
-                    ps.executeUpdate();
+                    rows = ps.executeUpdate();
                 }
             } else if (mesa instanceof TMesaTerraza) {
                 TMesaTerraza mesaT = (TMesaTerraza) mesa;
@@ -249,12 +264,13 @@ public class DAOMesaImp implements DAOMesa {
                     ps.setBoolean(1, mesaT.getCubierta());
                     ps.setDouble(2, mesaT.getSuplemento());
                     ps.setInt(3, mesaT.getId());
-                    ps.executeUpdate();
+                    rows = ps.executeUpdate();
                 }
             }
-
+            ok = rows > 0;
         } catch (SQLException e) {
             System.err.println("Error actualizando mesa: " + e.getMessage());
         }
+        return ok;
     }
 }

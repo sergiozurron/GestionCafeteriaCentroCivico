@@ -7,7 +7,7 @@ import com.grupoms.app.negocio.mesa.TMesa;
 public interface DAOMesa {
 	Integer altaMesa(TMesa mesa);
 	TMesa mostrarMesa(Integer id);
-	void modificarMesa(TMesa mesa);
+	Boolean modificarMesa(TMesa mesa);
 	List<TMesa> mostrarListaMesa();
-	void bajaMesa(Integer mesa);
+	Boolean bajaMesa(TMesa mesa);
 }

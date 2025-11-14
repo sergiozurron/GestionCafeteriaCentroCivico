@@ -1,0 +1,78 @@
+package com.grupoms.app.negocio.materialJPA;
+
+import java.io.Serializable;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
+
+@Inheritance(strategy=InheritanceType.JOINED)
+@Entity
+
+public class Material implements Serializable{
+	private static final long serialVersionUID = 0;
+	
+	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
+	protected Integer id;
+	
+	protected String autor;
+	protected Boolean activo;
+	
+
+	
+	public Material(TMaterial material) {
+		this.autor=material.getAutor();
+
+		this.activo=material.getActivo();
+		this.id = material.getID();
+	}
+	
+	//SETTERS
+
+	public void setID(Integer id) {
+		this.id=id;
+	}
+	
+	public void setAutor(String autor) {
+		this.autor=autor;
+	}
+	
+	public void setActivo(Boolean activo) {
+		this.activo=activo;
+	}
+	
+	//GETTERS
+	public Integer getID() {
+		return this.id;
+	}
+	
+	public String getAutor() {
+		return this.autor;
+	}
+	
+	public Boolean getActivo() {
+		return this.activo;
+	}
+	
+
+	//Transfer a Entity
+	
+	public void transferToEntity(TMaterial material) {
+		this.autor=material.getAutor();
+		this.id=material.getID();
+		this.activo=material.getActivo();
+	}
+	
+	//Entity a Transfer
+	public TMaterial entityToTransfeer() {
+		TMaterial material = new TMaterial();
+		material.setActivo(activo);
+		material.setID(id);
+		material.setAutor(autor);
+		
+		return material;
+	}
+}

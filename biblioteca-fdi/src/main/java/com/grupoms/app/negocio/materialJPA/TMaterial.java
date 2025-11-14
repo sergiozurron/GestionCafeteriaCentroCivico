@@ -16,6 +16,9 @@ public class TMaterial {
 		this.activo=true;
 	}
 	
+	public TMaterial() {
+	}
+
 	//SETTERS
 	public void setTipoMaterial(int tipoM) {
 		this.tipoMaterial= tipoM;

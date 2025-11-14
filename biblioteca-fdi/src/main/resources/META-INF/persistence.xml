@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="https://jakarta.ee/xml/ns/persistence" version="3.1">
+    <persistence-unit name="CentroCivicoJPA" transaction-type="RESOURCE_LOCAL">
+        <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+
+        <!-- clases de JPA -->
+        <class>negocio.socio.Socio</class>
+        <class>negocio.socio.Infantil</class>
+        <class>negocio.socio.Adulto</class>
+        <class>negocio.material.Material</class>
+        <class>negocio.material.Libro</class>
+        <class>negocio.material.Pintura</class>
+        <class>negocio.ejemplar.Ejemplar</class>
+        <class>negocio.clase.Clase</class>
+        <class>negocio.sala.Sala</class>
+        <class>negocio.promocion.Promocion</class>
+
+        <properties>
+            <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
+            <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/ms-db-dao-bganos?useSSL=false&amp;serverTimezone=UTC"/>
+            <property name="javax.persistence.jdbc.user" value="root"/>
+            <property name="javax.persistence.jdbc.password" value="root"/>
+            <property name="eclipselink.ddl-generation" value="create-or-extend-tables"/>
+            <property name="eclipselink.logging.level" value="FINE"/>
+        </properties>
+    </persistence-unit>
+</persistence>

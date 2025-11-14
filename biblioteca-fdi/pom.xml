@@ -4,8 +4,8 @@
   xsi:schemaLocation="https://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>JaCoCo-demo</groupId>
-  <artifactId>jacoco</artifactId>
+  <groupId>es.ucm.fdi.ms2526</groupId>
+  <artifactId>ms2526centrocivicoJPA</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <packaging>jar</packaging>
 
@@ -31,7 +31,19 @@
 	    <artifactId>mysql-connector-j</artifactId>
 	    <version>9.5.0</version>
 	</dependency>
-    
+	
+    <dependency>
+	    <groupId>jakarta.persistence</groupId>
+	    <artifactId>jakarta.persistence-api</artifactId>
+	    <version>3.1.0</version>
+	</dependency>
+	
+	<dependency>
+	    <groupId>org.eclipse.persistence</groupId>
+	    <artifactId>org.eclipse.persistence.jpa</artifactId>
+	    <version>4.0.2</version>
+	</dependency>
+
   </dependencies>
 
   <build>

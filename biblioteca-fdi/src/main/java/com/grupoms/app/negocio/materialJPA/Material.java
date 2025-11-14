@@ -8,10 +8,14 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
+import jakarta.persistence.NamedQueries;
+import jakarta.persistence.NamedQuery;
 
 @Inheritance(strategy=InheritanceType.JOINED)
 @Entity
-
+@NamedQueries({
+	@NamedQuery(name="Negocio.materialJPA.Material.findAll", query="SELECT m FROM Material m")
+})
 public class Material implements Serializable{
 	private static final long serialVersionUID = 0;
 	
@@ -25,7 +29,6 @@ public class Material implements Serializable{
 	
 	public Material(TMaterial material) {
 		this.autor=material.getAutor();
-
 		this.activo=material.getActivo();
 		this.id = material.getID();
 	}
@@ -67,7 +70,7 @@ public class Material implements Serializable{
 	}
 	
 	//Entity a Transfer
-	public TMaterial entityToTransfeer() {
+	public TMaterial entityToTransfer() {
 		TMaterial material = new TMaterial();
 		material.setActivo(activo);
 		material.setID(id);

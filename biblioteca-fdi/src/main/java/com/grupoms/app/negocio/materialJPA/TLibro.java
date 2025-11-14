@@ -11,6 +11,7 @@ public class TLibro extends TMaterial{
 		this.ISBN=ISBN;
 		this.editorial=editorial;
 	}
+	public TLibro() {}
 	
 	//SETTERS
 

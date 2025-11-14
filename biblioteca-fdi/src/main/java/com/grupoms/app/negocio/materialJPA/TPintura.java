@@ -13,8 +13,9 @@ public class TPintura extends TMaterial{
 		this.fecha=fecha;
 	}
 	
-	//GETTERS
+	public TPintura() {}
 	
+	//GETTERS
 	public int getNumero() {
 		return numero;
 	}
@@ -22,8 +23,8 @@ public class TPintura extends TMaterial{
 	public Date getFecha() {
 		return fecha;
 	}
-	//SETTERS
 	
+	//SETTERS
 	public void setNumero(int numero) {
 		this.numero=numero;
 	}

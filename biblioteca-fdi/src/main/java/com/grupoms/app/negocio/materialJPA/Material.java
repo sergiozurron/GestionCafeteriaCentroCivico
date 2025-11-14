@@ -36,6 +36,8 @@ public class Material implements Serializable{
 		this.id = material.getID();
 	}
 	
+	public Material() {}
+	
 	//SETTERS
 
 	public void setID(Integer id) {

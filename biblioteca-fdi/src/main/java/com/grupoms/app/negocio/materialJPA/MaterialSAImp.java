@@ -9,6 +9,7 @@ import com.grupoms.app.negocio.materialJPA.Material;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.LockModeType;
 import jakarta.persistence.TypedQuery;
 
 public class MaterialSAImp implements MaterialSA{
@@ -83,8 +84,24 @@ public class MaterialSAImp implements MaterialSA{
 
 	@Override
 	public TMaterial mostrarMaterial(Integer id) {
-		// TODO Auto-generated method stub
-		return null;
+		//Empiezo la transacccion
+		EntityManager em = EntityManagerSingleton.getInstance().getEMF().createEntityManager();
+		EntityTransaction t = em.getTransaction();
+		t.begin();
+		
+		//usamos optimistic para poder detectar cambios concurrentes
+		Material m = em.find(Material.class,id, LockModeType.OPTIMISTIC);
+		
+		TMaterial res = null;
+		//Si no lo encuentro, rollback de la transaccion
+		if(m == null)t.rollback();
+		else {
+			res = m.entityToTransfer();
+			t.commit();
+		}
+		
+		em.close();
+		return res;
 	}
 
 }

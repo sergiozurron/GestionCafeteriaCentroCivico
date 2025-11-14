@@ -10,6 +10,7 @@ import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
+import jakarta.persistence.Version;
 
 @Inheritance(strategy=InheritanceType.JOINED)
 @Entity
@@ -25,6 +26,8 @@ public class Material implements Serializable{
 	protected String autor;
 	protected Boolean activo;
 	
+	@Version
+	private int version;
 
 	
 	public Material(TMaterial material) {

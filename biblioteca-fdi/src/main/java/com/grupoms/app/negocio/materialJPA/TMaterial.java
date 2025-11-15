@@ -49,7 +49,7 @@ public class TMaterial {
 		return this.activo;
 	}
 	
-	public int getTipo() {
+	public int getTipoMaterial() {
 		return this.tipoMaterial;
 	}
 }

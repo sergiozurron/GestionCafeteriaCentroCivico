@@ -22,7 +22,7 @@ public class BOMaterial implements Serializable{
 	
 	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
 	protected Integer id;
-	
+	protected int tipoMaterial;
 	protected String autor;
 	protected Boolean activo;
 	
@@ -34,6 +34,7 @@ public class BOMaterial implements Serializable{
 		this.autor=material.getAutor();
 		this.activo=material.getActivo();
 		this.id = material.getID();
+		this.tipoMaterial=material.getTipoMaterial();
 	}
 	
 	public BOMaterial() {}
@@ -51,6 +52,9 @@ public class BOMaterial implements Serializable{
 	public void setActivo(Boolean activo) {
 		this.activo=activo;
 	}
+	public void setTipoMaterial(int tipo) {
+		this.tipoMaterial=tipo;
+	}
 	
 	//GETTERS
 	public Integer getID() {
@@ -65,22 +69,8 @@ public class BOMaterial implements Serializable{
 		return this.activo;
 	}
 	
-
-	//Transfer a Entity
-	
-	public void transferToEntity(TMaterial material) {
-		this.autor=material.getAutor();
-		this.id=material.getID();
-		this.activo=material.getActivo();
-	}
-	
-	//Entity a Transfer
-	public TMaterial entityToTransfer() {
-		TMaterial material = new TMaterial();
-		material.setActivo(activo);
-		material.setID(id);
-		material.setAutor(autor);
-		
-		return material;
+	public int getTipoMaterial() {
+		// TODO Auto-generated method stub
+		return tipoMaterial;
 	}
 }

@@ -4,12 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
+import com.grupoms.app.negocio.assembler.*;
 import com.grupoms.app.negocio.entityManager.EntityManagerSingleton;
-
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
-import jakarta.persistence.LockModeType;
 import jakarta.persistence.TypedQuery;
 
 public class MaterialSAImp implements MaterialSA{
@@ -51,7 +49,18 @@ public class MaterialSAImp implements MaterialSA{
 		
 		//Ejecuto la query
 		final TypedQuery<BOMaterial> query = em.createNamedQuery("Negocio.MaterialJPA.Material.findAll", BOMaterial.class);
-		final List<TMaterial> lista = query.getResultList().stream().map(BOMaterial::entityToTransfer).collect(Collectors.toList());
+		List<TMaterial> lista = query
+                .getResultList()
+                .stream()
+                .map(bo -> {
+                    if (bo instanceof BOLibro libro)
+                        return LibroAssembler.toDTO(libro);
+                    else if (bo instanceof BOPintura pintura)
+                        return PinturaAssembler.toDTO(pintura);
+                    else
+                        return MaterialAssembler.entityToTransfer(bo); // fallback
+                })
+                .collect(Collectors.toList());
 		
 		//guardo la transaccion
 		t.commit();
@@ -72,11 +81,11 @@ public class MaterialSAImp implements MaterialSA{
 		
 		//ejecuto la query
 		final TypedQuery<BOMaterial> query = em.createNamedQuery("Negocio.MaterialJPA.Material.findAll", BOMaterial.class);
-		final List<TMaterial> lista = query.getResultList().stream().map(BOMaterial::entityToTransfer).collect(Collectors.toList());
+		final List<TMaterial> lista = query.getResultList().stream().map(MaterialAssembler::entityToTransfer).collect(Collectors.toList());
 		
 		//actualizo la lista
 		for(TMaterial m: lista) {
-			if(m.getTipo() == tipo)
+			if(m.getTipoMaterial() == tipo)
 				listaFinal.add(m);
 		}
 		
@@ -98,20 +107,10 @@ public class MaterialSAImp implements MaterialSA{
 		EntityManager em = EntityManagerSingleton.getInstance().getEMF().createEntityManager();
 		EntityTransaction t = em.getTransaction();
 		t.begin();
+		return null;
 		
 		//usamos optimistic para poder detectar cambios concurrentes
-		BOMaterial m = em.find(BOMaterial.class,id, LockModeType.OPTIMISTIC);
 		
-		TMaterial res = null;
-		//Si no lo encuentro, rollback de la transaccion
-		if(m == null)t.rollback();
-		else {
-			res = m.entityToTransfer();
-			t.commit();
-		}
-		
-		em.close();
-		return res;
 	}
 
 }

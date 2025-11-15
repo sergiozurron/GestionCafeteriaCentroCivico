@@ -12,14 +12,14 @@ import jakarta.persistence.PrimaryKeyJoinColumn;
 @Entity
 @NamedQueries({})
 @PrimaryKeyJoinColumn(referencedColumnName = "id")
-public class Pintura extends Material implements Serializable{
+public class BOPintura extends BOMaterial implements Serializable{
 
 
 	private static final long serialVersionUID = 0;
 	
-	public Pintura() {}
+	public BOPintura() {}
 	
-	public Pintura(TMaterial material) {
+	public BOPintura(TMaterial material) {
 		super(material);
 	}
 	

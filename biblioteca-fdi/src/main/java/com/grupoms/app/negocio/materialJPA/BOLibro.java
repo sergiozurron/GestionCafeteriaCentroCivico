@@ -8,14 +8,14 @@ import jakarta.persistence.PrimaryKeyJoinColumn;
 @Entity
 @NamedQueries({})
 @PrimaryKeyJoinColumn(referencedColumnName = "id")
-public class Libro extends Material implements Serializable {
+public class BOLibro extends BOMaterial implements Serializable {
 	private static final long serialVersionUID = 0;
 	
-	public Libro(TMaterial material) {
+	public BOLibro(TMaterial material) {
 		super(material);
 	}
 	
-	public Libro() {}
+	public BOLibro() {}
 	
 	private String isbn;
 	private String editorial;

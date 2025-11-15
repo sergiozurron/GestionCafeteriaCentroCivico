@@ -17,7 +17,7 @@ import jakarta.persistence.Version;
 @NamedQueries({
 	@NamedQuery(name="Negocio.materialJPA.Material.findAll", query="SELECT m FROM Material m")
 })
-public class Material implements Serializable{
+public class BOMaterial implements Serializable{
 	private static final long serialVersionUID = 0;
 	
 	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -30,13 +30,13 @@ public class Material implements Serializable{
 	private int version;
 
 	
-	public Material(TMaterial material) {
+	public BOMaterial(TMaterial material) {
 		this.autor=material.getAutor();
 		this.activo=material.getActivo();
 		this.id = material.getID();
 	}
 	
-	public Material() {}
+	public BOMaterial() {}
 	
 	//SETTERS
 

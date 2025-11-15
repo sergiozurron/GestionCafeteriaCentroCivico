@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+
 import com.grupoms.app.negocio.entityManager.EntityManagerSingleton;
-import com.grupoms.app.negocio.materialJPA.Material;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
@@ -15,9 +15,19 @@ import jakarta.persistence.TypedQuery;
 public class MaterialSAImp implements MaterialSA{
 
 	@Override
-	public Integer altaPintura(TMaterial material) {
-		// TODO Auto-generated method stub
-		return null;
+	public synchronized Integer altaPintura(TMaterial material) {
+		Integer id = -1;
+		
+		//empiezo la transaccion
+		EntityManager em = EntityManagerSingleton.getInstance().getEMF().createEntityManager();
+		EntityTransaction t = em.getTransaction();
+		
+		try {
+			t.begin();
+		}catch(Exception e){
+			
+		}
+		return id;
 	}
 
 	@Override
@@ -40,8 +50,8 @@ public class MaterialSAImp implements MaterialSA{
 		t.begin();
 		
 		//Ejecuto la query
-		final TypedQuery<Material> query = em.createNamedQuery("Negocio.MaterialJPA.Material.findAll", Material.class);
-		final List<TMaterial> lista = query.getResultList().stream().map(Material::entityToTransfer).collect(Collectors.toList());
+		final TypedQuery<BOMaterial> query = em.createNamedQuery("Negocio.MaterialJPA.Material.findAll", BOMaterial.class);
+		final List<TMaterial> lista = query.getResultList().stream().map(BOMaterial::entityToTransfer).collect(Collectors.toList());
 		
 		//guardo la transaccion
 		t.commit();
@@ -61,8 +71,8 @@ public class MaterialSAImp implements MaterialSA{
 		List<TMaterial> listaFinal = new ArrayList<TMaterial>();
 		
 		//ejecuto la query
-		final TypedQuery<Material> query = em.createNamedQuery("Negocio.MaterialJPA.Material.findAll", Material.class);
-		final List<TMaterial> lista = query.getResultList().stream().map(Material::entityToTransfer).collect(Collectors.toList());
+		final TypedQuery<BOMaterial> query = em.createNamedQuery("Negocio.MaterialJPA.Material.findAll", BOMaterial.class);
+		final List<TMaterial> lista = query.getResultList().stream().map(BOMaterial::entityToTransfer).collect(Collectors.toList());
 		
 		//actualizo la lista
 		for(TMaterial m: lista) {
@@ -90,7 +100,7 @@ public class MaterialSAImp implements MaterialSA{
 		t.begin();
 		
 		//usamos optimistic para poder detectar cambios concurrentes
-		Material m = em.find(Material.class,id, LockModeType.OPTIMISTIC);
+		BOMaterial m = em.find(BOMaterial.class,id, LockModeType.OPTIMISTIC);
 		
 		TMaterial res = null;
 		//Si no lo encuentro, rollback de la transaccion

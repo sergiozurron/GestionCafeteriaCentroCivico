@@ -37,16 +37,4 @@ public class BOLibro extends BOMaterial implements Serializable {
 	public String getEditorial() {
 		return editorial;
 	}
-	
-	public TLibro entityToTransfer() {
-		TLibro libro = new TLibro();
-		libro.setActivo(activo);
-		libro.setID(id);
-		libro.setTipoMaterial(1);
-		libro.setAutor(autor);
-		libro.setEditorial(editorial);
-		libro.setISBN(isbn);
-		
-		return libro;
-	}
 }

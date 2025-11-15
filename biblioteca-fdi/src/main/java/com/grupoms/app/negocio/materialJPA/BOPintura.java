@@ -45,17 +45,5 @@ public class BOPintura extends BOMaterial implements Serializable{
 	public void setFecha(Date fecha) {
 		this.fecha=fecha;
 	}
-	
-	public TPintura entityToTransfer() {
-		TPintura pintura = new TPintura();
-		pintura.setActivo(activo);
-		pintura.setID(id);
-		pintura.setTipoMaterial(0);
-		pintura.setAutor(autor);
-		pintura.setNumero(numero);
-		pintura.setFecha(fecha);
-		
-		return pintura;
-	}
 
 }

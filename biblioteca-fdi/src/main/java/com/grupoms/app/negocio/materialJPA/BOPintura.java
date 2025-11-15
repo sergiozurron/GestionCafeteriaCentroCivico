@@ -24,7 +24,7 @@ public class BOPintura extends BOMaterial implements Serializable{
 	}
 	
 	private int numero;
-	private Date fecha;
+	private String fecha;
 	
 
 	//GETTERS
@@ -33,7 +33,7 @@ public class BOPintura extends BOMaterial implements Serializable{
 		return numero;
 	}
 	
-	public Date getFecha() {
+	public String getFecha() {
 		return fecha;
 	}
 	//SETTERS
@@ -42,7 +42,7 @@ public class BOPintura extends BOMaterial implements Serializable{
 		this.numero=numero;
 	}
 	
-	public void setFecha(Date fecha) {
+	public void setFecha(String fecha) {
 		this.fecha=fecha;
 	}
 

@@ -31,8 +31,8 @@ public class BOMaterial implements Serializable{
 	@Version
 	private int version;
 	
-	@OneToMany(mappedBy="material")
-	private List<BOEjemplar> ejemplares;
+	//@OneToMany(mappedBy="material")
+	//private List<BOEjemplar> ejemplares;
 	
 	public BOMaterial(TMaterial material) {
 		this.autor=material.getAutor();

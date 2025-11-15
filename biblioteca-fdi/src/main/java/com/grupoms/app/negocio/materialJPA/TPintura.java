@@ -5,9 +5,9 @@ import java.util.Date;
 public class TPintura extends TMaterial{
 	
 	protected int numero;
-	protected Date fecha;
+	protected String fecha;
 	
-	public TPintura(String autor, int tipoProducto, int numero, Date fecha) {
+	public TPintura(String autor, int tipoProducto, int numero, String fecha) {
 		super(autor,tipoProducto);
 		this.numero=numero;
 		this.fecha=fecha;
@@ -20,7 +20,7 @@ public class TPintura extends TMaterial{
 		return numero;
 	}
 	
-	public Date getFecha() {
+	public String getFecha() {
 		return fecha;
 	}
 	
@@ -29,7 +29,7 @@ public class TPintura extends TMaterial{
 		this.numero=numero;
 	}
 	
-	public void setFecha(Date fecha) {
+	public void setFecha(String fecha) {
 		this.fecha=fecha;
 	}
 }

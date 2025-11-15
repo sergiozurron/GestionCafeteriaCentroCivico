@@ -1,6 +1,7 @@
 package com.grupoms.app.negocio.materialJPA;
 
 import java.io.Serializable;
+import java.util.List;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -10,6 +11,7 @@ import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Version;
 
 @Inheritance(strategy=InheritanceType.JOINED)
@@ -28,7 +30,9 @@ public class BOMaterial implements Serializable{
 	
 	@Version
 	private int version;
-
+	
+	@OneToMany(mappedBy="material")
+	private List<BOEjemplar> ejemplares;
 	
 	public BOMaterial(TMaterial material) {
 		this.autor=material.getAutor();

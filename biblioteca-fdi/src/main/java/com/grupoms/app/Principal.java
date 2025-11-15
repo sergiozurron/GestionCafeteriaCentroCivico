@@ -75,11 +75,15 @@ public class Principal extends JFrame {
                 {"Mostrar Producto", FactoriaVistas.GUI_MOSTRAR_PRODUCTO},
                 {"Listar Productos", FactoriaVistas.GUI_LISTAR_PRODUCTOS}
         }));
+        
+        panelCentral.add(crearPanelCategoria("Material", new String[][] {
+        	{"Alta Material", FactoriaVistas.GUI_ALTA_MATERIAL}
+        }));
 
         add(panelCentral, BorderLayout.CENTER);
 
         // --- Pie de página ---
-        JLabel footer = new JLabel("Gestión Cafetería - GrupoMS", SwingConstants.CENTER);
+        JLabel footer = new JLabel("Gestión Cafetería y Centro Civico - GrupoMS", SwingConstants.CENTER);
         footer.setFont(new Font("Segoe UI", Font.PLAIN, 12));
         footer.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
         add(footer, BorderLayout.SOUTH);

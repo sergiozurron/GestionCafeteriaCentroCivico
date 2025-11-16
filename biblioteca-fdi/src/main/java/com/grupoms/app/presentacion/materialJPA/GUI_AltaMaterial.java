@@ -148,11 +148,15 @@ public class GUI_AltaMaterial extends JFrame implements IGUI {
 
     @Override
     public void actualizar(Context context) {
-        if (context == null) {
+    	if (context == null) {
             setVisible(true);
-        } else if (context.getEvento() == Evento.ALTA_MATERIAL_OK) {
-            JOptionPane.showMessageDialog(this, "Material creado con éxito");
-            campoAutor.setText("");
+        }
+    	switch(context.getEvento()) {
+        case Evento.ALTA_MATERIAL_OK:
+        case Evento.ALTA_LIBRO_OK:
+        case Evento.ALTA_PINTURA_OK:
+        	JOptionPane.showMessageDialog(this, "Material creado con éxito");
+        	campoAutor.setText("");
             campoEditorial.setText("");
             campoIsbn.setText("");
             campoNumero.setText("");
@@ -161,8 +165,13 @@ public class GUI_AltaMaterial extends JFrame implements IGUI {
             pinturaButton.setSelected(false);
             panelLibro.setVisible(false);
             panelPintura.setVisible(false);
-        } else if (context.getEvento() == Evento.ALTA_MATERIAL_KO) {
+            break;
+        case Evento.ALTA_MATERIAL_KO:
+        case Evento.ALTA_LIBRO_KO:
+        case Evento.ALTA_PINTURA_KO:
             JOptionPane.showMessageDialog(this, "Error al añadir el material", "Error", JOptionPane.ERROR_MESSAGE);
+            break;
         }
+      
     }
 }

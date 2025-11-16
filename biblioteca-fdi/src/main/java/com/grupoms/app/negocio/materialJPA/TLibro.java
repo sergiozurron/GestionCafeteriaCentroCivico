@@ -6,8 +6,8 @@ public class TLibro extends TMaterial{
 	protected String ISBN;
 	protected String editorial;
 	
-	public TLibro(String autor, int tipoProducto, String ISBN, String editorial) {
-		super(autor, tipoProducto);
+	public TLibro(String autor, int tipoProducto,String nombre, String ISBN, String editorial) {
+		super(autor, tipoProducto,nombre);
 		this.ISBN=ISBN;
 		this.editorial=editorial;
 	}

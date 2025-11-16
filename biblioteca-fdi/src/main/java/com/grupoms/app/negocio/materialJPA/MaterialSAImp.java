@@ -15,16 +15,46 @@ public class MaterialSAImp implements MaterialSA{
 	@Override
 	public synchronized Integer altaPintura(TMaterial material) {
 		Integer id = -1;
-		
+		BOMaterial materialExistente=null;
+		BOPintura pintura =null;
+
 		//empiezo la transaccion
 		EntityManager em = EntityManagerSingleton.getInstance().getEMF().createEntityManager();
 		EntityTransaction t = em.getTransaction();
-		
-		try {
+		try{
 			t.begin();
-		}catch(Exception e){
+			//verificamos si existe
+			TypedQuery<BOMaterial> query = em.createNamedQuery("com.grupoms.app.negocio.materialJPA.BOMaterial.findByName", BOMaterial.class);
+			query.setParameter("nombre", material.getNombre());
+			try {
+				materialExistente = query.getSingleResult();
+			}catch(Exception e){
+				//No hay material existente con ese nombre
+			}
+			if(materialExistente!=null) {
+				if(!materialExistente.getActivo()) { //si no esta activo
+					materialExistente.setActivo(true);
+					em.merge(materialExistente);
+					id = materialExistente.getID();
+				}else {
+					throw new IllegalStateException("La pintura con nombre "+ material.getNombre()+ " ya existe");
+				}
+				
+			}else {
+				pintura = new BOPintura(material);
+				em.persist(pintura);
+				em.flush();
+				id= pintura.getID();
+			}
+			t.commit();
 			
-		}
+		}catch(Exception e) {
+			if(t.isActive())
+				t.rollback();
+			throw e;
+		}finally {
+			em.close();
+		}		
 		return id;
 	}
 
@@ -48,7 +78,7 @@ public class MaterialSAImp implements MaterialSA{
 		t.begin();
 		
 		//Ejecuto la query
-		final TypedQuery<BOMaterial> query = em.createNamedQuery("Negocio.MaterialJPA.Material.findAll", BOMaterial.class);
+		final TypedQuery<BOMaterial> query = em.createNamedQuery("com.grupoms.app.negocio.materialJPA.Material.findAll", BOMaterial.class);
 		List<TMaterial> lista = query
                 .getResultList()
                 .stream()

@@ -17,7 +17,8 @@ import jakarta.persistence.Version;
 @Inheritance(strategy=InheritanceType.JOINED)
 @Entity
 @NamedQueries({
-	@NamedQuery(name="Negocio.materialJPA.Material.findAll", query="SELECT m FROM Material m")
+	@NamedQuery(name="com.grupoms.app.negocio.materialJPA.BOMaterial.findAll", query="SELECT m FROM BOMaterial m"),
+	@NamedQuery(name = "com.grupoms.app.negocio.materialJPA.BOMaterial.findByName", query = "SELECT m FROM BOMaterial m WHERE m.nombre = :nombre")
 })
 public class BOMaterial implements Serializable{
 	private static final long serialVersionUID = 0;
@@ -27,6 +28,7 @@ public class BOMaterial implements Serializable{
 	protected int tipoMaterial;
 	protected String autor;
 	protected Boolean activo;
+	protected String nombre;
 	
 	@Version
 	private int version;
@@ -39,6 +41,7 @@ public class BOMaterial implements Serializable{
 		this.activo=material.getActivo();
 		this.id = material.getID();
 		this.tipoMaterial=material.getTipoMaterial();
+		this.nombre = nombre;
 	}
 	
 	public BOMaterial() {}
@@ -60,6 +63,10 @@ public class BOMaterial implements Serializable{
 		this.tipoMaterial=tipo;
 	}
 	
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
+	
 	//GETTERS
 	public Integer getID() {
 		return this.id;
@@ -76,5 +83,9 @@ public class BOMaterial implements Serializable{
 	public int getTipoMaterial() {
 		// TODO Auto-generated method stub
 		return tipoMaterial;
+	}
+	
+	public String getNombre() {
+		return nombre;
 	}
 }

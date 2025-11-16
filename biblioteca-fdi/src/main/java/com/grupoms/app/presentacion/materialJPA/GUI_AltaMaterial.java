@@ -14,7 +14,7 @@ import com.grupoms.app.presentacion.controlador.Evento;
 
 public class GUI_AltaMaterial extends JFrame implements IGUI {
 
-    private JTextField campoAutor, campoEditorial, campoIsbn, campoNumero, campoFecha;
+    private JTextField campoAutor, campoEditorial, campoIsbn, campoNumero, campoFecha,campoNombre;
     private JRadioButton libroButton, pinturaButton;
     private JButton aceptar;
     private JPanel panelLibro, panelPintura;
@@ -35,7 +35,7 @@ public class GUI_AltaMaterial extends JFrame implements IGUI {
         gbc.insets = new Insets(5,5,5,5);
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        // Campos comunes
+     // Campos comunes
         JLabel labelAutor = new JLabel("Autor:");
         campoAutor = new JTextField(20);
         gbc.gridx = 0; gbc.gridy = 0;
@@ -43,16 +43,25 @@ public class GUI_AltaMaterial extends JFrame implements IGUI {
         gbc.gridx = 1;
         panel.add(campoAutor, gbc);
 
+        // NUEVO CAMPO Nombre
+        JLabel labelNombre = new JLabel("Nombre:");
+        campoNombre = new JTextField(20);
+        gbc.gridx = 0; gbc.gridy = 1;
+        panel.add(labelNombre, gbc);
+        gbc.gridx = 1;
+        panel.add(campoNombre, gbc);
+
         // Radio buttons para tipo
         libroButton = new JRadioButton("Libro");
         pinturaButton = new JRadioButton("Pintura");
         ButtonGroup grupoTipo = new ButtonGroup();
         grupoTipo.add(libroButton);
         grupoTipo.add(pinturaButton);
-        gbc.gridx = 0; gbc.gridy = 1;
+        gbc.gridx = 0; gbc.gridy = 2;
         panel.add(libroButton, gbc);
         gbc.gridx = 1;
         panel.add(pinturaButton, gbc);
+
 
         // Panel Libro
         panelLibro = new JPanel(new GridBagLayout());
@@ -121,16 +130,17 @@ public class GUI_AltaMaterial extends JFrame implements IGUI {
     private void crearMaterial() {
         try {
             String autor = campoAutor.getText();
+            String nombre = campoNombre.getText();
             TMaterial material;
 
             if (libroButton.isSelected()) {
                 String editorial = campoEditorial.getText();
                 String isbn = campoIsbn.getText();
-                material = new TLibro(autor, 1, isbn, editorial); // tipo 1 = Libro
+                material = new TLibro(autor, 1, nombre, isbn, editorial); // tipo 1 = Libro
             } else if (pinturaButton.isSelected()) {
                 int numero = Integer.parseInt(campoNumero.getText());
                 String fecha = campoFecha.getText();
-                material = new TPintura(autor, 0, numero, fecha); // tipo 0 = Pintura
+                material = new TPintura(autor, 0,nombre, numero, fecha); // tipo 0 = Pintura
             } else {
                 JOptionPane.showMessageDialog(this, "Debe seleccionar un tipo de material");
                 return;

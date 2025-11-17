@@ -8,8 +8,8 @@ public class FactoriaQueryImp extends FactoriaQuery{
 		case "ejemplaresSociosPlenoPorFecha":
 			return new ejemplaresSociosPlenoPorFecha();
 		case "mostrarProductosConIngredientesProveedor":
-		return null;
 		}
+		return null;
 	}
 
 }

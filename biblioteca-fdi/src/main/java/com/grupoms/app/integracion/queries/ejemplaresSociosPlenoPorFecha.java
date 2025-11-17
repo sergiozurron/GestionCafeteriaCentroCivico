@@ -11,11 +11,11 @@ import com.grupoms.app.integracion.Transaction.TransactionManager;
 
 public class ejemplaresSociosPlenoPorFecha implements Query{
 
-	private static final String consulta;
+	private static final String consulta="";
 	@Override
 	public Object execute(Object ob) {
 		Integer id = (Integer) ob;
-		List<TEjemplar> listaEjemplares = new ArrayList<TEjemplar>();ç
+		//List<TEjemplar> listaEjemplares = new ArrayList<TEjemplar>();ç
 		try {
 			TransactionManager tm = TransactionManager.getInstance();
 			Transaction t = tm.getTransaction();
@@ -23,12 +23,15 @@ public class ejemplaresSociosPlenoPorFecha implements Query{
 			PreparedStatement s = c.prepareStatement(consulta);
 			ResultSet r = s.executeQuery();
 			while(r.next()) {
-				TEjemplar ejemplar = new TEjemplar();
+			//	TEjemplar ejemplar = new TEjemplar();
 				// hacer todos los sets de ejemplar
 				
 			}
 			
+		}catch(Exception e) {
+			
 		}
+		return ob;
 	}
 
 }

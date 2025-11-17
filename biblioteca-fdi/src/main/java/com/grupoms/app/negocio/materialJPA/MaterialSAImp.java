@@ -65,6 +65,8 @@ public class MaterialSAImp implements MaterialSA{
 		}
 		return id;
 	}
+	
+	
 	@Override
 	public Integer bajaMaterial(Integer id) {
 		int res = -1;
@@ -105,7 +107,7 @@ public class MaterialSAImp implements MaterialSA{
 		t.begin();
 		
 		//Ejecuto la query
-		final TypedQuery<BOMaterial> query = em.createNamedQuery("com.grupoms.app.negocio.materialJPA.Material.findAll", BOMaterial.class);
+		final TypedQuery<BOMaterial> query = em.createNamedQuery("com.grupoms.app.negocio.materialJPA.BOMaterial.findAll", BOMaterial.class);
 		List<TMaterial> lista = query
                 .getResultList()
                 .stream()

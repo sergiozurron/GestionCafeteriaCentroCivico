@@ -19,11 +19,11 @@ public class BOLibro extends BOMaterial implements Serializable {
 	
 	public BOLibro() {}
 	
-	private String isbn;
+	private int isbn;
 	private String editorial;
 	
 	//SETTERS
-	public void setISBN(String ISBN) {
+	public void setISBN(int ISBN) {
 		this.isbn = ISBN;
 	}
 		
@@ -32,7 +32,7 @@ public class BOLibro extends BOMaterial implements Serializable {
 	}
 		
 	//GETTERS	
-	public String getISBN() {
+	public int getISBN() {
 		return isbn;
 	}
 		

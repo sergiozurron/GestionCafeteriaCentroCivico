@@ -3,10 +3,10 @@ package com.grupoms.app.negocio.materialJPA;
 public class TLibro extends TMaterial{
 
 
-	protected String ISBN;
+	protected int ISBN;
 	protected String editorial;
 	
-	public TLibro(String autor, int tipoProducto,String nombre, String ISBN, String editorial) {
+	public TLibro(String autor, int tipoProducto,String nombre, int ISBN, String editorial) {
 		super(autor, tipoProducto,nombre);
 		this.ISBN=ISBN;
 		this.editorial=editorial;
@@ -16,7 +16,7 @@ public class TLibro extends TMaterial{
 	//SETTERS
 
 	
-	public void setISBN(String ISBN) {
+	public void setISBN(int ISBN) {
 		this.ISBN = ISBN;
 	}
 	
@@ -26,7 +26,7 @@ public class TLibro extends TMaterial{
 	
 	//GETTERS
 	
-	public String getISBN() {
+	public int getISBN() {
 		return ISBN;
 	}
 	

@@ -77,7 +77,8 @@ public class Principal extends JFrame {
         }));
         
         panelCentral.add(crearPanelCategoria("Material", new String[][] {
-        	{"Alta Material", FactoriaVistas.GUI_ALTA_MATERIAL}
+        	{"Alta Material", FactoriaVistas.GUI_ALTA_MATERIAL},
+        	{"Listar Material",FactoriaVistas.GUI_LISTAR_MATERIAL}
         }));
 
         add(panelCentral, BorderLayout.CENTER);

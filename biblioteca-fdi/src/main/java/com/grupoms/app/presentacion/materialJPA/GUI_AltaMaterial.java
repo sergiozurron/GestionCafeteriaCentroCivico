@@ -136,7 +136,7 @@ public class GUI_AltaMaterial extends JFrame implements IGUI {
 
             if (libroButton.isSelected()) {
                 String editorial = campoEditorial.getText();
-                String isbn = campoIsbn.getText();
+                int isbn = Integer.parseInt(campoIsbn.getText());
                 material = new TLibro(autor, 1, nombre, isbn, editorial); // tipo 1 = Libro
             } else if (pinturaButton.isSelected()) {
                 int numero = Integer.parseInt(campoNumero.getText());

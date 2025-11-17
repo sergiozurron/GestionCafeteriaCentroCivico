@@ -156,7 +156,10 @@ public class Evento {
 	public static final int ALTA_MATERIAL = 300;
 	public static final int ALTA_MATERIAL_OK = 301;
 	public static final int ALTA_MATERIAL_KO = 302;
-
+	
+	public static final int LISTAR_MATERIAL = 303;
+	public static final int LISTAR_MATERIAL_OK = 304;	
+	public static final int LISTAR_MATERIAL_KO = 305;
 
 
 

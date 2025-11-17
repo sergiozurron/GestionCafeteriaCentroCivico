@@ -7,8 +7,7 @@ import java.util.function.Supplier;
 import com.grupoms.app.presentacion.IGUI;
 import com.grupoms.app.presentacion.empleado.*;
 import com.grupoms.app.presentacion.ingrediente.*;
-import com.grupoms.app.presentacion.materialJPA.GUI_AltaMaterial;
-import com.grupoms.app.presentacion.materialJPA.GUI_ListarMaterial;
+import com.grupoms.app.presentacion.materialJPA.*;
 import com.grupoms.app.presentacion.mesa.*;
 import com.grupoms.app.presentacion.pedido.*;
 import com.grupoms.app.presentacion.producto.*;
@@ -59,6 +58,7 @@ public class FactoriaVistas {
     
 	public static final String GUI_ALTA_MATERIAL = "GUI_AltaMaterial";
 	public static final String GUI_LISTAR_MATERIAL = "GUI_ListarMaterial";
+	public static final String GUI_MOSTRAR_MATERIAL = "GUI_MostrarMaterial";
 
     // Singleton
     private static FactoriaVistas instance;
@@ -121,6 +121,8 @@ public class FactoriaVistas {
         
         vistas.put(GUI_ALTA_MATERIAL, GUI_AltaMaterial::new);
         vistas.put(GUI_LISTAR_MATERIAL,GUI_ListarMaterial::new);
+        vistas.put(GUI_MOSTRAR_MATERIAL,GUI_MostrarMaterial::new);
+
     }
 
     public static synchronized FactoriaVistas getInstance() {

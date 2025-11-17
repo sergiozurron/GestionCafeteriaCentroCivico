@@ -8,7 +8,6 @@ import com.grupoms.app.negocio.assembler.*;
 import com.grupoms.app.negocio.entityManager.EntityManagerSingleton;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
-import jakarta.persistence.LockModeType;
 import jakarta.persistence.TypedQuery;
 
 public class MaterialSAImp implements MaterialSA{
@@ -128,32 +127,6 @@ public class MaterialSAImp implements MaterialSA{
 		em.close();
 		return lista;
 	}
-
-	@Override
-	public List<TMaterial> listarMaterialTipo(Integer tipo) {
-		//Empiezo la transaccion y creo el emf
-		EntityManager em = EntityManagerSingleton.getInstance().getEMF().createEntityManager();
-		EntityTransaction t = em.getTransaction();
-		t.begin();
-		
-		List<TMaterial> listaFinal = new ArrayList<TMaterial>();
-		
-		//ejecuto la query
-		final TypedQuery<BOMaterial> query = em.createNamedQuery("Negocio.MaterialJPA.Material.findAll", BOMaterial.class);
-		final List<TMaterial> lista = query.getResultList().stream().map(MaterialAssembler::entityToTransfer).collect(Collectors.toList());
-		
-		//actualizo la lista
-		for(TMaterial m: lista) {
-			if(m.getTipoMaterial() == tipo)
-				listaFinal.add(m);
-		}
-		
-		//guardo la transaccion y cierro el em
-		t.commit();
-		em.close();
-		return listaFinal;
-	}
-
 	@Override
 	public Integer modificarMaterial(TMaterial material) {
 		// TODO Auto-generated method stub
@@ -162,11 +135,23 @@ public class MaterialSAImp implements MaterialSA{
 
 	@Override
 	public TMaterial mostrarMaterial(Integer id) {
+		if(id==null ||id<0)return null;
 		//Empiezo la transacccion
 		EntityManager em = EntityManagerSingleton.getInstance().getEMF().createEntityManager();
-		EntityTransaction t = em.getTransaction();
-		t.begin();
-		return null;
+		BOMaterial material = em.find(BOMaterial.class, id);
+		if(material==null) {
+			em.close();
+			return null;
+		}
+		TMaterial dto;
+		if (material instanceof BOLibro libro) {
+		    dto = LibroAssembler.toDTO(libro);  // devuelve TLibro
+		} else if (material instanceof BOPintura pintura) {
+		    dto = PinturaAssembler.toDTO(pintura); // devuelve TPintura
+		} else {
+		    dto = MaterialAssembler.entityToTransfer(material); // solo TMaterial
+		}
+		return dto;
 		
 		//usamos optimistic para poder detectar cambios concurrentes
 		

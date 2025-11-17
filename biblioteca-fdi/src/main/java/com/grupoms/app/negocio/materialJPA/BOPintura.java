@@ -1,7 +1,6 @@
 package com.grupoms.app.negocio.materialJPA;
 
 import java.io.Serializable;
-import java.util.Date;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.NamedQueries;

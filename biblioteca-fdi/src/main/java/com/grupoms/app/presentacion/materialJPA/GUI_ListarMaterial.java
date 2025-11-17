@@ -97,18 +97,7 @@ public class GUI_ListarMaterial extends JFrame implements IGUI {
                         pintura.getNumero(),
                         pintura.getFecha()
                     });
-                } else {
-                    modeloTabla.addRow(new Object[]{
-                        m.getID(),
-                        m.getNombre(),
-                        m.getAutor(),
-                        "Material",
-                        "",
-                        "",
-                        "",
-                        ""
-                    });
-                }
+                } 
             }
         } else if (context.getEvento() == Evento.LISTAR_MATERIAL_KO) {
             JOptionPane.showMessageDialog(this, "Error al cargar los materiales.");

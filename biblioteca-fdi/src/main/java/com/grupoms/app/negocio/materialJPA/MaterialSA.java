@@ -8,9 +8,7 @@ public interface MaterialSA {
 	public Integer bajaMaterial(Integer id);
 	
 	public List<TMaterial> listarMateriales();
-	
-	public List<TMaterial> listarMaterialTipo(Integer tipo);
-	
+		
 	public Integer modificarMaterial(TMaterial material);
 	
 	public TMaterial mostrarMaterial(Integer id);

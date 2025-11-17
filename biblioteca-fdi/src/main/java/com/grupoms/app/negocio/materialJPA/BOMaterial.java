@@ -17,6 +17,7 @@ import jakarta.persistence.Version;
 @Inheritance(strategy=InheritanceType.JOINED)
 @Entity
 @NamedQueries({
+	@NamedQuery(name="com.grupoms.app.negocio.materialJPA.BOMaterial.findByType", query="SELECT m FROM BOMaterial m WHERE m.tipoMaterial = :tipo"),
 	@NamedQuery(name="com.grupoms.app.negocio.materialJPA.BOMaterial.findAll", query="SELECT m FROM BOMaterial m"),
 	@NamedQuery(name = "com.grupoms.app.negocio.materialJPA.BOMaterial.findByName", query = "SELECT m FROM BOMaterial m WHERE m.nombre = :nombre")
 })

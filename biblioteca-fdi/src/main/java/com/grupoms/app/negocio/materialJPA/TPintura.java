@@ -1,6 +1,6 @@
 package com.grupoms.app.negocio.materialJPA;
 
-import java.util.Date;
+
 
 public class TPintura extends TMaterial{
 	

@@ -3,8 +3,7 @@ package com.grupoms.app.presentacion.controlador.comandos;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.grupoms.app.presentacion.comandos.materialJPA.AltaMaterialCommand;
-import com.grupoms.app.presentacion.comandos.materialJPA.ListarMaterialCommand;
+import com.grupoms.app.presentacion.comandos.materialJPA.*;
 import com.grupoms.app.presentacion.controlador.Evento;
 import com.grupoms.app.presentacion.controlador.comandos.ingrediente.*;
 import com.grupoms.app.presentacion.controlador.comandos.mesa.*;
@@ -75,7 +74,7 @@ public class FactoryCommandImp extends FactoryCommand {
         //Material
         commands.put(Evento.ALTA_MATERIAL,new AltaMaterialCommand());
         commands.put(Evento.LISTAR_MATERIAL,new ListarMaterialCommand());
-
+        commands.put(Evento.MOSTRAR_MATERIAL, new MostrarMaterialCommand());
 
         //VISTAS
         views.put(Evento.MOSTRAR_PEDIDO, FactoriaVistas.GUI_MOSTRAR_PEDIDO);
@@ -117,6 +116,9 @@ public class FactoryCommandImp extends FactoryCommand {
         
         views.put(Evento.ALTA_MATERIAL,FactoriaVistas.GUI_ALTA_MATERIAL);
         views.put(Evento.LISTAR_MATERIAL, FactoriaVistas.GUI_LISTAR_MATERIAL);
+        views.put(Evento.MOSTRAR_MATERIAL, FactoriaVistas.GUI_MOSTRAR_MATERIAL);
+
+
     }
     @Override
     public Command getCommand(Integer event) {

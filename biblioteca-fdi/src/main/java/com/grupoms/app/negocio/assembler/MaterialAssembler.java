@@ -11,6 +11,7 @@ public class MaterialAssembler {
 	    dto.setTipoMaterial(bo.getTipoMaterial());
 	    dto.setActivo(bo.getActivo());
 	    dto.setID(bo.getID());
+	    dto.setNombre(bo.getNombre());
 	    return dto;  // debe devolver TMaterial
 	}
 
@@ -22,6 +23,7 @@ public class MaterialAssembler {
         bo.setTipoMaterial(dto.getTipoMaterial());
         bo.setActivo(dto.getActivo());
         bo.setID(dto.getID());
+        bo.setNombre(dto.getNombre());
         return bo;
     }
 }

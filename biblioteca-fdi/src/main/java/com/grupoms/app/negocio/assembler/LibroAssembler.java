@@ -16,7 +16,7 @@ public class LibroAssembler extends MaterialAssembler{
         dto.setID(baseDTO.getID());
         dto.setISBN(bo.getISBN());
         dto.setEditorial(bo.getEditorial());
-
+        dto.setNombre(baseDTO.getNombre());
         return dto;
     }
 
@@ -29,6 +29,7 @@ public class LibroAssembler extends MaterialAssembler{
         bo.setID(baseBO.getID());
         bo.setISBN(dto.getISBN());
         bo.setEditorial(dto.getEditorial());
+        bo.setNombre(baseBO.getNombre());
         return bo;
     }
 }

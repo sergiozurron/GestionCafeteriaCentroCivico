@@ -4,9 +4,6 @@ import java.util.List;
 
 public interface MaterialSA {
 	
-	public Integer altaPintura(TMaterial material);
-	
-	public Integer altaLibro(TMaterial material);
 	
 	public Integer bajaMaterial(Integer id);
 	
@@ -17,4 +14,6 @@ public interface MaterialSA {
 	public Integer modificarMaterial(TMaterial material);
 	
 	public TMaterial mostrarMaterial(Integer id);
+
+	public Integer altaMaterial(TMaterial material);
 }

@@ -13,17 +13,16 @@ import jakarta.persistence.TypedQuery;
 public class MaterialSAImp implements MaterialSA{
 
 	@Override
-	public synchronized Integer altaPintura(TMaterial material) {
+	public Integer altaMaterial(TMaterial material) {
+		BOMaterial materialExistente = null;
 		Integer id = -1;
-		BOMaterial materialExistente=null;
-		BOPintura pintura =null;
-
-		//empiezo la transaccion
+		BOPintura pintura=null;
+		BOLibro libro =null;
+		
 		EntityManager em = EntityManagerSingleton.getInstance().getEMF().createEntityManager();
 		EntityTransaction t = em.getTransaction();
-		try{
+		try {
 			t.begin();
-			//verificamos si existe
 			TypedQuery<BOMaterial> query = em.createNamedQuery("com.grupoms.app.negocio.materialJPA.BOMaterial.findByName", BOMaterial.class);
 			query.setParameter("nombre", material.getNombre());
 			try {
@@ -31,39 +30,41 @@ public class MaterialSAImp implements MaterialSA{
 			}catch(Exception e){
 				//No hay material existente con ese nombre
 			}
-			if(materialExistente!=null) {
-				if(!materialExistente.getActivo()) { //si no esta activo
+			if(materialExistente!=null) { //si ya existe
+				if(!materialExistente.getActivo()) { //si no esta activo, lo activo
 					materialExistente.setActivo(true);
 					em.merge(materialExistente);
-					id = materialExistente.getID();
+					id=materialExistente.getID();
 				}else {
-					throw new IllegalStateException("La pintura con nombre "+ material.getNombre()+ " ya existe");
-				}
-				
+					throw new IllegalStateException("El material con nombre "+ material.getNombre()+ " ya existe");
+				}	
 			}else {
-				pintura = new BOPintura(material);
-				em.persist(pintura);
-				em.flush();
-				id= pintura.getID();
+				 if (material instanceof TPintura pinturaDTO) {
+
+			            pintura = new BOPintura(pinturaDTO);
+			            em.persist(pintura);
+			            em.flush();
+			            id = pintura.getID();
+
+			        } else if (material instanceof TLibro libroDTO) {
+
+			            libro = new BOLibro(libroDTO);
+			            em.persist(libro);
+			            em.flush();
+			            id = libro.getID();
+
+			        }
 			}
 			t.commit();
-			
 		}catch(Exception e) {
 			if(t.isActive())
 				t.rollback();
 			throw e;
 		}finally {
 			em.close();
-		}		
+		}
 		return id;
 	}
-
-	@Override
-	public Integer altaLibro(TMaterial material) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 	@Override
 	public Integer bajaMaterial(Integer id) {
 		// TODO Auto-generated method stub

@@ -11,8 +11,10 @@ import jakarta.persistence.PrimaryKeyJoinColumn;
 public class BOLibro extends BOMaterial implements Serializable {
 	private static final long serialVersionUID = 0;
 	
-	public BOLibro(TMaterial material) {
-		super(material);
+	public BOLibro(TLibro libro) {
+		super(libro);
+		this.isbn = libro.getISBN();
+		this.editorial=libro.getEditorial();
 	}
 	
 	public BOLibro() {}

@@ -19,8 +19,10 @@ public class BOPintura extends BOMaterial implements Serializable{
 	
 	public BOPintura() {}
 	
-	public BOPintura(TMaterial material) {
-		super(material);
+	public BOPintura(TPintura pintura) {
+		super(pintura);
+		this.numero =pintura.numero;
+		this.fecha=pintura.getFecha();
 	}
 	
 	private int numero;

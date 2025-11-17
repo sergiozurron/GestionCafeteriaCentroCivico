@@ -116,14 +116,15 @@ public class GUI_AltaMaterial extends JFrame implements IGUI {
         aceptar = new JButton("Aceptar");
         aceptar.addActionListener(e -> crearMaterial());
 
-        // Ubicación de paneles específicos
-        gbc.gridx = 0; gbc.gridy = 2; gbc.gridwidth = 2;
+        //oopciones especificas
+        gbc.gridx = 0; gbc.gridy = 3; gbc.gridwidth = 2;
         panel.add(panelLibro, gbc);
-        gbc.gridy = 3;
-        panel.add(panelPintura, gbc);
-        gbc.gridy = 4;
-        panel.add(aceptar, gbc);
 
+        gbc.gridy = 4;
+        panel.add(panelPintura, gbc);
+
+        gbc.gridy = 5;
+        panel.add(aceptar, gbc);
         add(panel, BorderLayout.CENTER);
     }
 
@@ -163,8 +164,6 @@ public class GUI_AltaMaterial extends JFrame implements IGUI {
         }
     	switch(context.getEvento()) {
         case Evento.ALTA_MATERIAL_OK:
-        case Evento.ALTA_LIBRO_OK:
-        case Evento.ALTA_PINTURA_OK:
         	JOptionPane.showMessageDialog(this, "Material creado con éxito");
         	campoAutor.setText("");
             campoEditorial.setText("");
@@ -177,8 +176,6 @@ public class GUI_AltaMaterial extends JFrame implements IGUI {
             panelPintura.setVisible(false);
             break;
         case Evento.ALTA_MATERIAL_KO:
-        case Evento.ALTA_LIBRO_KO:
-        case Evento.ALTA_PINTURA_KO:
             JOptionPane.showMessageDialog(this, "Error al añadir el material", "Error", JOptionPane.ERROR_MESSAGE);
             break;
         }

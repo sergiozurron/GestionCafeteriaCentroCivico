@@ -16,19 +16,12 @@ public class AltaMaterialCommand implements Command{
 		int res = -1, event;
         TMaterial material = (TMaterial) data;
         MaterialSA sa = FactoriaSA.getInstance().creaSAMaterial();
-        if(material.getTipoMaterial()== 0) {
-        	res = sa.altaPintura((TPintura)material);
-        	if(res<0)
-            	event=Evento.ALTA_PINTURA_KO;
-        	else
-            	event = Evento.ALTA_PINTURA_OK;
-
+        
+        res = sa.altaMaterial(material);
+        if(res<0) {
+        	event = Evento.ALTA_MATERIAL_KO;
         }else {
-        	res = sa.altaLibro((TLibro)material);
-        	if(res<0)
-        		event = Evento.ALTA_LIBRO_KO;
-        	else
-        		event = Evento.ALTA_LIBRO_OK;
+        	event=Evento.ALTA_MATERIAL_OK;
         }
         return new Context(event,res);
 	}

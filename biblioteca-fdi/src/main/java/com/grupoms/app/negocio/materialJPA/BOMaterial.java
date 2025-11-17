@@ -39,9 +39,8 @@ public class BOMaterial implements Serializable{
 	public BOMaterial(TMaterial material) {
 		this.autor=material.getAutor();
 		this.activo=material.getActivo();
-		this.id = material.getID();
 		this.tipoMaterial=material.getTipoMaterial();
-		this.nombre = nombre;
+		this.nombre = material.getNombre();
 	}
 	
 	public BOMaterial() {}

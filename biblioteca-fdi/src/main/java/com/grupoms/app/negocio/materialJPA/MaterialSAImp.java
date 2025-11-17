@@ -33,7 +33,6 @@ public class MaterialSAImp implements MaterialSA{
 			if(materialExistente!=null) { //si ya existe
 				if(!materialExistente.getActivo()) { //si no esta activo, lo activo
 					materialExistente.setActivo(true);
-					em.merge(materialExistente);
 					id=materialExistente.getID();
 				}else {
 					throw new IllegalStateException("El material con nombre "+ material.getNombre()+ " ya existe");

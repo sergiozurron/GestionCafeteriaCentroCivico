@@ -16,7 +16,7 @@ public abstract class FactoriaSA {
 	
 	private static FactoriaSA instancia;
 	
-	public static FactoriaSA getInstance() {
+	public static synchronized FactoriaSA getInstance() {
 		if (instancia == null) {
 			instancia = new FactoriaSAImp();
 		}

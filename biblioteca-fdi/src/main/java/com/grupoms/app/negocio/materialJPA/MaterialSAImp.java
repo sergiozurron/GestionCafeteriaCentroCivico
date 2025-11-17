@@ -8,6 +8,7 @@ import com.grupoms.app.negocio.assembler.*;
 import com.grupoms.app.negocio.entityManager.EntityManagerSingleton;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.LockModeType;
 import jakarta.persistence.TypedQuery;
 
 public class MaterialSAImp implements MaterialSA{
@@ -66,8 +67,34 @@ public class MaterialSAImp implements MaterialSA{
 	}
 	@Override
 	public Integer bajaMaterial(Integer id) {
-		// TODO Auto-generated method stub
-		return null;
+		int res = -1;
+		EntityManager em = EntityManagerSingleton.getInstance().getEMF().createEntityManager();
+		EntityTransaction t = em.getTransaction();
+		try {
+			t.begin();
+			
+			BOMaterial material = em.find(BOMaterial.class,id);
+			
+			if(material!=null) { //si lo encuentra
+				if(material.getActivo()){//si esta activo
+				//	if(!material.getEjemplares().isEmpty()) {
+				//		res = -2;
+				//	}
+				//	else {
+					//	material.setActivo(false);
+					//	res=1;
+				//	}
+				}	
+			}
+			t.commit();
+		}catch(Exception e) {
+			 if (t.isActive()) t.rollback();
+		        e.printStackTrace();
+		}finally {
+	        em.close();
+	    }
+
+	    return res;
 	}
 
 	@Override

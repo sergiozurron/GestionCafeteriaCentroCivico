@@ -87,4 +87,9 @@ public class BOMaterial implements Serializable{
 	public String getNombre() {
 		return nombre;
 	}
+
+	//public List<BOEjemplar> getEjemplares() {
+		// TODO Auto-generated method stub
+		//return null;
+	//}
 }

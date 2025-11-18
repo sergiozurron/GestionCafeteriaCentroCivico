@@ -127,11 +127,50 @@ public class MaterialSAImp implements MaterialSA{
 		em.close();
 		return lista;
 	}
+	
 	@Override
 	public Integer modificarMaterial(TMaterial material) {
-		// TODO Auto-generated method stub
-		return null;
+	    Integer id = -1;
+	    EntityManager em = EntityManagerSingleton.getInstance().getEMF().createEntityManager();
+	    EntityTransaction t = em.getTransaction();
+	    t.begin();
+	    try {
+	        BOMaterial m = em.find(BOMaterial.class, material.getID());
+
+	        if (m == null) {
+	            em.close();
+	            throw new IllegalArgumentException("El ID del material no existe.");
+	        }
+	        else {
+		        // Actualizar campos comunes
+		        m.setNombre(material.getNombre());
+		        m.setAutor(material.getAutor());
+		        m.setTipoMaterial(material.getTipoMaterial());
+		        m.setActivo(true);
+		        // Actualizar campos específicos según tipo
+		        if (material.getTipoMaterial() == 0) {        // Pintura
+		            TPintura pintura = (TPintura) material;
+		            BOPintura boPintura = (BOPintura) m;
+		            boPintura.setFecha(pintura.getFecha());
+		            boPintura.setNumero(pintura.getNumero());
+	
+		        } else if (material.getTipoMaterial() == 1) { // Libro
+		            TLibro libro = (TLibro) material;
+		            BOLibro boLibro = (BOLibro) m;
+		            boLibro.setISBN(libro.getISBN());
+		            boLibro.setEditorial(libro.getEditorial());
+		        }
+	        }
+	        t.commit();
+	        id = material.getID();
+
+	    } finally {
+	        em.close();
+	    }
+
+	    return id;
 	}
+
 
 	@Override
 	public TMaterial mostrarMaterial(Integer id) {

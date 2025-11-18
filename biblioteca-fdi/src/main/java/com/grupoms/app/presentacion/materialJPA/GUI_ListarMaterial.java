@@ -63,7 +63,8 @@ public class GUI_ListarMaterial extends JFrame implements IGUI {
         add(panelPrincipal);
     }
 
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     public void actualizar(Context context) {
         if (context.getEvento() == Evento.LISTAR_MATERIAL_OK) {
             modeloTabla.setRowCount(0); // limpia la tabla

@@ -164,8 +164,10 @@ public class Evento {
 	public static final int MOSTRAR_MATERIAL = 306;
 	public static final int MOSTRAR_MATERIAL_KO = 307;
 	public static final int MOSTRAR_MATERIAL_OK = 308;
-
-
+	
+	public static final int MODIFICAR_MATERIAL = 309;
+	public static final int MODIFICAR_MATERIAL_OK = 310;
+	public static final int MODIFICAR_MATERIAL_KO = 311;
 
 
 

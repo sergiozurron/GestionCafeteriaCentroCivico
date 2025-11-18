@@ -59,6 +59,7 @@ public class FactoriaVistas {
 	public static final String GUI_ALTA_MATERIAL = "GUI_AltaMaterial";
 	public static final String GUI_LISTAR_MATERIAL = "GUI_ListarMaterial";
 	public static final String GUI_MOSTRAR_MATERIAL = "GUI_MostrarMaterial";
+	public static final String GUI_MODIFICAR_MATERIAL = "GUI_ModificarMaterial";
 
     // Singleton
     private static FactoriaVistas instance;
@@ -122,6 +123,8 @@ public class FactoriaVistas {
         vistas.put(GUI_ALTA_MATERIAL, GUI_AltaMaterial::new);
         vistas.put(GUI_LISTAR_MATERIAL,GUI_ListarMaterial::new);
         vistas.put(GUI_MOSTRAR_MATERIAL,GUI_MostrarMaterial::new);
+        vistas.put(GUI_MODIFICAR_MATERIAL,GUI_ModificarMaterial::new);
+
 
     }
 

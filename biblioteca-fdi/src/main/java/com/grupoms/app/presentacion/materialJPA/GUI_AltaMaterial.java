@@ -14,7 +14,11 @@ import com.grupoms.app.presentacion.controlador.Evento;
 
 public class GUI_AltaMaterial extends JFrame implements IGUI {
 
-    private JTextField campoAutor, campoEditorial, campoIsbn, campoNumero, campoFecha,campoNombre;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private JTextField campoAutor, campoEditorial, campoIsbn, campoNumero, campoFecha,campoNombre;
     private JRadioButton libroButton, pinturaButton;
     private JButton aceptar;
     private JPanel panelLibro, panelPintura;

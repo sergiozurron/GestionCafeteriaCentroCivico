@@ -43,7 +43,7 @@ public class TPromocion {
         return tipo;
     }
 
-    public boolean isActivo() {
+    public boolean getActivo() {
         return activo;
     }
 }

@@ -151,6 +151,23 @@ public class Evento {
     public static final int MOSTRAR_PEDIDOS = 235;
     public static final int MOSTRAR_PEDIDOS_OK = 236;
     public static final int MOSTRAR_PEDIDOS_KO = 237;
+    
+    //Material
+	public static final int ALTA_MATERIAL = 300;
+	public static final int ALTA_MATERIAL_OK = 301;
+	public static final int ALTA_MATERIAL_KO = 302;
+	
+	public static final int LISTAR_MATERIAL = 303;
+	public static final int LISTAR_MATERIAL_OK = 304;	
+	public static final int LISTAR_MATERIAL_KO = 305;
+	
+	public static final int MOSTRAR_MATERIAL = 306;
+	public static final int MOSTRAR_MATERIAL_KO = 307;
+	public static final int MOSTRAR_MATERIAL_OK = 308;
+	
+	public static final int MODIFICAR_MATERIAL = 309;
+	public static final int MODIFICAR_MATERIAL_OK = 310;
+	public static final int MODIFICAR_MATERIAL_KO = 311;
 
 
 

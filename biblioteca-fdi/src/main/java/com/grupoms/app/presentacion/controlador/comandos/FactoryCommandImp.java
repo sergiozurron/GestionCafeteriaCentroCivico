@@ -3,6 +3,7 @@ package com.grupoms.app.presentacion.controlador.comandos;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.grupoms.app.presentacion.comandos.materialJPA.*;
 import com.grupoms.app.presentacion.controlador.Evento;
 import com.grupoms.app.presentacion.controlador.comandos.ingrediente.*;
 import com.grupoms.app.presentacion.controlador.comandos.mesa.*;
@@ -68,7 +69,13 @@ public class FactoryCommandImp extends FactoryCommand {
         commands.put(Evento.MODIFICAR_PROVEEDOR, new ModificarProveedorCommand());
         commands.put(Evento.MOSTRAR_PROVEEDOR, new MostrarProveedorCommand());
         commands.put(Evento.MOSTRAR_LISTA_PROVEEDOR, new MostrarListaProveedoresCommand());
-
+        
+        
+        //Material
+        commands.put(Evento.ALTA_MATERIAL,new AltaMaterialCommand());
+        commands.put(Evento.LISTAR_MATERIAL,new ListarMaterialCommand());
+        commands.put(Evento.MOSTRAR_MATERIAL, new MostrarMaterialCommand());
+        commands.put(Evento.MODIFICAR_MATERIAL, new ModificarMaterialCommand());
 
         //VISTAS
         views.put(Evento.MOSTRAR_PEDIDO, FactoriaVistas.GUI_MOSTRAR_PEDIDO);
@@ -107,6 +114,13 @@ public class FactoryCommandImp extends FactoryCommand {
         views.put(Evento.MODIFICAR_PROVEEDOR, FactoriaVistas.GUI_MODIFICAR_PROVEEDOR);
         views.put(Evento.MOSTRAR_PROVEEDOR, FactoriaVistas.GUI_MOSTRAR_PROVEEDOR);
         views.put(Evento.MOSTRAR_LISTA_PROVEEDOR, FactoriaVistas.GUI_LISTAR_PROVEEDORES);
+        
+        views.put(Evento.ALTA_MATERIAL,FactoriaVistas.GUI_ALTA_MATERIAL);
+        views.put(Evento.LISTAR_MATERIAL, FactoriaVistas.GUI_LISTAR_MATERIAL);
+        views.put(Evento.MOSTRAR_MATERIAL, FactoriaVistas.GUI_MOSTRAR_MATERIAL);
+        views.put(Evento.MODIFICAR_MATERIAL, FactoriaVistas.GUI_MODIFICAR_MATERIAL);
+
+
     }
     @Override
     public Command getCommand(Integer event) {

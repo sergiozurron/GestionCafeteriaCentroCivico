@@ -10,24 +10,23 @@ public class Principal extends JFrame {
     private static final long serialVersionUID = 1L;
 
     public Principal() {
-        setTitle("Gestión Cafetería");
+        setTitle("Gestión Cafetería y Centro Cívico");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1200, 600);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout(15, 15));
 
         // --- Título superior ---
-        JLabel titulo = new JLabel("Gestión de la Cafetería", SwingConstants.CENTER);
+        JLabel titulo = new JLabel("Gestión Cafetería y Centro Cívico", SwingConstants.CENTER);
         titulo.setFont(new Font("Segoe UI", Font.BOLD, 26));
         titulo.setBorder(BorderFactory.createEmptyBorder(20, 0, 10, 0));
         add(titulo, BorderLayout.NORTH);
 
-        // --- Panel principal con botones ---
-        JPanel panelCentral = new JPanel(new GridLayout(2, 3, 20, 20));
-        panelCentral.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
+        // --- PANEL IZQUIERDA DAO ---
+        JPanel panelCafeteria = new JPanel(new GridLayout(2, 3, 20, 20));
+        panelCafeteria.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
 
-        // Crear secciones
-        panelCentral.add(crearPanelCategoria("Pedidos", new String[][]{
+        panelCafeteria.add(crearPanelCategoria("Pedidos", new String[][]{
                 {"Alta Pedido", FactoriaVistas.GUI_ALTA_PEDIDO},
                 {"Mostrar Pedido", FactoriaVistas.GUI_MOSTRAR_PEDIDO},
                 {"Devolver Pedido", FactoriaVistas.GUI_DEVOLVER_PEDIDO},
@@ -36,7 +35,7 @@ public class Principal extends JFrame {
                 {"Anyadir Producto", FactoriaVistas.GUI_ALTA_ORDEN}
         }));
 
-        panelCentral.add(crearPanelCategoria("Mesas", new String[][]{
+        panelCafeteria.add(crearPanelCategoria("Mesas", new String[][]{
                 {"Alta Mesa", FactoriaVistas.GUI_ALTA_MESA},
                 {"Baja Mesa", FactoriaVistas.GUI_BAJA_MESA},
                 {"Modificar Mesa", FactoriaVistas.GUI_MODIFICAR_MESA},
@@ -44,7 +43,7 @@ public class Principal extends JFrame {
                 {"Listar Mesas", FactoriaVistas.GUI_LISTAR_MESAS}
         }));
 
-        panelCentral.add(crearPanelCategoria("Proveedores", new String[][]{
+        panelCafeteria.add(crearPanelCategoria("Proveedores", new String[][]{
                 {"Alta Proveedor", FactoriaVistas.GUI_ALTA_PROVEEDOR},
                 {"Baja Proveedor", FactoriaVistas.GUI_BAJA_PROVEEDOR},
                 {"Modificar Proveedor", FactoriaVistas.GUI_MODIFICAR_PROVEEDOR},
@@ -52,7 +51,7 @@ public class Principal extends JFrame {
                 {"Listar Proveedores", FactoriaVistas.GUI_LISTAR_PROVEEDORES}
         }));
 
-        panelCentral.add(crearPanelCategoria("Ingredientes", new String[][]{
+        panelCafeteria.add(crearPanelCategoria("Ingredientes", new String[][]{
                 {"Alta Ingrediente", FactoriaVistas.GUI_ALTA_INGREDIENTE},
                 {"Baja Ingrediente", FactoriaVistas.GUI_BAJA_INGREDIENTE},
                 {"Modificar Ingrediente", FactoriaVistas.GUI_MODIFICAR_INGREDIENTE},
@@ -60,7 +59,7 @@ public class Principal extends JFrame {
                 {"Listar Ingredientes", FactoriaVistas.GUI_LISTAR_INGREDIENTES}
         }));
 
-        panelCentral.add(crearPanelCategoria("Empleados", new String[][]{
+        panelCafeteria.add(crearPanelCategoria("Empleados", new String[][]{
                 {"Alta Empleado", FactoriaVistas.GUI_ALTA_EMPLEADO},
                 {"Baja Empleado", FactoriaVistas.GUI_BAJA_EMPLEADO},
                 {"Modificar Empleado", FactoriaVistas.GUI_MODIFICAR_EMPLEADO},
@@ -68,7 +67,7 @@ public class Principal extends JFrame {
                 {"Listar Empleados", FactoriaVistas.GUI_LISTAR_EMPLEADOS}
         }));
 
-        panelCentral.add(crearPanelCategoria("Productos", new String[][]{
+        panelCafeteria.add(crearPanelCategoria("Productos", new String[][]{
                 {"Alta Producto", FactoriaVistas.GUI_ALTA_PRODUCTO},
                 {"Baja Producto", FactoriaVistas.GUI_BAJA_PRODUCTO},
                 {"Modificar Producto", FactoriaVistas.GUI_MODIFICAR_PRODUCTO},
@@ -76,15 +75,39 @@ public class Principal extends JFrame {
                 {"Listar Productos", FactoriaVistas.GUI_LISTAR_PRODUCTOS}
         }));
 
-        add(panelCentral, BorderLayout.CENTER);
+        // --- PANEL DERECHA JPA ---
+        JPanel panelCentroCivico = new JPanel();
+        panelCentroCivico.setLayout(new GridLayout(2, 3, 20, 20));
+        panelCentroCivico.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
+
+      
+        panelCentroCivico.add(crearPanelCategoria("Material", new String[][] {
+                {"Alta Material", FactoriaVistas.GUI_ALTA_MATERIAL},
+                {"Listar Material",FactoriaVistas.GUI_LISTAR_MATERIAL},
+                {"Mostrar Material",FactoriaVistas.GUI_MOSTRAR_MATERIAL},
+                {"Modificar Material",FactoriaVistas.GUI_MODIFICAR_MATERIAL}
+        }));
+
+
+        // --- DIVISOR CENTRAL ---
+        JSplitPane splitPane = new JSplitPane(
+                JSplitPane.HORIZONTAL_SPLIT,
+                panelCafeteria,
+                panelCentroCivico
+        );
+
+        splitPane.setResizeWeight(0.5);
+        splitPane.setDividerSize(8);
+        splitPane.setContinuousLayout(true);
+
+        add(splitPane, BorderLayout.CENTER);
 
         // --- Pie de página ---
-        JLabel footer = new JLabel("Gestión Cafetería - GrupoMS", SwingConstants.CENTER);
+        JLabel footer = new JLabel("Gestión Cafetería y Centro Cívico - GrupoMS", SwingConstants.CENTER);
         footer.setFont(new Font("Segoe UI", Font.PLAIN, 12));
         footer.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
         add(footer, BorderLayout.SOUTH);
 
-        // Mostrar ventana principal
         setVisible(true);
     }
 
@@ -101,16 +124,14 @@ public class Principal extends JFrame {
             boton.setFont(new Font("Segoe UI", Font.PLAIN, 16));
             boton.setFocusPainted(false);
 
-            // Acción: abrir la vista solo cuando se haga click
             boton.addActionListener(e -> {
                 IGUI vista = FactoriaVistas.getInstance().creaVista(opcion[1]);
                 if (vista != null) {
-                    vista.actualizar(null); // inicializamos la vista
+                    vista.actualizar(null);
                 } else {
                     JOptionPane.showMessageDialog(this,
                             "No se pudo abrir la vista: " + opcion[0],
-                            "Error",
-                            JOptionPane.ERROR_MESSAGE);
+                            "Error", JOptionPane.ERROR_MESSAGE);
                 }
             });
 

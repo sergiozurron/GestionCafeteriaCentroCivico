@@ -11,7 +11,11 @@ import com.grupoms.app.presentacion.controlador.Evento;
 
 public class GUI_MostrarIngrediente extends JFrame implements IGUI {
 
-    private JTextField campoID;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private JTextField campoID;
     private JButton mostrar;
 
     private JLabel nombreLabel;

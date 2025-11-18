@@ -11,6 +11,8 @@ public class TPromocion {
         this.tipo = tipo;
     }
 
+    public TPromocion() {}
+
     // SETTERS
 
     public void setId(Integer id) {

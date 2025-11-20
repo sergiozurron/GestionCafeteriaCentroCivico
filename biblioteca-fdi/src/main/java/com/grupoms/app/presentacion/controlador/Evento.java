@@ -169,6 +169,25 @@ public class Evento {
 	public static final int MODIFICAR_MATERIAL_OK = 310;
 	public static final int MODIFICAR_MATERIAL_KO = 311;
 
+	//Promocion
+	public static final int ALTA_PROMOCION = 350;
+	public static final int ALTA_PROMOCION_OK = 351;
+	public static final int ALTA_PROMOCION_KO = 352;
 
+	public static final int BAJA_PROMOCION = 353;
+	public static final int BAJA_PROMOCION_OK = 354;
+	public static final int BAJA_PROMOCION_KO = 355;
+
+	public static final int MODIFICAR_PROMOCION = 356;
+	public static final int MODIFICAR_PROMOCION_OK = 357;
+	public static final int MODIFICAR_PROMOCION_KO = 358;
+
+	public static final int MOSTRAR_PROMOCION = 359;
+	public static final int MOSTRAR_PROMOCION_OK = 360;
+	public static final int MOSTRAR_PROMOCION_KO = 361;
+
+	public static final int LISTAR_PROMOCION = 362;
+	public static final int LISTAR_PROMOCION_OK = 363;
+	public static final int LISTAR_PROMOCION_KO = 364;
 
 }

@@ -15,6 +15,7 @@ import jakarta.persistence.Version;
 @Entity
 @NamedQueries({
 	@NamedQuery(name = "com.grupoms.app.negocio.PromocionJPA.BOPromocion.findByType", query="SELECT p FROM BOPromocion p WHERE p.tipo = :tipo"),
+    @NamedQuery(name = "com.grupoms.app.negocio.PromocionJPA.BOPromocion.findByDiscount", query="SELECT p FROM BOPromocion p WHERE p.descuento = :descuento"),
 	@NamedQuery(name = "com.grupoms.app.negocio.PromocionJPA.BOPromocion.findAll", query="SELECT p FROM BOPromocion p")
 })
 @PrimaryKeyJoinColumn(referencedColumnName = "id")

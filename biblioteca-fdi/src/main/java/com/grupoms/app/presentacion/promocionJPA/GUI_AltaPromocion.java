@@ -9,7 +9,6 @@ import com.grupoms.app.presentacion.controlador.Controlador;
 import com.grupoms.app.presentacion.controlador.Evento;
 
 import java.awt.*;
-import java.awt.event.*;
 
 public class GUI_AltaPromocion extends JFrame implements IGUI  {
 
@@ -92,7 +91,7 @@ public class GUI_AltaPromocion extends JFrame implements IGUI  {
         }
     	switch(context.getEvento()) {
         case Evento.ALTA_PROMOCION_OK:
-        	JOptionPane.showMessageDialog(this, "Promoción creada con éxito");
+        	JOptionPane.showMessageDialog(this, "Promoción creada con éxito", "Éxito", JOptionPane.INFORMATION_MESSAGE);
         	campoTipo.setText("");
             campoDescuento.setText("");
             break;

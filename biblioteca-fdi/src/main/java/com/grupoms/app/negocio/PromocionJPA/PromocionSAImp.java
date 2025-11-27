@@ -20,19 +20,20 @@ public class PromocionSAImp {
 
         try {
 			t.begin();
-			TypedQuery<BOPromocion> query = em.createNamedQuery("com.grupoms.app.negocio.materialJPA.BOPromocion.findByType", BOPromocion.class);
+			TypedQuery<BOPromocion> query = em.createNamedQuery("com.grupoms.app.negocio.materialJPA.BOPromocion.findByInstance", BOPromocion.class);
 			query.setParameter("tipo", promocion.getTipo());
+            query.setParameter("descuento", promocion.getDescuento());
 			try {
 				promocionExistente = query.getSingleResult();
 			}catch(Exception e){
-				//No hay promocion existente con ese nombre
+				//No hay promocion existente con ese tipo y descuento
 			}
             if (promocionExistente != null) { //si ya existe
 				if (!promocionExistente.getActivo()) { //si no esta activo, lo activo
 					promocionExistente.setActivo(true);
 					id = promocionExistente.getID();
 				}else {
-					throw new IllegalStateException("La promoción con nombre " + promocion.getTipo()+ " ya existe");
+					throw new IllegalStateException("La promoción con tipo " + promocion.getTipo() + "y descuento" + promocion.getDescuento() + " ya existe");
 				}
 			} else {
                 BOPromocion nuevaPromocion = new BOPromocion(promocion);

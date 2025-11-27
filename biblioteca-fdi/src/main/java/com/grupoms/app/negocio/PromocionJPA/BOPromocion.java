@@ -1,6 +1,9 @@
 package com.grupoms.app.negocio.PromocionJPA;
 
 import java.io.Serializable;
+import java.util.List;
+
+import com.grupoms.app.negocio.socioJPA.BOSocio;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Inheritance;
@@ -16,7 +19,9 @@ import jakarta.persistence.Version;
 @NamedQueries({
 	@NamedQuery(name = "com.grupoms.app.negocio.PromocionJPA.BOPromocion.findByType", query="SELECT p FROM BOPromocion p WHERE p.tipo = :tipo"),
     @NamedQuery(name = "com.grupoms.app.negocio.PromocionJPA.BOPromocion.findByDiscount", query="SELECT p FROM BOPromocion p WHERE p.descuento = :descuento"),
-	@NamedQuery(name = "com.grupoms.app.negocio.PromocionJPA.BOPromocion.findAll", query="SELECT p FROM BOPromocion p")
+	@NamedQuery(name = "com.grupoms.app.negocio.PromocionJPA.BOPromocion.findAll", query="SELECT p FROM BOPromocion p"),
+    @NamedQuery(name = "com.grupoms.app.negocio.PromocionJPA.BOPromocion.findByInstance", query = "SELECT p FROM BOPromocion p WHERE p.tipo = :tipo AND p.descuento = :descuento")
+
 })
 @PrimaryKeyJoinColumn(referencedColumnName = "id")
 
@@ -31,8 +36,8 @@ public class BOPromocion implements Serializable{
     @Version
 	private int version;
 
-    //@ManyToMany(mappedBy="promocion")
-	//private List<BOSocio> socios;
+    @ManyToMany(mappedBy="promocion")
+	private List<BOSocio> socios;
     
     public BOPromocion(TPromocion promocion) {
         this.id = promocion.getId();
@@ -79,7 +84,7 @@ public class BOPromocion implements Serializable{
         return this.activo;
     }
 
-    //public List<BOSocio> getSocios() {
-		//return null;
-	//}
+    public List<BOSocio> getSocios() {
+		return null;
+	}
 }

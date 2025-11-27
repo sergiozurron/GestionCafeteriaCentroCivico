@@ -193,5 +193,8 @@ public class Evento {
 	public static final int VER_PROMOCIONES_POR_SOCIO = 365;
 	public static final int VER_PROMOCIONES_POR_SOCIO_OK = 366;
 	public static final int VER_PROMOCIONES_POR_SOCIO_KO = 367;
-
+	
+	public static final int ALTA_EJEMPLAR = 400;
+	public static final int ALTA_EJEMPLAR_OK = 401;
+	public static final int ALTA_EJEMPLAR_KO = 402;
 }

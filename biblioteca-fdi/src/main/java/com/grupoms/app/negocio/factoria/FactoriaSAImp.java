@@ -7,6 +7,8 @@ import com.grupoms.app.negocio.empleado.*;
 import com.grupoms.app.negocio.ingrediente.*;
 import com.grupoms.app.negocio.materialJPA.*;
 import com.grupoms.app.negocio.producto.*;
+import com.grupoms.app.negocio.EjemplarJPA.EjemplarSA;
+import com.grupoms.app.negocio.EjemplarJPA.EjemplarSAImp;
 import com.grupoms.app.negocio.PromocionJPA.*;
 
 
@@ -55,5 +57,9 @@ public class FactoriaSAImp extends FactoriaSA {
 
 	public PromocionSA creaSAPromocion() {
 		return new PromocionSAImp();
+	}
+
+	public EjemplarSA creaSAEjemplar() {
+		return new EjemplarSAImp();
 	}
 }

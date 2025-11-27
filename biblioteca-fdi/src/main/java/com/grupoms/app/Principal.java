@@ -87,6 +87,10 @@ public class Principal extends JFrame {
                 {"Mostrar Material",FactoriaVistas.GUI_MOSTRAR_MATERIAL},
                 {"Modificar Material",FactoriaVistas.GUI_MODIFICAR_MATERIAL}
         }));
+        
+        panelCentroCivico.add(crearPanelCategoria("Ejemplar", new String[][] {
+        	{"Alta Ejemplar", FactoriaVistas.GUI_ALTA_EJEMPLAR}
+        }));
 
 
         // --- DIVISOR CENTRAL ---

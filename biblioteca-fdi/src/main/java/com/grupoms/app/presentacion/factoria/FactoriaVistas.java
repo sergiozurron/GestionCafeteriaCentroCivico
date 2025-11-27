@@ -12,6 +12,7 @@ import com.grupoms.app.presentacion.mesa.*;
 import com.grupoms.app.presentacion.pedido.*;
 import com.grupoms.app.presentacion.producto.*;
 import com.grupoms.app.presentacion.proveedor.*;
+import com.grupoms.app.presentacion.promocionJPA.*;
 
 public class FactoriaVistas {
 
@@ -55,11 +56,19 @@ public class FactoriaVistas {
     public static final String GUI_MODIFICAR_EMPLEADO = "GUI_ModificarEmpleado";
     public static final String GUI_ALTA_ORDEN = "GUI_AnyadirProducto";
     
-    
+    // JPA
+
 	public static final String GUI_ALTA_MATERIAL = "GUI_AltaMaterial";
 	public static final String GUI_LISTAR_MATERIAL = "GUI_ListarMaterial";
 	public static final String GUI_MOSTRAR_MATERIAL = "GUI_MostrarMaterial";
 	public static final String GUI_MODIFICAR_MATERIAL = "GUI_ModificarMaterial";
+
+    public static final String GUI_ALTA_PROMOCION = "GUI_AltaPromocion";
+    public static final String GUI_BAJA_PROMOCION = "GUI_BajaPromocion";
+    public static final String GUI_MODIFICAR_PROMOCION = "GUI_ModificarPromocion";
+    public static final String GUI_LISTAR_PROMOCION = "GUI_ListarPromocion";
+    public static final String GUI_MOSTRAR_PROMOCION = "GUI_MostrarPromocion";
+    public static final String GUI_VER_PROMOCIONES_POR_SOCIO = "GUI_VerPromocionesPorSocio";
 
     // Singleton
     private static FactoriaVistas instance;
@@ -125,7 +134,12 @@ public class FactoriaVistas {
         vistas.put(GUI_MOSTRAR_MATERIAL,GUI_MostrarMaterial::new);
         vistas.put(GUI_MODIFICAR_MATERIAL,GUI_ModificarMaterial::new);
 
-
+        vistas.put(GUI_ALTA_PROMOCION, GUI_AltaPromocion::new);
+        vistas.put(GUI_BAJA_PROMOCION, GUI_BajaPromocion::new);
+        vistas.put(GUI_MODIFICAR_PROMOCION, GUI_ModificarPromocion::new);
+        vistas.put(GUI_LISTAR_PROMOCION, GUI_ListarPromocion::new);
+        vistas.put(GUI_MOSTRAR_PROMOCION, GUI_MostrarPromocion::new);
+        vistas.put(GUI_VER_PROMOCIONES_POR_SOCIO, GUI_VerPromocionesPorSocio::new);
     }
 
     public static synchronized FactoriaVistas getInstance() {

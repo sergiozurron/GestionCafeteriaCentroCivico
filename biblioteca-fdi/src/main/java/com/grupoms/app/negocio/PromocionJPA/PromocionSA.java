@@ -8,5 +8,5 @@ public interface PromocionSA {
     public Integer modificarPromocion(TPromocion promocion);
     public TPromocion mostrarPromocion(Integer id);
     public List<TPromocion> listarPromociones();
-    // public List<TPromocion> VerPromocionesPorSocio( no sé qué poner aquí ); // tampoco sé cómo llamar la función :'(
+    public List<TPromocion> VerPromocionesPorSocio(Integer idSocio);
 }

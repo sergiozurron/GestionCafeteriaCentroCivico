@@ -1,6 +1,7 @@
 package com.grupoms.app.presentacion.promocionJPA;
 
 import javax.swing.*;
+import java.util.List;
 
 import com.grupoms.app.negocio.PromocionJPA.TPromocion;
 import com.grupoms.app.presentacion.IGUI;
@@ -49,7 +50,7 @@ public class GUI_ListarPromocion extends JFrame implements IGUI {
         switch(context.getEvento()) {
             case Evento.LISTAR_PROMOCION_OK:
                 @SuppressWarnings("unchecked")
-                java.util.List<TPromocion> promociones = (java.util.List<TPromocion>) context.getDatos();
+                List<TPromocion> promociones = (List<TPromocion>) context.getDatos();
                 StringBuilder mensaje = new StringBuilder("Promociones:\n");
                 for (TPromocion promo : promociones) {
                     mensaje.append("ID: ").append(promo.getId())

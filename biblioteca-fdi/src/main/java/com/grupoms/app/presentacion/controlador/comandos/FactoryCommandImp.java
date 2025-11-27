@@ -120,7 +120,12 @@ public class FactoryCommandImp extends FactoryCommand {
         views.put(Evento.MOSTRAR_MATERIAL, FactoriaVistas.GUI_MOSTRAR_MATERIAL);
         views.put(Evento.MODIFICAR_MATERIAL, FactoriaVistas.GUI_MODIFICAR_MATERIAL);
 
-
+        views.put(Evento.ALTA_PROMOCION, FactoriaVistas.GUI_ALTA_PROMOCION);
+        views.put(Evento.BAJA_PROMOCION, FactoriaVistas.GUI_BAJA_PROMOCION);
+        views.put(Evento.MODIFICAR_PROMOCION, FactoriaVistas.GUI_MODIFICAR_PROMOCION);
+        views.put(Evento.LISTAR_PROMOCION, FactoriaVistas.GUI_LISTAR_PROMOCION);
+        views.put(Evento.MOSTRAR_PROMOCION, FactoriaVistas.GUI_MOSTRAR_PROMOCION);
+        views.put(Evento.VER_PROMOCIONES_POR_SOCIO, FactoriaVistas.GUI_VER_PROMOCIONES_POR_SOCIO);
     }
     @Override
     public Command getCommand(Integer event) {

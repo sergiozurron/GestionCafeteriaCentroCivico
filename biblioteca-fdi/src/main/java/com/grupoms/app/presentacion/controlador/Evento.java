@@ -190,4 +190,8 @@ public class Evento {
 	public static final int LISTAR_PROMOCION_OK = 363;
 	public static final int LISTAR_PROMOCION_KO = 364;
 
+	public static final int VER_PROMOCIONES_POR_SOCIO = 365;
+	public static final int VER_PROMOCIONES_POR_SOCIO_OK = 366;
+	public static final int VER_PROMOCIONES_POR_SOCIO_KO = 367;
+
 }

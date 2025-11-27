@@ -10,7 +10,7 @@ import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.TypedQuery;
 
 
-public class PromocionSAImp {
+public class PromocionSAImp implements PromocionSA {
     public Integer altaPromocion(TPromocion promocion) {
         BOPromocion promocionExistente = null;
 		Integer id = -1;
@@ -129,4 +129,19 @@ public class PromocionSAImp {
         return lista;
     }
 
+    public List<TPromocion> VerPromocionesPorSocio(Integer idSocio) {
+        EntityManager em = EntityManagerSingleton.getInstance().getEMF().createEntityManager();
+        EntityTransaction t = em.getTransaction();
+        t.begin();
+        final TypedQuery<BOPromocion> query = em.createNamedQuery("com.grupoms.app.negocio.PromocionJPA.BOPromocion.findBySocio", BOPromocion.class);
+        query.setParameter("idSocio", idSocio);
+        List<TPromocion> lista = query
+                .getResultList()
+                .stream()
+                .map(PromocionAssembler::toDTO)
+                .collect(Collectors.toList());
+        t.commit();
+        em.close();
+        return lista;
+    }
 }

@@ -17,11 +17,9 @@ import jakarta.persistence.Version;
 @Inheritance(strategy=InheritanceType.JOINED)
 @Entity
 @NamedQueries({
-	@NamedQuery(name = "com.grupoms.app.negocio.PromocionJPA.BOPromocion.findByType", query="SELECT p FROM BOPromocion p WHERE p.tipo = :tipo"),
-    @NamedQuery(name = "com.grupoms.app.negocio.PromocionJPA.BOPromocion.findByDiscount", query="SELECT p FROM BOPromocion p WHERE p.descuento = :descuento"),
 	@NamedQuery(name = "com.grupoms.app.negocio.PromocionJPA.BOPromocion.findAll", query="SELECT p FROM BOPromocion p"),
-    @NamedQuery(name = "com.grupoms.app.negocio.PromocionJPA.BOPromocion.findByInstance", query = "SELECT p FROM BOPromocion p WHERE p.tipo = :tipo AND p.descuento = :descuento")
-
+    @NamedQuery(name = "com.grupoms.app.negocio.PromocionJPA.BOPromocion.findByInstance", query = "SELECT p FROM BOPromocion p WHERE p.tipo = :tipo AND p.descuento = :descuento"),
+    @NamedQuery(name = "com.grupoms.app.negocio.PromocionJPA.BOPromocion.findBySocio", query = "SELECT p FROM BOPromocion p JOIN p.socios s WHERE s.id = :idSocio")
 })
 @PrimaryKeyJoinColumn(referencedColumnName = "id")
 

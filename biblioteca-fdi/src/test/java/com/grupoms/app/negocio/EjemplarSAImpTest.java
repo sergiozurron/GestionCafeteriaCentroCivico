@@ -133,5 +133,33 @@ public class EjemplarSAImpTest {
 		// THEN
 		assertTrue(!resultado);
 	}
+	
+	@Test
+	void bajaEjemplar_DeberiaDevolverFalse_CuandoEjemplarNoActivo() {
+		// GIVEN
+		BOLibro libro = new BOLibro();
+		libro.setISBN(222222);
+		libro.setNombre("Titulo Inactivo Baja");
+		libro.setAutor("Autor Inactivo Baja");
+		libro.setEditorial("Editorial Inactivo Baja");
+		libro.setTipoMaterial(1);
+		libro.setActivo(true);
+		
+		BOEjemplar ejemplar = new BOEjemplar();
+		ejemplar.setEstado("Dañado");
+		ejemplar.setActivo(false);
+		ejemplar.setMaterial(libro);
+		
+		em.getTransaction().begin();
+		em.persist(libro);
+		em.persist(ejemplar);
+		em.getTransaction().commit();
+		
+		// WHEN
+		boolean resultado = ejemplarSA.bajaEjemplar(ejemplar.getId());
+		
+		// THEN
+		assertTrue(!resultado);
+	}
 
 }

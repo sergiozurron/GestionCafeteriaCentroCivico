@@ -78,11 +78,11 @@ public class GUI_BajaEjemplar extends JFrame implements IGUI {
 		}
 		switch (context.getEvento()) {
 			case Evento.BAJA_EJEMPLAR_OK:
-				JOptionPane.showMessageDialog(this, "Ejemplar dado de baja.");
+				JOptionPane.showMessageDialog(this, "Ejemplar dado de baja");
 				campoId.setText("");
 				break;
 			case Evento.BAJA_EJEMPLAR_KO:
-				JOptionPane.showMessageDialog(this, "Error al dar de baja el ejemplar");
+				JOptionPane.showMessageDialog(this, "Error al dar de baja el ejemplar", "Error", JOptionPane.ERROR_MESSAGE);
 				break;
 			default:
 				break;

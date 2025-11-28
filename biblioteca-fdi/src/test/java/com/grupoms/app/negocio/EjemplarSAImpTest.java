@@ -63,5 +63,49 @@ public class EjemplarSAImpTest {
 		// THEN
 		assertTrue(idEjemplar == -1);
 	}
+	
+	@Test
+	void bajaEjemplar_DeberiaEliminarEjemplarYDevolverTrue() {
+		// GIVEN
+		BOLibro libro = new BOLibro();
+		libro.setISBN(654321);
+		libro.setNombre("Titulo de Prueba Baja");
+		libro.setAutor("Autor de Prueba Baja");
+		libro.setEditorial("Editorial de Prueba Baja");
+		libro.setTipoMaterial(1);
+		libro.setActivo(true);
+		
+		BOEjemplar ejemplar = new BOEjemplar();
+		ejemplar.setEstado("Usado");
+		ejemplar.setActivo(true);
+		ejemplar.setMaterial(libro);
+		
+		em.getTransaction().begin();
+		em.persist(libro);
+		em.persist(ejemplar);
+		em.getTransaction().commit();
+		
+		// WHEN
+		boolean resultado = ejemplarSA.bajaEjemplar(ejemplar.getId());
+		
+		// THEN
+		assertTrue(resultado);
+		
+		em.getTransaction().begin();
+		ejemplar = em.find(BOEjemplar.class, ejemplar.getId());
+		em.getTransaction().commit();
+		
+		assertNotNull(ejemplar);
+		assertTrue(!ejemplar.getActivo());
+	}
+	
+	@Test
+	void bajaEjemplar_DeberiaDevolverFalse_CuandoEjemplarNoExiste() {
+		// WHEN
+		boolean resultado = ejemplarSA.bajaEjemplar(-1); // ID de ejemplar inexistente
+		
+		// THEN
+		assertTrue(!resultado);
+	}
 
 }

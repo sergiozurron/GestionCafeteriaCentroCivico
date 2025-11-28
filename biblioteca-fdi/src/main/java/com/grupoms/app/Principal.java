@@ -89,7 +89,11 @@ public class Principal extends JFrame {
         }));
         
         panelCentroCivico.add(crearPanelCategoria("Ejemplar", new String[][] {
-        	{"Alta Ejemplar", FactoriaVistas.GUI_ALTA_EJEMPLAR}
+        	{"Alta Ejemplar", FactoriaVistas.GUI_ALTA_EJEMPLAR},
+        	{"Baja Ejemplar",FactoriaVistas.GUI_BAJA_EJEMPLAR},
+        	{"Listar Ejemplar",FactoriaVistas.GUI_LISTAR_EJEMPLAR},
+			{"Mostrar Ejemplar",FactoriaVistas.GUI_MOSTRAR_EJEMPLAR},
+			{"Modificar Ejemplar",FactoriaVistas.GUI_MODIFICAR_EJEMPLAR}
         }));
 
 

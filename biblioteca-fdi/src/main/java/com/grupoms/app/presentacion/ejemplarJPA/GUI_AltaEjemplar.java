@@ -50,7 +50,7 @@ public class GUI_AltaEjemplar extends JFrame implements IGUI {
 			String estado = campoEstado.getText().trim();
 
 			if (estado.isEmpty()) {
-				JOptionPane.showMessageDialog(this, "El nombre no puede estar vacío");
+				JOptionPane.showMessageDialog(this, "El estado es obligatorio");
 				return;
 			}
 

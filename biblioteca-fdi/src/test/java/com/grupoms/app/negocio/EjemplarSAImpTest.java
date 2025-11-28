@@ -65,6 +65,32 @@ public class EjemplarSAImpTest {
 	}
 	
 	@Test
+	void altaEjemplar_DeberiaDevolverMenosUno_CuandoMaterialNoActivo() {
+		// GIVEN
+		BOLibro libro = new BOLibro();
+		libro.setISBN(111111);
+		libro.setNombre("Titulo Inactivo");
+		libro.setAutor("Autor Inactivo");
+		libro.setEditorial("Editorial Inactivo");
+		libro.setTipoMaterial(1);
+		libro.setActivo(false);
+		
+		em.getTransaction().begin();
+		em.persist(libro);
+		em.getTransaction().commit();
+		
+		TEjemplar ejemplar = new TEjemplar();
+		ejemplar.setIdMaterial(libro.getID());
+		ejemplar.setEstado("Nuevo");
+		
+		// WHEN
+		int idEjemplar = ejemplarSA.altaEjemplar(ejemplar);
+		
+		// THEN
+		assertTrue(idEjemplar == -1);
+	}
+	
+	@Test
 	void bajaEjemplar_DeberiaEliminarEjemplarYDevolverTrue() {
 		// GIVEN
 		BOLibro libro = new BOLibro();

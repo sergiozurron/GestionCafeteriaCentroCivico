@@ -15,7 +15,7 @@ public class EjemplarSAImp implements EjemplarSA {
 			em.getTransaction().begin();
 			BOMaterial boMaterial = em.find(BOMaterial.class, ejemplar.getIdMaterial());
 
-			if (boMaterial == null) {
+			if (boMaterial == null || !boMaterial.getActivo()) {
 				em.getTransaction().rollback();
 				return -1;
 			}

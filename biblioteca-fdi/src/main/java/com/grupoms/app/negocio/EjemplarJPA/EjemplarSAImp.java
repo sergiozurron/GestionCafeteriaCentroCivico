@@ -58,4 +58,35 @@ public class EjemplarSAImp implements EjemplarSA {
 		}
 	}
 
+	@Override
+	public Boolean modificarEjemplar(TEjemplar ejemplar) {
+		EntityManager em = EntityManagerProvider.getEntityManager();
+		
+		try {
+			em.getTransaction().begin();
+			BOEjemplar boEjemplar = em.find(BOEjemplar.class, ejemplar.getId());
+
+			if (boEjemplar == null || !boEjemplar.getActivo()) {
+				em.getTransaction().rollback();
+				return false;
+			}
+			
+			BOMaterial boMaterial = em.find(BOMaterial.class, ejemplar.getIdMaterial());
+			
+			if (boMaterial == null || !boMaterial.getActivo()) {
+				em.getTransaction().rollback();
+				return false;
+			}
+
+			boEjemplar.setEstado(ejemplar.getEstado());
+			boEjemplar.setMaterial(boMaterial);
+			em.getTransaction().commit();
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			em.getTransaction().rollback();
+			return false;
+		}
+	}
+
 }

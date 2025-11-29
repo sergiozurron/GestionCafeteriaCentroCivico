@@ -201,6 +201,9 @@ public class Evento {
 	public static final int BAJA_EJEMPLAR = 403;
 	public static final int BAJA_EJEMPLAR_OK = 404;
 	public static final int BAJA_EJEMPLAR_KO = 405;
+	public static final int MODIFICAR_EJEMPLAR = 406;
+	public static final int MODIFICAR_EJEMPLAR_OK = 407;
+	public static final int MODIFICAR_EJEMPLAR_KO = 408;
 
 	// CLASE
 	public static final int ALTA_CLASE = 500;
@@ -230,5 +233,7 @@ public class Evento {
 	public static final int DESVINCULAR_EJEMPLAR_CLASE = 518;
 	public static final int DESVINCULAR_EJEMPLAR_CLASE_OK = 519;
 	public static final int DESVINCULAR_EJEMPLAR_CLASE_KO = 520;
+
+	
 
 }

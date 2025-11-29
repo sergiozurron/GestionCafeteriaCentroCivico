@@ -201,4 +201,8 @@ public class Evento {
 	public static final int BAJA_EJEMPLAR = 403;
 	public static final int BAJA_EJEMPLAR_OK = 404;
 	public static final int BAJA_EJEMPLAR_KO = 405;
+	
+	public static final int MODIFICAR_EJEMPLAR = 406;
+	public static final int MODIFICAR_EJEMPLAR_OK = 407;
+	public static final int MODIFICAR_EJEMPLAR_KO = 408;
 }

@@ -12,6 +12,7 @@ import com.grupoms.app.negocio.empleado.SAEmpleado;
 import com.grupoms.app.negocio.materialJPA.MaterialSA;
 import com.grupoms.app.negocio.EjemplarJPA.EjemplarSA;
 import com.grupoms.app.negocio.PromocionJPA.PromocionSA;
+import com.grupoms.app.negocio.ClaseJPA.ClaseSA;
 
 public abstract class FactoriaSA {
 	
@@ -34,4 +35,5 @@ public abstract class FactoriaSA {
 	public abstract MaterialSA creaSAMaterial();
 	public abstract PromocionSA creaSAPromocion();
 	public abstract EjemplarSA creaSAEjemplar();
+	public abstract ClaseSA creaSAClase();
 }

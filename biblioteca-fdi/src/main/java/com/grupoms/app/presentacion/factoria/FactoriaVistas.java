@@ -15,6 +15,7 @@ import com.grupoms.app.presentacion.pedido.*;
 import com.grupoms.app.presentacion.producto.*;
 import com.grupoms.app.presentacion.proveedor.*;
 import com.grupoms.app.presentacion.promocionJPA.*;
+import com.grupoms.app.presentacion.claseJPA.*;
 
 public class FactoriaVistas {
 
@@ -77,6 +78,16 @@ public class FactoriaVistas {
 	public static final String GUI_LISTAR_EJEMPLAR = "GUI_ListarEjemplar";
 	public static final String GUI_MOSTRAR_EJEMPLAR = "GUI_MostrarEjemplar";
 	public static final String GUI_MODIFICAR_EJEMPLAR = "GUI_ModificarEjemplar";
+
+    public static final String GUI_ALTA_CLASE = "GUI_AltaClase";
+	public static final String GUI_BAJA_CLASE = "GUI_BajaClase";
+	public static final String GUI_LISTAR_CLASE = "GUI_ListarClase";
+	public static final String GUI_MOSTRAR_CLASE = "GUI_MostrarClase";
+	public static final String GUI_MODIFICAR_CLASE = "GUI_ModificarClase";
+
+	public static final String GUI_VINCULAR_EJEMPLAR_CLASE = "GUI_VincularEjemplarClase";
+	public static final String GUI_DESVINCULAR_EJEMPLAR_CLASE = "GUI_DesvincularEjemplarClase";
+
 
     // Singleton
     private static FactoriaVistas instance;
@@ -151,6 +162,14 @@ public class FactoriaVistas {
         
         vistas.put(GUI_ALTA_EJEMPLAR, GUI_AltaEjemplar::new);
         vistas.put(GUI_BAJA_EJEMPLAR, GUI_BajaEjemplar::new);
+
+        vistas.put(GUI_ALTA_CLASE, GUI_AltaClase::new);
+        vistas.put(GUI_BAJA_CLASE, GUI_BajaClase::new);
+        vistas.put(GUI_MODIFICAR_CLASE, GUI_ModificarClase::new);
+        vistas.put(GUI_LISTAR_CLASE, GUI_ListarClase::new);
+        vistas.put(GUI_MOSTRAR_CLASE, GUI_MostrarClase::new);
+        vistas.put(GUI_VINCULAR_EJEMPLAR_CLASE, GUI_VincularEjemplarClase::new);
+        vistas.put(GUI_DESVINCULAR_EJEMPLAR_CLASE, GUI_DesvincularEjemplarClase::new);
     }
 
     public static synchronized FactoriaVistas getInstance() {

@@ -201,4 +201,34 @@ public class Evento {
 	public static final int BAJA_EJEMPLAR = 403;
 	public static final int BAJA_EJEMPLAR_OK = 404;
 	public static final int BAJA_EJEMPLAR_KO = 405;
+
+	// CLASE
+	public static final int ALTA_CLASE = 500;
+	public static final int ALTA_CLASE_OK = 501;
+	public static final int ALTA_CLASE_KO = 502;
+
+	public static final int BAJA_CLASE = 503;
+	public static final int BAJA_CLASE_OK = 504;
+	public static final int BAJA_CLASE_KO = 505;
+
+	public static final int MODIFICAR_CLASE = 506;
+	public static final int MODIFICAR_CLASE_OK = 507;
+	public static final int MODIFICAR_CLASE_KO = 508;
+
+	public static final int MOSTRAR_CLASE = 509;
+	public static final int MOSTRAR_CLASE_OK = 510;
+	public static final int MOSTRAR_CLASE_KO = 511;
+
+	public static final int LISTAR_CLASES = 512;
+	public static final int LISTAR_CLASES_OK = 513;
+	public static final int LISTAR_CLASES_KO = 514;
+
+	public static final int VINCULAR_EJEMPLAR_CLASE = 515;
+	public static final int VINCULAR_EJEMPLAR_CLASE_OK = 516;
+	public static final int VINCULAR_EJEMPLAR_CLASE_KO = 517;
+
+	public static final int DESVINCULAR_EJEMPLAR_CLASE = 518;
+	public static final int DESVINCULAR_EJEMPLAR_CLASE_OK = 519;
+	public static final int DESVINCULAR_EJEMPLAR_CLASE_KO = 520;
+
 }

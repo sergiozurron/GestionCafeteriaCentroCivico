@@ -10,6 +10,8 @@ import com.grupoms.app.negocio.producto.*;
 import com.grupoms.app.negocio.EjemplarJPA.EjemplarSA;
 import com.grupoms.app.negocio.EjemplarJPA.EjemplarSAImp;
 import com.grupoms.app.negocio.PromocionJPA.*;
+import com.grupoms.app.negocio.ClaseJPA.ClaseSA;
+import com.grupoms.app.negocio.ClaseJPA.ClaseSAImp;
 
 
 public class FactoriaSAImp extends FactoriaSA {
@@ -61,5 +63,9 @@ public class FactoriaSAImp extends FactoriaSA {
 
 	public EjemplarSA creaSAEjemplar() {
 		return new EjemplarSAImp();
+	}
+
+	public ClaseSA creaSAClase() {
+		return new ClaseSAImp();
 	}
 }

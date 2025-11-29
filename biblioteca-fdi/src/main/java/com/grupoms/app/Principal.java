@@ -96,6 +96,16 @@ public class Principal extends JFrame {
 			{"Modificar Ejemplar",FactoriaVistas.GUI_MODIFICAR_EJEMPLAR}
         }));
 
+        panelCentroCivico.add(crearPanelCategoria("Clase", new String[][] {
+                {"Alta Clase",FactoriaVistas.GUI_ALTA_CLASE},
+                {"Baja Clase",FactoriaVistas.GUI_BAJA_CLASE},
+                {"Listar Clase",FactoriaVistas.GUI_LISTAR_CLASE},
+                {"Mostrar Clase",FactoriaVistas.GUI_MOSTRAR_CLASE},
+                {"Modificar Clase",FactoriaVistas.GUI_MODIFICAR_CLASE},
+                {"Vincular Ejemplar",FactoriaVistas.GUI_VINCULAR_EJEMPLAR_CLASE},
+                {"Desvincular Ejemplar",FactoriaVistas.GUI_DESVINCULAR_EJEMPLAR_CLASE}
+        }));
+
 
         // --- DIVISOR CENTRAL ---
         JSplitPane splitPane = new JSplitPane(

@@ -24,7 +24,6 @@ public class GUI_ModificarIngrediente  extends JFrame implements IGUI{
        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); //destruye la ventana sin cerrar la app
        pack(); //ajusta
        setLocationRelativeTo(null); //centra
-        setVisible(true);//es visible
     }
     @Override
     public void actualizar(Context context) {

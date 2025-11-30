@@ -1,6 +1,7 @@
 package com.grupoms.app.negocio.EjemplarJPA;
 
 import com.grupoms.app.EntityManagerProvider;
+import com.grupoms.app.negocio.assembler.EjemplarAssembler;
 import com.grupoms.app.negocio.materialJPA.BOMaterial;
 
 import jakarta.persistence.EntityManager;
@@ -86,6 +87,24 @@ public class EjemplarSAImp implements EjemplarSA {
 			e.printStackTrace();
 			em.getTransaction().rollback();
 			return false;
+		}
+	}
+
+	@Override
+	public TEjemplar mostrarEjemplar(Integer idEjemplar) {
+		EntityManager em = EntityManagerProvider.getEntityManager();
+
+		try {
+			BOEjemplar boEjemplar = em.find(BOEjemplar.class, idEjemplar);
+
+			if (boEjemplar == null || !boEjemplar.getActivo()) {
+				return null;
+			}
+
+			return EjemplarAssembler.toTransferObject(boEjemplar);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
 		}
 	}
 

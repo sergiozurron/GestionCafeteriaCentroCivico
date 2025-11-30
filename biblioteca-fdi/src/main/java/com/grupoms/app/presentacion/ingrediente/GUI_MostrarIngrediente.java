@@ -28,7 +28,6 @@ public class GUI_MostrarIngrediente extends JFrame implements IGUI {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         pack();
         setLocationRelativeTo(null);
-        setVisible(true);
     }
 
     private void initGUI() {

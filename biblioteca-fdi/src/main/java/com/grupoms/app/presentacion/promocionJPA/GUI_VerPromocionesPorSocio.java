@@ -26,7 +26,6 @@ public class GUI_VerPromocionesPorSocio extends JFrame implements IGUI {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         pack();
         setLocationRelativeTo(null);
-        setVisible(true);
     }
 
     private void initGUI() {

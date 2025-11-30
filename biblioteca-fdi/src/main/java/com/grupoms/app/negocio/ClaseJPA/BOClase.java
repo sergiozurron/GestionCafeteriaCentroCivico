@@ -25,7 +25,11 @@ import jakarta.persistence.Version;
     @NamedQuery(
         name = "com.grupoms.app.negocio.claseJPA.BOClase.findAll",
         query = "SELECT c FROM BOClase c"
-    )
+    ),
+    @NamedQuery(
+            name = "com.grupoms.app.negocio.claseJPA.BOClase.findBySala",
+            query = "SELECT c FROM BOSala s JOIN s.clases c WHERE s.id = :idSala AND c.activo = true"
+        )
 })
 @PrimaryKeyJoinColumn(referencedColumnName = "id")
 public class BOClase implements Serializable {

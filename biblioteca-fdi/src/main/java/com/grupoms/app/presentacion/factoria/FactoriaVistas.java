@@ -4,19 +4,35 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.grupoms.app.presentacion.IGUI;
+import com.grupoms.app.presentacion.claseJPA.GUI_AltaClase;
+import com.grupoms.app.presentacion.claseJPA.GUI_BajaClase;
+import com.grupoms.app.presentacion.claseJPA.GUI_DesvincularEjemplarClase;
+import com.grupoms.app.presentacion.claseJPA.GUI_ListarClase;
+import com.grupoms.app.presentacion.claseJPA.GUI_ModificarClase;
+import com.grupoms.app.presentacion.claseJPA.GUI_MostrarClase;
+import com.grupoms.app.presentacion.claseJPA.GUI_VincularEjemplarClase;
 import com.grupoms.app.presentacion.ejemplarJPA.GUI_AltaEjemplar;
 import com.grupoms.app.presentacion.ejemplarJPA.GUI_BajaEjemplar;
 import com.grupoms.app.presentacion.ejemplarJPA.GUI_ModificarEjemplar;
 import com.grupoms.app.presentacion.ejemplarJPA.GUI_MostrarEjemplar;
-import com.grupoms.app.presentacion.empleado.*;
-import com.grupoms.app.presentacion.ingrediente.*;
-import com.grupoms.app.presentacion.materialJPA.*;
-import com.grupoms.app.presentacion.mesa.*;
-import com.grupoms.app.presentacion.pedido.*;
-import com.grupoms.app.presentacion.producto.*;
-import com.grupoms.app.presentacion.proveedor.*;
-import com.grupoms.app.presentacion.promocionJPA.*;
-import com.grupoms.app.presentacion.claseJPA.*;
+import com.grupoms.app.presentacion.materialJPA.GUI_AltaMaterial;
+import com.grupoms.app.presentacion.materialJPA.GUI_ListarMaterial;
+import com.grupoms.app.presentacion.materialJPA.GUI_ModificarMaterial;
+import com.grupoms.app.presentacion.materialJPA.GUI_MostrarMaterial;
+import com.grupoms.app.presentacion.promocionJPA.GUI_AltaPromocion;
+import com.grupoms.app.presentacion.promocionJPA.GUI_BajaPromocion;
+import com.grupoms.app.presentacion.promocionJPA.GUI_ListarPromocion;
+import com.grupoms.app.presentacion.promocionJPA.GUI_ModificarPromocion;
+import com.grupoms.app.presentacion.promocionJPA.GUI_MostrarPromocion;
+import com.grupoms.app.presentacion.promocionJPA.GUI_VerPromocionesPorSocio;
+import com.grupoms.app.presentacion.salaJPA.GUI_AltaSala;
+import com.grupoms.app.presentacion.salaJPA.GUI_BajaSala;
+import com.grupoms.app.presentacion.salaJPA.GUI_DesvincularClaseSala;
+import com.grupoms.app.presentacion.salaJPA.GUI_ListarSala;
+import com.grupoms.app.presentacion.salaJPA.GUI_ModificarSala;
+import com.grupoms.app.presentacion.salaJPA.GUI_MostrarClasesPorSala;
+import com.grupoms.app.presentacion.salaJPA.GUI_MostrarSala;
+import com.grupoms.app.presentacion.salaJPA.GUI_VincularClaseSala;
 
 public class FactoriaVistas {
 
@@ -88,6 +104,16 @@ public class FactoriaVistas {
 
 	public static final String GUI_VINCULAR_EJEMPLAR_CLASE = "GUI_VincularEjemplarClase";
 	public static final String GUI_DESVINCULAR_EJEMPLAR_CLASE = "GUI_DesvincularEjemplarClase";
+	
+	public static final String GUI_ALTA_SALA = "GUI_AltaSala";
+    public static final String GUI_BAJA_SALA = "GUI_BajaSala";
+    public static final String GUI_LISTAR_SALA = "GUI_ListarSala";
+    public static final String GUI_MOSTRAR_SALA = "GUI_MostrarSala";
+    public static final String GUI_MODIFICAR_SALA = "GUI_ModificarSala";
+
+    public static final String GUI_VINCULAR_CLASE_SALA = "GUI_VincularClaseSala";
+    public static final String GUI_DESVINCULAR_CLASE_SALA = "GUI_DesvincularClaseSala";
+    public static final String GUI_MOSTRAR_CLASES_POR_SALA = "GUI_MostrarClasesPorSala";
 
 
     // Singleton
@@ -173,6 +199,15 @@ public class FactoriaVistas {
         vistas.put(GUI_MOSTRAR_CLASE, new GUI_MostrarClase());
         vistas.put(GUI_VINCULAR_EJEMPLAR_CLASE, new GUI_VincularEjemplarClase());
         vistas.put(GUI_DESVINCULAR_EJEMPLAR_CLASE, new GUI_DesvincularEjemplarClase());
+        
+        vistas.put(GUI_ALTA_SALA, new GUI_AltaSala());
+        vistas.put(GUI_BAJA_SALA, new GUI_BajaSala());
+        vistas.put(GUI_MODIFICAR_SALA, new GUI_ModificarSala());
+        vistas.put(GUI_LISTAR_SALA, new GUI_ListarSala());
+        vistas.put(GUI_MOSTRAR_SALA, new GUI_MostrarSala());
+        vistas.put(GUI_VINCULAR_CLASE_SALA, new GUI_VincularClaseSala());
+        vistas.put(GUI_DESVINCULAR_CLASE_SALA, new GUI_DesvincularClaseSala());
+        vistas.put(GUI_MOSTRAR_CLASES_POR_SALA, new GUI_MostrarClasesPorSala());
     }
 
     public static FactoriaVistas getInstance() {

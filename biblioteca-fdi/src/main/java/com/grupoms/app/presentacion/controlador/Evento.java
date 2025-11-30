@@ -239,6 +239,37 @@ public class Evento {
 	public static final int DESVINCULAR_EJEMPLAR_CLASE_OK = 519;
 	public static final int DESVINCULAR_EJEMPLAR_CLASE_KO = 520;
 
-	
+	// SALA
+	public static final int ALTA_SALA = 600;
+	public static final int ALTA_SALA_OK = 601;
+	public static final int ALTA_SALA_KO = 602;
+
+	public static final int BAJA_SALA = 603;
+	public static final int BAJA_SALA_OK = 604;
+	public static final int BAJA_SALA_KO = 605;
+
+	public static final int MODIFICAR_SALA = 606;
+	public static final int MODIFICAR_SALA_OK = 607;
+	public static final int MODIFICAR_SALA_KO = 608;
+
+	public static final int MOSTRAR_SALA = 609;
+	public static final int MOSTRAR_SALA_OK = 610;
+	public static final int MOSTRAR_SALA_KO = 611;
+
+	public static final int LISTAR_SALAS = 612;
+	public static final int LISTAR_SALAS_OK = 613;
+	public static final int LISTAR_SALAS_KO = 614;
+
+	public static final int VINCULAR_CLASE_SALA = 615;
+	public static final int VINCULAR_CLASE_SALA_OK = 616;
+	public static final int VINCULAR_CLASE_SALA_KO = 617;
+
+	public static final int DESVINCULAR_CLASE_SALA = 618;
+	public static final int DESVINCULAR_CLASE_SALA_OK = 619;
+	public static final int DESVINCULAR_CLASE_SALA_KO = 620;
+
+	public static final int MOSTRAR_CLASES_POR_SALA = 621;
+	public static final int MOSTRAR_CLASES_POR_SALA_OK = 622;
+	public static final int MOSTRAR_CLASES_POR_SALA_KO = 623;
 
 }

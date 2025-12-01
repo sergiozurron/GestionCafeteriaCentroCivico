@@ -1,4 +1,4 @@
-package com.grupoms.app.negocio.entityManager;
+package com.grupoms.app.integracion.factoria;
 
 import jakarta.persistence.EntityManagerFactory;
 

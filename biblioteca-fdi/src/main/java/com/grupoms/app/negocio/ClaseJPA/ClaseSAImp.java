@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.grupoms.app.negocio.assembler.ClaseAssembler;
-import com.grupoms.app.negocio.entityManager.EntityManagerSingleton;
+import com.grupoms.app.integracion.factoria.EntityManagerSingleton;
 import com.grupoms.app.negocio.EjemplarJPA.BOEjemplar;
 
 import jakarta.persistence.EntityManager;

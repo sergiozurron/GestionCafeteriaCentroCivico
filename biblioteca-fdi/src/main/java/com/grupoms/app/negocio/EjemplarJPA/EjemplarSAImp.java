@@ -5,8 +5,8 @@ import java.util.Collections;
 import java.util.List;
 
 import com.grupoms.app.EntityManagerProvider;
+import com.grupoms.app.integracion.factoria.EntityManagerSingleton;
 import com.grupoms.app.negocio.assembler.EjemplarAssembler;
-import com.grupoms.app.negocio.entityManager.EntityManagerSingleton;
 import com.grupoms.app.negocio.materialJPA.BOMaterial;
 
 import jakarta.persistence.EntityManager;
@@ -60,6 +60,11 @@ public class EjemplarSAImp implements EjemplarSA {
 			}
 
 			boEjemplar.setActivo(false);
+			 BOMaterial material = boEjemplar.getMaterial();
+		        if (material != null && material.getEjemplares() != null) {
+		            material.getEjemplares().remove(boEjemplar);
+		        }
+
 			em.getTransaction().commit();
 			return true;
 		} catch (Exception e) {

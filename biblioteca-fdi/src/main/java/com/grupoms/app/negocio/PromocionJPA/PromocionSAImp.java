@@ -2,8 +2,8 @@ package com.grupoms.app.negocio.PromocionJPA;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.grupoms.app.integracion.factoria.EntityManagerSingleton;
 import com.grupoms.app.negocio.assembler.PromocionAssembler;
-import com.grupoms.app.negocio.entityManager.EntityManagerSingleton;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;

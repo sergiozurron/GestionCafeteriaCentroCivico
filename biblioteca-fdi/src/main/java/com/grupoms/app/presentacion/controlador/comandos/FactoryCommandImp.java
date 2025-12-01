@@ -82,6 +82,7 @@ public class FactoryCommandImp extends FactoryCommand {
         commands.put(Evento.MOSTRAR_MATERIAL, new MostrarMaterialCommand());
         commands.put(Evento.MODIFICAR_MATERIAL, new ModificarMaterialCommand());
         commands.put(Evento.MOSTRAR_EJEMPLARMATERIAL, new MostrarEjemplaresPorMaterialCommand());
+        commands.put(Evento.BAJA_MATERIAL, new BajaMaterialCommand());
         
         // Ejemplar
         commands.put(Evento.ALTA_EJEMPLAR, new AltaEjemplarCommand());
@@ -134,6 +135,8 @@ public class FactoryCommandImp extends FactoryCommand {
         views.put(Evento.MOSTRAR_MATERIAL, FactoriaVistas.GUI_MOSTRAR_MATERIAL);
         views.put(Evento.MODIFICAR_MATERIAL, FactoriaVistas.GUI_MODIFICAR_MATERIAL);
         views.put(Evento.MOSTRAR_EJEMPLARMATERIAL, FactoriaVistas.GUI_LISTAR_EJEMPLARESMATERIAL);
+        views.put(Evento.BAJA_MATERIAL, FactoriaVistas.GUI_BAJA_MATERIAL);
+
 
         views.put(Evento.ALTA_PROMOCION, FactoriaVistas.GUI_ALTA_PROMOCION);
         views.put(Evento.BAJA_PROMOCION, FactoriaVistas.GUI_BAJA_PROMOCION);

@@ -84,6 +84,7 @@ public class Principal extends JFrame {
         panelCentroCivico.add(crearPanelCategoria("Material", new String[][] {
                 {"Alta Material", FactoriaVistas.GUI_ALTA_MATERIAL},
                 {"Listar Material",FactoriaVistas.GUI_LISTAR_MATERIAL},
+                {"Baja Material",FactoriaVistas.GUI_BAJA_MATERIAL},
                 {"Mostrar Material",FactoriaVistas.GUI_MOSTRAR_MATERIAL},
                 {"Modificar Material",FactoriaVistas.GUI_MODIFICAR_MATERIAL},
                 {"Listar Ejemplares", FactoriaVistas.GUI_LISTAR_EJEMPLARESMATERIAL}

@@ -4,8 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.grupoms.app.integracion.factoria.EntityManagerSingleton;
 import com.grupoms.app.negocio.assembler.*;
-import com.grupoms.app.negocio.entityManager.EntityManagerSingleton;
+
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.TypedQuery;
@@ -67,35 +68,33 @@ public class MaterialSAImp implements MaterialSA{
 	
 	
 	@Override
-	public Integer bajaMaterial(Integer id) {
-		int res = -1;
-		EntityManager em = EntityManagerSingleton.getInstance().getEMF().createEntityManager();
-		EntityTransaction t = em.getTransaction();
-		try {
-			t.begin();
-			
-			BOMaterial material = em.find(BOMaterial.class,id);
-			
-			if(material!=null) { //si lo encuentra
-				if(material.getActivo()){//si esta activo
-					if(!material.getEjemplares().isEmpty()) {
-						res = -2;
-					}
-					else {
-						material.setActivo(false);
-						res=1;
-					}
-				}	
-			}
-			t.commit();
-		}catch(Exception e) {
-			 if (t.isActive()) t.rollback();
-		        e.printStackTrace();
-		}finally {
+	public Integer bajaMaterial(Integer id) throws Exception {
+	    EntityManager em = EntityManagerSingleton.getInstance().getEMF().createEntityManager();
+	    EntityTransaction t = em.getTransaction();
+	    try {
+	        t.begin();
+
+	        BOMaterial material = em.find(BOMaterial.class, id);
+
+	        if (material == null || !material.getActivo()) {
+	            t.rollback();
+	            throw new Exception("El material no existe o ya está inactivo.");
+	        }
+
+	        if (!material.getEjemplares().isEmpty()) {
+	            t.rollback();
+	            throw new Exception("Elimine primero los ejemplares asociados a este material.");
+	        }
+
+	        material.setActivo(false);
+	        t.commit();
+	        return 1; 
+	    } catch (Exception e) {
+	        if (t.isActive()) t.rollback();
+	        throw e; 
+	    } finally {
 	        em.close();
 	    }
-
-	    return res;
 	}
 
 	@Override

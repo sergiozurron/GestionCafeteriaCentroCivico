@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.grupoms.app.integracion.factoria.EntityManagerSingleton;
 import com.grupoms.app.negocio.ClaseJPA.BOClase;
 import com.grupoms.app.negocio.ClaseJPA.TClase;
 import com.grupoms.app.negocio.assembler.ClaseAssembler;
 import com.grupoms.app.negocio.assembler.SalaAssembler;
-import com.grupoms.app.negocio.entityManager.EntityManagerSingleton;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;

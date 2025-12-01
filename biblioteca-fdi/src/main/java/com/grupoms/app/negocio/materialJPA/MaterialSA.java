@@ -5,7 +5,7 @@ import java.util.List;
 public interface MaterialSA {
 	
 	
-	public Integer bajaMaterial(Integer id);
+	public Integer bajaMaterial(Integer id) throws Exception;
 	
 	public List<TMaterial> listarMateriales();
 		

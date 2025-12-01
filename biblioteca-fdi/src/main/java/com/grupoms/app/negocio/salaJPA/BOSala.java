@@ -46,12 +46,6 @@ public class BOSala implements Serializable {
 	@OneToMany(mappedBy = "sala")
 	private List<BOClase> clases;	
 	
-	public BOSala(TSala sala) {
-		this.capacidad = sala.getCapacidad();
-		this.nombre = sala.getNombre();
-		this.activo = sala.getActivo();
-	}
-	
 	public BOSala() {}
 
 	public Integer getId() {

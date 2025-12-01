@@ -7,6 +7,11 @@ import com.grupoms.app.negocio.empleado.*;
 import com.grupoms.app.negocio.ingrediente.*;
 import com.grupoms.app.negocio.materialJPA.*;
 import com.grupoms.app.negocio.producto.*;
+import com.grupoms.app.negocio.EjemplarJPA.EjemplarSA;
+import com.grupoms.app.negocio.EjemplarJPA.EjemplarSAImp;
+import com.grupoms.app.negocio.PromocionJPA.*;
+import com.grupoms.app.negocio.ClaseJPA.ClaseSA;
+import com.grupoms.app.negocio.ClaseJPA.ClaseSAImp;
 
 
 public class FactoriaSAImp extends FactoriaSA {
@@ -45,9 +50,22 @@ public class FactoriaSAImp extends FactoriaSA {
 		return new SAEmpleadoImp();
 	}
 
+	// JPA
+
 	@Override
 	public MaterialSA creaSAMaterial() {
 		return new MaterialSAImp();
 	}
 
+	public PromocionSA creaSAPromocion() {
+		return new PromocionSAImp();
+	}
+
+	public EjemplarSA creaSAEjemplar() {
+		return new EjemplarSAImp();
+	}
+
+	public ClaseSA creaSAClase() {
+		return new ClaseSAImp();
+	}
 }

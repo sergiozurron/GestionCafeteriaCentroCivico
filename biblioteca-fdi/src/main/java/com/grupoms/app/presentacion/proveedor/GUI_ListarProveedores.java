@@ -25,7 +25,6 @@ public class GUI_ListarProveedores extends JFrame implements IGUI {
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		initGUI();
-		setVisible(true);
 	}
 
 	private void initGUI() {

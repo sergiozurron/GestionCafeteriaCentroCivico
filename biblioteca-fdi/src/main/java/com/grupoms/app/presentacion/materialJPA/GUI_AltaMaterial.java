@@ -29,7 +29,6 @@ public class GUI_AltaMaterial extends JFrame implements IGUI {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         pack();
         setLocationRelativeTo(null);
-        setVisible(true);
     }
 
     private void initGUI() {
@@ -165,6 +164,7 @@ public class GUI_AltaMaterial extends JFrame implements IGUI {
     public void actualizar(Context context) {
     	if (context == null) {
             setVisible(true);
+            return;
         }
     	switch(context.getEvento()) {
         case Evento.ALTA_MATERIAL_OK:

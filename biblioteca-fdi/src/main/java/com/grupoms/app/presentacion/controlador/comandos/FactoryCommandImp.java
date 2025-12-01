@@ -3,6 +3,10 @@ package com.grupoms.app.presentacion.controlador.comandos;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.grupoms.app.presentacion.comandos.ejemplarJPA.AltaEjemplarCommand;
+import com.grupoms.app.presentacion.comandos.ejemplarJPA.BajaEjemplarCommand;
+import com.grupoms.app.presentacion.comandos.ejemplarJPA.ModificarEjemplarCommand;
+import com.grupoms.app.presentacion.comandos.ejemplarJPA.MostrarEjemplarCommand;
 import com.grupoms.app.presentacion.comandos.materialJPA.*;
 import com.grupoms.app.presentacion.controlador.Evento;
 import com.grupoms.app.presentacion.controlador.comandos.ingrediente.*;
@@ -76,6 +80,12 @@ public class FactoryCommandImp extends FactoryCommand {
         commands.put(Evento.LISTAR_MATERIAL,new ListarMaterialCommand());
         commands.put(Evento.MOSTRAR_MATERIAL, new MostrarMaterialCommand());
         commands.put(Evento.MODIFICAR_MATERIAL, new ModificarMaterialCommand());
+        
+        // Ejemplar
+        commands.put(Evento.ALTA_EJEMPLAR, new AltaEjemplarCommand());
+        commands.put(Evento.BAJA_EJEMPLAR, new BajaEjemplarCommand());
+        commands.put(Evento.MODIFICAR_EJEMPLAR, new ModificarEjemplarCommand());
+        commands.put(Evento.MOSTRAR_EJEMPLAR, new MostrarEjemplarCommand());
 
         //VISTAS
         views.put(Evento.MOSTRAR_PEDIDO, FactoriaVistas.GUI_MOSTRAR_PEDIDO);
@@ -120,7 +130,17 @@ public class FactoryCommandImp extends FactoryCommand {
         views.put(Evento.MOSTRAR_MATERIAL, FactoriaVistas.GUI_MOSTRAR_MATERIAL);
         views.put(Evento.MODIFICAR_MATERIAL, FactoriaVistas.GUI_MODIFICAR_MATERIAL);
 
-
+        views.put(Evento.ALTA_PROMOCION, FactoriaVistas.GUI_ALTA_PROMOCION);
+        views.put(Evento.BAJA_PROMOCION, FactoriaVistas.GUI_BAJA_PROMOCION);
+        views.put(Evento.MODIFICAR_PROMOCION, FactoriaVistas.GUI_MODIFICAR_PROMOCION);
+        views.put(Evento.LISTAR_PROMOCION, FactoriaVistas.GUI_LISTAR_PROMOCION);
+        views.put(Evento.MOSTRAR_PROMOCION, FactoriaVistas.GUI_MOSTRAR_PROMOCION);
+        views.put(Evento.VER_PROMOCIONES_POR_SOCIO, FactoriaVistas.GUI_VER_PROMOCIONES_POR_SOCIO);
+        
+        views.put(Evento.ALTA_EJEMPLAR, FactoriaVistas.GUI_ALTA_EJEMPLAR);
+        views.put(Evento.BAJA_EJEMPLAR, FactoriaVistas.GUI_BAJA_EJEMPLAR);
+        views.put(Evento.MODIFICAR_EJEMPLAR, FactoriaVistas.GUI_MODIFICAR_EJEMPLAR);
+        views.put(Evento.MOSTRAR_EJEMPLAR, FactoriaVistas.GUI_MOSTRAR_EJEMPLAR);
     }
     @Override
     public Command getCommand(Integer event) {

@@ -26,9 +26,6 @@ public class GUI_ListarIngrediente extends JFrame implements IGUI {
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         initGUI();
-        setVisible(true);
-
-
     }
 
     private void initGUI() {

@@ -25,7 +25,6 @@ public class GUI_ListarEmpleado extends JFrame implements IGUI {
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         initGUI();
-        setVisible(true); // Aseguramos que la ventana se vea
     }
 
     private void initGUI() {

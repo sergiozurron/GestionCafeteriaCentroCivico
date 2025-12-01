@@ -169,6 +169,107 @@ public class Evento {
 	public static final int MODIFICAR_MATERIAL_OK = 310;
 	public static final int MODIFICAR_MATERIAL_KO = 311;
 
+	//Promocion
+	public static final int ALTA_PROMOCION = 350;
+	public static final int ALTA_PROMOCION_OK = 351;
+	public static final int ALTA_PROMOCION_KO = 352;
 
+	public static final int BAJA_PROMOCION = 353;
+	public static final int BAJA_PROMOCION_OK = 354;
+	public static final int BAJA_PROMOCION_KO = 355;
+
+	public static final int MODIFICAR_PROMOCION = 356;
+	public static final int MODIFICAR_PROMOCION_OK = 357;
+	public static final int MODIFICAR_PROMOCION_KO = 358;
+
+	public static final int MOSTRAR_PROMOCION = 359;
+	public static final int MOSTRAR_PROMOCION_OK = 360;
+	public static final int MOSTRAR_PROMOCION_KO = 361;
+
+	public static final int LISTAR_PROMOCION = 362;
+	public static final int LISTAR_PROMOCION_OK = 363;
+	public static final int LISTAR_PROMOCION_KO = 364;
+
+	public static final int VER_PROMOCIONES_POR_SOCIO = 365;
+	public static final int VER_PROMOCIONES_POR_SOCIO_OK = 366;
+	public static final int VER_PROMOCIONES_POR_SOCIO_KO = 367;
+	
+	public static final int ALTA_EJEMPLAR = 400;
+	public static final int ALTA_EJEMPLAR_OK = 401;
+	public static final int ALTA_EJEMPLAR_KO = 402;
+	
+	public static final int BAJA_EJEMPLAR = 403;
+	public static final int BAJA_EJEMPLAR_OK = 404;
+	public static final int BAJA_EJEMPLAR_KO = 405;
+	
+	public static final int MODIFICAR_EJEMPLAR = 406;
+	public static final int MODIFICAR_EJEMPLAR_OK = 407;
+	public static final int MODIFICAR_EJEMPLAR_KO = 408;
+	
+	public static final int MOSTRAR_EJEMPLAR = 409;
+	public static final int MOSTRAR_EJEMPLAR_OK = 410;
+	public static final int MOSTRAR_EJEMPLAR_KO = 411;
+
+	// CLASE
+	public static final int ALTA_CLASE = 500;
+	public static final int ALTA_CLASE_OK = 501;
+	public static final int ALTA_CLASE_KO = 502;
+
+	public static final int BAJA_CLASE = 503;
+	public static final int BAJA_CLASE_OK = 504;
+	public static final int BAJA_CLASE_KO = 505;
+
+	public static final int MODIFICAR_CLASE = 506;
+	public static final int MODIFICAR_CLASE_OK = 507;
+	public static final int MODIFICAR_CLASE_KO = 508;
+
+	public static final int MOSTRAR_CLASE = 509;
+	public static final int MOSTRAR_CLASE_OK = 510;
+	public static final int MOSTRAR_CLASE_KO = 511;
+
+	public static final int LISTAR_CLASES = 512;
+	public static final int LISTAR_CLASES_OK = 513;
+	public static final int LISTAR_CLASES_KO = 514;
+
+	public static final int VINCULAR_EJEMPLAR_CLASE = 515;
+	public static final int VINCULAR_EJEMPLAR_CLASE_OK = 516;
+	public static final int VINCULAR_EJEMPLAR_CLASE_KO = 517;
+
+	public static final int DESVINCULAR_EJEMPLAR_CLASE = 518;
+	public static final int DESVINCULAR_EJEMPLAR_CLASE_OK = 519;
+	public static final int DESVINCULAR_EJEMPLAR_CLASE_KO = 520;
+
+	// SALA
+	public static final int ALTA_SALA = 600;
+	public static final int ALTA_SALA_OK = 601;
+	public static final int ALTA_SALA_KO = 602;
+
+	public static final int BAJA_SALA = 603;
+	public static final int BAJA_SALA_OK = 604;
+	public static final int BAJA_SALA_KO = 605;
+
+	public static final int MODIFICAR_SALA = 606;
+	public static final int MODIFICAR_SALA_OK = 607;
+	public static final int MODIFICAR_SALA_KO = 608;
+
+	public static final int MOSTRAR_SALA = 609;
+	public static final int MOSTRAR_SALA_OK = 610;
+	public static final int MOSTRAR_SALA_KO = 611;
+
+	public static final int LISTAR_SALAS = 612;
+	public static final int LISTAR_SALAS_OK = 613;
+	public static final int LISTAR_SALAS_KO = 614;
+
+	public static final int VINCULAR_CLASE_SALA = 615;
+	public static final int VINCULAR_CLASE_SALA_OK = 616;
+	public static final int VINCULAR_CLASE_SALA_KO = 617;
+
+	public static final int DESVINCULAR_CLASE_SALA = 618;
+	public static final int DESVINCULAR_CLASE_SALA_OK = 619;
+	public static final int DESVINCULAR_CLASE_SALA_KO = 620;
+
+	public static final int MOSTRAR_CLASES_POR_SALA = 621;
+	public static final int MOSTRAR_CLASES_POR_SALA_OK = 622;
+	public static final int MOSTRAR_CLASES_POR_SALA_KO = 623;
 
 }

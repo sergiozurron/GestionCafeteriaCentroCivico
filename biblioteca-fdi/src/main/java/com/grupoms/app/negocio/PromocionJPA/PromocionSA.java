@@ -8,4 +8,5 @@ public interface PromocionSA {
     public Integer modificarPromocion(TPromocion promocion);
     public TPromocion mostrarPromocion(Integer id);
     public List<TPromocion> listarPromociones();
+    public List<TPromocion> VerPromocionesPorSocio(Integer idSocio);
 }

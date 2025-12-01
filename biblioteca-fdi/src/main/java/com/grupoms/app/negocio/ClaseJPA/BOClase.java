@@ -3,12 +3,17 @@ package com.grupoms.app.negocio.ClaseJPA;
 import java.io.Serializable;
 import java.util.Date;
 
+import com.grupoms.app.negocio.salaJPA.BOSala;
+
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.PrimaryKeyJoinColumn;
@@ -53,6 +58,10 @@ public class BOClase implements Serializable {
     @Version
     private int version;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "sala_id")
+    private BOSala sala;
+    
     public BOClase() { }
 
     public BOClase(TClase clase) {

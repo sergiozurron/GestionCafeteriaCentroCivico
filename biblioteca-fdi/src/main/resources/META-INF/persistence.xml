@@ -11,9 +11,7 @@
 	    
 	    <class>com.grupoms.app.negocio.PromocionJPA.BOPromocion</class>
 	    
-	    <class>com.grupoms.app.negocio.salaJPA.BOSala</class>
 	    
-	    <class>com.grupoms.app.negocio.ClaseJPA.BOClase</class>
 	    -->
 	    
 
@@ -21,7 +19,8 @@
 
         
 
-        
+        <class>com.grupoms.app.negocio.salaJPA.BOSala</class>
+	    <class>com.grupoms.app.negocio.ClaseJPA.BOClase</class>
         <class>com.grupoms.app.negocio.materialJPA.BOMaterial</class>
         <class>com.grupoms.app.negocio.materialJPA.BOLibro</class>
         <class>com.grupoms.app.negocio.materialJPA.BOPintura</class>

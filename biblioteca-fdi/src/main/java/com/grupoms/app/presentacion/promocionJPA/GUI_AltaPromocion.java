@@ -86,7 +86,8 @@ public class GUI_AltaPromocion extends JFrame implements IGUI  {
     @Override
     public void actualizar(Context context) {
         if (context == null) {
-            setVisible(true);
+        	setVisible(true);
+			return;
         }
     	switch(context.getEvento()) {
         case Evento.ALTA_PROMOCION_OK:

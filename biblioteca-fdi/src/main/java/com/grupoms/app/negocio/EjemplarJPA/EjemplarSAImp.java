@@ -1,10 +1,17 @@
 package com.grupoms.app.negocio.EjemplarJPA;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import com.grupoms.app.EntityManagerProvider;
 import com.grupoms.app.negocio.assembler.EjemplarAssembler;
+import com.grupoms.app.negocio.entityManager.EntityManagerSingleton;
 import com.grupoms.app.negocio.materialJPA.BOMaterial;
 
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.LockModeType;
 
 public class EjemplarSAImp implements EjemplarSA {
 
@@ -27,6 +34,9 @@ public class EjemplarSAImp implements EjemplarSA {
 			boEjemplar.setMaterial(boMaterial);
 
 			em.persist(boEjemplar);
+			if (boMaterial.getEjemplares() != null) {
+			    boMaterial.getEjemplares().add(boEjemplar);
+			}
 			em.getTransaction().commit();
 			return boEjemplar.getId();
 		} catch (Exception e) {
@@ -106,6 +116,31 @@ public class EjemplarSAImp implements EjemplarSA {
 			e.printStackTrace();
 			return null;
 		}
+	}
+	@Override
+	public List<TEjemplar> listarEjemplaresPorMaterial(Integer idMaterial) {
+		EntityManager em = EntityManagerSingleton.getInstance().getEMF().createEntityManager();
+		EntityTransaction t = em.getTransaction();
+		List<TEjemplar> lista = new ArrayList<>();
+		try {
+		    t.begin();
+		    BOMaterial material = em.find(BOMaterial.class, idMaterial, LockModeType.OPTIMISTIC);
+		    if(material == null || !material.getActivo()) {
+		        t.rollback();
+		        return Collections.emptyList();
+		    }
+		    for(BOEjemplar e: material.getEjemplares()) {
+		        lista.add(EjemplarAssembler.toTransferObject(e));
+		    }
+		    t.commit();
+		} catch(Exception ex) {
+		    if(t.isActive()) t.rollback();
+		    ex.printStackTrace();
+		    return Collections.emptyList();
+		} finally {
+		    em.close();
+		}
+		return lista;
 	}
 
 }

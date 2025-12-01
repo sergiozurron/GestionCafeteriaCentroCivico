@@ -16,6 +16,7 @@ import com.grupoms.app.presentacion.ejemplarJPA.GUI_BajaEjemplar;
 import com.grupoms.app.presentacion.ejemplarJPA.GUI_ModificarEjemplar;
 import com.grupoms.app.presentacion.ejemplarJPA.GUI_MostrarEjemplar;
 import com.grupoms.app.presentacion.materialJPA.GUI_AltaMaterial;
+import com.grupoms.app.presentacion.materialJPA.GUI_ListarEjemplaresMaterial;
 import com.grupoms.app.presentacion.materialJPA.GUI_ListarMaterial;
 import com.grupoms.app.presentacion.materialJPA.GUI_ModificarMaterial;
 import com.grupoms.app.presentacion.materialJPA.GUI_MostrarMaterial;
@@ -114,6 +115,7 @@ public class FactoriaVistas {
     public static final String GUI_VINCULAR_CLASE_SALA = "GUI_VincularClaseSala";
     public static final String GUI_DESVINCULAR_CLASE_SALA = "GUI_DesvincularClaseSala";
     public static final String GUI_MOSTRAR_CLASES_POR_SALA = "GUI_MostrarClasesPorSala";
+	public static final String GUI_LISTAR_EJEMPLARESMATERIAL = "GUI_ListarEjemplaresMaterial";
 
 
     // Singleton
@@ -179,6 +181,7 @@ public class FactoriaVistas {
         vistas.put(GUI_LISTAR_MATERIAL,new GUI_ListarMaterial());
         vistas.put(GUI_MOSTRAR_MATERIAL,new GUI_MostrarMaterial());
         vistas.put(GUI_MODIFICAR_MATERIAL,new GUI_ModificarMaterial());
+        vistas.put(GUI_LISTAR_EJEMPLARESMATERIAL, new GUI_ListarEjemplaresMaterial());
 
         vistas.put(GUI_ALTA_PROMOCION, new GUI_AltaPromocion());
         vistas.put(GUI_BAJA_PROMOCION, new GUI_BajaPromocion());

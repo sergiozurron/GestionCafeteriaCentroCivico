@@ -3,6 +3,8 @@ package com.grupoms.app.negocio.materialJPA;
 import java.io.Serializable;
 import java.util.List;
 
+import com.grupoms.app.negocio.EjemplarJPA.BOEjemplar;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -34,8 +36,8 @@ public class BOMaterial implements Serializable{
 	@Version
 	private int version;
 	
-	//@OneToMany(mappedBy="material")
-	//private List<BOEjemplar> ejemplares;
+	@OneToMany(mappedBy="material")
+	private List<BOEjemplar> ejemplares;
 	
 	public BOMaterial(TMaterial material) {
 		this.autor=material.getAutor();
@@ -89,8 +91,8 @@ public class BOMaterial implements Serializable{
 		return nombre;
 	}
 
-	//public List<BOEjemplar> getEjemplares() {
-		// TODO Auto-generated method stub
-		//return null;
-	//}
+
+	public List<BOEjemplar> getEjemplares() {
+		return ejemplares;
+	}
 }

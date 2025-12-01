@@ -44,7 +44,8 @@ public class GUI_ListarPromocion extends JFrame implements IGUI {
     @Override
     public void actualizar(Context context) {
         if (context == null) {
-            return;
+        	setVisible(true);
+			return;
         }
         switch(context.getEvento()) {
             case Evento.LISTAR_PROMOCION_OK:

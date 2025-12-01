@@ -5,17 +5,27 @@
 
     <!-- clases de JPA -->
         <!--
-			<class>com.grupoms.app.negocio.socio.Socio</class>
-	        <class>com.grupoms.app.negocio.socio.Infantil</class>
-	        <class>com.grupoms.app.negocio.socio.Adulto</class>
-	         <class>com.grupoms.app.negocio.ejemplar.Ejemplar</class>
-        <class>com.grupoms.app.negocio.clase.Clase</class>
-        <class>com.grupoms.app.negocio.sala.Sala</class>
-        <class>negocio.promocion.Promocion</class>
-     -->
+		<class>com.grupoms.app.negocio.socioJPA.BOSocio</class>
+	    <class>com.grupoms.app.negocio.socioJPA.BOInfantil</class>
+	    <class>com.grupoms.app.negocio.socioJPA.BOAdulto</class>
+	    
+	    <class>com.grupoms.app.negocio.PromocionJPA.BOPromocion</class>
+	    
+	    <class>com.grupoms.app.negocio.salaJPA.BOSala</class>
+	    
+	    <class>com.grupoms.app.negocio.ClaseJPA.BOClase</class>
+	    -->
+	    
+
+       	
+
+        
+
+        
         <class>com.grupoms.app.negocio.materialJPA.BOMaterial</class>
         <class>com.grupoms.app.negocio.materialJPA.BOLibro</class>
         <class>com.grupoms.app.negocio.materialJPA.BOPintura</class>
+        
         <class>com.grupoms.app.negocio.EjemplarJPA.BOEjemplar</class>
        
     

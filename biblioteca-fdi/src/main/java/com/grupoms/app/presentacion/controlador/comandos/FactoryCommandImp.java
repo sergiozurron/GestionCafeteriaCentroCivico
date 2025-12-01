@@ -7,6 +7,7 @@ import com.grupoms.app.presentacion.comandos.ejemplarJPA.AltaEjemplarCommand;
 import com.grupoms.app.presentacion.comandos.ejemplarJPA.BajaEjemplarCommand;
 import com.grupoms.app.presentacion.comandos.ejemplarJPA.ModificarEjemplarCommand;
 import com.grupoms.app.presentacion.comandos.ejemplarJPA.MostrarEjemplarCommand;
+import com.grupoms.app.presentacion.comandos.ejemplarJPA.MostrarEjemplaresPorMaterialCommand;
 import com.grupoms.app.presentacion.comandos.materialJPA.*;
 import com.grupoms.app.presentacion.controlador.Evento;
 import com.grupoms.app.presentacion.controlador.comandos.ingrediente.*;
@@ -80,6 +81,7 @@ public class FactoryCommandImp extends FactoryCommand {
         commands.put(Evento.LISTAR_MATERIAL,new ListarMaterialCommand());
         commands.put(Evento.MOSTRAR_MATERIAL, new MostrarMaterialCommand());
         commands.put(Evento.MODIFICAR_MATERIAL, new ModificarMaterialCommand());
+        commands.put(Evento.MOSTRAR_EJEMPLARMATERIAL, new MostrarEjemplaresPorMaterialCommand());
         
         // Ejemplar
         commands.put(Evento.ALTA_EJEMPLAR, new AltaEjemplarCommand());
@@ -87,6 +89,8 @@ public class FactoryCommandImp extends FactoryCommand {
         commands.put(Evento.MODIFICAR_EJEMPLAR, new ModificarEjemplarCommand());
         commands.put(Evento.MOSTRAR_EJEMPLAR, new MostrarEjemplarCommand());
 
+        
+        
         //VISTAS
         views.put(Evento.MOSTRAR_PEDIDO, FactoriaVistas.GUI_MOSTRAR_PEDIDO);
         views.put(Evento.MODIFICAR_PEDIDO, FactoriaVistas.GUI_MODIFICAR_PEDIDO);
@@ -129,6 +133,7 @@ public class FactoryCommandImp extends FactoryCommand {
         views.put(Evento.LISTAR_MATERIAL, FactoriaVistas.GUI_LISTAR_MATERIAL);
         views.put(Evento.MOSTRAR_MATERIAL, FactoriaVistas.GUI_MOSTRAR_MATERIAL);
         views.put(Evento.MODIFICAR_MATERIAL, FactoriaVistas.GUI_MODIFICAR_MATERIAL);
+        views.put(Evento.MOSTRAR_EJEMPLARMATERIAL, FactoriaVistas.GUI_LISTAR_EJEMPLARESMATERIAL);
 
         views.put(Evento.ALTA_PROMOCION, FactoriaVistas.GUI_ALTA_PROMOCION);
         views.put(Evento.BAJA_PROMOCION, FactoriaVistas.GUI_BAJA_PROMOCION);

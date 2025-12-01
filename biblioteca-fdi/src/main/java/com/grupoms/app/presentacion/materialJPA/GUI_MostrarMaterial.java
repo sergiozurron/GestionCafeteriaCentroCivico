@@ -107,7 +107,11 @@ public class GUI_MostrarMaterial extends JFrame implements IGUI{
 	}
 	@Override
 	public void actualizar(Context context) {
-		if (context == null) return; // evita NPE
+		if (context == null) {
+			setVisible(true);
+			return;
+		}
+
 		switch(context.getEvento()) {
 		case Evento.MOSTRAR_MATERIAL_OK:
 			TMaterial m = (TMaterial) context.getDatos();

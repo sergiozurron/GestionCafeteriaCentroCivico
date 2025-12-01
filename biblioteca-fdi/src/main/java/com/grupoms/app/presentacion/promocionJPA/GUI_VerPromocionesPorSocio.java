@@ -64,7 +64,8 @@ public class GUI_VerPromocionesPorSocio extends JFrame implements IGUI {
     @Override
     public void actualizar(Context context) {
         if (context == null) {
-            return;
+        	setVisible(true);
+			return;
         }
         switch(context.getEvento()) {
             case Evento.VER_PROMOCIONES_POR_SOCIO_OK:

@@ -65,6 +65,10 @@ public class GUI_ListarMaterial extends JFrame implements IGUI {
     @SuppressWarnings("unchecked")
 	@Override
     public void actualizar(Context context) {
+    	 if (context == null) {
+    		 setVisible(true);
+ 			return;
+    	    }
         if (context.getEvento() == Evento.LISTAR_MATERIAL_OK) {
             modeloTabla.setRowCount(0); // limpia la tabla
             List<TMaterial> materiales = (List<TMaterial>) context.getDatos();

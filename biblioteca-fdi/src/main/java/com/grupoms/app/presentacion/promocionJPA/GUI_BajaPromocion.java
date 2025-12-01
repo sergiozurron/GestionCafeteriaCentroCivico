@@ -57,7 +57,8 @@ public class GUI_BajaPromocion extends JFrame implements IGUI {
     @Override
     public void actualizar(Context context) {
         if (context == null) {
-            setVisible(true);
+        	setVisible(true);
+			return;
         } else if (context.getEvento() == Evento.BAJA_PROMOCION_OK) {
             JOptionPane.showMessageDialog(this, "Promoción dada de baja con éxito", "Éxito", JOptionPane.INFORMATION_MESSAGE);
         } else if (context.getEvento() == Evento.BAJA_PROMOCION_KO) {

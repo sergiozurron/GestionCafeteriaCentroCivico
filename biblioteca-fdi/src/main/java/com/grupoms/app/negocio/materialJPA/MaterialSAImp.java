@@ -78,13 +78,13 @@ public class MaterialSAImp implements MaterialSA{
 			
 			if(material!=null) { //si lo encuentra
 				if(material.getActivo()){//si esta activo
-				//	if(!material.getEjemplares().isEmpty()) {
-				//		res = -2;
-				//	}
-				//	else {
-					//	material.setActivo(false);
-					//	res=1;
-				//	}
+					if(!material.getEjemplares().isEmpty()) {
+						res = -2;
+					}
+					else {
+						material.setActivo(false);
+						res=1;
+					}
 				}	
 			}
 			t.commit();

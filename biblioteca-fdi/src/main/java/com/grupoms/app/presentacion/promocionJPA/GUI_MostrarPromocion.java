@@ -57,8 +57,8 @@ public class GUI_MostrarPromocion extends JFrame implements IGUI{
     @Override
     public void actualizar(Context context) {
         if (context == null) {
-            JOptionPane.showMessageDialog(this, "Error al mostrar la promoción.");
-            return;
+        	setVisible(true);
+			return;
         } else if (context.getEvento() == Evento.MOSTRAR_PROMOCION_OK) {
             TPromocion promocion = (TPromocion) context.getDatos();
 

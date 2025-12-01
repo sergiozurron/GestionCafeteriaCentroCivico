@@ -88,7 +88,8 @@ public class GUI_ModificarPromocion extends JFrame implements IGUI {
     @Override
     public void actualizar(Context context) {
         if (context == null) {
-            setVisible(true);
+        	setVisible(true);
+			return;
         } else if (context.getEvento() == Evento.MODIFICAR_PROMOCION_OK) {
             JOptionPane.showMessageDialog(this, "Promoción modificada con éxito", "Éxito", JOptionPane.INFORMATION_MESSAGE);
             // Limpiar campos

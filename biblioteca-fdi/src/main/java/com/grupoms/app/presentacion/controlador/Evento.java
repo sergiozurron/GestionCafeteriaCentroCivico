@@ -168,6 +168,10 @@ public class Evento {
 	public static final int MODIFICAR_MATERIAL = 309;
 	public static final int MODIFICAR_MATERIAL_OK = 310;
 	public static final int MODIFICAR_MATERIAL_KO = 311;
+	
+	public static final int MOSTRAR_EJEMPLARMATERIAL = 312;
+	public static final int MOSTRAR_EJEMPLARMATERIAL_KO = 313;
+	public static final int MOSTRAR_EJEMPLARMATERIAL_OK = 314;
 
 	//Promocion
 	public static final int ALTA_PROMOCION = 350;
@@ -271,5 +275,6 @@ public class Evento {
 	public static final int MOSTRAR_CLASES_POR_SALA = 621;
 	public static final int MOSTRAR_CLASES_POR_SALA_OK = 622;
 	public static final int MOSTRAR_CLASES_POR_SALA_KO = 623;
+
 
 }

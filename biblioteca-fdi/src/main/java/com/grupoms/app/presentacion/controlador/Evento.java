@@ -217,6 +217,10 @@ public class Evento {
 	public static final int MOSTRAR_EJEMPLAR = 409;
 	public static final int MOSTRAR_EJEMPLAR_OK = 410;
 	public static final int MOSTRAR_EJEMPLAR_KO = 411;
+	
+	public static final int LISTAR_EJEMPLARES = 412;
+	public static final int LISTAR_EJEMPLARES_OK = 413;
+	public static final int LISTAR_EJEMPLARES_KO = 414;
 
 	// CLASE
 	public static final int ALTA_CLASE = 500;

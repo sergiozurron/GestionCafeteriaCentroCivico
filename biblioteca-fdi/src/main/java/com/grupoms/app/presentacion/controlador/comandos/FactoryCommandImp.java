@@ -3,6 +3,7 @@ package com.grupoms.app.presentacion.controlador.comandos;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.grupoms.app.presentacion.comandos.ListarEjemplarCommand;
 import com.grupoms.app.presentacion.comandos.ejemplarJPA.AltaEjemplarCommand;
 import com.grupoms.app.presentacion.comandos.ejemplarJPA.BajaEjemplarCommand;
 import com.grupoms.app.presentacion.comandos.ejemplarJPA.ModificarEjemplarCommand;
@@ -89,6 +90,7 @@ public class FactoryCommandImp extends FactoryCommand {
         commands.put(Evento.BAJA_EJEMPLAR, new BajaEjemplarCommand());
         commands.put(Evento.MODIFICAR_EJEMPLAR, new ModificarEjemplarCommand());
         commands.put(Evento.MOSTRAR_EJEMPLAR, new MostrarEjemplarCommand());
+        commands.put(Evento.LISTAR_EJEMPLARES, new ListarEjemplarCommand());
 
         
         
@@ -149,7 +151,9 @@ public class FactoryCommandImp extends FactoryCommand {
         views.put(Evento.BAJA_EJEMPLAR, FactoriaVistas.GUI_BAJA_EJEMPLAR);
         views.put(Evento.MODIFICAR_EJEMPLAR, FactoriaVistas.GUI_MODIFICAR_EJEMPLAR);
         views.put(Evento.MOSTRAR_EJEMPLAR, FactoriaVistas.GUI_MOSTRAR_EJEMPLAR);
+        views.put(Evento.LISTAR_EJEMPLARES, FactoriaVistas.GUI_LISTAR_EJEMPLAR);
     }
+    
     @Override
     public Command getCommand(Integer event) {
         return commands.get(event);

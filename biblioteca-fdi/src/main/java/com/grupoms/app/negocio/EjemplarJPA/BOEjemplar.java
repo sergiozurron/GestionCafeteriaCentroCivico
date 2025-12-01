@@ -8,8 +8,10 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.NamedQuery;
 
 @Entity
+@NamedQuery(name = "BOEjemplar.findAll", query = "SELECT e FROM BOEjemplar e")
 public class BOEjemplar {
 
 	@Id

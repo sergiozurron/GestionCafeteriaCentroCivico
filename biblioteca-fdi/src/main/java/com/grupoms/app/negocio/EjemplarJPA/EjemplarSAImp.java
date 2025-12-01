@@ -3,6 +3,7 @@ package com.grupoms.app.negocio.EjemplarJPA;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.grupoms.app.EntityManagerProvider;
 import com.grupoms.app.integracion.factoria.EntityManagerSingleton;
@@ -77,7 +78,7 @@ public class EjemplarSAImp implements EjemplarSA {
 	@Override
 	public Boolean modificarEjemplar(TEjemplar ejemplar) {
 		EntityManager em = EntityManagerProvider.getEntityManager();
-		
+
 		try {
 			em.getTransaction().begin();
 			BOEjemplar boEjemplar = em.find(BOEjemplar.class, ejemplar.getId());
@@ -86,9 +87,9 @@ public class EjemplarSAImp implements EjemplarSA {
 				em.getTransaction().rollback();
 				return false;
 			}
-			
+
 			BOMaterial boMaterial = em.find(BOMaterial.class, ejemplar.getIdMaterial());
-			
+
 			if (boMaterial == null || !boMaterial.getActivo()) {
 				em.getTransaction().rollback();
 				return false;
@@ -109,19 +110,27 @@ public class EjemplarSAImp implements EjemplarSA {
 	public TEjemplar mostrarEjemplar(Integer idEjemplar) {
 		EntityManager em = EntityManagerProvider.getEntityManager();
 
-		try {
-			BOEjemplar boEjemplar = em.find(BOEjemplar.class, idEjemplar);
+		BOEjemplar boEjemplar = em.find(BOEjemplar.class, idEjemplar);
 
-			if (boEjemplar == null || !boEjemplar.getActivo()) {
-				return null;
-			}
-
-			return EjemplarAssembler.toTransferObject(boEjemplar);
-		} catch (Exception e) {
-			e.printStackTrace();
+		if (boEjemplar == null || !boEjemplar.getActivo()) {
 			return null;
 		}
+
+		return EjemplarAssembler.toTransferObject(boEjemplar);
 	}
+
+	@Override
+	public List<TEjemplar> listarEjemplares() {
+		EntityManager em = EntityManagerProvider.getEntityManager();
+		
+		List<TEjemplar> ejemplares = em.createNamedQuery("BOEjemplar.findAll", BOEjemplar.class)
+				.getResultList()
+				.stream()
+				.map(EjemplarAssembler::toTransferObject)
+				.collect(Collectors.toList());
+		return ejemplares;
+	}
+	
 	@Override
 	public List<TEjemplar> listarEjemplaresPorMaterial(Integer idMaterial) {
 		EntityManager em = EntityManagerSingleton.getInstance().getEMF().createEntityManager();

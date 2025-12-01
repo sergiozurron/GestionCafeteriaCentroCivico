@@ -9,4 +9,5 @@ public interface EjemplarSA {
 	Boolean modificarEjemplar(TEjemplar ejemplar);
 	TEjemplar mostrarEjemplar(Integer idEjemplar);
 	List<TEjemplar> listarEjemplaresPorMaterial(Integer idMaterial); 
+	List<TEjemplar> listarEjemplares();
 }

@@ -13,6 +13,7 @@ import com.grupoms.app.presentacion.claseJPA.GUI_MostrarClase;
 import com.grupoms.app.presentacion.claseJPA.GUI_VincularEjemplarClase;
 import com.grupoms.app.presentacion.ejemplarJPA.GUI_AltaEjemplar;
 import com.grupoms.app.presentacion.ejemplarJPA.GUI_BajaEjemplar;
+import com.grupoms.app.presentacion.ejemplarJPA.GUI_ListarEjemplar;
 import com.grupoms.app.presentacion.ejemplarJPA.GUI_ModificarEjemplar;
 import com.grupoms.app.presentacion.ejemplarJPA.GUI_MostrarEjemplar;
 import com.grupoms.app.presentacion.materialJPA.GUI_AltaMaterial;
@@ -197,6 +198,7 @@ public class FactoriaVistas {
         vistas.put(GUI_BAJA_EJEMPLAR, new GUI_BajaEjemplar());
         vistas.put(GUI_MODIFICAR_EJEMPLAR, new GUI_ModificarEjemplar());
         vistas.put(GUI_MOSTRAR_EJEMPLAR, new GUI_MostrarEjemplar());
+        vistas.put(GUI_LISTAR_EJEMPLAR, new GUI_ListarEjemplar());
 
         vistas.put(GUI_ALTA_CLASE, new GUI_AltaClase());
         vistas.put(GUI_BAJA_CLASE, new GUI_BajaClase());

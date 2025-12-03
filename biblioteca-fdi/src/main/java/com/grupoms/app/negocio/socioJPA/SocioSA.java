@@ -12,7 +12,7 @@ public interface SocioSA {
 
     public Integer altaSocio(TSocio socio);
 
-    public Integer bajaSocio(Integer id);
+    public Integer bajaSocio(Integer id) throws Exception;
 
     public Integer modificarSocio(TSocio socio);
 
@@ -20,9 +20,16 @@ public interface SocioSA {
 
     public List<TSocio> listarSocios();
 
-    public List<TEjemplar> verEjemplaresPrestadosPorSocio(Integer id);
-
     public Pair<TSocio,List<TEjemplar>>  mostrarSocioYEjemplares(Integer id);
 
-    public Integer solicitarPrestamoEjemplar(Integer idSocio, Integer idEjemplar, LocalDate fecha);
+    public List<TSocio> mostrarSociosPorPromocin(Integer idPromocion);
+
+    public Integer solicitarEjemplar(Integer idSocio, Integer idEjemplar, LocalDate fechaFinal);
+
+    public Integer devolverEjemplar(Integer idSocio,Integer idEjemplar,LocalDate fechaDevolucion);
+
+    public Integer vincularPromocionASocio(Integer idSocio,Integer idPromocion);
+
+    public Integer desvincularPromocionASocio(Integer idSocio,Integer idPromocion);
+
 }

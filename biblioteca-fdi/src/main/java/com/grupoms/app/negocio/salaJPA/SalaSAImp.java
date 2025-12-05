@@ -21,7 +21,7 @@ public class SalaSAImp implements SalaSA{
 		BOSala salaExistente = null;
 		Integer id = -1;
 		
-		EntityManager em = EntityManagerSingleton.getInstance().getEMF().createEntityManager();
+		EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
 		EntityTransaction t = em.getTransaction();
 		
 		try {
@@ -60,7 +60,7 @@ public class SalaSAImp implements SalaSA{
 	@Override
 	public Integer bajaSala(Integer id) {
 		int res = -1;
-		EntityManager em = EntityManagerSingleton.getInstance().getEMF().createEntityManager();
+		EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
 		EntityTransaction t = em.getTransaction();
 		try {
 			t.begin();
@@ -92,7 +92,7 @@ public class SalaSAImp implements SalaSA{
 	@Override
 	public Integer modificarSala(TSala sala) {
 		Integer id = -1;
-		 EntityManager em = EntityManagerSingleton.getInstance().getEMF().createEntityManager();
+		 EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
 		 EntityTransaction t = em.getTransaction();
 		 t.begin();
 		 try {
@@ -119,7 +119,7 @@ public class SalaSAImp implements SalaSA{
 		if(id == null || id < 0)
 			return null;
 		
-		EntityManager em = EntityManagerSingleton.getInstance().getEMF().createEntityManager();
+		EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
 		BOSala sala = em.find(BOSala.class, id);
 		
 		if(sala == null) {
@@ -133,7 +133,7 @@ public class SalaSAImp implements SalaSA{
 
 	@Override
 	public List<TSala> listarSala() {
-		EntityManager em = EntityManagerSingleton.getInstance().getEMF().createEntityManager();
+		EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
 		EntityTransaction t = em.getTransaction();
 		t.begin();
 		
@@ -146,7 +146,7 @@ public class SalaSAImp implements SalaSA{
 	@Override
 	public Boolean vincularClaseASala(Integer idSala, Integer idClase) {
 	    boolean exito = false;
-	    EntityManager em = EntityManagerSingleton.getInstance().getEMF().createEntityManager();
+	    EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
 	    EntityTransaction t = em.getTransaction();
 	    
 	    try {
@@ -179,7 +179,7 @@ public class SalaSAImp implements SalaSA{
 	@Override
 	public Boolean desvincularClaseDeSala(Integer idSala, Integer idClase) {
 	    boolean exito = false;
-	    EntityManager em = EntityManagerSingleton.getInstance().getEMF().createEntityManager();
+	    EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
 	    EntityTransaction t = em.getTransaction();
 	    
 	    try {
@@ -209,7 +209,7 @@ public class SalaSAImp implements SalaSA{
 
 	@Override
 	public List<TClase> mostrarClasesPorSala(Integer idSala) {
-	    EntityManager em = EntityManagerSingleton.getInstance().getEMF().createEntityManager();
+	    EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
 	    EntityTransaction t = em.getTransaction();
 	    t.begin();
 	    

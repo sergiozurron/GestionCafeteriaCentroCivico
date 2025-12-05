@@ -5,18 +5,20 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-import com.grupoms.app.EntityManagerProvider;
+import com.grupoms.app.integracion.factoria.EntityManagerSingleton;
 import com.grupoms.app.negocio.EjemplarJPA.BOEjemplar;
 import com.grupoms.app.negocio.EjemplarJPA.EjemplarSAImp;
 import com.grupoms.app.negocio.EjemplarJPA.TEjemplar;
 import com.grupoms.app.negocio.materialJPA.BOLibro;
+import com.grupoms.app.negocio.materialJPA.BOMaterial;
 
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
 
 public class EjemplarSAImpTest {
 
 	EjemplarSAImp ejemplarSA = new EjemplarSAImp();
-	EntityManager em = EntityManagerProvider.getEntityManager();
+	EntityManagerFactory emf = EntityManagerSingleton.getEMF();
 	
 	@Test
 	void altaEjemplar_DeberiaCrearEjemplarYDevolverId() {
@@ -29,9 +31,7 @@ public class EjemplarSAImpTest {
 		libro.setTipoMaterial(1);
 		libro.setActivo(true);
 		
-		em.getTransaction().begin();
-		em.persist(libro);
-		em.getTransaction().commit();
+		crearMaterialPrueba(libro);
 		
 		TEjemplar ejemplar = new TEjemplar();
 		ejemplar.setIdMaterial(libro.getID());
@@ -43,9 +43,7 @@ public class EjemplarSAImpTest {
 		// THEN
 		assertTrue(idEjemplar > 0);
 		
-		em.getTransaction().begin();
-		BOEjemplar boEjemplar = em.find(BOEjemplar.class, idEjemplar);
-		em.getTransaction().commit();
+		BOEjemplar boEjemplar = buscarEjemplarPorId(idEjemplar);
 		
 		assertNotNull(boEjemplar);
 	}
@@ -75,9 +73,7 @@ public class EjemplarSAImpTest {
 		libro.setTipoMaterial(1);
 		libro.setActivo(false);
 		
-		em.getTransaction().begin();
-		em.persist(libro);
-		em.getTransaction().commit();
+		crearMaterialPrueba(libro);
 		
 		TEjemplar ejemplar = new TEjemplar();
 		ejemplar.setIdMaterial(libro.getID());
@@ -106,10 +102,8 @@ public class EjemplarSAImpTest {
 		ejemplar.setActivo(true);
 		ejemplar.setMaterial(libro);
 		
-		em.getTransaction().begin();
-		em.persist(libro);
-		em.persist(ejemplar);
-		em.getTransaction().commit();
+		crearMaterialPrueba(libro);
+		crearEjemplarPrueba(ejemplar);
 		
 		// WHEN
 		boolean resultado = ejemplarSA.bajaEjemplar(ejemplar.getId());
@@ -117,12 +111,10 @@ public class EjemplarSAImpTest {
 		// THEN
 		assertTrue(resultado);
 		
-		em.getTransaction().begin();
-		ejemplar = em.find(BOEjemplar.class, ejemplar.getId());
-		em.getTransaction().commit();
+		BOEjemplar ejemplarDesactivado = buscarEjemplarPorId(ejemplar.getId());
 		
-		assertNotNull(ejemplar);
-		assertTrue(!ejemplar.getActivo());
+		assertNotNull(ejemplarDesactivado);
+		assertTrue(!ejemplarDesactivado.getActivo());
 	}
 	
 	@Test
@@ -150,10 +142,8 @@ public class EjemplarSAImpTest {
 		ejemplar.setActivo(false);
 		ejemplar.setMaterial(libro);
 		
-		em.getTransaction().begin();
-		em.persist(libro);
-		em.persist(ejemplar);
-		em.getTransaction().commit();
+		crearMaterialPrueba(libro);
+		crearEjemplarPrueba(ejemplar);
 		
 		// WHEN
 		boolean resultado = ejemplarSA.bajaEjemplar(ejemplar.getId());
@@ -178,10 +168,8 @@ public class EjemplarSAImpTest {
 		ejemplar.setActivo(true);
 		ejemplar.setMaterial(libro);
 		
-		em.getTransaction().begin();
-		em.persist(libro);
-		em.persist(ejemplar);
-		em.getTransaction().commit();
+		crearMaterialPrueba(libro);
+		crearEjemplarPrueba(ejemplar);
 		
 		TEjemplar tEjemplar = new TEjemplar();
 		tEjemplar.setId(ejemplar.getId());
@@ -194,12 +182,10 @@ public class EjemplarSAImpTest {
 		// THEN
 		assertTrue(resultado);
 		
-		em.getTransaction().begin();
-		ejemplar = em.find(BOEjemplar.class, ejemplar.getId());
-		em.getTransaction().commit();
+		BOEjemplar ejemplarModificado = buscarEjemplarPorId(ejemplar.getId());
 		
-		assertNotNull(ejemplar);
-		assertTrue(ejemplar.getEstado().equals("Excelente"));
+		assertNotNull(ejemplarModificado);
+		assertTrue(ejemplarModificado.getEstado().equals("Excelente"));
 	}
 	
 	@Test
@@ -233,10 +219,8 @@ public class EjemplarSAImpTest {
 		ejemplar.setActivo(false);
 		ejemplar.setMaterial(libro);
 		
-		em.getTransaction().begin();
-		em.persist(libro);
-		em.persist(ejemplar);
-		em.getTransaction().commit();
+		crearMaterialPrueba(libro);
+		crearEjemplarPrueba(ejemplar);
 		
 		TEjemplar tEjemplar = new TEjemplar();
 		tEjemplar.setId(ejemplar.getId());
@@ -266,10 +250,8 @@ public class EjemplarSAImpTest {
 		ejemplar.setActivo(true);
 		ejemplar.setMaterial(libro);
 		
-		em.getTransaction().begin();
-		em.persist(libro);
-		em.persist(ejemplar);
-		em.getTransaction().commit();
+		crearMaterialPrueba(libro);
+		crearEjemplarPrueba(ejemplar);
 		
 		TEjemplar tEjemplar = new TEjemplar();
 		tEjemplar.setId(ejemplar.getId());
@@ -307,11 +289,9 @@ public class EjemplarSAImpTest {
 		ejemplar.setActivo(true);
 		ejemplar.setMaterial(libroActivo);
 		
-		em.getTransaction().begin();
-		em.persist(libroActivo);
-		em.persist(libroInactivo);
-		em.persist(ejemplar);
-		em.getTransaction().commit();
+		crearMaterialPrueba(libroActivo);
+		crearMaterialPrueba(libroInactivo);
+		crearEjemplarPrueba(ejemplar);
 		
 		TEjemplar tEjemplar = new TEjemplar();
 		tEjemplar.setId(ejemplar.getId());
@@ -323,6 +303,32 @@ public class EjemplarSAImpTest {
 		
 		// THEN
 		assertTrue(!resultado);
+	}
+	
+	void crearMaterialPrueba(BOMaterial material) {
+		EntityManager em = emf.createEntityManager();
+		em.getTransaction().begin();
+		em.persist(material);
+		em.getTransaction().commit();
+		em.close();
+	}
+	
+	void crearEjemplarPrueba(BOEjemplar ejemplar) {
+		EntityManager em = emf.createEntityManager();
+		em.getTransaction().begin();
+		em.persist(ejemplar);
+		em.getTransaction().commit();
+		em.close();
+	}
+	
+	BOEjemplar buscarEjemplarPorId(int id) {
+		EntityManager em = emf.createEntityManager();
+		BOEjemplar ejemplar = null;
+		em.getTransaction().begin();
+		ejemplar = em.find(BOEjemplar.class, id);
+		em.getTransaction().commit();
+		em.close();
+		return ejemplar;
 	}
 
 }

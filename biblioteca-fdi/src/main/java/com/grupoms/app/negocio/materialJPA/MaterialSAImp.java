@@ -20,7 +20,7 @@ public class MaterialSAImp implements MaterialSA{
 		BOPintura pintura=null;
 		BOLibro libro =null;
 		
-		EntityManager em = EntityManagerSingleton.getInstance().getEMF().createEntityManager();
+		EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
 		EntityTransaction t = em.getTransaction();
 		try {
 			t.begin();
@@ -69,7 +69,7 @@ public class MaterialSAImp implements MaterialSA{
 	
 	@Override
 	public Integer bajaMaterial(Integer id) throws Exception {
-	    EntityManager em = EntityManagerSingleton.getInstance().getEMF().createEntityManager();
+	    EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
 	    EntityTransaction t = em.getTransaction();
 	    try {
 	        t.begin();
@@ -100,7 +100,7 @@ public class MaterialSAImp implements MaterialSA{
 	@Override
 	public List<TMaterial> listarMateriales() {
 		//Empiezo la transaccion y creo el emf
-		EntityManager em = EntityManagerSingleton.getInstance().getEMF().createEntityManager();
+		EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
 		EntityTransaction t = em.getTransaction();
 		t.begin();
 		
@@ -130,7 +130,7 @@ public class MaterialSAImp implements MaterialSA{
 	@Override
 	public Integer modificarMaterial(TMaterial material) {
 	    Integer id = -1;
-	    EntityManager em = EntityManagerSingleton.getInstance().getEMF().createEntityManager();
+	    EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
 	    EntityTransaction t = em.getTransaction();
 	    t.begin();
 	    try {
@@ -175,7 +175,7 @@ public class MaterialSAImp implements MaterialSA{
 	public TMaterial mostrarMaterial(Integer id) {
 		if(id==null ||id<0)return null;
 		//Empiezo la transacccion
-		EntityManager em = EntityManagerSingleton.getInstance().getEMF().createEntityManager();
+		EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
 		BOMaterial material = em.find(BOMaterial.class, id);
 		if(material==null) {
 			em.close();

@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.grupoms.app.negocio.assembler.ClaseAssembler;
-import com.grupoms.app.EntityManagerProvider;
 import com.grupoms.app.integracion.factoria.EntityManagerSingleton;
 import com.grupoms.app.negocio.EjemplarJPA.BOEjemplar;
 
@@ -21,7 +20,7 @@ public class ClaseSAImp implements ClaseSA {
 		BOClase claseExistente = null;
 		Integer id = -1;
 
-		EntityManager em = EntityManagerSingleton.getInstance().getEMF().createEntityManager();
+		EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
 		EntityTransaction t = em.getTransaction();
 
 		try {
@@ -69,7 +68,7 @@ public class ClaseSAImp implements ClaseSA {
 	public Integer bajaClase(Integer id) {
 		int res = -1;
 
-		EntityManager em = EntityManagerSingleton.getInstance().getEMF().createEntityManager();
+		EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
 		EntityTransaction t = em.getTransaction();
 
 		try {
@@ -99,7 +98,7 @@ public class ClaseSAImp implements ClaseSA {
 	public Integer modificarClase(TClase clase) {
 		Integer id = -1;
 
-		EntityManager em = EntityManagerSingleton.getInstance().getEMF().createEntityManager();
+		EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
 		EntityTransaction t = em.getTransaction();
 
 		try {
@@ -137,7 +136,7 @@ public class ClaseSAImp implements ClaseSA {
 		if (id == null || id < 0)
 			return null;
 
-		EntityManager em = EntityManagerSingleton.getInstance().getEMF().createEntityManager();
+		EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
 		BOClase clase = em.find(BOClase.class, id);
 
 		if (clase == null) {
@@ -154,7 +153,7 @@ public class ClaseSAImp implements ClaseSA {
 
 	@Override
 	public List<TClase> listarClase() {
-		EntityManager em = EntityManagerSingleton.getInstance().getEMF().createEntityManager();
+		EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
 		EntityTransaction t = em.getTransaction();
 
 		t.begin();
@@ -177,7 +176,7 @@ public class ClaseSAImp implements ClaseSA {
 	public Integer vincularEjemplarAClase(Integer idClase, Integer idEjemplar) {
 		int res = -1;
 
-		EntityManager em = EntityManagerProvider.getEntityManager();
+		EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
 		EntityTransaction t = em.getTransaction();
 
 		try {
@@ -195,6 +194,8 @@ public class ClaseSAImp implements ClaseSA {
 		} catch (Exception e) {
 			if (t.isActive())
 				t.rollback();
+		} finally {
+			em.close();
 		}
 
 		return res;
@@ -206,7 +207,7 @@ public class ClaseSAImp implements ClaseSA {
 	public Integer desvincularEjemplarDeClase(Integer idClase, Integer idEjemplar) {
 		int res = -1;
 
-		EntityManager em = EntityManagerProvider.getEntityManager();
+		EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
 		EntityTransaction t = em.getTransaction();
 
 		try {
@@ -225,6 +226,8 @@ public class ClaseSAImp implements ClaseSA {
 			if (t.isActive())
 				t.rollback();
 			// Optionally log
+		} finally {
+			em.close();
 		}
 
 		return res;

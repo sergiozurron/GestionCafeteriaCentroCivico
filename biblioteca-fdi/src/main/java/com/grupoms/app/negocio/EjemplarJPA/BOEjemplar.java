@@ -17,6 +17,7 @@ import jakarta.persistence.Version;
 
 @Entity
 @NamedQuery(name = "BOEjemplar.findAll", query = "SELECT e FROM BOEjemplar e")
+@NamedQuery(name = "BOEjemplar.findByMaterialId", query = "SELECT e FROM BOEjemplar e WHERE e.material.id = :materialId AND e.material.activo = true")
 public class BOEjemplar {
 
 	@Id

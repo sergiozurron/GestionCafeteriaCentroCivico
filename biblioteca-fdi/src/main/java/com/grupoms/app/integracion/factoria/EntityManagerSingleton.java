@@ -4,16 +4,12 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 
 
-public abstract class EntityManagerSingleton {
+public class EntityManagerSingleton {
 
-    private static EntityManagerSingleton instance;
+	private static final EntityManagerFactory em = Persistence.createEntityManagerFactory("CentroCivicoJPA");
 
-    public synchronized static EntityManagerSingleton getInstance(){
-        if(instance == null)
-            instance = new EntityManagerSingletonImp(Persistence.createEntityManagerFactory("CentroCivicoJPA"));
-        return instance;
-    }
-
-    public abstract EntityManagerFactory getEMF();
+	public static EntityManagerFactory getEMF() {
+		return em;
+	}
     
 }

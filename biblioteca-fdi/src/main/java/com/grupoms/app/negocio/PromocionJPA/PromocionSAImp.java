@@ -15,7 +15,7 @@ public class PromocionSAImp implements PromocionSA {
         BOPromocion promocionExistente = null;
 		Integer id = -1;
 
-        EntityManager em = EntityManagerSingleton.getInstance().getEMF().createEntityManager();
+        EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
 		EntityTransaction t = em.getTransaction();
 
         try {
@@ -53,7 +53,7 @@ public class PromocionSAImp implements PromocionSA {
 
     public Integer bajaPromocion(Integer id) {
         int res = -1;
-		EntityManager em = EntityManagerSingleton.getInstance().getEMF().createEntityManager();
+		EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
 		EntityTransaction t = em.getTransaction();
 		try {
             t.begin();
@@ -77,7 +77,7 @@ public class PromocionSAImp implements PromocionSA {
 
     public Integer modificarPromocion(TPromocion promocion) {
         Integer id = -1;
-	    EntityManager em = EntityManagerSingleton.getInstance().getEMF().createEntityManager();
+	    EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
 	    EntityTransaction t = em.getTransaction();
 	    t.begin();
 	    try {
@@ -104,7 +104,7 @@ public class PromocionSAImp implements PromocionSA {
     public TPromocion mostrarPromocion(Integer id) {
         if(id==null ||id<0)return null;
 		//Empiezo la transacccion
-		EntityManager em = EntityManagerSingleton.getInstance().getEMF().createEntityManager();
+		EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
         BOPromocion promocion = em.find(BOPromocion.class, id);
         if (promocion == null) {
             em.close();
@@ -115,7 +115,7 @@ public class PromocionSAImp implements PromocionSA {
     }
 
     public List<TPromocion> listarPromociones() {
-        EntityManager em = EntityManagerSingleton.getInstance().getEMF().createEntityManager();
+        EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
 		EntityTransaction t = em.getTransaction();
 		t.begin();
         final TypedQuery<BOPromocion> query = em.createNamedQuery("com.grupoms.app.negocio.PromocionJPA.BOPromocion.findAll", BOPromocion.class);
@@ -130,7 +130,7 @@ public class PromocionSAImp implements PromocionSA {
     }
 
     public List<TPromocion> VerPromocionesPorSocio(Integer idSocio) {
-        EntityManager em = EntityManagerSingleton.getInstance().getEMF().createEntityManager();
+        EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
         EntityTransaction t = em.getTransaction();
         t.begin();
         final TypedQuery<BOPromocion> query = em.createNamedQuery("com.grupoms.app.negocio.PromocionJPA.BOPromocion.findBySocio", BOPromocion.class);

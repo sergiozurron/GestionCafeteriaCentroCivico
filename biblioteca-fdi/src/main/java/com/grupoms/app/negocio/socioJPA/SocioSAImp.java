@@ -23,7 +23,7 @@ public class SocioSAImp implements SocioSA{
         BOAdulto adulto=null;
         BOInfantil infantil=null;
 
-        EntityManager em = EntityManagerSingleton.getInstance().getEMF().createEntityManager();
+        EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
         EntityTransaction t = em.getTransaction();
         try{
             t.begin();
@@ -69,7 +69,7 @@ public class SocioSAImp implements SocioSA{
 
     @Override
     public Integer bajaSocio(Integer id) throws Exception {
-        EntityManager em = EntityManagerSingleton.getInstance().getEMF().createEntityManager();
+        EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
         EntityTransaction t = em.getTransaction();
         try{
             t.begin();
@@ -100,7 +100,7 @@ public class SocioSAImp implements SocioSA{
     @Override
     public Integer modificarSocio(TSocio socio) {
         Integer id = -1;
-        EntityManager em = EntityManagerSingleton.getInstance().getEMF().createEntityManager();
+        EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
         EntityTransaction t = em.getTransaction();
         t.begin();
         try {
@@ -144,7 +144,7 @@ public class SocioSAImp implements SocioSA{
     public TSocio mostrarSocio(Integer id) {
         if(id==null ||id<0)return null;
         //Empiezo la transacccion
-        EntityManager em = EntityManagerSingleton.getInstance().getEMF().createEntityManager();
+        EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
         BOSocio socio = em.find(BOSocio.class, id);
         if(socio==null) {
             em.close();
@@ -163,7 +163,7 @@ public class SocioSAImp implements SocioSA{
 
     @Override
     public List<TSocio> listarSocios() {
-        EntityManager em = EntityManagerSingleton.getInstance().getEMF().createEntityManager();
+        EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
         EntityTransaction t = em.getTransaction();
         t.begin();
 

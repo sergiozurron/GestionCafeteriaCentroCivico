@@ -2,7 +2,9 @@ package com.grupoms.app.negocio.ClaseJPA;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
+import com.grupoms.app.negocio.EjemplarJPA.BOEjemplar;
 import com.grupoms.app.negocio.salaJPA.BOSala;
 
 import jakarta.persistence.Entity;
@@ -13,6 +15,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
@@ -20,7 +23,6 @@ import jakarta.persistence.PrimaryKeyJoinColumn;
 import jakarta.persistence.Version;
 
 
-@Inheritance(strategy = InheritanceType.JOINED)
 @Entity
 @NamedQueries({
     @NamedQuery(
@@ -36,7 +38,6 @@ import jakarta.persistence.Version;
             query = "SELECT c FROM BOSala s JOIN s.clases c WHERE s.id = :idSala AND c.activo = true"
         )
 })
-@PrimaryKeyJoinColumn(referencedColumnName = "id")
 public class BOClase implements Serializable {
 
     private static final long serialVersionUID = 0L;
@@ -61,6 +62,9 @@ public class BOClase implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "sala_id")
     private BOSala sala;
+    
+    @ManyToMany
+    private List<BOEjemplar> ejemplares;
     
     public BOClase() { }
 
@@ -119,4 +123,13 @@ public class BOClase implements Serializable {
     public void setVersion(int version) {
         this.version = version;
     }
+    
+    public void anyadirEjemplar(BOEjemplar ejemplar) {
+    	ejemplares.add(ejemplar);
+    }
+    
+    public void eliminarEjemplar(BOEjemplar ejemplar) {
+    	ejemplares.remove(ejemplar);
+    }
+    
 }

@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.grupoms.app.presentacion.comandos.ListarEjemplarCommand;
+import com.grupoms.app.presentacion.comandos.claseJPA.DesvincularEjemplarDeClaseCommand;
+import com.grupoms.app.presentacion.comandos.claseJPA.VincularEjemplarAClaseCommand;
 import com.grupoms.app.presentacion.comandos.ejemplarJPA.AltaEjemplarCommand;
 import com.grupoms.app.presentacion.comandos.ejemplarJPA.BajaEjemplarCommand;
 import com.grupoms.app.presentacion.comandos.ejemplarJPA.ModificarEjemplarCommand;
@@ -91,7 +93,10 @@ public class FactoryCommandImp extends FactoryCommand {
         commands.put(Evento.MODIFICAR_EJEMPLAR, new ModificarEjemplarCommand());
         commands.put(Evento.MOSTRAR_EJEMPLAR, new MostrarEjemplarCommand());
         commands.put(Evento.LISTAR_EJEMPLARES, new ListarEjemplarCommand());
-
+        
+        // Clase
+        commands.put(Evento.VINCULAR_EJEMPLAR_CLASE, new VincularEjemplarAClaseCommand());
+        commands.put(Evento.DESVINCULAR_EJEMPLAR_CLASE, new DesvincularEjemplarDeClaseCommand());
         
         
         //VISTAS
@@ -152,6 +157,9 @@ public class FactoryCommandImp extends FactoryCommand {
         views.put(Evento.MODIFICAR_EJEMPLAR, FactoriaVistas.GUI_MODIFICAR_EJEMPLAR);
         views.put(Evento.MOSTRAR_EJEMPLAR, FactoriaVistas.GUI_MOSTRAR_EJEMPLAR);
         views.put(Evento.LISTAR_EJEMPLARES, FactoriaVistas.GUI_LISTAR_EJEMPLAR);
+        
+        views.put(Evento.VINCULAR_EJEMPLAR_CLASE, FactoriaVistas.GUI_VINCULAR_EJEMPLAR_CLASE);
+        views.put(Evento.DESVINCULAR_EJEMPLAR_CLASE, FactoriaVistas.GUI_DESVINCULAR_EJEMPLAR_CLASE);
     }
     
     @Override

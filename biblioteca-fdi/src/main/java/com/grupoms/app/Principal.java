@@ -123,8 +123,6 @@ public class Principal extends JFrame {
             {"Listar Sala",FactoriaVistas.GUI_LISTAR_SALA},
             {"Mostrar Sala",FactoriaVistas.GUI_MOSTRAR_SALA},
             {"Modificar Sala",FactoriaVistas.GUI_MODIFICAR_SALA},
-            {"Vincular Sala",FactoriaVistas.GUI_VINCULAR_CLASE_SALA},
-            {"Desvincular Sala",FactoriaVistas.GUI_DESVINCULAR_CLASE_SALA},
             {"Mostrar Clases por Sala",FactoriaVistas.GUI_MOSTRAR_CLASES_POR_SALA}
     }));
 

@@ -11,14 +11,51 @@ import com.grupoms.app.presentacion.comandos.ejemplarJPA.BajaEjemplarCommand;
 import com.grupoms.app.presentacion.comandos.ejemplarJPA.ModificarEjemplarCommand;
 import com.grupoms.app.presentacion.comandos.ejemplarJPA.MostrarEjemplarCommand;
 import com.grupoms.app.presentacion.comandos.ejemplarJPA.MostrarEjemplaresPorMaterialCommand;
-import com.grupoms.app.presentacion.comandos.materialJPA.*;
+import com.grupoms.app.presentacion.comandos.materialJPA.AltaMaterialCommand;
+import com.grupoms.app.presentacion.comandos.materialJPA.BajaMaterialCommand;
+import com.grupoms.app.presentacion.comandos.materialJPA.ListarMaterialCommand;
+import com.grupoms.app.presentacion.comandos.materialJPA.ModificarMaterialCommand;
+import com.grupoms.app.presentacion.comandos.materialJPA.MostrarMaterialCommand;
+import com.grupoms.app.presentacion.comandos.salaJPA.AltaSalaCommand;
+import com.grupoms.app.presentacion.comandos.salaJPA.BajaSalaCommand;
+import com.grupoms.app.presentacion.comandos.salaJPA.ListarSalasCommand;
+import com.grupoms.app.presentacion.comandos.salaJPA.ModificarSalaCommand;
+import com.grupoms.app.presentacion.comandos.salaJPA.MostrarSalaCommand;
 import com.grupoms.app.presentacion.controlador.Evento;
-import com.grupoms.app.presentacion.controlador.comandos.ingrediente.*;
-import com.grupoms.app.presentacion.controlador.comandos.mesa.*;
-import com.grupoms.app.presentacion.controlador.comandos.pedido.*;
-import com.grupoms.app.presentacion.controlador.comandos.empleado.*;
-import com.grupoms.app.presentacion.controlador.comandos.producto.*;
-import com.grupoms.app.presentacion.controlador.comandos.proveedor.*;
+import com.grupoms.app.presentacion.controlador.comandos.empleado.AltaEmpleadoCommand;
+import com.grupoms.app.presentacion.controlador.comandos.empleado.BajaEmpleadoCommand;
+import com.grupoms.app.presentacion.controlador.comandos.empleado.ModificarEmpleadoCommand;
+import com.grupoms.app.presentacion.controlador.comandos.empleado.MostrarEmpleadoCommand;
+import com.grupoms.app.presentacion.controlador.comandos.empleado.MostrarListaEmpleadosCommand;
+import com.grupoms.app.presentacion.controlador.comandos.ingrediente.AltaIngredienteCommand;
+import com.grupoms.app.presentacion.controlador.comandos.ingrediente.BajaIngredienteCommand;
+import com.grupoms.app.presentacion.controlador.comandos.ingrediente.ListarIngredientesPorProductoCommand;
+import com.grupoms.app.presentacion.controlador.comandos.ingrediente.ListarIngredientesPorProveedorCommand;
+import com.grupoms.app.presentacion.controlador.comandos.ingrediente.ModificarIngredienteCommand;
+import com.grupoms.app.presentacion.controlador.comandos.ingrediente.MostrarIngredienteCommand;
+import com.grupoms.app.presentacion.controlador.comandos.ingrediente.MostrarListaIngredientes;
+import com.grupoms.app.presentacion.controlador.comandos.mesa.AltaMesaCommand;
+import com.grupoms.app.presentacion.controlador.comandos.mesa.BajaMesaCommand;
+import com.grupoms.app.presentacion.controlador.comandos.mesa.ModificarMesaCommand;
+import com.grupoms.app.presentacion.controlador.comandos.mesa.MostrarListaMesasCommand;
+import com.grupoms.app.presentacion.controlador.comandos.mesa.MostrarMesaCommand;
+import com.grupoms.app.presentacion.controlador.comandos.pedido.AltaOrdenCommand;
+import com.grupoms.app.presentacion.controlador.comandos.pedido.AltaPedidoCommand;
+import com.grupoms.app.presentacion.controlador.comandos.pedido.ConfirmarPedidoCommand;
+import com.grupoms.app.presentacion.controlador.comandos.pedido.DevolverPedidoCommand;
+import com.grupoms.app.presentacion.controlador.comandos.pedido.ListarPedidoCommand;
+import com.grupoms.app.presentacion.controlador.comandos.pedido.ModificarPedidoCommand;
+import com.grupoms.app.presentacion.controlador.comandos.pedido.MostrarPedidoCommand;
+import com.grupoms.app.presentacion.controlador.comandos.producto.AltaProductoCommand;
+import com.grupoms.app.presentacion.controlador.comandos.producto.BajaProductoCommand;
+import com.grupoms.app.presentacion.controlador.comandos.producto.ModificarProductoCommand;
+import com.grupoms.app.presentacion.controlador.comandos.producto.MostrarListaProductosCommand;
+import com.grupoms.app.presentacion.controlador.comandos.producto.MostrarProductoCommand;
+import com.grupoms.app.presentacion.controlador.comandos.proveedor.AltaProveedorCommand;
+import com.grupoms.app.presentacion.controlador.comandos.proveedor.BajaProveedorCommand;
+import com.grupoms.app.presentacion.controlador.comandos.proveedor.ModificarProveedorCommand;
+import com.grupoms.app.presentacion.controlador.comandos.proveedor.MostrarListaProveedoresCommand;
+import com.grupoms.app.presentacion.controlador.comandos.proveedor.MostrarProveedorCommand;
 import com.grupoms.app.presentacion.factoria.FactoriaVistas;
 
 public class FactoryCommandImp extends FactoryCommand {
@@ -98,6 +135,12 @@ public class FactoryCommandImp extends FactoryCommand {
         commands.put(Evento.VINCULAR_EJEMPLAR_CLASE, new VincularEjemplarAClaseCommand());
         commands.put(Evento.DESVINCULAR_EJEMPLAR_CLASE, new DesvincularEjemplarDeClaseCommand());
         
+        //Sala
+        commands.put(Evento.ALTA_SALA, new AltaSalaCommand());
+        commands.put(Evento.BAJA_SALA, new BajaSalaCommand());
+        commands.put(Evento.MODIFICAR_SALA, new ModificarSalaCommand());
+        commands.put(Evento.MOSTRAR_SALA, new MostrarSalaCommand());
+        commands.put(Evento.LISTAR_SALAS, new ListarSalasCommand());        
         
         //VISTAS
         views.put(Evento.MOSTRAR_PEDIDO, FactoriaVistas.GUI_MOSTRAR_PEDIDO);

@@ -30,12 +30,9 @@ import com.grupoms.app.presentacion.promocionJPA.GUI_MostrarPromocion;
 import com.grupoms.app.presentacion.promocionJPA.GUI_VerPromocionesPorSocio;
 import com.grupoms.app.presentacion.salaJPA.GUI_AltaSala;
 import com.grupoms.app.presentacion.salaJPA.GUI_BajaSala;
-import com.grupoms.app.presentacion.salaJPA.GUI_DesvincularClaseSala;
 import com.grupoms.app.presentacion.salaJPA.GUI_ListarSala;
 import com.grupoms.app.presentacion.salaJPA.GUI_ModificarSala;
-import com.grupoms.app.presentacion.salaJPA.GUI_MostrarClasesPorSala;
 import com.grupoms.app.presentacion.salaJPA.GUI_MostrarSala;
-import com.grupoms.app.presentacion.salaJPA.GUI_VincularClaseSala;
 
 public class FactoriaVistas {
 
@@ -113,10 +110,8 @@ public class FactoriaVistas {
     public static final String GUI_LISTAR_SALA = "GUI_ListarSala";
     public static final String GUI_MOSTRAR_SALA = "GUI_MostrarSala";
     public static final String GUI_MODIFICAR_SALA = "GUI_ModificarSala";
-
-    public static final String GUI_VINCULAR_CLASE_SALA = "GUI_VincularClaseSala";
-    public static final String GUI_DESVINCULAR_CLASE_SALA = "GUI_DesvincularClaseSala";
     public static final String GUI_MOSTRAR_CLASES_POR_SALA = "GUI_MostrarClasesPorSala";
+    
 	public static final String GUI_LISTAR_EJEMPLARESMATERIAL = "GUI_ListarEjemplaresMaterial";
 	public static final String GUI_BAJA_MATERIAL = "GUI_BajaMaterial";
 
@@ -213,9 +208,6 @@ public class FactoriaVistas {
         vistas.put(GUI_MODIFICAR_SALA, new GUI_ModificarSala());
         vistas.put(GUI_LISTAR_SALA, new GUI_ListarSala());
         vistas.put(GUI_MOSTRAR_SALA, new GUI_MostrarSala());
-        vistas.put(GUI_VINCULAR_CLASE_SALA, new GUI_VincularClaseSala());
-        vistas.put(GUI_DESVINCULAR_CLASE_SALA, new GUI_DesvincularClaseSala());
-        vistas.put(GUI_MOSTRAR_CLASES_POR_SALA, new GUI_MostrarClasesPorSala());
     }
 
     public static FactoriaVistas getInstance() {

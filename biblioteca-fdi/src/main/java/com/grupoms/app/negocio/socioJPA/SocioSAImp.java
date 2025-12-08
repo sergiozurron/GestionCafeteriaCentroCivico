@@ -1,6 +1,7 @@
 package com.grupoms.app.negocio.socioJPA;
 
 import com.grupoms.app.integracion.factoria.EntityManagerSingleton;
+import com.grupoms.app.negocio.ClaseJPA.BOClase;
 import com.grupoms.app.negocio.EjemplarJPA.BOEjemplar;
 import com.grupoms.app.negocio.EjemplarJPA.TEjemplar;
 import com.grupoms.app.negocio.PromocionJPA.BOPromocion;
@@ -83,7 +84,7 @@ public class SocioSAImp implements SocioSA{
                 throw new Exception("El socio no existe o ya está inactivo.");
             }
 
-            if (!socio.getEjemplares().isEmpty()) {
+            if (!socio.getPrestamo().isEmpty()) {
                 t.rollback();
                 throw new Exception("Elimine primero los ejemplares asociados a este socio.");
             }
@@ -182,7 +183,7 @@ public class SocioSAImp implements SocioSA{
                         return SocioAssembler.entityToTransfer(bo); // fallback
                 })
                 .collect(Collectors.toList());
-        
+
         t.commit();
 
         //cierro el em
@@ -192,7 +193,7 @@ public class SocioSAImp implements SocioSA{
 
     @Override
     public Pair<TSocio, List<TEjemplar>> mostrarSocioYEjemplares(Integer idSocio) {
-        EntityManager em = EntityManagerSingleton.getInstance().getEMF().createEntityManager();
+        EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
         EntityTransaction t = em.getTransaction();
         t.begin();
         TSocio socio=mostrarSocio(idSocio);
@@ -211,7 +212,7 @@ public class SocioSAImp implements SocioSA{
 
     @Override
     public List<TSocio> mostrarSociosPorPromocion(Integer idPromocion) {
-        EntityManager em = EntityManagerSingleton.getInstance().getEMF().createEntityManager();
+        EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
         EntityTransaction t = em.getTransaction();
         List<TSocio> lista = new ArrayList<>();
         try {
@@ -237,35 +238,7 @@ public class SocioSAImp implements SocioSA{
 
     @Override
     public Integer solicitarEjemplar(Integer idSocio, Integer idEjemplar, LocalDate fechaFinal) {
-        EntityManager em = EntityManagerSingleton.getInstance().getEMF().createEntityManager();
-        EntityTransaction t = em.getTransaction();
-        Integer res=-1;
-        try {
-            t.begin();
-
-            BOSocio s = em.find(BOSocio.class, idSocio);
-            BOEjemplar e = em.find(BOEjemplar.class, idEjemplar);
-
-            if (s != null && s.getActivo() && e != null && e.getActivo()) {
-
-                if (!s.getEjemplares().contains(e)) {
-                    s.aniadirEjemplares(e);
-
-                    res=1;
-                }
-            }
-
-            t.commit();
-
-        } catch (Exception e) {
-            if (t.isActive())
-                t.rollback();
-            e.printStackTrace();
-        } finally {
-            em.close();
-        }
-
-        return res;
+        return 0;
     }
 
     @Override
@@ -275,12 +248,62 @@ public class SocioSAImp implements SocioSA{
 
     @Override
     public Integer vincularPromocionASocio(Integer idSocio, Integer idPromocion) {
-        return 0;
+        int res = -1;
+
+        EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
+        EntityTransaction t = em.getTransaction();
+
+        try {
+            t.begin();
+
+            BOSocio socio = em.find(BOSocio.class, idSocio);
+            BOPromocion promocion = em.find(BOPromocion.class, idPromocion);
+
+            if (socio != null && socio.getActivo() && promocion != null && promocion.getActivo()) {
+                if(socio.getPromocions().contains(promocion))throw new Exception("El socio ya tiene esta promoción.");
+                socio.anyadirPromocion(promocion);
+                res = 1;
+            }
+
+            t.commit();
+        } catch (Exception e) {
+            if (t.isActive())
+                t.rollback();
+        } finally {
+            em.close();
+        }
+
+        return res;
     }
 
     @Override
     public Integer desvincularPromocionASocio(Integer idSocio, Integer idPromocion) {
-        return 0;
+        int res = -1;
+
+        EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
+        EntityTransaction t = em.getTransaction();
+
+        try {
+            t.begin();
+
+            BOSocio socio = em.find(BOSocio.class, idSocio);
+            BOPromocion promocion = em.find(BOPromocion.class, idPromocion);
+
+            if (socio != null && socio.getActivo() && promocion != null && promocion.getActivo()) {
+                if (!socio.getPromocions().contains(promocion))
+                    throw new Exception("El socio no tiene esta promoción.");
+                socio.eliminarPromocion(promocion);
+                res = 1;
+            }
+
+            t.commit();
+        } catch (Exception e) {
+            if (t.isActive())
+                t.rollback();
+        } finally {
+            em.close();
+        }
+        return res;
     }
 
 

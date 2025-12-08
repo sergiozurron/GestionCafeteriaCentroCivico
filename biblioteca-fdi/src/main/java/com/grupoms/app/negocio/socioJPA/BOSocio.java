@@ -1,6 +1,7 @@
 package com.grupoms.app.negocio.socioJPA;
 
 import com.grupoms.app.negocio.PromocionJPA.BOPromocion;
+import com.grupoms.app.negocio.PromocionJPA.TPromocion;
 import com.grupoms.app.negocio.prestamoJPA.BOPrestamo;
 import jakarta.persistence.*;
 
@@ -39,7 +40,7 @@ public class BOSocio implements Serializable {
     @OneToMany(mappedBy = "socio")
     private List<BOPrestamo> socios;
 
-    @OneToMany(mappedBy = "socio")
+    @ManyToMany
     private List<BOPromocion> promocions;
 
     public BOSocio(TSocio socio) {
@@ -88,9 +89,23 @@ public class BOSocio implements Serializable {
         return activo;
     }
 
-    public List<BOPromocion> getPromocions(){return promocions;}
+    public void eliminarPromocion(BOPromocion pro){
+        promocions.remove(pro);
+    }
 
-    public void setPromocions(List<BOPromocion> promocions) {
-        this.promocions = promocions;
+    public void anyadirPromocion(BOPromocion pro) {
+        promocions.add(pro);
+    }
+
+    public List<BOPromocion> getPromocions() {
+        return promocions;
+    }
+
+    public List<BOPrestamo> getPrestamo() {
+        return socios;
+    }
+
+    public void setPrestamo(List<BOPrestamo> socios) {
+        this.socios = socios;
     }
 }

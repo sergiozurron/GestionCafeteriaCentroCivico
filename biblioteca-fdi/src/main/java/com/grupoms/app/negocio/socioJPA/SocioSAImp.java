@@ -1,7 +1,6 @@
 package com.grupoms.app.negocio.socioJPA;
 
 import com.grupoms.app.integracion.factoria.EntityManagerSingleton;
-import com.grupoms.app.negocio.ClaseJPA.BOClase;
 import com.grupoms.app.negocio.EjemplarJPA.BOEjemplar;
 import com.grupoms.app.negocio.EjemplarJPA.TEjemplar;
 import com.grupoms.app.negocio.PromocionJPA.BOPromocion;

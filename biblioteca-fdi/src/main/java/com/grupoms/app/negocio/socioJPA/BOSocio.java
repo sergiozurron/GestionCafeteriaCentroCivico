@@ -1,8 +1,7 @@
 package com.grupoms.app.negocio.socioJPA;
 
-import com.grupoms.app.negocio.EjemplarJPA.BOEjemplar;
 import com.grupoms.app.negocio.PromocionJPA.BOPromocion;
-import com.grupoms.app.negocio.materialJPA.TMaterial;
+import com.grupoms.app.negocio.prestamoJPA.BOPrestamo;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -11,6 +10,8 @@ import java.util.List;
 @Inheritance(strategy= InheritanceType.JOINED)
 @Entity
 @NamedQueries({
+        @NamedQuery(name = "com.grupoms.app.negocio.socioJPA.BOSocio.findByName",
+                query = "SELECT s FROM BOSocio s WHERE s.nombreYapellido = :nombre"),
         @NamedQuery(name="com.grupoms.app.negocio.socioJPA.BOSocio.findByType",
                 query="SELECT s FROM BOSocio s WHERE s.tipoSocio = :tipo"),
         @NamedQuery(name="com.grupoms.app.negocio.socioJPA.BOSocio.findAll",
@@ -33,8 +34,10 @@ public class BOSocio implements Serializable {
     @Version
     private int version;
 
+
+
     @OneToMany(mappedBy = "socio")
-    private List<BOEjemplar> ejemplares;
+    private List<BOPrestamo> socios;
 
     @OneToMany(mappedBy = "socio")
     private List<BOPromocion> promocions;
@@ -85,9 +88,9 @@ public class BOSocio implements Serializable {
         return activo;
     }
 
-
-    public List<BOEjemplar> getEjemplares() {
-        return ejemplares;
-    }
     public List<BOPromocion> getPromocions(){return promocions;}
+
+    public void setPromocions(List<BOPromocion> promocions) {
+        this.promocions = promocions;
+    }
 }

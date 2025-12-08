@@ -87,6 +87,6 @@ public class BOPromocion implements Serializable{
     }
 
     public List<BOSocio> getSocios() {
-		return null;
+		return socios;
 	}
 }

@@ -19,7 +19,7 @@ public class SocioAssembler {
 
 
     // Convierte campos comunes DTO → BO
-    protected static BOSocio transferToEntity(TSocio dto) {
+    public static BOSocio transferToEntity(TSocio dto) {
         BOSocio bo = new BOSocio();
         bo.setID(dto.getId());
         bo.setNombreYapellido(dto.getNombreYapellido());

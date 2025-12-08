@@ -14,6 +14,10 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.Version;
+import com.grupoms.app.negocio.prestamoJPA.BOPrestamo;
+import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 @NamedQuery(name = "BOEjemplar.findAll", query = "SELECT e FROM BOEjemplar e")
@@ -30,9 +34,12 @@ public class BOEjemplar {
 	private BOMaterial material;
 	@ManyToMany(mappedBy = "ejemplares")
 	private List<BOClase> clases;
-	
+
 	@Version
 	private int version;
+
+	@OneToMany(mappedBy = "ejemplar")
+	private List<BOPrestamo> ejemplares;
 
 	public Integer getId() {
 		return id;
@@ -65,5 +72,6 @@ public class BOEjemplar {
 	public void setMaterial(BOMaterial material) {
 		this.material = material;		
 	}
+
 
 }

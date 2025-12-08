@@ -18,7 +18,7 @@ public class AdultoAssembler extends SocioAssembler{
 
 
     // Convierte campos comunes DTO → BO
-    protected static BOAdulto toBO(TAdulto dto) {
+    public static BOAdulto toBO(TAdulto dto) {
         BOAdulto bo = new BOAdulto();
         bo.setID(dto.getId());
         bo.setNombreYapellido(dto.getNombreYapellido());

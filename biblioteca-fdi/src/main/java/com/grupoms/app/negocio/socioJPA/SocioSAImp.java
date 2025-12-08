@@ -1,16 +1,18 @@
 package com.grupoms.app.negocio.socioJPA;
 
 import com.grupoms.app.integracion.factoria.EntityManagerSingleton;
+import com.grupoms.app.negocio.EjemplarJPA.BOEjemplar;
 import com.grupoms.app.negocio.EjemplarJPA.TEjemplar;
+import com.grupoms.app.negocio.PromocionJPA.BOPromocion;
 import com.grupoms.app.negocio.assembler.*;
-import com.grupoms.app.negocio.materialJPA.*;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.TypedQuery;
-import jakarta.persistence.criteria.CriteriaBuilder;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -156,7 +158,7 @@ public class SocioSAImp implements SocioSA{
         } else if (socio instanceof BOInfantil infantil) {
             dto = InfantilAssembler.toDTO(infantil); // devuelve TInfantil
         } else {
-            dto = SocioAssembler.entityToTransfer(socio); // solo TMaterial
+            dto = SocioAssembler.entityToTransfer(socio);
         }
         return dto;
     }
@@ -189,18 +191,81 @@ public class SocioSAImp implements SocioSA{
     }
 
     @Override
-    public Pair<TSocio, List<TEjemplar>> mostrarSocioYEjemplares(Integer id) {
-        return null;
+    public Pair<TSocio, List<TEjemplar>> mostrarSocioYEjemplares(Integer idSocio) {
+        EntityManager em = EntityManagerSingleton.getInstance().getEMF().createEntityManager();
+        EntityTransaction t = em.getTransaction();
+        t.begin();
+        TSocio socio=mostrarSocio(idSocio);
+        TypedQuery<BOEjemplar> query = em.createNamedQuery("com.grupoms.app.negocio.EjemplarJPA.BOEjemplar.findBySocio", BOEjemplar.class);
+        query.setParameter("idSocio", idSocio);
+
+        List<TEjemplar> lista = query.getResultList()
+                .stream()
+                .map(EjemplarAssembler::toTransferObject)
+                .collect(Collectors.toList());
+
+        t.commit();
+        em.close();
+        return Pair.of(socio,lista);
     }
 
     @Override
-    public List<TSocio> mostrarSociosPorPromocin(Integer idPromocion) {
-        return List.of();
+    public List<TSocio> mostrarSociosPorPromocion(Integer idPromocion) {
+        EntityManager em = EntityManagerSingleton.getInstance().getEMF().createEntityManager();
+        EntityTransaction t = em.getTransaction();
+        List<TSocio> lista = new ArrayList<>();
+        try {
+            t.begin();
+            BOPromocion promocion = em.find(BOPromocion.class, idPromocion);
+            if(promocion == null || !promocion.getActivo()) {
+                t.rollback();
+                return Collections.emptyList();
+            }
+            for(BOSocio s: promocion.getSocios()) {
+                lista.add(SocioAssembler.entityToTransfer(s));
+            }
+            t.commit();
+        } catch(Exception ex) {
+            if(t.isActive()) t.rollback();
+            ex.printStackTrace();
+            return Collections.emptyList();
+        } finally {
+            em.close();
+        }
+        return lista;
     }
 
     @Override
     public Integer solicitarEjemplar(Integer idSocio, Integer idEjemplar, LocalDate fechaFinal) {
-        return 0;
+        EntityManager em = EntityManagerSingleton.getInstance().getEMF().createEntityManager();
+        EntityTransaction t = em.getTransaction();
+        Integer res=-1;
+        try {
+            t.begin();
+
+            BOSocio s = em.find(BOSocio.class, idSocio);
+            BOEjemplar e = em.find(BOEjemplar.class, idEjemplar);
+
+            if (s != null && s.getActivo() && e != null && e.getActivo()) {
+
+                if (!s.getEjemplares().contains(e)) {
+                    s.aniadirEjemplares(e);
+
+                    res=1;
+                }
+            }
+
+            t.commit();
+
+        } catch (Exception e) {
+            if (t.isActive())
+                t.rollback();
+            e.printStackTrace();
+        } finally {
+            em.close();
+        }
+
+        return res;
     }
 
     @Override

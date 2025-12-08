@@ -19,7 +19,7 @@ public class InfantilAssembler extends SocioAssembler{
 
 
     // Convierte campos comunes DTO → BO
-    protected static BOInfantil toBO(TInfantil dto) {
+    public static BOInfantil toBO(TInfantil dto) {
         BOInfantil bo = new BOInfantil();
         bo.setID(dto.getId());
         bo.setNombreYapellido(dto.getNombreYapellido());

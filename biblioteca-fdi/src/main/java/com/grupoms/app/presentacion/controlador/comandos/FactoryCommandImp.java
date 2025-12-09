@@ -3,11 +3,11 @@ package com.grupoms.app.presentacion.controlador.comandos;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.grupoms.app.presentacion.comandos.ListarEjemplarCommand;
 import com.grupoms.app.presentacion.comandos.claseJPA.DesvincularEjemplarDeClaseCommand;
 import com.grupoms.app.presentacion.comandos.claseJPA.VincularEjemplarAClaseCommand;
 import com.grupoms.app.presentacion.comandos.ejemplarJPA.AltaEjemplarCommand;
 import com.grupoms.app.presentacion.comandos.ejemplarJPA.BajaEjemplarCommand;
+import com.grupoms.app.presentacion.comandos.ejemplarJPA.ListarEjemplarCommand;
 import com.grupoms.app.presentacion.comandos.ejemplarJPA.ModificarEjemplarCommand;
 import com.grupoms.app.presentacion.comandos.ejemplarJPA.MostrarEjemplarCommand;
 import com.grupoms.app.presentacion.comandos.ejemplarJPA.MostrarEjemplaresPorMaterialCommand;
@@ -16,6 +16,7 @@ import com.grupoms.app.presentacion.comandos.materialJPA.BajaMaterialCommand;
 import com.grupoms.app.presentacion.comandos.materialJPA.ListarMaterialCommand;
 import com.grupoms.app.presentacion.comandos.materialJPA.ModificarMaterialCommand;
 import com.grupoms.app.presentacion.comandos.materialJPA.MostrarMaterialCommand;
+import com.grupoms.app.presentacion.comandos.prestamoJPA.AltaPrestamoCommand;
 import com.grupoms.app.presentacion.comandos.salaJPA.AltaSalaCommand;
 import com.grupoms.app.presentacion.comandos.salaJPA.BajaSalaCommand;
 import com.grupoms.app.presentacion.comandos.salaJPA.ListarSalasCommand;
@@ -140,7 +141,10 @@ public class FactoryCommandImp extends FactoryCommand {
         commands.put(Evento.BAJA_SALA, new BajaSalaCommand());
         commands.put(Evento.MODIFICAR_SALA, new ModificarSalaCommand());
         commands.put(Evento.MOSTRAR_SALA, new MostrarSalaCommand());
-        commands.put(Evento.LISTAR_SALAS, new ListarSalasCommand());        
+        commands.put(Evento.LISTAR_SALAS, new ListarSalasCommand());      
+        
+        // Prestamo
+        commands.put(Evento.ALTA_PRESTAMO, new AltaPrestamoCommand());
         
         //VISTAS
         views.put(Evento.MOSTRAR_PEDIDO, FactoriaVistas.GUI_MOSTRAR_PEDIDO);
@@ -203,6 +207,8 @@ public class FactoryCommandImp extends FactoryCommand {
         
         views.put(Evento.VINCULAR_EJEMPLAR_CLASE, FactoriaVistas.GUI_VINCULAR_EJEMPLAR_CLASE);
         views.put(Evento.DESVINCULAR_EJEMPLAR_CLASE, FactoriaVistas.GUI_DESVINCULAR_EJEMPLAR_CLASE);
+        
+        views.put(Evento.ALTA_PRESTAMO, FactoriaVistas.GUI_ALTA_PRESTAMO);
     }
     
     @Override

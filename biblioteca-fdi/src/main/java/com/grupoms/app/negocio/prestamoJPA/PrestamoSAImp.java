@@ -1,6 +1,7 @@
 package com.grupoms.app.negocio.prestamoJPA;
 
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -44,7 +45,7 @@ public class PrestamoSAImp implements PrestamoSA {
             BOPrestamo boPrestamo = new BOPrestamo();
             boPrestamo.setSocio(socio);
             boPrestamo.setEjemplar(ejemplar);
-            boPrestamo.setFechaInicial(prestamo.getFechaInicial()); // Usar la del transfer o new Date()
+            boPrestamo.setFechaInicial(new Date()); // Usar la del transfer o new Date()
             boPrestamo.setFechaMaxima(prestamo.getFechaMaxima());
             boPrestamo.setActivo(true);
             boPrestamo.setPrecioMulta(0.0);
@@ -115,12 +116,10 @@ public class PrestamoSAImp implements PrestamoSA {
                 return -1;
             }
 
-            bo.setFechaInicial(prestamo.getFechaInicial());
             bo.setFechaMaxima(prestamo.getFechaMaxima());
-            bo.setFechaDevuelto(prestamo.getFechaDevuelto());
             bo.setPrecioMulta(prestamo.getPrecioMulta());
             
-            if (prestamo.getFechaDevuelto() != null && bo.getEjemplar() != null) {
+            if (bo.getEjemplar() != null) {
                  if ("PRESTADO".equalsIgnoreCase(bo.getEjemplar().getEstado())) {
                      bo.getEjemplar().setEstado("DISPONIBLE");
                  }

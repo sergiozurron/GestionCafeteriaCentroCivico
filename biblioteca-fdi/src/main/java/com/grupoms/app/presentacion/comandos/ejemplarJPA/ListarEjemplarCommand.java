@@ -1,4 +1,4 @@
-package com.grupoms.app.presentacion.comandos;
+package com.grupoms.app.presentacion.comandos.ejemplarJPA;
 
 import java.util.List;
 

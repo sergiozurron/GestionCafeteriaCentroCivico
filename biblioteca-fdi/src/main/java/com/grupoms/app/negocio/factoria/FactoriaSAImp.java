@@ -18,6 +18,8 @@ import com.grupoms.app.negocio.pedido.SAOrden;
 import com.grupoms.app.negocio.pedido.SAOrdenImp;
 import com.grupoms.app.negocio.pedido.SAPedido;
 import com.grupoms.app.negocio.pedido.SAPedidoImp;
+import com.grupoms.app.negocio.prestamoJPA.PrestamoSA;
+import com.grupoms.app.negocio.prestamoJPA.PrestamoSAImp;
 import com.grupoms.app.negocio.producto.SAProducto;
 import com.grupoms.app.negocio.producto.SAProductoImp;
 import com.grupoms.app.negocio.proveedor.SAProveedor;
@@ -86,4 +88,10 @@ public class FactoriaSAImp extends FactoriaSA {
 		
 		return new SalaSAImp();
 	}
+
+	@Override
+	public PrestamoSA creaSAPrestamo() {
+		return new PrestamoSAImp();
+	}
+	
 }

@@ -38,7 +38,7 @@ public class BOPromocion implements Serializable{
     @Version
 	private int version;
 
-    @ManyToMany(mappedBy="promocion")
+    @ManyToMany(mappedBy="promociones")
 	private List<BOSocio> socios;
     
     public BOPromocion(TPromocion promocion) {

@@ -15,6 +15,7 @@
 		<class>com.grupoms.app.negocio.materialJPA.BOMaterial</class>
 		<class>com.grupoms.app.negocio.materialJPA.BOLibro</class>
 		<class>com.grupoms.app.negocio.materialJPA.BOPintura</class>
+
 		<class>com.grupoms.app.negocio.EjemplarJPA.BOEjemplar</class>
 
 		<class>com.grupoms.app.negocio.salaJPA.BOSala</class>

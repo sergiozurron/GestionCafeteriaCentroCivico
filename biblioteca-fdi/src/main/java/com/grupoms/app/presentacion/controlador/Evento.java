@@ -271,4 +271,8 @@ public class Evento {
 	public static final int LISTAR_SALAS = 612;
 	public static final int LISTAR_SALAS_OK = 613;
 	public static final int LISTAR_SALAS_KO = 614;
+	
+	public static final int ALTA_PRESTAMO = 700;
+	public static final int ALTA_PRESTAMO_OK = 701;
+	public static final int ALTA_PRESTAMO_KO = 702;
 }

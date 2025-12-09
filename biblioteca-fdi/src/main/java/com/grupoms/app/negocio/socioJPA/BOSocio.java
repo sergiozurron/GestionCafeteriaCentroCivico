@@ -13,7 +13,7 @@ import java.util.List;
     @NamedQuery(name = "com.grupoms.app.negocio.socioJPA.BOSocio.findByName", query = "SELECT s FROM BOSocio s WHERE s.nombreYapellido = :nombre"),
     @NamedQuery(name = "com.grupoms.app.negocio.socioJPA.BOSocio.findByType", query = "SELECT s FROM BOSocio s WHERE s.tipoSocio = :tipo"),
     @NamedQuery(name = "com.grupoms.app.negocio.socioJPA.BOSocio.findAll", query = "SELECT s FROM BOSocio s"),
-    @NamedQuery(name = "com.grupoms.app.negocio.socioJPA.BOSocio.findByPromocion", query = "SELECT s FROM BOSocio s JOIN s.promocion p WHERE p.id = :idPromocion")
+    @NamedQuery(name = "com.grupoms.app.negocio.socioJPA.BOSocio.findByPromocion", query = "SELECT s FROM BOSocio s JOIN s.promociones p WHERE p.id = :idPromocion")
 })
 public class BOSocio implements Serializable {
 
@@ -35,7 +35,7 @@ public class BOSocio implements Serializable {
     private List<BOPrestamo> prestamos;
 
     @ManyToMany
-    private List<BOPromocion> promocion;
+    private List<BOPromocion> promociones;
 
     public BOSocio() {}
 
@@ -107,26 +107,26 @@ public class BOSocio implements Serializable {
     }
 
     public List<BOPromocion> getPromocion() {
-        if (promocion == null) {
-            promocion = new ArrayList<>();
+        if (promociones == null) {
+            promociones = new ArrayList<>();
         }
-        return promocion;
+        return promociones;
     }
 
     public void setPromocion(List<BOPromocion> promocions) {
-        this.promocion = promocions;
+        this.promociones = promocions;
     }
 
     public void anyadirPromocion(BOPromocion promocion) {
-        if (this.promocion == null) {
-            this.promocion = new ArrayList<>();
+        if (this.promociones == null) {
+            this.promociones = new ArrayList<>();
         }
-        this.promocion.add(promocion);
+        this.promociones.add(promocion);
     }
 
     public void eliminarPromocion(BOPromocion promocion) {
-        if (this.promocion != null) {
-            this.promocion.remove(promocion);
+        if (this.promociones != null) {
+            this.promociones.remove(promocion);
         }
     }
 }

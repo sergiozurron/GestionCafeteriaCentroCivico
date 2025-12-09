@@ -1,18 +1,17 @@
 package com.grupoms.app.negocio.socioJPA;
 
-import com.grupoms.app.negocio.materialJPA.TLibro;
+import java.io.Serializable;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.PrimaryKeyJoinColumn;
-
-import java.io.Serializable;
 
 @Entity
 @NamedQueries({})
 @PrimaryKeyJoinColumn(referencedColumnName = "id")
 public class BOInfantil extends BOSocio implements Serializable {
 
-    private static final long serialVersionUID = 0;
+    private static final long serialVersionUID = 1L;
 
     private Double reduccion;
     private int edad;

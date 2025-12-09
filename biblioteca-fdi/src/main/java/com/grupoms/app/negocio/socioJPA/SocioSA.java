@@ -1,10 +1,11 @@
 package com.grupoms.app.negocio.socioJPA;
 
-import com.grupoms.app.negocio.EjemplarJPA.TEjemplar;
+import java.util.Date;
+import java.util.List;
+
 import org.apache.commons.lang3.tuple.Pair;
 
-import java.time.LocalDate;
-import java.util.List;
+import com.grupoms.app.negocio.EjemplarJPA.TEjemplar;
 
 public interface SocioSA {
 
@@ -22,12 +23,12 @@ public interface SocioSA {
 
     public List<TSocio> mostrarSociosPorPromocion(Integer idPromocion);
 
-    public Integer solicitarEjemplar(Integer idSocio, Integer idEjemplar, LocalDate fechaFinal);
-
-    public Integer devolverEjemplar(Integer idSocio,Integer idEjemplar,LocalDate fechaDevolucion);
-
     public Integer vincularPromocionASocio(Integer idSocio,Integer idPromocion);
 
     public Integer desvincularPromocionASocio(Integer idSocio,Integer idPromocion);
+
+	Integer solicitarEjemplar(Integer idSocio, Integer idEjemplar, Date fechaMaxima);
+
+	Integer devolverEjemplar(Integer idSocio, Integer idEjemplar, Date fechaDevolucion);
 
 }

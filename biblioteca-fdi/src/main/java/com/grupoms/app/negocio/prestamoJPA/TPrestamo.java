@@ -1,78 +1,46 @@
 package com.grupoms.app.negocio.prestamoJPA;
 
-import java.time.LocalDate;
+import java.util.Date;
 
 public class TPrestamo {
     private Integer id;
     private Integer idSocio;
     private Integer idEjemplar;
-    private Boolean multa=false;
-    private Integer precioMulta=0;
-    private LocalDate fechaPrevista;
-    private LocalDate fechaDevolucion;
+    private Date fechaInicial;
+    private Date fechaMaxima;
+    private Date fechaDevuelto;
+    private Double precioMulta;
+    private Boolean activo;
 
-    public TPrestamo(Integer idSocio, Integer idEjemplar, Boolean multa, Integer precioMulta, LocalDate fechaPrevista, LocalDate fechaDevolucion) {
-        this.idSocio = idSocio;
-        this.idEjemplar = idEjemplar;
-        this.multa = multa;
-        this.precioMulta = precioMulta;
-        this.fechaPrevista = fechaPrevista;
-        this.fechaDevolucion = fechaDevolucion;
-    }
+    public TPrestamo() {}
 
-    public Integer getPrecioMulta() {
-        return precioMulta;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public Integer getIdSocio() {
-        return idSocio;
-    }
-
-    public Integer getIdEjemplar() {
-        return idEjemplar;
-    }
-
-    public Boolean getMulta() {
-        return multa;
-    }
-
-    public LocalDate getFechaPrevista() {
-        return fechaPrevista;
-    }
-
-    public LocalDate getFechaDevolucion() {
-        return fechaDevolucion;
-    }
-
-    public void setId(Integer id) {
+    // Constructor completo
+    public TPrestamo(Integer id, Integer idSocio, Integer idEjemplar, Date fechaInicial, Date fechaMaxima, Date fechaDevuelto, Double precioMulta, Boolean activo) {
         this.id = id;
-    }
-
-    public void setIdSocio(Integer idSocio) {
         this.idSocio = idSocio;
-    }
-
-    public void setIdEjemplar(Integer idEjemplar) {
         this.idEjemplar = idEjemplar;
-    }
-
-    public void setPrecioMulta(Integer precioMulta) {
+        this.fechaInicial = fechaInicial;
+        this.fechaMaxima = fechaMaxima;
+        this.fechaDevuelto = fechaDevuelto;
         this.precioMulta = precioMulta;
+        this.activo = activo;
     }
 
-    public void setMulta(Boolean multa) {
-        this.multa = multa;
-    }
-
-    public void setFechaPrevista(LocalDate fechaPrevista) {
-        this.fechaPrevista = fechaPrevista;
-    }
-
-    public void setFechaDevolucion(LocalDate fechaDevolucion) {
-        this.fechaDevolucion = fechaDevolucion;
-    }
+    // Getters y Setters
+    public Integer getId() { return id; }
+    public void setId(Integer id) { this.id = id; }
+    public Integer getIdSocio() { return idSocio; }
+    public void setIdSocio(Integer idSocio) { this.idSocio = idSocio; }
+    public Integer getIdEjemplar() { return idEjemplar; }
+    public void setIdEjemplar(Integer idEjemplar) { this.idEjemplar = idEjemplar; }
+    public Date getFechaInicial() { return fechaInicial; }
+    public void setFechaInicial(Date fechaInicial) { this.fechaInicial = fechaInicial; }
+    public Date getFechaMaxima() { return fechaMaxima; }
+    public void setFechaMaxima(Date fechaMaxima) { this.fechaMaxima = fechaMaxima; }
+    public Date getFechaDevuelto() { return fechaDevuelto; }
+    public void setFechaDevuelto(Date fechaDevuelto) { this.fechaDevuelto = fechaDevuelto; }
+    public Double getPrecioMulta() { return precioMulta; }
+    public void setPrecioMulta(Double precioMulta) { this.precioMulta = precioMulta; }
+    public Boolean getActivo() { return activo; }
+    public void setActivo(Boolean activo) { this.activo = activo; }
 }

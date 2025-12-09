@@ -1,108 +1,81 @@
 package com.grupoms.app.negocio.prestamoJPA;
 
+import java.io.Serializable;
+import java.util.Date; 
 import com.grupoms.app.negocio.EjemplarJPA.BOEjemplar;
-import com.grupoms.app.negocio.EjemplarJPA.EjemplarSAImp;
-import com.grupoms.app.negocio.EjemplarJPA.TEjemplar;
-import com.grupoms.app.negocio.assembler.AdultoAssembler;
-import com.grupoms.app.negocio.assembler.EjemplarAssembler;
-import com.grupoms.app.negocio.assembler.SocioAssembler;
 import com.grupoms.app.negocio.socioJPA.BOSocio;
-import com.grupoms.app.negocio.socioJPA.SocioSAImp;
-import com.grupoms.app.negocio.socioJPA.TSocio;
 import jakarta.persistence.*;
 
-import java.time.LocalDate;
-
-@Inheritance(strategy= InheritanceType.JOINED)
 @Entity
 @NamedQueries({
-        @NamedQuery(name = "com.grupoms.app.negocio.prestamoJPA.BOPrestamo.findByIDs",
-                query = "SELECT p FROM BOPrestamo p WHERE p.socio.getId() = :idSocio AND p.ejemplar.getId() = :idEjemplar"),
-        @NamedQuery(name="com.grupoms.app.negocio.prestamoJPA.BOPrestamo.findAll",
-                query="SELECT s FROM BOSocio s")
+    @NamedQuery(name = "BOPrestamo.findActivoBySocioYEjemplar", 
+        query = "SELECT p FROM BOPrestamo p WHERE p.socio.id = :idSocio AND p.ejemplar.id = :idEjemplar AND p.activo = true AND p.fechaDevuelto IS NULL"),
+    @NamedQuery(name = "BOPrestamo.findBySocio", 
+        query = "SELECT p FROM BOPrestamo p WHERE p.socio.id = :idSocio AND p.activo = true")
 })
-public class BOPrestamo {
-    @EmbeddedId private BOPrestamoID id;
+public class BOPrestamo implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+
+    @Temporal(TemporalType.DATE) 
+    private Date fechaInicial;
+
+    @Temporal(TemporalType.DATE)
+    private Date fechaMaxima;
+
+    @Temporal(TemporalType.DATE)
+    private Date fechaDevuelto;
+
+    private Double precioMulta;
+    private Boolean activo;
+
+    @Version
+    private int version;
+
     @ManyToOne
-    @MapsId private BOSocio socio;
+    @JoinColumn(name = "socio_id") 
+    private BOSocio socio;
+
     @ManyToOne
-    @MapsId private BOEjemplar ejemplar;
+    @JoinColumn(name = "ejemplar_id")
+    private BOEjemplar ejemplar;
 
-    private SocioSAImp socioSA;
-    private EjemplarSAImp ejemplarSA;
+    public BOPrestamo() {}
 
-    private Boolean multa=false;
-    private Integer precioMulta=0;
-    private LocalDate fechaPrevista;
-    private LocalDate fechaDevolucion;
-
-    public BOPrestamo(TPrestamo prestamo) {
-        this.socio=SocioAssembler.transferToEntity(socioSA.mostrarSocio(prestamo.getIdSocio()));
-        this.ejemplar = EjemplarAssembler.transferToEntity(ejemplarSA.mostrarEjemplar(prestamo.getIdEjemplar()));
-        this.multa = multa;
-        this.precioMulta = precioMulta;
-        this.fechaPrevista = fechaPrevista;
-        this.fechaDevolucion = fechaDevolucion;
-    }
-
-    public BOPrestamo(){}
-
-    public BOPrestamoID getId() {
-        return id;
-    }
-
-    public BOSocio getSocio() {
-        return socio;
-    }
-
-    public BOEjemplar getEjemplar() {
-        return ejemplar;
-    }
-
-    public Boolean getMulta() {
-        return multa;
-    }
-
-    public LocalDate getFechaPrevista() {
-        return fechaPrevista;
-    }
-
-    public Integer getPrecioMulta() {
-        return precioMulta;
-    }
-
-    public LocalDate getFechaDevolucion() {
-        return fechaDevolucion;
-    }
-
-    public void setId(BOPrestamoID id) {
-        this.id = id;
-    }
-
-    public void setSocio(BOSocio socio) {
+    public BOPrestamo(BOSocio socio, BOEjemplar ejemplar, Date fechaMaxima) {
         this.socio = socio;
-    }
-
-    public void setEjemplar(BOEjemplar ejemplar) {
         this.ejemplar = ejemplar;
+        this.fechaMaxima = fechaMaxima;
+        this.fechaInicial = new Date(); // da la fecha actual
+        this.activo = true;
+        this.precioMulta = 0.0;
     }
 
-    public void setMulta(Boolean multa) {
-        this.multa = multa;
-    }
-
-    public void setPrecioMulta(Integer precioMulta) {
-        this.precioMulta = precioMulta;
-    }
-
-    public void setFechaPrevista(LocalDate fechaPrevista) {
-        this.fechaPrevista = fechaPrevista;
-    }
-
-    public void setFechaDevolucion(LocalDate fechaDevolucion) {
-        this.fechaDevolucion = fechaDevolucion;
-    }
-
-
-
+    public Integer getId() { return id; }
+    public void setId(Integer id) { this.id = id; }
+    
+    public Date getFechaInicial() { return fechaInicial; }
+    public void setFechaInicial(Date fechaInicial) { this.fechaInicial = fechaInicial; }
+    
+    public Date getFechaMaxima() { return fechaMaxima; }
+    public void setFechaMaxima(Date fechaMaxima) { this.fechaMaxima = fechaMaxima; }
+    
+    public Date getFechaDevuelto() { return fechaDevuelto; }
+    public void setFechaDevuelto(Date fechaDevuelto) { this.fechaDevuelto = fechaDevuelto; }
+    
+    public Double getPrecioMulta() { return precioMulta; }
+    public void setPrecioMulta(Double precioMulta) { this.precioMulta = precioMulta; }
+    
+    public Boolean getActivo() { return activo; }
+    public void setActivo(Boolean activo) { this.activo = activo; }
+    
+    public BOSocio getSocio() { return socio; }
+    public void setSocio(BOSocio socio) { this.socio = socio; }
+    
+    public BOEjemplar getEjemplar() { return ejemplar; }
+    public void setEjemplar(BOEjemplar ejemplar) { this.ejemplar = ejemplar; }
 }

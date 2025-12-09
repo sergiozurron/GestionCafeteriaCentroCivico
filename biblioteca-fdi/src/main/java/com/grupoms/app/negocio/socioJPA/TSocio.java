@@ -2,57 +2,67 @@ package com.grupoms.app.negocio.socioJPA;
 
 public class TSocio {
     protected Integer id;
-    protected String _nombreYapellido;
-    protected String _dni;
-    protected int _tipoSocio; //0->Adulto     1->Infantil
-    protected Integer _cuota;
-    protected Boolean _activo;
+    protected String nombreYapellido;
+    protected String dni;
+    protected int tipoSocio; // 0->Adulto, 1->Infantil
+    protected Integer cuota;
+    protected Boolean activo;
 
-    public TSocio(String nombreYapellido,String dni,int tipoSocio,Integer cuota){
-        _nombreYapellido=nombreYapellido;
-        _dni=dni;
-        _tipoSocio=tipoSocio;
-        _cuota=cuota;
-        _activo=true;
+    public TSocio(String nombreYapellido, String dni, int tipoSocio, Integer cuota) {
+        this.nombreYapellido = nombreYapellido;
+        this.dni = dni;
+        this.tipoSocio = tipoSocio;
+        this.cuota = cuota;
+        this.activo = true;
     }
 
-    public TSocio(){}
+    public TSocio() {}
 
     public Integer getId() {
         return id;
-    }
-    public String getNombreYapellido() {
-        return _nombreYapellido;
-    }
-    public String getDni() {
-        return _dni;
-    }
-    public int getTipoSocio() {
-        return _tipoSocio;
-    }
-    public Integer getCuota() {
-        return _cuota;
-    }
-    public Boolean getActivo() {
-        return _activo;
     }
 
     public void setId(Integer id) {
         this.id = id;
     }
+
+    public String getNombreYapellido() {
+        return nombreYapellido;
+    }
+
     public void setNombreYapellido(String nombreYapellido) {
-        this._nombreYapellido = nombreYapellido;
+        this.nombreYapellido = nombreYapellido;
     }
+
+    public String getDni() {
+        return dni;
+    }
+
     public void setDni(String dni) {
-        this._dni = dni;
+        this.dni = dni;
     }
+
+    public int getTipoSocio() {
+        return tipoSocio;
+    }
+
     public void setTipoSocio(int tipoSocio) {
-        this._tipoSocio = tipoSocio;
+        this.tipoSocio = tipoSocio;
     }
+
+    public Integer getCuota() {
+        return cuota;
+    }
+
     public void setCuota(Integer cuota) {
-        this._cuota = cuota;
+        this.cuota = cuota;
     }
+
+    public Boolean getActivo() {
+        return activo;
+    }
+
     public void setActivo(Boolean activo) {
-        this._activo = activo;
+        this.activo = activo;
     }
 }

@@ -1,77 +1,52 @@
 package com.grupoms.app.negocio.EjemplarJPA;
 
 import java.util.List;
-
+import java.util.ArrayList;
 import com.grupoms.app.negocio.ClaseJPA.BOClase;
 import com.grupoms.app.negocio.materialJPA.BOMaterial;
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.NamedQuery;
-import jakarta.persistence.Version;
 import com.grupoms.app.negocio.prestamoJPA.BOPrestamo;
 import jakarta.persistence.*;
-
-import java.util.List;
 
 @Entity
 @NamedQuery(name = "BOEjemplar.findAll", query = "SELECT e FROM BOEjemplar e")
 @NamedQuery(name = "BOEjemplar.findByMaterialId", query = "SELECT e FROM BOEjemplar e WHERE e.material.id = :materialId AND e.material.activo = true")
+@NamedQuery(name = "BOEjemplar.findBySocio", query = "SELECT e FROM BOEjemplar e JOIN e.prestamos p WHERE p.socio.id = :idSocio AND p.activo = true AND p.fechaDevuelto IS NULL")
 public class BOEjemplar {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
-	private String estado;
-	private Boolean activo;
-	@ManyToOne
-	@JoinColumn(name = "material_id")
-	private BOMaterial material;
-	@ManyToMany(mappedBy = "ejemplares")
-	private List<BOClase> clases;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+    private String estado; 
+    private Boolean activo;
+    
+    @ManyToOne
+    @JoinColumn(name = "material_id")
+    private BOMaterial material;
+    
+    @ManyToMany(mappedBy = "ejemplares")
+    private List<BOClase> clases;
 
-	@Version
-	private int version;
+    @Version
+    private int version;
 
-	@OneToMany(mappedBy = "ejemplar")
-	private List<BOPrestamo> ejemplares;
+    // Relación 1:N hacia Prestamo (PDF Página 77 - Project example)
+    // 'mappedBy' apunta al atributo 'ejemplar' en BOPrestamo
+    @OneToMany(mappedBy = "ejemplar")
+    private List<BOPrestamo> prestamos;
 
-	public Integer getId() {
-		return id;
-	}
+    public Integer getId() { return id; }
+    public void setId(Integer id) { this.id = id; }
+    public String getEstado() { return estado; }
+    public void setEstado(String estado) { this.estado = estado; }
+    public Boolean getActivo() { return activo; }
+    public void setActivo(Boolean activo) { this.activo = activo; }
+    public BOMaterial getMaterial() { return material; }
+    public void setMaterial(BOMaterial material) { this.material = material; }
 
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
-	public String getEstado() {
-		return estado;
-	}
-
-	public void setEstado(String estado) {
-		this.estado = estado;
-	}
-
-	public Boolean getActivo() {
-		return activo;
-	}
-
-	public void setActivo(Boolean activo) {
-		this.activo = activo;
-	}
-	
-	public BOMaterial getMaterial() {
-		return material;
-	}
-
-	public void setMaterial(BOMaterial material) {
-		this.material = material;		
-	}
-
-
+    // Getter y Setter para préstamos
+    public List<BOPrestamo> getPrestamos() {
+        if (prestamos == null) prestamos = new ArrayList<>();
+        return prestamos;
+    }
+    public void setPrestamos(List<BOPrestamo> prestamos) { this.prestamos = prestamos; }
 }

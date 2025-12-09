@@ -5,7 +5,6 @@ import com.grupoms.app.negocio.socioJPA.TSocio;
 
 public class SocioAssembler {
 
-    // Convierte campos comunes BO → DTO
     public static TSocio entityToTransfer(BOSocio bo) {
         TSocio dto = new TSocio();
         dto.setId(bo.getId());
@@ -14,14 +13,12 @@ public class SocioAssembler {
         dto.setTipoSocio(bo.getTipoSocio());
         dto.setCuota(bo.getCuota());
         dto.setActivo(bo.getActivo());
-        return dto;  // debe devolver TSocio
+        return dto;
     }
 
-
-    // Convierte campos comunes DTO → BO
     public static BOSocio transferToEntity(TSocio dto) {
         BOSocio bo = new BOSocio();
-        bo.setID(dto.getId());
+        bo.setId(dto.getId());
         bo.setNombreYapellido(dto.getNombreYapellido());
         bo.setDni(dto.getDni());
         bo.setTipoSocio(dto.getTipoSocio());
@@ -29,5 +26,4 @@ public class SocioAssembler {
         bo.setActivo(dto.getActivo());
         return bo;
     }
-    
 }

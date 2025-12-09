@@ -29,8 +29,7 @@ public class BOEjemplar {
     @Version
     private int version;
 
-    // Relación 1:N hacia Prestamo (PDF Página 77 - Project example)
-    // 'mappedBy' apunta al atributo 'ejemplar' en BOPrestamo
+    
     @OneToMany(mappedBy = "ejemplar")
     private List<BOPrestamo> prestamos;
 
@@ -42,8 +41,6 @@ public class BOEjemplar {
     public void setActivo(Boolean activo) { this.activo = activo; }
     public BOMaterial getMaterial() { return material; }
     public void setMaterial(BOMaterial material) { this.material = material; }
-
-    // Getter y Setter para préstamos
     public List<BOPrestamo> getPrestamos() {
         if (prestamos == null) prestamos = new ArrayList<>();
         return prestamos;

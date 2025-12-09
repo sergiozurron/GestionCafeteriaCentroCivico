@@ -22,19 +22,19 @@ import jakarta.persistence.Version;
 
 @Entity
 @NamedQueries({
-    @NamedQuery(
-        name = "com.grupoms.app.negocio.claseJPA.BOClase.findByTipo",
-        query = "SELECT c FROM BOClase c WHERE c.tipo = :tipo"
-    ),
-    @NamedQuery(
-        name = "com.grupoms.app.negocio.claseJPA.BOClase.findAll",
-        query = "SELECT c FROM BOClase c"
-    ),
-    @NamedQuery(
-            name = "com.grupoms.app.negocio.claseJPA.BOClase.findBySala",
-            query = "SELECT c FROM BOSala s JOIN s.clases c WHERE s.id = :idSala AND c.activo = true"
-        )
-})
+	@NamedQuery(
+	        name = "com.grupoms.app.negocio.claseJPA.BOClase.findByTipo",
+	        query = "SELECT c FROM BOClase c WHERE c.tipo = :tipo"
+	    ),
+	    @NamedQuery(
+	        name = "com.grupoms.app.negocio.claseJPA.BOClase.findAll",
+	        query = "SELECT c FROM BOClase c"
+	    ),
+	    @NamedQuery(
+	        name = "com.grupoms.app.negocio.claseJPA.BOClase.findBySala",
+	        query = "SELECT c FROM BOClase c WHERE c.sala.id = :idSala AND c.activo = true"
+	    )
+	})
 public class BOClase implements Serializable {
 
     private static final long serialVersionUID = 0L;

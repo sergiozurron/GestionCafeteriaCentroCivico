@@ -1,17 +1,29 @@
 package com.grupoms.app.negocio.factoria;
 
-import com.grupoms.app.negocio.mesa.*;
-import com.grupoms.app.negocio.proveedor.*;
-import com.grupoms.app.negocio.pedido.*;
-import com.grupoms.app.negocio.empleado.*;
-import com.grupoms.app.negocio.ingrediente.*;
-import com.grupoms.app.negocio.materialJPA.*;
-import com.grupoms.app.negocio.producto.*;
-import com.grupoms.app.negocio.EjemplarJPA.EjemplarSA;
-import com.grupoms.app.negocio.EjemplarJPA.EjemplarSAImp;
-import com.grupoms.app.negocio.PromocionJPA.*;
 import com.grupoms.app.negocio.ClaseJPA.ClaseSA;
 import com.grupoms.app.negocio.ClaseJPA.ClaseSAImp;
+import com.grupoms.app.negocio.EjemplarJPA.EjemplarSA;
+import com.grupoms.app.negocio.EjemplarJPA.EjemplarSAImp;
+import com.grupoms.app.negocio.PromocionJPA.PromocionSA;
+import com.grupoms.app.negocio.PromocionJPA.PromocionSAImp;
+import com.grupoms.app.negocio.empleado.SAEmpleado;
+import com.grupoms.app.negocio.empleado.SAEmpleadoImp;
+import com.grupoms.app.negocio.ingrediente.SAIngrediente;
+import com.grupoms.app.negocio.ingrediente.SAIngredienteImp;
+import com.grupoms.app.negocio.materialJPA.MaterialSA;
+import com.grupoms.app.negocio.materialJPA.MaterialSAImp;
+import com.grupoms.app.negocio.mesa.SAMesa;
+import com.grupoms.app.negocio.mesa.SAMesaImp;
+import com.grupoms.app.negocio.pedido.SAOrden;
+import com.grupoms.app.negocio.pedido.SAOrdenImp;
+import com.grupoms.app.negocio.pedido.SAPedido;
+import com.grupoms.app.negocio.pedido.SAPedidoImp;
+import com.grupoms.app.negocio.producto.SAProducto;
+import com.grupoms.app.negocio.producto.SAProductoImp;
+import com.grupoms.app.negocio.proveedor.SAProveedor;
+import com.grupoms.app.negocio.proveedor.SAProveedorImpl;
+import com.grupoms.app.negocio.salaJPA.SalaSA;
+import com.grupoms.app.negocio.salaJPA.SalaSAImp;
 
 
 public class FactoriaSAImp extends FactoriaSA {
@@ -67,5 +79,11 @@ public class FactoriaSAImp extends FactoriaSA {
 
 	public ClaseSA creaSAClase() {
 		return new ClaseSAImp();
+	}
+
+	@Override
+	public SalaSA creaSASala() {
+		
+		return new SalaSAImp();
 	}
 }

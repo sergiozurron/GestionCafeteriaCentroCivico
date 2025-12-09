@@ -1,46 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <persistence xmlns="https://jakarta.ee/xml/ns/persistence"
 	version="3.1">
-	<persistence-unit name="CentroCivicoJPA"
-		transaction-type="RESOURCE_LOCAL">
+	<persistence-unit name="CentroCivicoJPA" transaction-type="RESOURCE_LOCAL">
 		<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
 
-		<!-- clases de JPA -->
-		<!-- <class>com.grupoms.app.negocio.socioJPA.BOSocio</class> <class>com.grupoms.app.negocio.socioJPA.BOInfantil</class> 
-			<class>com.grupoms.app.negocio.socioJPA.BOAdulto</class> <class>com.grupoms.app.negocio.PromocionJPA.BOPromocion</class> -->
+		<class>com.grupoms.app.negocio.socioJPA.BOSocio</class>
+		<class>com.grupoms.app.negocio.socioJPA.BOAdulto</class>
+		<class>com.grupoms.app.negocio.socioJPA.BOInfantil</class>
 
+		<class>com.grupoms.app.negocio.PromocionJPA.BOPromocion</class>
 
+		<class>com.grupoms.app.negocio.prestamoJPA.BOPrestamo</class>
 
-
-
-
-		<class>com.grupoms.app.negocio.salaJPA.BOSala</class>
-		<class>com.grupoms.app.negocio.ClaseJPA.BOClase</class>
 		<class>com.grupoms.app.negocio.materialJPA.BOMaterial</class>
 		<class>com.grupoms.app.negocio.materialJPA.BOLibro</class>
 		<class>com.grupoms.app.negocio.materialJPA.BOPintura</class>
-
 		<class>com.grupoms.app.negocio.EjemplarJPA.BOEjemplar</class>
+
+		<class>com.grupoms.app.negocio.salaJPA.BOSala</class>
+		<class>com.grupoms.app.negocio.ClaseJPA.BOClase</class>
 
 
 		<properties>
-			<property name="jakarta.persistence.jdbc.driver"
-				value="com.mysql.cj.jdbc.Driver" />
-			<property name="jakarta.persistence.jdbc.url"
-				value="jdbc:mysql://localhost:3306/CentroCivicoDB?createDatabaseIfNotExist=true&amp;useSSL=false&amp;allowPublicKeyRetrieval=true&amp;serverTimezone=UTC" />
-
-
-
+			<property name="jakarta.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver" />
+			<property name="jakarta.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/CentroCivicoDB?createDatabaseIfNotExist=true&amp;useSSL=false&amp;allowPublicKeyRetrieval=true&amp;serverTimezone=UTC" />
 			<property name="jakarta.persistence.jdbc.user" value="root" />
-			<property name="jakarta.persistence.jdbc.password"
-				value="root" />
+			<property name="jakarta.persistence.jdbc.password" value="root" />
+
 			<property name="eclipselink.logging.level" value="FINE" />
 			<property name="eclipselink.logging.level.sql" value="FINE" />
-			<property name="eclipselink.ddl-generation"
-				value="drop-and-create-tables" />
-			<property name="eclipselink.ddl-generation.output-mode"
-				value="both" />
+
+			<property name="eclipselink.ddl-generation" value="drop-and-create-tables" />
+			<property name="eclipselink.ddl-generation.output-mode" value="both" />
 		</properties>
+		
 	</persistence-unit>
 </persistence>
-

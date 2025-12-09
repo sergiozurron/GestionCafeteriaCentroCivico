@@ -318,7 +318,7 @@ public class SocioSAImp implements SocioSA {
             BOPromocion promocion = em.find(BOPromocion.class, idPromocion);
 
             if (socio != null && socio.getActivo() && promocion != null && promocion.getActivo()) {
-                if (socio.getPromocions().contains(promocion)) {
+                if (socio.getPromocion().contains(promocion)) {
                     throw new Exception("El socio ya tiene esta promoción");
                 }
                 socio.anyadirPromocion(promocion);
@@ -346,7 +346,7 @@ public class SocioSAImp implements SocioSA {
             BOPromocion promocion = em.find(BOPromocion.class, idPromocion);
 
             if (socio != null && socio.getActivo() && promocion != null && promocion.getActivo()) {
-                if (!socio.getPromocions().contains(promocion)) {
+                if (!socio.getPromocion().contains(promocion)) {
                     throw new Exception("El socio no tiene esta promoción");
                 }
                 socio.eliminarPromocion(promocion);

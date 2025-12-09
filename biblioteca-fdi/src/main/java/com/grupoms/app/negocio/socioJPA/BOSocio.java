@@ -13,7 +13,7 @@ import java.util.List;
     @NamedQuery(name = "com.grupoms.app.negocio.socioJPA.BOSocio.findByName", query = "SELECT s FROM BOSocio s WHERE s.nombreYapellido = :nombre"),
     @NamedQuery(name = "com.grupoms.app.negocio.socioJPA.BOSocio.findByType", query = "SELECT s FROM BOSocio s WHERE s.tipoSocio = :tipo"),
     @NamedQuery(name = "com.grupoms.app.negocio.socioJPA.BOSocio.findAll", query = "SELECT s FROM BOSocio s"),
-    @NamedQuery(name = "com.grupoms.app.negocio.socioJPA.BOSocio.findByPromocion", query = "SELECT s FROM BOSocio s JOIN s.promocions p WHERE p.id = :idPromocion")
+    @NamedQuery(name = "com.grupoms.app.negocio.socioJPA.BOSocio.findByPromocion", query = "SELECT s FROM BOSocio s JOIN s.promocion p WHERE p.id = :idPromocion")
 })
 public class BOSocio implements Serializable {
 
@@ -35,7 +35,7 @@ public class BOSocio implements Serializable {
     private List<BOPrestamo> prestamos;
 
     @ManyToMany
-    private List<BOPromocion> promocions;
+    private List<BOPromocion> promocion;
 
     public BOSocio() {}
 
@@ -106,27 +106,27 @@ public class BOSocio implements Serializable {
         this.prestamos = prestamos;
     }
 
-    public List<BOPromocion> getPromocions() {
-        if (promocions == null) {
-            promocions = new ArrayList<>();
+    public List<BOPromocion> getPromocion() {
+        if (promocion == null) {
+            promocion = new ArrayList<>();
         }
-        return promocions;
+        return promocion;
     }
 
-    public void setPromocions(List<BOPromocion> promocions) {
-        this.promocions = promocions;
+    public void setPromocion(List<BOPromocion> promocions) {
+        this.promocion = promocions;
     }
 
     public void anyadirPromocion(BOPromocion promocion) {
-        if (this.promocions == null) {
-            this.promocions = new ArrayList<>();
+        if (this.promocion == null) {
+            this.promocion = new ArrayList<>();
         }
-        this.promocions.add(promocion);
+        this.promocion.add(promocion);
     }
 
     public void eliminarPromocion(BOPromocion promocion) {
-        if (this.promocions != null) {
-            this.promocions.remove(promocion);
+        if (this.promocion != null) {
+            this.promocion.remove(promocion);
         }
     }
 }

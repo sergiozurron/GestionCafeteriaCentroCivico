@@ -26,7 +26,7 @@ public class ClaseSAImp implements ClaseSA {
 		try {
 			t.begin();
 
-			TypedQuery<BOClase> query = em.createNamedQuery("com.grupoms.app.negocio.claseJPA.BOClase.findByInstance",
+			TypedQuery<BOClase> query = em.createNamedQuery("com.grupoms.app.negocio.claseJPA.BOClase.findByTipoAndFecha",
 					BOClase.class);
 			query.setParameter("tipo", clase.getTipo());
 			query.setParameter("fechaInicio", clase.getFechaInicio());

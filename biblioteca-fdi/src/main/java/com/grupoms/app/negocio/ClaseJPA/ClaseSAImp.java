@@ -1,5 +1,4 @@
 package com.grupoms.app.negocio.ClaseJPA;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -75,7 +74,7 @@ public class ClaseSAImp implements ClaseSA {
 			t.begin();
 
 			BOClase clase = em.find(BOClase.class, id);
-			if (clase != null && Boolean.TRUE.equals(clase.getActivo())) {
+			if (clase != null && clase.getActivo()) {
 				clase.setActivo(false);
 				res = 1;
 			} else {
@@ -225,7 +224,6 @@ public class ClaseSAImp implements ClaseSA {
 		} catch (Exception e) {
 			if (t.isActive())
 				t.rollback();
-			// Optionally log
 		} finally {
 			em.close();
 		}

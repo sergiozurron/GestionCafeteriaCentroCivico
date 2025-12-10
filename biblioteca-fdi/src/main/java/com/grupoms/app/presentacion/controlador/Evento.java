@@ -340,4 +340,8 @@ public class Evento {
 	public static final int BAJA_PRESTAMO_OK = 704;
 	public static final int BAJA_PRESTAMO_KO = 705;
 	
+	public static final int LISTAR_PRESTAMOS = 706;
+	public static final int LISTAR_PRESTAMOS_OK = 707;
+	public static final int LISTAR_PRESTAMOS_KO = 708;
+	
 }

@@ -6,8 +6,11 @@ public class TPrestamo {
     private Integer id;
     private Integer idSocio;
     private Integer idEjemplar;
+    private Date fechaInicial;
     private Date fechaMaxima;
+    private Date fechaDevuelto;
     private Double precioMulta;
+    private Boolean activo;
 
     public TPrestamo() {}
 
@@ -31,4 +34,28 @@ public class TPrestamo {
     public void setFechaMaxima(Date fechaMaxima) { this.fechaMaxima = fechaMaxima; }
     public Double getPrecioMulta() { return precioMulta; }
     public void setPrecioMulta(Double precioMulta) { this.precioMulta = precioMulta; }
+
+	public Date getFechaInicial() {
+		return fechaInicial;
+	}
+
+	public void setFechaInicial(Date fechaInicial) {
+		this.fechaInicial = fechaInicial;
+	}
+
+	public Date getFechaDevuelto() {
+		return fechaDevuelto;
+	}
+
+	public void setFechaDevuelto(Date fechaDevuelto) {
+		this.fechaDevuelto = fechaDevuelto;
+	}
+
+	public Boolean getActivo() {
+		return activo;
+	}
+
+	public void setActivo(Boolean activo) {
+		this.activo = activo;
+	}
 }

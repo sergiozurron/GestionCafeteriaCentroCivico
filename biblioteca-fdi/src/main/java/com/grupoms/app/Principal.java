@@ -112,7 +112,8 @@ public class Principal extends JFrame {
 		
 		panelCentroCivico.add(crearPanelCategoria("Prestamo", new String[][] {
 			{"Alta Préstamo", FactoriaVistas.GUI_ALTA_PRESTAMO},
-			{"Baja Préstamo", FactoriaVistas.GUI_BAJA_PRESTAMO}
+			{"Baja Préstamo", FactoriaVistas.GUI_BAJA_PRESTAMO},
+			{"Listar Préstamo", FactoriaVistas.GUI_LISTAR_PRESTAMO}
 		}));
 
 		// --- DIVISOR CENTRAL ---

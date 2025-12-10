@@ -1,4 +1,4 @@
-package com.grupoms.app.presentacion.ejemplarJPA;
+package com.grupoms.app.presentacion.prestamoJPA;
 
 import java.awt.BorderLayout;
 import java.util.List;
@@ -11,13 +11,13 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
-import com.grupoms.app.negocio.EjemplarJPA.TEjemplar;
+import com.grupoms.app.negocio.prestamoJPA.TPrestamo;
 import com.grupoms.app.presentacion.IGUI;
 import com.grupoms.app.presentacion.controlador.Context;
 import com.grupoms.app.presentacion.controlador.Controlador;
 import com.grupoms.app.presentacion.controlador.Evento;
 
-public class GUI_ListarEjemplar extends JFrame implements IGUI {
+public class GUI_ListarPrestamo extends JFrame implements IGUI {
 
 	private static final long serialVersionUID = 1L;
 
@@ -25,9 +25,9 @@ public class GUI_ListarEjemplar extends JFrame implements IGUI {
 	private DefaultTableModel modeloTabla;
 	private JButton btnCargar;
 
-	public GUI_ListarEjemplar() {
+	public GUI_ListarPrestamo() {
 		setTitle("Listar Ejemplares");
-		setSize(400, 300);
+		setSize(700, 500);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setLocationRelativeTo(null);
 
@@ -36,22 +36,26 @@ public class GUI_ListarEjemplar extends JFrame implements IGUI {
 		// Configuración de la tabla
 		modeloTabla = new DefaultTableModel();
 		modeloTabla.addColumn("ID");
-		modeloTabla.addColumn("Estado");
-		modeloTabla.addColumn("Id Material");
+		modeloTabla.addColumn("ID Ejemplar");
+		modeloTabla.addColumn("ID Socio");
+		modeloTabla.addColumn("Fecha Inicial");
+		modeloTabla.addColumn("Fecha Máxima");
+		modeloTabla.addColumn("Fecha Devuelto");
+		modeloTabla.addColumn("Precio Multa");
 		modeloTabla.addColumn("Activo");
 
 		tabla = new JTable(modeloTabla);
 		JScrollPane scrollPane = new JScrollPane(tabla);
 
 		// Botón para cargar proveedores
-		btnCargar = new JButton("Cargar Ejemplares");
+		btnCargar = new JButton("Cargar Préstamos");
 		btnCargar.addActionListener(e -> {
 			try {
-				Context contexto = new Context(Evento.LISTAR_EJEMPLARES, null);
+				Context contexto = new Context(Evento.LISTAR_PRESTAMOS, null);
 				Controlador.getInstance().handle(contexto);
 			} catch (Exception ex) {
 				ex.printStackTrace();
-				JOptionPane.showMessageDialog(this, "Error al cargar ejemplares: " + ex.getMessage(), "Error",
+				JOptionPane.showMessageDialog(this, "Error al cargar préstamos: " + ex.getMessage(), "Error",
 						JOptionPane.ERROR_MESSAGE);
 			}
 		});
@@ -68,14 +72,16 @@ public class GUI_ListarEjemplar extends JFrame implements IGUI {
 			setVisible(true);
 			return;
 		}
-		if (context.getEvento() == Evento.LISTAR_EJEMPLARES_OK) {
+		if (context.getEvento() == Evento.LISTAR_PRESTAMOS_OK) {
 			modeloTabla.setRowCount(0); // Limpiar la tabla
 
-			List<TEjemplar> ejemplares = (List<TEjemplar>) context.getDatos();
+			List<TPrestamo> prestamos = (List<TPrestamo>) context.getDatos();
 
-			for (TEjemplar ejemplar : ejemplares) {
-				Object[] fila = { ejemplar.getId(), ejemplar.getEstado(), ejemplar.getIdMaterial(),
-						(ejemplar.getActivo() != null && ejemplar.getActivo()) ? "Sí" : "No" };
+			for (TPrestamo prestamo : prestamos) {
+				Object[] fila = { prestamo.getId(), prestamo.getIdEjemplar(), prestamo.getIdSocio(),
+						prestamo.getFechaInicial(), prestamo.getFechaMaxima(), prestamo.getFechaDevuelto(),
+						prestamo.getPrecioMulta(),
+						(prestamo.getActivo() != null && prestamo.getActivo()) ? "Sí" : "No" };
 				modeloTabla.addRow(fila);
 			}
 		}

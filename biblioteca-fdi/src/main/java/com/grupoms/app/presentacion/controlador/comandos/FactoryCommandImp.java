@@ -18,6 +18,7 @@ import com.grupoms.app.presentacion.comandos.materialJPA.ModificarMaterialComman
 import com.grupoms.app.presentacion.comandos.materialJPA.MostrarMaterialCommand;
 import com.grupoms.app.presentacion.comandos.prestamoJPA.AltaPrestamoCommand;
 import com.grupoms.app.presentacion.comandos.prestamoJPA.BajaPrestamoCommand;
+import com.grupoms.app.presentacion.comandos.prestamoJPA.ListarPrestamosCommand;
 import com.grupoms.app.presentacion.comandos.salaJPA.AltaSalaCommand;
 import com.grupoms.app.presentacion.comandos.salaJPA.BajaSalaCommand;
 import com.grupoms.app.presentacion.comandos.salaJPA.ListarSalasCommand;
@@ -147,6 +148,7 @@ public class FactoryCommandImp extends FactoryCommand {
         // Prestamo
         commands.put(Evento.ALTA_PRESTAMO, new AltaPrestamoCommand());
         commands.put(Evento.BAJA_PRESTAMO, new BajaPrestamoCommand());
+        commands.put(Evento.LISTAR_PRESTAMOS, new ListarPrestamosCommand());
         
         //VISTAS
         views.put(Evento.MOSTRAR_PEDIDO, FactoriaVistas.GUI_MOSTRAR_PEDIDO);
@@ -212,6 +214,7 @@ public class FactoryCommandImp extends FactoryCommand {
         
         views.put(Evento.ALTA_PRESTAMO, FactoriaVistas.GUI_ALTA_PRESTAMO);
         views.put(Evento.BAJA_PRESTAMO, FactoriaVistas.GUI_BAJA_PRESTAMO);
+        views.put(Evento.LISTAR_PRESTAMOS, FactoriaVistas.GUI_LISTAR_PRESTAMO);
     }
     
     @Override

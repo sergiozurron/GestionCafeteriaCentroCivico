@@ -29,16 +29,6 @@ public class BOInfantil extends BOSocio implements Serializable {
     }
 
     public Double getReduccion() {
-        int e=this.edad;
-        if(e<=3){
-            reduccion=0.50;
-        }
-        else if(e<=14){
-            reduccion=0.20;
-        }
-        else if(e<=18){
-            reduccion=0.10;
-        }
         return reduccion;
     }
 

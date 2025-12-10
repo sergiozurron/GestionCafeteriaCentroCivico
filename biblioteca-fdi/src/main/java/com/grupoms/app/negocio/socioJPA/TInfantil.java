@@ -1,7 +1,7 @@
 package com.grupoms.app.negocio.socioJPA;
 
 public class TInfantil extends TSocio {
-    
+
     private Double reduccion;
     private int edad;
 
@@ -34,8 +34,7 @@ public class TInfantil extends TSocio {
         }
         return reduccion;
     }
-
-    public void setReduccion(Double reduccion) {
-        this.reduccion = reduccion;
+    public void setReduccion(Double reduccion){
+        this.reduccion=reduccion;
     }
 }

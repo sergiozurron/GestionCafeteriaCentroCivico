@@ -271,7 +271,67 @@ public class Evento {
 	public static final int LISTAR_SALAS = 612;
 	public static final int LISTAR_SALAS_OK = 613;
 	public static final int LISTAR_SALAS_KO = 614;
-	
+
+	public static final int VINCULAR_CLASE_SALA = 615;
+	public static final int VINCULAR_CLASE_SALA_OK = 616;
+	public static final int VINCULAR_CLASE_SALA_KO = 617;
+
+	public static final int DESVINCULAR_CLASE_SALA = 618;
+	public static final int DESVINCULAR_CLASE_SALA_OK = 619;
+	public static final int DESVINCULAR_CLASE_SALA_KO = 620;
+
+	public static final int MOSTRAR_CLASES_POR_SALA = 621;
+	public static final int MOSTRAR_CLASES_POR_SALA_OK = 622;
+	public static final int MOSTRAR_CLASES_POR_SALA_KO = 623;
+
+	//Socio
+	public static final int ALTA_SOCIO = 650;
+	public static final int ALTA_SOCIO_OK = 651;
+	public static final int ALTA_SOCIO_KO = 652;
+
+	public static final int BAJA_SOCIO = 653;
+	public static final int BAJA_SOCIO_OK = 654;
+	public static final int BAJA_SOCIO_KO = 655;
+
+	public static final int MOSTRAR_SOCIO = 656;
+	public static final int MOSTRAR_SOCIO_OK = 657;
+	public static final int MOSTRAR_SOCIO_KO = 658;
+
+	public static final int LISTAR_SOCIOS = 659;
+	public static final int LISTAR_SOCIOS_OK = 660;
+	public static final int LISTAR_SOCIOS_KO = 661;
+
+	public static final int MODIFICAR_SOCIO = 662;
+	public static final int MODIFICAR_SOCIO_OK = 663;
+	public static final int MODIFICAR_SOCIO_KO = 664;
+
+	public static final int MOSTRAR_SOCIO_EJEMPLARES = 665;
+	public static final int MOSTRAR_SOCIO_EJEMPLARES_OK = 666;
+	public static final int MOSTRAR_SOCIO_EJEMPLARES_KO = 667;
+
+	public static final int MOSTRAR_SOCIOS_POR_PROMOCION = 668;
+	public static final int MOSTRAR_SOCIOS_POR_PROMOCION_OK = 669;
+	public static final int MOSTRAR_SOCIOS_POR_PROMOCION_KO = 670;
+
+	public static final int SOLICITAR_EJEMPLAR = 671;
+	public static final int SOLICITAR_EJEMPLAR_OK = 672;
+	public static final int SOLICITAR_EJEMPLAR_KO = 673;
+
+	public static final int DEVOLVER_EJEMPLAR = 674;
+	public static final int DEVOLVER_EJEMPLAR_OK = 675;
+	public static final int DEVOLVER_EJEMPLAR_KO = 676;
+
+	public static final int VINCULAR_PROMOCION = 677;
+	public static final int VINCULAR_PROMOCION_OK = 678;
+	public static final int VINCULAR_PROMOCION_KO = 679;
+
+	public static final int DESVINCULAR_PROMOCION = 680;
+	public static final int DESVINCULAR_PROMOCION_OK = 681;
+	public static final int DESVINCULAR_PROMOCION_KO = 682;
+
+
+
+
 	public static final int ALTA_PRESTAMO = 700;
 	public static final int ALTA_PRESTAMO_OK = 701;
 	public static final int ALTA_PRESTAMO_KO = 702;

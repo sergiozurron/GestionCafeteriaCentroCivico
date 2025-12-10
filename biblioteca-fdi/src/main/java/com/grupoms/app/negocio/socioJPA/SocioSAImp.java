@@ -86,17 +86,11 @@ public class SocioSAImp implements SocioSA {
                 throw new Exception("El socio no existe o ya está inactivo.");
             }
 
-            boolean tienePrestamosActivos = false;
-            if (socio.getPrestamos() != null) {
-                for (BOPrestamo p : socio.getPrestamos()) {
-                    if (p.getActivo() && p.getFechaDevuelto() == null) {
-                        tienePrestamosActivos = true;
-                        break;
-                    }
-                }
-            }
+            TypedQuery<BOPrestamo> query = em.createNamedQuery("BOPrestamo.findBySocio", BOPrestamo.class);
+            query.setParameter("idSocio", socio.getId());
+            List<BOPrestamo> prestamos = query.getResultList();
 
-            if (tienePrestamosActivos) {
+            if (prestamos.size() > 0) {
                 t.rollback();
                 throw new Exception("El socio tiene préstamos pendientes.");
             }

@@ -30,7 +30,7 @@ public class BOSocio implements Serializable {
 
     @Version
     private int version;
-
+    
     @OneToMany(mappedBy = "socio")
     private List<BOPrestamo> prestamos;
 

@@ -19,16 +19,10 @@ public interface SocioSA {
 
     public List<TSocio> listarSocios();
 
-    public Pair<TSocio,List<TEjemplar>>  mostrarSocioYEjemplares(Integer idSocio);
-
     public List<TSocio> mostrarSociosPorPromocion(Integer idPromocion);
 
     public Integer vincularPromocionASocio(Integer idSocio,Integer idPromocion);
 
     public Integer desvincularPromocionASocio(Integer idSocio,Integer idPromocion);
-
-	Integer solicitarEjemplar(Integer idSocio, Integer idEjemplar, Date fechaMaxima);
-
-	Integer devolverEjemplar(Integer idSocio, Integer idEjemplar, Date fechaDevolucion);
 
 }

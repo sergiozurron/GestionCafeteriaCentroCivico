@@ -10,7 +10,17 @@ import com.grupoms.app.presentacion.controlador.Evento;
 
 import java.awt.*;
 
-public class GUI_MostrarPromocion extends JFrame implements IGUI{
+public class GUI_MostrarPromocion extends JFrame implements IGUI {
+
+    private static final long serialVersionUID = 1L;
+
+    private JTextField campoID;
+    private JButton mostrar;
+
+    private JLabel tipoLabel;
+    private JLabel descuentoLabel;
+    private JLabel activoLabel;
+
     public GUI_MostrarPromocion() {
         super("Mostrar Promoción");
         initGUI();
@@ -20,61 +30,88 @@ public class GUI_MostrarPromocion extends JFrame implements IGUI{
     }
 
     private void initGUI() {
-        setLayout(new BorderLayout());
+
         JPanel panel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(5,5,5,5);
+        gbc.insets = new Insets(5, 5, 5, 5);
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        JLabel labelId = new JLabel("ID de la Promoción a mostrar:");
-        JTextField campoId = new JTextField(20);
-        gbc.gridx = 0; gbc.gridy = 0;
-        panel.add(labelId, gbc);
+        // Campo ID
+        JLabel labelID = new JLabel("ID Promoción:");
+        campoID = new JTextField(10);
+
+        mostrar = new JButton("Mostrar Promoción");
+        mostrar.addActionListener(e -> {
+            try {
+                int id = Integer.parseInt(campoID.getText());
+                Context contexto = new Context(Evento.MOSTRAR_PROMOCION, id);
+                Controlador.getInstance().handle(contexto);
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(this, "Error: el ID debe ser numérico");
+            }
+        });
+
+        tipoLabel = new JLabel();
+        descuentoLabel = new JLabel();
+        activoLabel = new JLabel();
+
+        int y = 0;
+
+        gbc.gridx = 0; gbc.gridy = y;
+        panel.add(labelID, gbc);
         gbc.gridx = 1;
-        panel.add(campoId, gbc);
+        panel.add(campoID, gbc);
 
-        // Botón Aceptar
-        JButton aceptar = new JButton("Aceptar");
-        gbc.gridx = 0; gbc.gridy = 1; gbc.gridwidth = 2;
-        aceptar.addActionListener(e -> MostrarPromocion(campoId.getText()));
+        y++;
+        gbc.gridx = 0; gbc.gridy = y; gbc.gridwidth = 2;
+        panel.add(mostrar, gbc);
 
-        panel.add(aceptar, gbc);
+        y++;
+        gbc.gridwidth = 1;
+        gbc.gridx = 0; gbc.gridy = y;
+        panel.add(new JLabel("Tipo:"), gbc);
+        gbc.gridx = 1;
+        panel.add(tipoLabel, gbc);
+
+        y++;
+        gbc.gridx = 0; gbc.gridy = y;
+        panel.add(new JLabel("Descuento:"), gbc);
+        gbc.gridx = 1;
+        panel.add(descuentoLabel, gbc);
+
+        y++;
+        gbc.gridx = 0; gbc.gridy = y;
+        panel.add(new JLabel("Activo:"), gbc);
+        gbc.gridx = 1;
+        panel.add(activoLabel, gbc);
+
         add(panel, BorderLayout.CENTER);
-    }
-
-    private void MostrarPromocion(String idText) {
-        try {
-            int id = Integer.parseInt(idText);
-            TPromocion promocion = new TPromocion();
-            promocion.setId(id);
-            Context contexto = new Context(Evento.MOSTRAR_PROMOCION, promocion);
-            Controlador.getInstance().handle(contexto);
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "ID inválido. Por favor, ingrese un número entero.");
-        }
     }
 
     @Override
     public void actualizar(Context context) {
         if (context == null) {
-        	setVisible(true);
-			return;
-        } else if (context.getEvento() == Evento.MOSTRAR_PROMOCION_OK) {
-            TPromocion promocion = (TPromocion) context.getDatos();
+            setVisible(true);
+            return;
+        }
 
-            if (promocion == null) {
-                JOptionPane.showMessageDialog(this, "La promoción no existe.");
-            } else {
-                StringBuilder info = new StringBuilder();
-                info.append("ID: ").append(promocion.getId()).append("\n");
-                info.append("Tipo: ").append(promocion.getTipo()).append("\n");
-                info.append("Descuento: ").append(promocion.getDescuento()).append("\n");
-                info.append("Activo: ").append(promocion.getActivo() ? "Sí" : "No").append("\n");
+        switch (context.getEvento()) {
 
-                JOptionPane.showMessageDialog(this, info.toString(), "Detalles de la Promoción", JOptionPane.INFORMATION_MESSAGE);
-            }
-        } else if (context.getEvento() == Evento.MOSTRAR_PROMOCION_KO) {
-            JOptionPane.showMessageDialog(this, "No se ha podido mostrar la promoción.", "Error", JOptionPane.ERROR_MESSAGE);
+            case Evento.MOSTRAR_PROMOCION_OK:
+                TPromocion p = (TPromocion) context.getDatos();
+                if (p != null) {
+                    tipoLabel.setText(p.getTipo());
+                    descuentoLabel.setText(String.valueOf(p.getDescuento()));
+                    activoLabel.setText(p.getActivo() ? "Sí" : "No");
+                }
+                break;
+
+            case Evento.MOSTRAR_PROMOCION_KO:
+                JOptionPane.showMessageDialog(this, "Promoción no encontrada en la base de datos");
+                tipoLabel.setText("");
+                descuentoLabel.setText("");
+                activoLabel.setText("");
+                break;
         }
     }
 }

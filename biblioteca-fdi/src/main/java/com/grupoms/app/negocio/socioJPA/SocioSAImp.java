@@ -90,7 +90,7 @@ public class SocioSAImp implements SocioSA {
             query.setParameter("idSocio", socio.getId());
             List<BOPrestamo> prestamos = query.getResultList();
 
-            if (prestamos.size() > 0) {
+            if (prestamos.isEmpty()) {
                 t.rollback();
                 throw new Exception("El socio tiene préstamos pendientes.");
             }

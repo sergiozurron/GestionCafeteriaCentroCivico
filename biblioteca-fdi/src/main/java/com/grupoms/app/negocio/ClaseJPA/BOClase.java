@@ -1,6 +1,7 @@
 package com.grupoms.app.negocio.ClaseJPA;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -67,13 +68,16 @@ public class BOClase implements Serializable {
     @ManyToMany
     private List<BOEjemplar> ejemplares;
     
-    public BOClase() { }
+    public BOClase() {
+        this.ejemplares = new ArrayList<>();
+    }
 
     public BOClase(TClase clase) {
         this.tipo = clase.getTipo();
         this.fechaInicio = clase.getFechaInicio();
         this.duracion = clase.getDuracion();
         this.activo = clase.getActivo();
+        this.ejemplares = new ArrayList<>();
     }
 
 
@@ -126,11 +130,13 @@ public class BOClase implements Serializable {
     }
     
     public void anyadirEjemplar(BOEjemplar ejemplar) {
-    	ejemplares.add(ejemplar);
+     if (this.ejemplares == null) this.ejemplares = new ArrayList<>();
+     ejemplares.add(ejemplar);
     }
     
     public void eliminarEjemplar(BOEjemplar ejemplar) {
-    	ejemplares.remove(ejemplar);
+     if (this.ejemplares == null) return;
+     ejemplares.remove(ejemplar);
     }
     
 }

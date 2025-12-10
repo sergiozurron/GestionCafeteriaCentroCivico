@@ -26,6 +26,20 @@ public abstract class FactoriaSA {
 		return instancia;
 	}
 	
+	/**
+	 * Permite inyectar una factoria para testing
+	 */
+	public static synchronized void setInstance(FactoriaSA factoria) {
+		instancia = factoria;
+	}
+
+	/**
+	 * Resetea la instancia singleton (útil entre tests)
+	 */
+	public static synchronized void resetInstance() {
+		instancia = null;
+	}
+
 	public abstract SAProveedor creaSAProveedor();
 	public abstract SAMesa creaSAMesa();
 	public abstract SAPedido creaSAPedido();

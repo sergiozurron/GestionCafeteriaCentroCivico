@@ -25,7 +25,7 @@ public class EjemplarSAImp implements EjemplarSA {
 			}
 
 			BOEjemplar boEjemplar = new BOEjemplar();
-			boEjemplar.setEstado(ejemplar.getEstado());
+			boEjemplar.setEstado("DISPONIBLE");
 			boEjemplar.setActivo(true);
 			boEjemplar.setMaterial(boMaterial);
 

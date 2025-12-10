@@ -60,7 +60,7 @@ public class GUI_AltaPromocion extends JFrame implements IGUI  {
         
 
         if (tipo.isEmpty() || descuentoStr.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Por favor, complete todos los campos.", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Por favor, completa todos los campos.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 

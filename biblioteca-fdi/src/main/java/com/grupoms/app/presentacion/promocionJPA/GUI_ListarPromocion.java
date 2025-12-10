@@ -1,68 +1,91 @@
 package com.grupoms.app.presentacion.promocionJPA;
 
 import javax.swing.*;
-import java.util.List;
+import javax.swing.table.DefaultTableModel;
 
-import com.grupoms.app.negocio.PromocionJPA.TPromocion;
+import com.grupoms.app.negocio.PromocionJPA.*;
 import com.grupoms.app.presentacion.IGUI;
 import com.grupoms.app.presentacion.controlador.Context;
 import com.grupoms.app.presentacion.controlador.Controlador;
 import com.grupoms.app.presentacion.controlador.Evento;
 
 import java.awt.*;
+import java.util.List;
 
 public class GUI_ListarPromocion extends JFrame implements IGUI {
+
+    private static final long serialVersionUID = 1L;
+
+    private JTable tabla;
+    private DefaultTableModel modeloTabla;
+    private JButton botonCargar;
+
     public GUI_ListarPromocion() {
-        super("Listar Promociones");
-        initGUI();
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        pack();
+        setTitle("Listado de Promociones");
+        setSize(600, 400);
         setLocationRelativeTo(null);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        initGUI();
     }
 
     private void initGUI() {
-        setLayout(new BorderLayout());
-        JPanel panel = new JPanel(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(5,5,5,5);
-        gbc.fill = GridBagConstraints.HORIZONTAL;
+        JPanel panelPrincipal = new JPanel(new BorderLayout());
 
-        // Botón Listar
-        JButton listar = new JButton("Listar Promociones");
-        gbc.gridx = 0; gbc.gridy = 0; gbc.gridwidth = 2;
-        listar.addActionListener(e -> listarPromociones());
+        // --- Configuración de la tabla ---
+        modeloTabla = new DefaultTableModel();
+        modeloTabla.addColumn("ID");
+        modeloTabla.addColumn("Tipo");
+        modeloTabla.addColumn("Descuento");
+        modeloTabla.addColumn("Activo");
 
-        panel.add(listar, gbc);
-        add(panel, BorderLayout.CENTER);
+        tabla = new JTable(modeloTabla);
+        JScrollPane scrollPane = new JScrollPane(tabla);
+
+        botonCargar = new JButton("Cargar Promociones");
+        botonCargar.addActionListener(e -> {
+
+        try {
+            Context contexto = new Context(Evento.LISTAR_PROMOCION, null);
+            Controlador.getInstance().handle(contexto);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error al listar promociones: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        });
+        panelPrincipal.add(botonCargar, BorderLayout.NORTH);
+        
+
+        panelPrincipal.add(scrollPane, BorderLayout.CENTER);
+        add(panelPrincipal);
     }
 
-    private void listarPromociones() {
-        Context contexto = new Context(Evento.LISTAR_PROMOCION, null);
-        Controlador.getInstance().handle(contexto);
-    }
-
+    @SuppressWarnings("unchecked")
     @Override
     public void actualizar(Context context) {
         if (context == null) {
-        	setVisible(true);
-			return;
+            setVisible(true);
+            return;
         }
-        switch(context.getEvento()) {
-            case Evento.LISTAR_PROMOCION_OK:
-                @SuppressWarnings("unchecked")
-                List<TPromocion> promociones = (List<TPromocion>) context.getDatos();
-                StringBuilder mensaje = new StringBuilder("Promociones:\n");
-                for (TPromocion promo : promociones) {
-                    mensaje.append("ID: ").append(promo.getId())
-                           .append(", Tipo: ").append(promo.getTipo())
-                           .append(", Descuento: ").append(promo.getDescuento())
-                           .append("\n");
-                }
-                JOptionPane.showMessageDialog(this, mensaje.toString(), "Listado de Promociones", JOptionPane.INFORMATION_MESSAGE);
-                break;
-            case Evento.LISTAR_PROMOCION_KO:
-                JOptionPane.showMessageDialog(this, "Error al listar las promociones", "Error", JOptionPane.ERROR_MESSAGE);
-                break;
+
+        if (context.getEvento() == Evento.LISTAR_PROMOCION_OK) {
+            modeloTabla.setRowCount(0); // limpia la tabla
+            List<TPromocion> promociones = (List<TPromocion>) context.getDatos();
+
+            if (promociones == null || promociones.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "No hay promociones en la base de datos.");
+                return;
+            }
+
+            for (TPromocion p : promociones) {
+                modeloTabla.addRow(new Object[]{
+                        p.getId(),
+                        p.getTipo(),
+                        p.getDescuento(),
+                        p.getActivo() ? "Sí" : "No"
+                });
+            }
+        } else if (context.getEvento() == Evento.LISTAR_PROMOCION_KO) {
+            JOptionPane.showMessageDialog(this, "Error al listar las promociones.");
         }
     }
 }

@@ -27,14 +27,13 @@ public class SalaSAImp implements SalaSA {
         
         try {
             t.begin();
-            // CORRECCIÓN 1: Typo arreglado "com.grupoms..." (antes ponía grpoms)
             TypedQuery<BOSala> query = em.createNamedQuery("com.grupoms.app.negocio.salaJPA.BOSala.findByName", BOSala.class);
             query.setParameter("nombre", sala.getNombre());
             
             try {
                 salaExistente = query.getSingleResult();
             } catch(NoResultException e) {
-                salaExistente = null; // Controlamos explícitamente que no existe
+                salaExistente = null; 
             }
             
             if(salaExistente != null) {

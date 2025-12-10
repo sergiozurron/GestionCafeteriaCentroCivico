@@ -21,11 +21,11 @@ public class GUI_ModificarSocio extends JFrame implements IGUI {
     private JTextField edad;
     private JLabel reduccion;
 
-    private JComboBox<String> tipoCombo,miembroPlenoCombo;
+    private JComboBox<String> tipoCombo, miembroPlenoCombo;
 
     private JButton modificar;
 
-    public GUI_ModificarSocio(){
+    public GUI_ModificarSocio() {
         super("Modificar Socio");
         initGUI();
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -65,58 +65,75 @@ public class GUI_ModificarSocio extends JFrame implements IGUI {
         JLabel labelEdad = new JLabel("Edad: ");
         edad = new JTextField(10);
         JLabel labelReduccion = new JLabel("Reducción: ");
-        int ed=Integer.parseInt(edad.getText());
-        if (ed <= 3) {
-            reduccion = new JLabel("50%");
-        } else if (ed <= 14) {
-            reduccion = new JLabel("20%");
-        } else if (ed <= 18) {
-            reduccion = new JLabel("10%");
-        } else {
-            reduccion = new JLabel("0%");;
-        }
+
+        reduccion = new JLabel("0%");
 
         modificar = new JButton("Modificar Socio");
         modificar.addActionListener(e -> {
             try {
+                // Validación básica de campos vacíos para evitar otro crash
+                if (id.getText().isEmpty() || cuota.getText().isEmpty()) {
+                    JOptionPane.showMessageDialog(this, "Por favor rellena ID y Cuota");
+                    return;
+                }
+
                 int idI = Integer.parseInt(id.getText());
                 String nombreI = nombre.getText();
-                String dniI=dni.getText();
+                String dniI = dni.getText();
                 int cuotaI = Integer.parseInt(cuota.getText());
 
                 TSocio s = null;
+
                 if (tipoCombo.getSelectedItem().equals("Adulto")) {
                     TAdulto adulto = new TAdulto();
                     adulto.setTipoSocio(0);
-                    if(miembroPlenoCombo.getSelectedItem().equals("Si")){
+                    if (miembroPlenoCombo.getSelectedItem().equals("Si")) {
                         adulto.setMiembroPleno(true);
-                    }
-                    else if(miembroPlenoCombo.getSelectedItem().equals("No")){
+                    } else if (miembroPlenoCombo.getSelectedItem().equals("No")) {
                         adulto.setMiembroPleno(false);
-                    }
-                    else{
+                    } else {
                         JOptionPane.showMessageDialog(this, "Debe rellenar SI/NO");
                         return;
                     }
-                    s=adulto;
-                } else if(tipoCombo.getSelectedItem().equals("Infantil")){
+                    s = adulto;
+                } else if (tipoCombo.getSelectedItem().equals("Infantil")) {
+                    if (edad.getText().isEmpty()) {
+                        JOptionPane.showMessageDialog(this, "Debe introducir la edad");
+                        return;
+                    }
+                    
                     TInfantil infantil = new TInfantil();
                     infantil.setTipoSocio(1);
-                    infantil.setEdad(Integer.parseInt(edad.getText()));
-                    infantil.setReduccion(infantil.getReduccion());
+                    int edadValor = Integer.parseInt(edad.getText());
+                    infantil.setEdad(edadValor);
+
+                    // Lógica de reducción movida aquí (donde sí tenemos el dato de la edad)
+                    double valorReduccion;
+                    if (edadValor <= 3) valorReduccion = 0.5;      // 50%
+                    else if (edadValor <= 14) valorReduccion = 0.2; // 20%
+                    else if (edadValor <= 18) valorReduccion = 0.1; // 10%
+                    else valorReduccion = 0.0;
+                    
+                    infantil.setReduccion(valorReduccion);
+                    
+                    // Actualizamos la etiqueta visualmente también
+                    reduccion.setText((int)(valorReduccion * 100) + "%");
+                    
                     s = infantil;
                 }
 
-                s.setId(idI);
-                s.setNombreYapellido(nombreI);
-                s.setDni(dniI);
-                s.setCuota(cuotaI);
+                if (s != null) {
+                    s.setId(idI);
+                    s.setNombreYapellido(nombreI);
+                    s.setDni(dniI);
+                    s.setCuota(cuotaI);
 
-                Context contexto = new Context(Evento.MODIFICAR_SOCIO, s);
-                Controlador.getInstance().handle(contexto);
+                    Context contexto = new Context(Evento.MODIFICAR_SOCIO, s);
+                    Controlador.getInstance().handle(contexto);
+                }
 
             } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(this, "Error: campos numéricos no válidos");
+                JOptionPane.showMessageDialog(this, "Error: Verifique que ID, Cuota y Edad sean números válidos.");
             }
         });
 
@@ -156,7 +173,7 @@ public class GUI_ModificarSocio extends JFrame implements IGUI {
     }
 
     private void actualizarCamposTipo() {
-        Boolean isAdulto=tipoCombo.getSelectedItem().equals("Adulto");
+        Boolean isAdulto = tipoCombo.getSelectedItem().equals("Adulto");
         miembroPlenoCombo.setEnabled(isAdulto);
         edad.setEnabled(!isAdulto);
         reduccion.setEnabled(!isAdulto);
@@ -174,7 +191,7 @@ public class GUI_ModificarSocio extends JFrame implements IGUI {
             dni.setText("");
             cuota.setText("");
             edad.setText("");
-            reduccion.setText("");
+            reduccion.setText("0%");
         } else if (context.getEvento() == Evento.MODIFICAR_SOCIO_KO) {
             JOptionPane.showMessageDialog(this, "No se ha podido modificar el socio");
         }

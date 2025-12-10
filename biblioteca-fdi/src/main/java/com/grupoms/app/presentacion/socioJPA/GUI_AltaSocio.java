@@ -46,14 +46,14 @@ public class GUI_AltaSocio extends JFrame implements IGUI {
 
         JLabel labelDNI=new JLabel("DNI: ");
         campoDni = new JTextField(20);
-        gbc.gridx = 0; gbc.gridy = 0;
+        gbc.gridx = 0; gbc.gridy = 1;
         panel.add(labelDNI, gbc);
         gbc.gridx = 1;
         panel.add(campoDni, gbc);
 
         JLabel labelCuota=new JLabel("Cuota: ");
         campoCuota = new JTextField(20);
-        gbc.gridx = 0; gbc.gridy = 0;
+        gbc.gridx = 0; gbc.gridy = 2;
         panel.add(labelCuota, gbc);
         gbc.gridx = 1;
         panel.add(campoCuota, gbc);
@@ -63,7 +63,7 @@ public class GUI_AltaSocio extends JFrame implements IGUI {
         ButtonGroup grupoTipo = new ButtonGroup();
         grupoTipo.add(adultoButton);
         grupoTipo.add(infantilButton);
-        gbc.gridx = 0; gbc.gridy = 2;
+        gbc.gridx = 0; gbc.gridy = 3;
         panel.add(adultoButton, gbc);
         gbc.gridx = 1;
         panel.add(infantilButton, gbc);
@@ -80,12 +80,11 @@ public class GUI_AltaSocio extends JFrame implements IGUI {
         gbcAdulto.insets = new Insets(5,5,5,5);
         gbcAdulto.gridx = 0; gbcAdulto.gridy = 0;
         panelAdulto.add(labelMiembroPleno, gbcAdulto);
-        gbcAdulto.gridx = 1;
-        gbc.gridx = 0; gbc.gridy = 2;
+        gbcAdulto.gridx = 0;gbcAdulto.gridy = 1;
         panelAdulto.add(si, gbc);
         gbc.gridx = 1;
         panelAdulto.add(no, gbc);
-        gbcAdulto.gridx = 0; gbcAdulto.gridy = 1;
+        gbcAdulto.gridx = 0; gbcAdulto.gridy = 2;
         panelAdulto.setVisible(false);
 
         // Panel Infantil

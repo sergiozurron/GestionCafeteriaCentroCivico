@@ -31,6 +31,7 @@ import com.grupoms.app.presentacion.comandos.salaJPA.BajaSalaCommand;
 import com.grupoms.app.presentacion.comandos.salaJPA.ListarSalasCommand;
 import com.grupoms.app.presentacion.comandos.salaJPA.ModificarSalaCommand;
 import com.grupoms.app.presentacion.comandos.salaJPA.MostrarSalaCommand;
+import com.grupoms.app.presentacion.comandos.socioJPA.*;
 import com.grupoms.app.presentacion.controlador.Evento;
 import com.grupoms.app.presentacion.controlador.comandos.empleado.AltaEmpleadoCommand;
 import com.grupoms.app.presentacion.controlador.comandos.empleado.BajaEmpleadoCommand;
@@ -179,6 +180,14 @@ public class FactoryCommandImp extends FactoryCommand {
         commands.put(Evento.MOSTRAR_PROMOCION, new MostrarPromocionCommand());
         commands.put(Evento.VER_PROMOCIONES_POR_SOCIO, new VerPromocionesPorSocioCommand());
         
+        //Socio
+        commands.put(Evento.ALTA_SOCIO,new AltaSocioCommand());
+        commands.put(Evento.BAJA_SOCIO, new BajaSocioCommand());
+        commands.put(Evento.MODIFICAR_SOCIO, new ModificarSocioCommand());
+        commands.put(Evento.MOSTRAR_SOCIO, new MostrarSocioCommand());
+        commands.put(Evento.LISTAR_SOCIOS,new ListarSociosCommand());
+        
+        
         //VISTAS
         views.put(Evento.MOSTRAR_PEDIDO, FactoriaVistas.GUI_MOSTRAR_PEDIDO);
         views.put(Evento.MODIFICAR_PEDIDO, FactoriaVistas.GUI_MODIFICAR_PEDIDO);
@@ -260,6 +269,12 @@ public class FactoryCommandImp extends FactoryCommand {
         views.put(Evento.MODIFICAR_CLASE, FactoriaVistas.GUI_MODIFICAR_CLASE);
         views.put(Evento.VINCULAR_EJEMPLAR_CLASE, FactoriaVistas.GUI_VINCULAR_EJEMPLAR_CLASE) ;
         views.put(Evento.DESVINCULAR_EJEMPLAR_CLASE, FactoriaVistas.GUI_DESVINCULAR_EJEMPLAR_CLASE);
+
+        views.put(Evento.ALTA_SOCIO,FactoriaVistas.GUI_ALTA_SOCIO);
+        views.put(Evento.BAJA_SOCIO, FactoriaVistas.GUI_BAJA_SOCIO);
+        views.put(Evento.MODIFICAR_SOCIO, FactoriaVistas.GUI_MODIFICAR_SOCIO);
+        views.put(Evento.MOSTRAR_SOCIO, FactoriaVistas. GUI_MOSTRAR_SOCIO);
+        views.put(Evento.LISTAR_SOCIOS,FactoriaVistas. GUI_LISTAR_SOCIOS);
     }
     
     @Override

@@ -23,6 +23,7 @@ import com.grupoms.app.presentacion.materialJPA.GUI_ListarMaterial;
 import com.grupoms.app.presentacion.materialJPA.GUI_ModificarMaterial;
 import com.grupoms.app.presentacion.materialJPA.GUI_MostrarMaterial;
 import com.grupoms.app.presentacion.prestamoJPA.GUI_AltaPrestamo;
+import com.grupoms.app.presentacion.prestamoJPA.GUI_BajaPrestamo;
 import com.grupoms.app.presentacion.promocionJPA.GUI_AltaPromocion;
 import com.grupoms.app.presentacion.promocionJPA.GUI_BajaPromocion;
 import com.grupoms.app.presentacion.promocionJPA.GUI_ListarPromocion;
@@ -117,6 +118,7 @@ public class FactoriaVistas {
 	public static final String GUI_BAJA_MATERIAL = "GUI_BajaMaterial";
 	
 	public static final String GUI_ALTA_PRESTAMO = "GUI_AltaPrestamo";
+	public static final String GUI_BAJA_PRESTAMO = "GUI_BajaPrestamo";
 
     // Singleton
     private static FactoriaVistas instance;
@@ -212,6 +214,7 @@ public class FactoriaVistas {
         vistas.put(GUI_MOSTRAR_SALA, new GUI_MostrarSala());
         
         vistas.put(GUI_ALTA_PRESTAMO, new GUI_AltaPrestamo());
+        vistas.put(GUI_BAJA_PRESTAMO, new GUI_BajaPrestamo());
     }
 
     public static FactoriaVistas getInstance() {

@@ -56,7 +56,7 @@ public class GUI_AltaPrestamo extends JFrame implements IGUI {
 
 		btnCrear = new JButton("Crear Préstamo");
 
-		btnCrear.addActionListener(_ -> {
+		btnCrear.addActionListener(e -> {
 			String precioMultaString = campoPrecioMulta.getText().trim();
 			String fechaDevolucionString = campoFechaDevolucion.getText().trim();
 			String idSocioString = campoIdSocio.getText().trim();

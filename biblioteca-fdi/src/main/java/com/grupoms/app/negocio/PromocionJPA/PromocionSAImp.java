@@ -20,7 +20,7 @@ public class PromocionSAImp implements PromocionSA {
 
         try {
 			t.begin();
-			TypedQuery<BOPromocion> query = em.createNamedQuery("com.grupoms.app.negocio.materialJPA.BOPromocion.findByInstance", BOPromocion.class);
+			TypedQuery<BOPromocion> query = em.createNamedQuery("com.grupoms.app.negocio.PromocionJPA.BOPromocion.findByInstance", BOPromocion.class);
 			query.setParameter("tipo", promocion.getTipo());
             query.setParameter("descuento", promocion.getDescuento());
 			try {

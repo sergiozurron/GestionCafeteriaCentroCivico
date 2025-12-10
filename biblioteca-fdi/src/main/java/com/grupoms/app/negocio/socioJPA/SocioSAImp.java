@@ -180,25 +180,6 @@ public class SocioSAImp implements SocioSA {
         }
     }
 
-    @Override
-    public Pair<TSocio, List<TEjemplar>> mostrarSocioYEjemplares(Integer idSocio) {
-        EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
-        try {
-            TSocio socio = mostrarSocio(idSocio);
-            if (socio == null) return null;
-
-            TypedQuery<BOEjemplar> query = em.createNamedQuery("BOEjemplar.findBySocio", BOEjemplar.class);
-            query.setParameter("idSocio", idSocio);
-
-            List<TEjemplar> lista = query.getResultList().stream()
-                    .map(EjemplarAssembler::toTransferObject)
-                    .collect(Collectors.toList());
-
-            return Pair.of(socio, lista);
-        } finally {
-            em.close();
-        }
-    }
 
     @Override
     public List<TSocio> mostrarSociosPorPromocion(Integer idPromocion) {
@@ -219,86 +200,6 @@ public class SocioSAImp implements SocioSA {
         return lista;
     }
 
-    @Override
-    public Integer solicitarEjemplar(Integer idSocio, Integer idEjemplar, Date fechaMaxima) {
-        EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
-        EntityTransaction t = em.getTransaction();
-        Integer idPrestamo = -1;
-
-        try {
-            t.begin();
-            BOSocio socio = em.find(BOSocio.class, idSocio);
-            if (socio == null || !socio.getActivo()) throw new Exception("Socio no válido");
-
-            BOEjemplar ejemplar = em.find(BOEjemplar.class, idEjemplar);
-            if (ejemplar == null || !ejemplar.getActivo()) throw new Exception("Ejemplar no válido");
-
-            if (!"DISPONIBLE".equalsIgnoreCase(ejemplar.getEstado())) {
-                throw new Exception("El ejemplar no está disponible");
-            }
-
-            BOPrestamo prestamo = new BOPrestamo(socio, ejemplar, fechaMaxima);
-            ejemplar.setEstado("PRESTADO");
-            em.persist(prestamo);
-
-            socio.getPrestamos().add(prestamo);
-            ejemplar.getPrestamos().add(prestamo);
-
-            t.commit();
-            idPrestamo = prestamo.getId();
-        } catch (Exception e) {
-            if (t.isActive()) t.rollback();
-            e.printStackTrace();
-            return -1;
-        } finally {
-            em.close();
-        }
-        return idPrestamo;
-    }
-
-    @Override
-    public Integer devolverEjemplar(Integer idSocio, Integer idEjemplar, Date fechaDevolucion) {
-        EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
-        EntityTransaction t = em.getTransaction();
-        Integer res = -1;
-
-        try {
-            t.begin();
-            TypedQuery<BOPrestamo> query = em.createNamedQuery("BOPrestamo.findActivoBySocioYEjemplar", BOPrestamo.class);
-            query.setParameter("idSocio", idSocio);
-            query.setParameter("idEjemplar", idEjemplar);
-
-            BOPrestamo prestamo;
-            try {
-                prestamo = query.getSingleResult();
-            } catch (Exception e) {
-                throw new Exception("No hay préstamo activo");
-            }
-
-            prestamo.setFechaDevuelto(fechaDevolucion);
-
-            if (fechaDevolucion.after(prestamo.getFechaMaxima())) {
-                long diffInMillies = Math.abs(fechaDevolucion.getTime() - prestamo.getFechaMaxima().getTime());
-                long diasRetraso = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
-                prestamo.setPrecioMulta(diasRetraso * 2.0);
-            } else {
-                prestamo.setPrecioMulta(0.0);
-            }
-
-            BOEjemplar ejemplar = prestamo.getEjemplar();
-            ejemplar.setEstado("DISPONIBLE");
-
-            t.commit();
-            res = prestamo.getId();
-        } catch (Exception e) {
-            if (t.isActive()) t.rollback();
-            e.printStackTrace();
-            return -1;
-        } finally {
-            em.close();
-        }
-        return res;
-    }
 
     @Override
     public Integer vincularPromocionASocio(Integer idSocio, Integer idPromocion) {

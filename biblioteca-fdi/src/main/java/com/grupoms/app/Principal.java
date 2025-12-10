@@ -114,7 +114,8 @@ public class Principal extends JFrame {
 			{"Alta Préstamo", FactoriaVistas.GUI_ALTA_PRESTAMO},
 			{"Baja Préstamo", FactoriaVistas.GUI_BAJA_PRESTAMO},
 			{"Listar Préstamo", FactoriaVistas.GUI_LISTAR_PRESTAMO},
-			{"Mostrar Préstamo", FactoriaVistas.GUI_MOSTRAR_PRESTAMO}
+			{"Mostrar Préstamo", FactoriaVistas.GUI_MOSTRAR_PRESTAMO},
+			{"Modificar Préstamo", FactoriaVistas.GUI_MODIFICAR_PRESTAMO}
 		}));
 
 		// --- DIVISOR CENTRAL ---

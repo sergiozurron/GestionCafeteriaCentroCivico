@@ -20,6 +20,7 @@ import com.grupoms.app.negocio.prestamoJPA.BOPrestamo;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.LockModeType;
 import jakarta.persistence.TypedQuery;
 
 public class SocioSAImp implements SocioSA {
@@ -209,8 +210,8 @@ public class SocioSAImp implements SocioSA {
 
         try {
             t.begin();
-            BOSocio socio = em.find(BOSocio.class, idSocio);
-            BOPromocion promocion = em.find(BOPromocion.class, idPromocion);
+            BOSocio socio = em.find(BOSocio.class, idSocio, LockModeType.OPTIMISTIC);
+            BOPromocion promocion = em.find(BOPromocion.class, idPromocion, LockModeType.OPTIMISTIC);
 
             if (socio != null && socio.getActivo() && promocion != null && promocion.getActivo()) {
                 if (socio.getPromocion().contains(promocion)) {

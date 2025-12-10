@@ -33,10 +33,11 @@ public class PromocionSAImp implements PromocionSA {
 					promocionExistente.setActivo(true);
 					id = promocionExistente.getID();
 				}else {
-					throw new IllegalStateException("La promoción con tipo " + promocion.getTipo() + "y descuento" + promocion.getDescuento() + " ya existe");
+					throw new IllegalStateException("La promoción con tipo " + promocion.getTipo() + " y descuento " + promocion.getDescuento() + " ya existe");
 				}
-			} else {
+			} else { // si no existe
                 BOPromocion nuevaPromocion = new BOPromocion(promocion);
+                nuevaPromocion.setActivo(true);
                 em.persist(nuevaPromocion);
                 em.flush();
                 id = nuevaPromocion.getID();
@@ -59,11 +60,11 @@ public class PromocionSAImp implements PromocionSA {
             t.begin();
             BOPromocion promocion = em.find(BOPromocion.class, id);
             if (promocion != null && promocion.getActivo()) {
-                promocion.setActivo(false);
                 res = 1; // Baja exitosa
             } else {
                 res = 0; // Promoción no encontrada o ya inactiva
             }
+            promocion.setActivo(false);
             t.commit();
         } catch (Exception e) {
             if (t.isActive())

@@ -3,7 +3,12 @@ package com.grupoms.app.presentacion.controlador.comandos;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.grupoms.app.presentacion.comandos.claseJPA.AltaClaseCommand;
+import com.grupoms.app.presentacion.comandos.claseJPA.BajaClaseCommand;
 import com.grupoms.app.presentacion.comandos.claseJPA.DesvincularEjemplarDeClaseCommand;
+import com.grupoms.app.presentacion.comandos.claseJPA.ListarClasesCommand;
+import com.grupoms.app.presentacion.comandos.claseJPA.ModificarClaseCommand;
+import com.grupoms.app.presentacion.comandos.claseJPA.MostrarClaseCommand;
 import com.grupoms.app.presentacion.comandos.claseJPA.VincularEjemplarAClaseCommand;
 import com.grupoms.app.presentacion.comandos.ejemplarJPA.AltaEjemplarCommand;
 import com.grupoms.app.presentacion.comandos.ejemplarJPA.BajaEjemplarCommand;
@@ -144,6 +149,11 @@ public class FactoryCommandImp extends FactoryCommand {
         commands.put(Evento.LISTAR_EJEMPLARES, new ListarEjemplarCommand());
         
         // Clase
+        commands.put(Evento.ALTA_CLASE, new AltaClaseCommand());
+        commands.put(Evento.BAJA_CLASE, new BajaClaseCommand());
+        commands.put(Evento.MODIFICAR_CLASE, new ModificarClaseCommand());
+        commands.put(Evento.MOSTRAR_CLASE, new MostrarClaseCommand());
+        commands.put(Evento.LISTAR_CLASES, new ListarClasesCommand());
         commands.put(Evento.VINCULAR_EJEMPLAR_CLASE, new VincularEjemplarAClaseCommand());
         commands.put(Evento.DESVINCULAR_EJEMPLAR_CLASE, new DesvincularEjemplarDeClaseCommand());
         

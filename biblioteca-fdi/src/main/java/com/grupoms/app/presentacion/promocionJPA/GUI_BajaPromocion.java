@@ -47,7 +47,7 @@ public class GUI_BajaPromocion extends JFrame implements IGUI {
             int id = Integer.parseInt(idText);
             TPromocion promocion = new TPromocion();
             promocion.setId(id);
-            Context contexto = new Context(Evento.BAJA_PROMOCION, promocion);
+            Context contexto = new Context(Evento.BAJA_PROMOCION, id);
             Controlador.getInstance().handle(contexto);
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(this, "ID inválido. Por favor, ingrese un número entero.");

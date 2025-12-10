@@ -60,11 +60,11 @@ public class PromocionSAImp implements PromocionSA {
             t.begin();
             BOPromocion promocion = em.find(BOPromocion.class, id);
             if (promocion != null && promocion.getActivo()) {
+                promocion.setActivo(false);
                 res = 1; // Baja exitosa
             } else {
                 res = 0; // Promoción no encontrada o ya inactiva
             }
-            promocion.setActivo(false);
             t.commit();
         } catch (Exception e) {
             if (t.isActive())

@@ -61,6 +61,13 @@ import com.grupoms.app.presentacion.controlador.comandos.proveedor.BajaProveedor
 import com.grupoms.app.presentacion.controlador.comandos.proveedor.ModificarProveedorCommand;
 import com.grupoms.app.presentacion.controlador.comandos.proveedor.MostrarListaProveedoresCommand;
 import com.grupoms.app.presentacion.controlador.comandos.proveedor.MostrarProveedorCommand;
+import com.grupoms.app.presentacion.comandos.promocionJPA.AltaPromocionCommand;
+import com.grupoms.app.presentacion.comandos.promocionJPA.BajaPromocionCommand;
+import com.grupoms.app.presentacion.comandos.promocionJPA.ListarPromocionCommand;
+import com.grupoms.app.presentacion.comandos.promocionJPA.ModificarPromocionCommand;
+import com.grupoms.app.presentacion.comandos.promocionJPA.MostrarPromocionCommand;
+import com.grupoms.app.presentacion.comandos.promocionJPA.VerPromocionesPorSocioCommand;
+
 import com.grupoms.app.presentacion.factoria.FactoriaVistas;
 
 public class FactoryCommandImp extends FactoryCommand {
@@ -153,6 +160,14 @@ public class FactoryCommandImp extends FactoryCommand {
         commands.put(Evento.LISTAR_PRESTAMOS, new ListarPrestamosCommand());
         commands.put(Evento.MOSTRAR_PRESTAMO, new MostrarPrestamoCommand());
         commands.put(Evento.MODIFICAR_PRESTAMO, new ModificarPrestamoCommand());
+
+        // Promocion
+        commands.put(Evento.ALTA_PROMOCION, new AltaPromocionCommand());
+        commands.put(Evento.BAJA_PROMOCION, new BajaPromocionCommand());
+        commands.put(Evento.MODIFICAR_PROMOCION, new ModificarPromocionCommand());
+        commands.put(Evento.LISTAR_PROMOCION, new ListarPromocionCommand());
+        commands.put(Evento.MOSTRAR_PROMOCION, new MostrarPromocionCommand());
+        commands.put(Evento.VER_PROMOCIONES_POR_SOCIO, new VerPromocionesPorSocioCommand());
         
         //VISTAS
         views.put(Evento.MOSTRAR_PEDIDO, FactoriaVistas.GUI_MOSTRAR_PEDIDO);

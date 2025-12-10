@@ -38,6 +38,7 @@ import com.grupoms.app.presentacion.salaJPA.GUI_BajaSala;
 import com.grupoms.app.presentacion.salaJPA.GUI_ListarSala;
 import com.grupoms.app.presentacion.salaJPA.GUI_ModificarSala;
 import com.grupoms.app.presentacion.salaJPA.GUI_MostrarSala;
+import com.grupoms.app.presentacion.socioJPA.*;
 
 public class FactoriaVistas {
 
@@ -119,6 +120,18 @@ public class FactoriaVistas {
     
 	public static final String GUI_LISTAR_EJEMPLARESMATERIAL = "GUI_ListarEjemplaresMaterial";
 	public static final String GUI_BAJA_MATERIAL = "GUI_BajaMaterial";
+
+    public static final String GUI_ALTA_SOCIO = "GUI_AltaSocio";
+    public static final String GUI_BAJA_SOCIO = "GUI_BajaSocio";
+    public static final String GUI_MOSTRAR_SOCIO = "GUI_MostrarSocio";
+    public static final String GUI_LISTAR_SOCIOS = "GUI_ListarSocios";
+    public static final String GUI_MODIFICAR_SOCIO = "GUI_ModificarSocio";
+    //public static final String GUI_MOSTRAR_SOCIO_EJEMPLARES = "";
+    public static final String GUI_MOSTRAR_SOCIOS_POR_PROMOCION = "GUI_MostrarSociosPorPromocion";
+    //public static final String GUI_SOLICITAR_EJEMPLAR = "";
+    //public static final String GUI_DEVOLVER_EJEMPLAR = "";
+    public static final String GUI_VINCULAR_PROMOCION = "GUI_VincularPromocionASocio";
+    public static final String GUI_DESVINCULAR_PROMOCION = "GUI_DesvincularPromocionASocio";
 	
 	public static final String GUI_ALTA_PRESTAMO = "GUI_AltaPrestamo";
 	public static final String GUI_BAJA_PRESTAMO = "GUI_BajaPrestamo";
@@ -218,7 +231,16 @@ public class FactoriaVistas {
         vistas.put(GUI_MODIFICAR_SALA, new GUI_ModificarSala());
         vistas.put(GUI_LISTAR_SALA, new GUI_ListarSala());
         vistas.put(GUI_MOSTRAR_SALA, new GUI_MostrarSala());
-        
+
+        vistas.put(GUI_ALTA_SOCIO , new  GUI_AltaSocio()  );
+        vistas.put(GUI_BAJA_SOCIO , new  GUI_BajaSocio()   );
+        vistas.put(GUI_MOSTRAR_SOCIO , new  GUI_MostrarSocio()   );
+        vistas.put(GUI_LISTAR_SOCIOS , new GUI_ListarSocios()  );
+        vistas.put(GUI_MODIFICAR_SOCIO , new GUI_ModificarSocio()   );
+        vistas.put(GUI_MOSTRAR_SOCIOS_POR_PROMOCION , new GUI_MostrarSociosPorPromocion()   );
+        vistas.put(GUI_VINCULAR_PROMOCION , new GUI_VincularPromocionASocio() );
+        vistas.put(GUI_DESVINCULAR_PROMOCION , new GUI_DesvincularPromocionASocio() );
+
         vistas.put(GUI_ALTA_PRESTAMO, new GUI_AltaPrestamo());
         vistas.put(GUI_BAJA_PRESTAMO, new GUI_BajaPrestamo());
         vistas.put(GUI_LISTAR_PRESTAMO, new GUI_ListarPrestamo());

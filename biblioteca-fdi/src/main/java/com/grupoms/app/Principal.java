@@ -109,6 +109,17 @@ public class Principal extends JFrame {
 				{ "Listar Sala", FactoriaVistas.GUI_LISTAR_SALA }, { "Mostrar Sala", FactoriaVistas.GUI_MOSTRAR_SALA },
 				{ "Modificar Sala", FactoriaVistas.GUI_MODIFICAR_SALA },
 				{ "Mostrar Clases por Sala", FactoriaVistas.GUI_MOSTRAR_CLASES_POR_SALA } }));
+
+		panelCentroCivico.add(crearPanelCategoria("Socio",
+				new String[][] { { "Alta Socio", FactoriaVistas.GUI_ALTA_SOCIO },
+						{ "Baja Socio", FactoriaVistas.GUI_BAJA_SOCIO },
+						{ "Listar Socio", FactoriaVistas.GUI_LISTAR_SOCIOS },
+						{ "Mostrar Socio", FactoriaVistas.GUI_MOSTRAR_SOCIO },
+						{ "Modificar Socio", FactoriaVistas.GUI_MODIFICAR_SOCIO },
+						{ "Ver Socios por Promoción", FactoriaVistas.GUI_MOSTRAR_SOCIOS_POR_PROMOCION },
+						{ "Vincular Promoción a Socio", FactoriaVistas.GUI_VINCULAR_PROMOCION},
+						{ "Desvincular Promoción a Socio", FactoriaVistas.GUI_DESVINCULAR_PROMOCION}
+				}));
 		
 		panelCentroCivico.add(crearPanelCategoria("Prestamo", new String[][] {
 			{"Alta Préstamo", FactoriaVistas.GUI_ALTA_PRESTAMO},

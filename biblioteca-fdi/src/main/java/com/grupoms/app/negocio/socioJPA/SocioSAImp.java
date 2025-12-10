@@ -115,7 +115,7 @@ public class SocioSAImp implements SocioSA {
 
         try {
             t.begin();
-            BOSocio s = em.find(BOSocio.class, socio.getId());
+            BOSocio s = em.find(BOSocio.class, socio.getId(), LockModeType.OPTIMISTIC);
 
             if (s == null) {
                 throw new IllegalArgumentException("El ID del Socio no existe.");

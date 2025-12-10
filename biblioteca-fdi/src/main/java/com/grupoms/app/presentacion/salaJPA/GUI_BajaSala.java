@@ -21,12 +21,12 @@ public class GUI_BajaSala extends JFrame implements IGUI {
 
 	private static final long serialVersionUID = 1L;
 
-	private JTextField campoIdSala;
+	private JTextField campoId;
 	private JButton btnBaja;
 
 	public GUI_BajaSala() {
-		setTitle("Baja Sala");
-		setSize(350, 160);
+		super("Baja Sala");
+		setSize(400, 200);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setLocationRelativeTo(null);
 
@@ -37,38 +37,33 @@ public class GUI_BajaSala extends JFrame implements IGUI {
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 
 		JLabel labelId = new JLabel("ID Sala:");
-		campoIdSala = new JTextField(10);
+		campoId = new JTextField(15);
 
-		btnBaja = new JButton("Dar de baja");
-
+		btnBaja = new JButton("Dar de Baja");
 		btnBaja.addActionListener(e -> {
-			String idTexto = campoIdSala.getText().trim();
-
-			if (idTexto.isEmpty()) {
-				JOptionPane.showMessageDialog(this, "El ID de la sala es obligatorio");
-				return;
-			}
-
-			Integer idSala;
 			try {
-				idSala = Integer.parseInt(idTexto);
-			} catch (NumberFormatException ex) {
-				JOptionPane.showMessageDialog(this, "El ID de la sala debe ser un número válido");
-				return;
-			}
+				Integer id = Integer.parseInt(campoId.getText().trim());
 
-			Context contexto = new Context(Evento.BAJA_SALA, idSala);
-			Controlador.getInstance().handle(contexto);
+				if (id <= 0) {
+					JOptionPane.showMessageDialog(this, "El ID debe ser mayor que 0");
+					return;
+				}
+
+				Context contexto = new Context(Evento.BAJA_SALA, id);
+				Controlador.getInstance().handle(contexto);
+
+			} catch (NumberFormatException ex) {
+				JOptionPane.showMessageDialog(this, "Error: El ID debe ser un número válido");
+			}
 		});
 
-		gbc.gridx = 0;
-		gbc.gridy = 0;
+		// Colocación
+		gbc.gridx = 0; gbc.gridy = 0;
 		panel.add(labelId, gbc);
 		gbc.gridx = 1;
-		panel.add(campoIdSala, gbc);
+		panel.add(campoId, gbc);
 
-		gbc.gridx = 0;
-		gbc.gridy = 1;
+		gbc.gridx = 0; gbc.gridy = 1;
 		gbc.gridwidth = 2;
 		panel.add(btnBaja, gbc);
 
@@ -84,14 +79,10 @@ public class GUI_BajaSala extends JFrame implements IGUI {
 		switch (context.getEvento()) {
 		case Evento.BAJA_SALA_OK:
 			JOptionPane.showMessageDialog(this, "Sala dada de baja correctamente");
+			campoId.setText(""); // Limpiamos el campo al terminar con éxito
 			break;
 		case Evento.BAJA_SALA_KO:
-            // Manejamos el error específico de clases asignadas (-2) si devuelve Integer
-            if (context.getDatos() instanceof Integer && (Integer)context.getDatos() == -2) {
-                JOptionPane.showMessageDialog(this, "No se puede dar de baja: La sala tiene clases asignadas.", "Error", JOptionPane.ERROR_MESSAGE);
-            } else {
-			    JOptionPane.showMessageDialog(this, "Error al dar de baja la sala", "Error", JOptionPane.ERROR_MESSAGE);
-            }
+			JOptionPane.showMessageDialog(this, "Error al dar de baja la sala", "Error", JOptionPane.ERROR_MESSAGE);
 			break;
 		default:
 			break;

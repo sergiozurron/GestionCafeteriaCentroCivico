@@ -16,7 +16,7 @@ public class ListarSalasCommand implements Command{
 		SalaSA sa = FactoriaSA.getInstance().creaSASala();
 		try {
 			List<TSala> lista = sa.listarSala();
-            return new Context(Evento.LISTAR_SALAS_KO, lista);
+            return new Context(Evento.LISTAR_SALAS_OK, lista);
 		}catch (Exception e) {
             return new Context(Evento.LISTAR_SALAS_KO, null);
         }

@@ -26,6 +26,10 @@ import jakarta.persistence.Version;
 	        name = "com.grupoms.app.negocio.claseJPA.BOClase.findByTipo",
 	        query = "SELECT c FROM BOClase c WHERE c.tipo = :tipo"
 	    ),
+	@NamedQuery(
+		    name = "com.grupoms.app.negocio.claseJPA.BOClase.findByTipoAndFecha",
+		    query = "SELECT c FROM BOClase c WHERE c.tipo = :tipo AND c.fechaInicio = :fechaInicio"
+		),
 	    @NamedQuery(
 	        name = "com.grupoms.app.negocio.claseJPA.BOClase.findAll",
 	        query = "SELECT c FROM BOClase c"

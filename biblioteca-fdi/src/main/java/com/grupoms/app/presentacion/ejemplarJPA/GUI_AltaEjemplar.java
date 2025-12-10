@@ -22,7 +22,6 @@ public class GUI_AltaEjemplar extends JFrame implements IGUI {
 
 	private static final long serialVersionUID = 1L;
 
-	private JTextField campoEstado;
 	private JTextField campoIdMaterial;
 	private JButton btnCrear;
 
@@ -38,22 +37,12 @@ public class GUI_AltaEjemplar extends JFrame implements IGUI {
 		gbc.insets = new Insets(8, 8, 8, 8);
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 
-		JLabel labelNombre = new JLabel("Estado:");
-		campoEstado = new JTextField(15);
-
 		JLabel labelIdMaterial = new JLabel("Id Material:");
 		campoIdMaterial = new JTextField(15);
 
 		btnCrear = new JButton("Crear Ejemplar");
 
 		btnCrear.addActionListener(e -> {
-			String estado = campoEstado.getText().trim();
-
-			if (estado.isEmpty()) {
-				JOptionPane.showMessageDialog(this, "El estado es obligatorio");
-				return;
-			}
-
 			Integer idMaterial;
 			try {
 				idMaterial = Integer.parseInt(campoIdMaterial.getText().trim());
@@ -64,7 +53,6 @@ public class GUI_AltaEjemplar extends JFrame implements IGUI {
 
 			// Crear TEjemplar
 			TEjemplar ejemplar = new TEjemplar();
-			ejemplar.setEstado(estado);
 			ejemplar.setIdMaterial(idMaterial);
 
 			// Enviar al controlador
@@ -73,21 +61,14 @@ public class GUI_AltaEjemplar extends JFrame implements IGUI {
 
 		});
 
-		// Colocación
 		gbc.gridx = 0;
 		gbc.gridy = 0;
-		panel.add(labelNombre, gbc);
-		gbc.gridx = 1;
-		panel.add(campoEstado, gbc);
-
-		gbc.gridx = 0;
-		gbc.gridy = 1;
 		panel.add(labelIdMaterial, gbc);
 		gbc.gridx = 1;
 		panel.add(campoIdMaterial, gbc);
 
 		gbc.gridx = 0;
-		gbc.gridy = 2;
+		gbc.gridy = 1;
 		gbc.gridwidth = 2;
 		panel.add(btnCrear, gbc);
 

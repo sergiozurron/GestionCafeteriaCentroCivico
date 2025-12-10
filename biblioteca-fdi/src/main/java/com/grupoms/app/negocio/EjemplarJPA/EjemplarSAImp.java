@@ -8,6 +8,7 @@ import com.grupoms.app.negocio.assembler.EjemplarAssembler;
 import com.grupoms.app.negocio.materialJPA.BOMaterial;
 
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.LockModeType;
 
 public class EjemplarSAImp implements EjemplarSA {
 
@@ -17,7 +18,7 @@ public class EjemplarSAImp implements EjemplarSA {
 
 		try {
 			em.getTransaction().begin();
-			BOMaterial boMaterial = em.find(BOMaterial.class, ejemplar.getIdMaterial());
+			BOMaterial boMaterial = em.find(BOMaterial.class, ejemplar.getIdMaterial(), LockModeType.OPTIMISTIC_FORCE_INCREMENT);
 
 			if (boMaterial == null || !boMaterial.getActivo()) {
 				em.getTransaction().rollback();
@@ -25,14 +26,11 @@ public class EjemplarSAImp implements EjemplarSA {
 			}
 
 			BOEjemplar boEjemplar = new BOEjemplar();
-			boEjemplar.setEstado(ejemplar.getEstado());
+			boEjemplar.setEstado("DISPONIBLE");
 			boEjemplar.setActivo(true);
 			boEjemplar.setMaterial(boMaterial);
 
 			em.persist(boEjemplar);
-			if (boMaterial.getEjemplares() != null) {
-				boMaterial.getEjemplares().add(boEjemplar);
-			}
 			em.getTransaction().commit();
 			return boEjemplar.getId();
 		} catch (Exception e) {
@@ -50,7 +48,7 @@ public class EjemplarSAImp implements EjemplarSA {
 
 		try {
 			em.getTransaction().begin();
-			BOEjemplar boEjemplar = em.find(BOEjemplar.class, idEjemplar);
+			BOEjemplar boEjemplar = em.find(BOEjemplar.class, idEjemplar, LockModeType.OPTIMISTIC_FORCE_INCREMENT);
 
 			if (boEjemplar == null || !boEjemplar.getActivo()) {
 				em.getTransaction().rollback();
@@ -58,11 +56,6 @@ public class EjemplarSAImp implements EjemplarSA {
 			}
 
 			boEjemplar.setActivo(false);
-			BOMaterial material = boEjemplar.getMaterial();
-			if (material != null && material.getEjemplares() != null) {
-				material.getEjemplares().remove(boEjemplar);
-			}
-
 			em.getTransaction().commit();
 			return true;
 		} catch (Exception e) {
@@ -80,14 +73,14 @@ public class EjemplarSAImp implements EjemplarSA {
 
 		try {
 			em.getTransaction().begin();
-			BOEjemplar boEjemplar = em.find(BOEjemplar.class, ejemplar.getId());
+			BOEjemplar boEjemplar = em.find(BOEjemplar.class, ejemplar.getId(), LockModeType.OPTIMISTIC_FORCE_INCREMENT);
 
 			if (boEjemplar == null || !boEjemplar.getActivo()) {
 				em.getTransaction().rollback();
 				return false;
 			}
 
-			BOMaterial boMaterial = em.find(BOMaterial.class, ejemplar.getIdMaterial());
+			BOMaterial boMaterial = em.find(BOMaterial.class, ejemplar.getIdMaterial(), LockModeType.OPTIMISTIC_FORCE_INCREMENT);
 
 			if (boMaterial == null || !boMaterial.getActivo()) {
 				em.getTransaction().rollback();

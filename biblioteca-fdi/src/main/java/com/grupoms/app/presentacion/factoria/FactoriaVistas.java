@@ -25,6 +25,8 @@ import com.grupoms.app.presentacion.materialJPA.GUI_MostrarMaterial;
 import com.grupoms.app.presentacion.prestamoJPA.GUI_AltaPrestamo;
 import com.grupoms.app.presentacion.prestamoJPA.GUI_BajaPrestamo;
 import com.grupoms.app.presentacion.prestamoJPA.GUI_ListarPrestamo;
+import com.grupoms.app.presentacion.prestamoJPA.GUI_ModificarPrestamo;
+import com.grupoms.app.presentacion.prestamoJPA.GUI_MostrarPrestamo;
 import com.grupoms.app.presentacion.promocionJPA.GUI_AltaPromocion;
 import com.grupoms.app.presentacion.promocionJPA.GUI_BajaPromocion;
 import com.grupoms.app.presentacion.promocionJPA.GUI_ListarPromocion;
@@ -121,6 +123,8 @@ public class FactoriaVistas {
 	public static final String GUI_ALTA_PRESTAMO = "GUI_AltaPrestamo";
 	public static final String GUI_BAJA_PRESTAMO = "GUI_BajaPrestamo";
 	public static final String GUI_LISTAR_PRESTAMO = "GUI_ListarPrestamo";
+	public static final String GUI_MOSTRAR_PRESTAMO = "GUI_MostrarPrestamo";
+	public static final String GUI_MODIFICAR_PRESTAMO = "GUI_ModificarPrestamo";
 
     // Singleton
     private static FactoriaVistas instance;
@@ -218,6 +222,8 @@ public class FactoriaVistas {
         vistas.put(GUI_ALTA_PRESTAMO, new GUI_AltaPrestamo());
         vistas.put(GUI_BAJA_PRESTAMO, new GUI_BajaPrestamo());
         vistas.put(GUI_LISTAR_PRESTAMO, new GUI_ListarPrestamo());
+        vistas.put(GUI_MOSTRAR_PRESTAMO, new GUI_MostrarPrestamo());
+        vistas.put(GUI_MODIFICAR_PRESTAMO, new GUI_ModificarPrestamo());
     }
 
     public static FactoriaVistas getInstance() {

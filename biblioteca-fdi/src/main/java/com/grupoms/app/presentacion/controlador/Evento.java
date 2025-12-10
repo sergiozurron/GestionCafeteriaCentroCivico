@@ -344,4 +344,12 @@ public class Evento {
 	public static final int LISTAR_PRESTAMOS_OK = 707;
 	public static final int LISTAR_PRESTAMOS_KO = 708;
 	
+	public static final int MOSTRAR_PRESTAMO = 709;
+	public static final int MOSTRAR_PRESTAMO_OK = 710;
+	public static final int MOSTRAR_PRESTAMO_KO = 711;
+	
+	public static final int MODIFICAR_PRESTAMO = 712;
+	public static final int MODIFICAR_PRESTAMO_OK = 713;
+	public static final int MODIFICAR_PRESTAMO_KO = 714;
+	
 }

@@ -9,6 +9,7 @@ import com.grupoms.app.negocio.EjemplarJPA.BOEjemplar;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.TypedQuery;
+import com.grupoms.app.negocio.salaJPA.BOSala;
 
 public class ClaseSAImp implements ClaseSA {
 
@@ -25,14 +26,18 @@ public class ClaseSAImp implements ClaseSA {
 		try {
 			t.begin();
 
-			TypedQuery<BOClase> query = em.createNamedQuery("com.grupoms.app.negocio.claseJPA.BOClase.findByTipoAndFecha",
-					BOClase.class);
+			// ---- 1) Check if class already exists with same type and start date ----
+			TypedQuery<BOClase> query = em.createNamedQuery(
+				"com.grupoms.app.negocio.claseJPA.BOClase.findByTipoAndFecha",
+				BOClase.class
+			);
 			query.setParameter("tipo", clase.getTipo());
 			query.setParameter("fechaInicio", clase.getFechaInicio());
 
 			try {
 				claseExistente = query.getSingleResult();
 			} catch (Exception e) {
+				// No existing class found, this is fine
 			}
 
 			if (claseExistente != null) {
@@ -40,11 +45,35 @@ public class ClaseSAImp implements ClaseSA {
 					claseExistente.setActivo(true);
 					id = claseExistente.getId();
 				} else {
-					throw new IllegalStateException("La clase de tipo " + clase.getTipo() + " con fecha de inicio "
-							+ clase.getFechaInicio() + " ya existe y está activa");
+					throw new IllegalStateException(
+						"La clase de tipo " + clase.getTipo() +
+						" con fecha de inicio " + clase.getFechaInicio() +
+						" ya existe y está activa"
+					);
 				}
 			} else {
+				Integer idSala = clase.getIdSala(); // id de sala introducida
+
+				if (idSala == null) {
+					throw new IllegalArgumentException("Debe indicarse la sala para la clase.");
+				}
+
+				BOSala sala = em.find(BOSala.class, idSala);
+				if (sala == null) {
+					throw new IllegalArgumentException(
+						"No existe ninguna sala con id " + idSala
+					);
+				}
+
+				if (!sala.getActivo()) {
+				     throw new IllegalStateException(
+				        "La sala con id " + idSala + " no está activa."
+				     );
+				 }
+
 				BOClase nuevaClase = new BOClase(clase);
+				nuevaClase.setSala(sala); 
+
 				em.persist(nuevaClase);
 				em.flush();
 				id = nuevaClase.getId();
@@ -52,14 +81,18 @@ public class ClaseSAImp implements ClaseSA {
 
 			t.commit();
 		} catch (Exception e) {
-			if (t.isActive())
+			if (t.isActive()) {
 				t.rollback();
+			}
+			
+			throw e; // si quieres propagar la excepción hacia arriba
 		} finally {
 			em.close();
 		}
 
 		return id;
 	}
+
 
 	// ---- 2) Baja Clase ----
 

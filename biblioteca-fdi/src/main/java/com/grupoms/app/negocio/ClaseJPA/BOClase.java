@@ -139,4 +139,12 @@ public class BOClase implements Serializable {
      ejemplares.remove(ejemplar);
     }
     
+    public BOSala getSala() {
+        return sala;
+    }
+
+    public void setSala(BOSala sala) {
+        this.sala = sala;
+    }
+
 }

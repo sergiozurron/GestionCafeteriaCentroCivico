@@ -2,6 +2,7 @@ package com.grupoms.app.negocio.assembler;
 
 import com.grupoms.app.negocio.ClaseJPA.BOClase;
 import com.grupoms.app.negocio.ClaseJPA.TClase;
+import com.grupoms.app.negocio.salaJPA.BOSala;
 
 /**
  * Assembler for Clase.
@@ -19,6 +20,11 @@ public class ClaseAssembler {
         dto.setFechaInicio(bo.getFechaInicio());
         dto.setDuracion(bo.getDuracion());
         dto.setActivo(bo.getActivo());
+
+        if (bo.getSala() != null) {
+            dto.setIdSala(bo.getSala().getId());
+        }
+
         return dto;
     }
 
@@ -31,6 +37,13 @@ public class ClaseAssembler {
         bo.setFechaInicio(dto.getFechaInicio());
         bo.setDuracion(dto.getDuracion());
         bo.setActivo(dto.getActivo());
+
+        if (dto.getIdSala() != null) {
+            BOSala salaProxy = new BOSala();
+            salaProxy.setId(dto.getIdSala());
+            bo.setSala(salaProxy);
+        }
+
         return bo;
     }
 }

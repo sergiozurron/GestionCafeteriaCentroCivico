@@ -15,6 +15,7 @@ public class TClase {
     protected Date fechaInicio;
     protected Integer duracion;
     protected Boolean activo;
+    protected Integer idSala;
 
     // ---- 2) Getters & Setters ----
 
@@ -56,5 +57,13 @@ public class TClase {
 
     public void setActivo(Boolean activo) {
         this.activo = activo;
+    }
+
+       public Integer getIdSala() {
+        return idSala;
+    }
+
+    public void setIdSala(Integer idSala) {
+        this.idSala = idSala;
     }
 }

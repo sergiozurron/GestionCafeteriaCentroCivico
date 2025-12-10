@@ -26,6 +26,8 @@ import com.grupoms.app.negocio.proveedor.SAProveedor;
 import com.grupoms.app.negocio.proveedor.SAProveedorImpl;
 import com.grupoms.app.negocio.salaJPA.SalaSA;
 import com.grupoms.app.negocio.salaJPA.SalaSAImp;
+import com.grupoms.app.negocio.socioJPA.SocioSA;
+import com.grupoms.app.negocio.socioJPA.SocioSAImp;
 
 
 public class FactoriaSAImp extends FactoriaSA {
@@ -87,6 +89,11 @@ public class FactoriaSAImp extends FactoriaSA {
 	public SalaSA creaSASala() {
 		
 		return new SalaSAImp();
+	}
+
+	@Override
+	public SocioSA creaSASocio() {
+		return new SocioSAImp();
 	}
 
 	@Override

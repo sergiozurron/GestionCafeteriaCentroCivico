@@ -6,7 +6,6 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -21,107 +20,105 @@ import com.grupoms.app.presentacion.controlador.Evento;
 
 public class GUI_AltaSala extends JFrame implements IGUI {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private JTextField campoNombre;
-	private JTextField campoCapacidad;
-	private JCheckBox checkActivo;
-	private JButton btnCrear;
+    private JTextField campoNombre;
+    private JTextField campoCapacidad;
+    // JCheckBox eliminado
+    private JButton btnCrear;
 
-	public GUI_AltaSala() {
-		setTitle("Alta Sala");
-		setSize(400, 200);
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setLocationRelativeTo(null);
+    public GUI_AltaSala() {
+        super("Alta Sala");
+        initGUI();
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        pack();
+        setLocationRelativeTo(null);
+    }
 
-		setLayout(new BorderLayout());
-		JPanel panel = new JPanel(new GridBagLayout());
-		GridBagConstraints gbc = new GridBagConstraints();
-		gbc.insets = new Insets(8, 8, 8, 8);
-		gbc.fill = GridBagConstraints.HORIZONTAL;
+    private void initGUI() {
+        setLayout(new BorderLayout());
+        JPanel panel = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(8, 8, 8, 8);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
 
-		JLabel labelNombre = new JLabel("Nombre:");
-		campoNombre = new JTextField(15);
+        JLabel labelNombre = new JLabel("Nombre:");
+        campoNombre = new JTextField(20);
 
-		JLabel labelCapacidad = new JLabel("Capacidad:");
-		campoCapacidad = new JTextField(15);
+        JLabel labelCapacidad = new JLabel("Capacidad:");
+        campoCapacidad = new JTextField(20);
 
-		checkActivo = new JCheckBox("Activa");
-		checkActivo.setSelected(true);
+        btnCrear = new JButton("Crear Sala");
+        btnCrear.addActionListener(e -> crearSala());
 
-		btnCrear = new JButton("Crear Sala");
+        // Colocación de componentes
+        gbc.gridx = 0; gbc.gridy = 0;
+        panel.add(labelNombre, gbc);
+        gbc.gridx = 1;
+        panel.add(campoNombre, gbc);
 
-		btnCrear.addActionListener(e -> {
-			String nombre = campoNombre.getText().trim();
-			String capacidadTexto = campoCapacidad.getText().trim();
+        gbc.gridx = 0; gbc.gridy = 1;
+        panel.add(labelCapacidad, gbc);
+        gbc.gridx = 1;
+        panel.add(campoCapacidad, gbc);
 
-			if (nombre.isEmpty()) {
-				JOptionPane.showMessageDialog(this, "El nombre es obligatorio");
-				return;
-			}
-			if (capacidadTexto.isEmpty()) {
-				JOptionPane.showMessageDialog(this, "La capacidad es obligatoria");
-				return;
-			}
+        // El checkbox estaba en gridy=2, ahora ponemos el botón ahí
+        gbc.gridx = 0; 
+        gbc.gridy = 2; 
+        gbc.gridwidth = 2; // Ocupa todo el ancho
+        panel.add(btnCrear, gbc);
 
-			Integer capacidad;
-			try {
-				capacidad = Integer.parseInt(capacidadTexto);
-				if(capacidad <= 0) throw new NumberFormatException();
-			} catch (NumberFormatException ex) {
-				JOptionPane.showMessageDialog(this, "La capacidad debe ser un número entero positivo");
-				return;
-			}
+        add(panel, BorderLayout.CENTER);
+    }
 
-			TSala sala = new TSala();
-			sala.setNombre(nombre);
-			sala.setCapacidad(capacidad);
-			sala.setActivo(checkActivo.isSelected());
+    private void crearSala() {
+        try {
+            String nombre = campoNombre.getText().trim();
+            
+            if (nombre.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "El nombre es obligatorio");
+                return;
+            }
 
-			Context contexto = new Context(Evento.ALTA_SALA, sala);
-			Controlador.getInstance().handle(contexto);
-		});
+            int capacidad = Integer.parseInt(campoCapacidad.getText().trim());
+            
+            // Validación extra para lógica de negocio básica
+            if (capacidad <= 0) {
+                 JOptionPane.showMessageDialog(this, "La capacidad debe ser mayor a 0");
+                 return;
+            }
 
-		gbc.gridx = 0;
-		gbc.gridy = 0;
-		panel.add(labelNombre, gbc);
-		gbc.gridx = 1;
-		panel.add(campoNombre, gbc);
+            TSala sala = new TSala();
+            sala.setNombre(nombre);
+            sala.setCapacidad(capacidad);
+            sala.setActivo(true); // Siempre activa por defecto
 
-		gbc.gridx = 0;
-		gbc.gridy = 1;
-		panel.add(labelCapacidad, gbc);
-		gbc.gridx = 1;
-		panel.add(campoCapacidad, gbc);
+            Context contexto = new Context(Evento.ALTA_SALA, sala);
+            Controlador.getInstance().handle(contexto);
+            setVisible(false);
 
-		gbc.gridx = 0;
-		gbc.gridy = 2;
-		gbc.gridwidth = 2;
-		panel.add(checkActivo, gbc);
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "La capacidad debe ser un número entero válido", "Error",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+    }
 
-		gbc.gridy = 3;
-		panel.add(btnCrear, gbc);
-
-		add(panel, BorderLayout.CENTER);
-	}
-
-	@Override
-	public void actualizar(Context context) {
-		if (context == null) {
-			setVisible(true);
-			return;
-		}
-		switch (context.getEvento()) {
-		case Evento.ALTA_SALA_OK:
-			int idSala = (int) context.getDatos();
-			JOptionPane.showMessageDialog(this, "Sala creada con ID: " + idSala);
-			break;
-		case Evento.ALTA_SALA_KO:
-			JOptionPane.showMessageDialog(this, "Error al crear la sala. " + 
-                    (context.getDatos() != null ? context.getDatos() : ""), "Error", JOptionPane.ERROR_MESSAGE);
-			break;
-		default:
-			break;
-		}
-	}
+    @Override
+    public void actualizar(Context context) {
+        if (context == null) {
+            setVisible(true);
+            return;
+        }
+        switch (context.getEvento()) {
+        case Evento.ALTA_SALA_OK:
+            JOptionPane.showMessageDialog(this, "Sala creada con éxito. ID: " + context.getDatos());
+            // Limpiamos los campos
+            campoNombre.setText("");
+            campoCapacidad.setText("");
+            break;
+        case Evento.ALTA_SALA_KO:
+            JOptionPane.showMessageDialog(this, "Error al crear la sala", "Error", JOptionPane.ERROR_MESSAGE);
+            break;
+        }
+    }
 }

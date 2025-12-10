@@ -138,14 +138,14 @@ public class MaterialSAImp implements MaterialSA{
 
 	        if (m == null) {
 	            em.close();
-	            throw new IllegalArgumentException("El ID del material no existe.");
+	            throw new IllegalArgumentException("El ID del material no existe o no está activo.");
 	        }
 	        else {
 		        // Actualizar campos comunes
 		        m.setNombre(material.getNombre());
 		        m.setAutor(material.getAutor());
 		        m.setTipoMaterial(material.getTipoMaterial());
-		        m.setActivo(true);
+		        
 		        // Actualizar campos específicos según tipo
 		        if (material.getTipoMaterial() == 0) {        // Pintura
 		            TPintura pintura = (TPintura) material;
@@ -177,7 +177,7 @@ public class MaterialSAImp implements MaterialSA{
 		//Empiezo la transacccion
 		EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
 		BOMaterial material = em.find(BOMaterial.class, id);
-		if(material==null) {
+		if(material==null || !material.getActivo()) {
 			em.close();
 			return null;
 		}

@@ -1,7 +1,17 @@
 package com.grupoms.app.presentacion.salaJPA;
 
-import javax.swing.*;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+
 import com.grupoms.app.negocio.salaJPA.TSala;
 import com.grupoms.app.presentacion.IGUI;
 import com.grupoms.app.presentacion.controlador.Context;
@@ -12,6 +22,12 @@ public class GUI_MostrarSala extends JFrame implements IGUI {
 
     private static final long serialVersionUID = 1L;
 
+    private JTextField campoID;
+    private JButton mostrar;
+
+    private JLabel nombreLabel;
+    private JLabel capacidadLabel;
+
     public GUI_MostrarSala() {
         super("Mostrar Sala");
         initGUI();
@@ -21,67 +37,76 @@ public class GUI_MostrarSala extends JFrame implements IGUI {
     }
 
     private void initGUI() {
-        setLayout(new BorderLayout());
         JPanel panel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 5, 5, 5);
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        JLabel labelId = new JLabel("ID de la Sala a mostrar:");
-        JTextField campoId = new JTextField(20);
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        panel.add(labelId, gbc);
+        JLabel labelID = new JLabel("ID Sala:");
+        campoID = new JTextField(10);
+
+        mostrar = new JButton("Mostrar Sala");
+        mostrar.addActionListener(e -> {
+            try {
+                int id = Integer.parseInt(campoID.getText().trim());
+                Context contexto = new Context(Evento.MOSTRAR_SALA, id);
+                Controlador.getInstance().handle(contexto);
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(this, "Error: el ID debe ser numérico");
+            }
+        });
+
+        nombreLabel = new JLabel();
+        capacidadLabel = new JLabel();
+
+        int y = 0;
+
+        gbc.gridx = 0; gbc.gridy = y;
+        panel.add(labelID, gbc);
         gbc.gridx = 1;
-        panel.add(campoId, gbc);
+        panel.add(campoID, gbc);
 
-        JButton aceptar = new JButton("Aceptar");
-        gbc.gridx = 0;
-        gbc.gridy = 1;
-        gbc.gridwidth = 2;
-        aceptar.addActionListener(e -> mostrarSala(campoId.getText()));
+        y++;
+        gbc.gridx = 0; gbc.gridy = y; gbc.gridwidth = 2;
+        panel.add(mostrar, gbc);
 
-        panel.add(aceptar, gbc);
+        y++;
+        gbc.gridwidth = 1;
+        gbc.gridx = 0; gbc.gridy = y;
+        panel.add(new JLabel("Nombre:"), gbc);
+        gbc.gridx = 1;
+        panel.add(nombreLabel, gbc);
+
+        y++;
+        // Fila 3: Capacidad
+        gbc.gridx = 0; gbc.gridy = y;
+        panel.add(new JLabel("Capacidad:"), gbc);
+        gbc.gridx = 1;
+        panel.add(capacidadLabel, gbc);
+
         add(panel, BorderLayout.CENTER);
-    }
-
-    private void mostrarSala(String idText) {
-        try {
-            int id = Integer.parseInt(idText);
-            // Normalmente para mostrar solo enviamos el ID en el contexto, 
-            // pero si tu controlador espera un Transfer, lo envolvemos.
-            Context contexto = new Context(Evento.MOSTRAR_SALA, id);
-            Controlador.getInstance().handle(contexto);
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "ID inválido. Por favor, ingrese un número entero.");
-        }
     }
 
     @Override
     public void actualizar(Context context) {
         if (context == null) {
-            JOptionPane.showMessageDialog(this, "Error al mostrar la sala.");
+            setVisible(true);
             return;
-        } else if (context.getEvento() == Evento.MOSTRAR_SALA_OK) {
-            TSala sala = (TSala) context.getDatos();
+        }
 
-            if (sala == null) {
-                JOptionPane.showMessageDialog(this, "La sala no existe.");
-            } else {
-                StringBuilder info = new StringBuilder();
-                info.append("ID: ").append(sala.getId()).append("\n");
-                info.append("Nombre: ").append(sala.getNombre()).append("\n");
-                info.append("Capacidad: ").append(sala.getCapacidad()).append("\n");
-                info.append("Activo: ").append(
-                        (sala.getActivo() != null && sala.getActivo()) ? "Sí" : "No"
-                ).append("\n");
-
-                JOptionPane.showMessageDialog(this, info.toString(),
-                        "Detalles de la Sala", JOptionPane.INFORMATION_MESSAGE);
+        switch (context.getEvento()) {
+        case Evento.MOSTRAR_SALA_OK:
+            TSala s = (TSala) context.getDatos();
+            if (s != null) {
+                nombreLabel.setText(s.getNombre());
+                capacidadLabel.setText(String.valueOf(s.getCapacidad()));
             }
-        } else if (context.getEvento() == Evento.MOSTRAR_SALA_KO) {
-            JOptionPane.showMessageDialog(this, "No se ha podido mostrar la sala.",
-                    "Error", JOptionPane.ERROR_MESSAGE);
+            break;
+        case Evento.MOSTRAR_SALA_KO:
+            JOptionPane.showMessageDialog(this, "Sala no encontrada en la base de datos");
+            nombreLabel.setText("");
+            capacidadLabel.setText("");
+            break;
         }
     }
 }

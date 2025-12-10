@@ -145,7 +145,7 @@ public class FactoryCommandImp extends FactoryCommand {
         commands.put(Evento.BAJA_SALA, new BajaSalaCommand());
         commands.put(Evento.MODIFICAR_SALA, new ModificarSalaCommand());
         commands.put(Evento.MOSTRAR_SALA, new MostrarSalaCommand());
-        commands.put(Evento.LISTAR_SALAS, new ListarSalasCommand());      
+        commands.put(Evento.LISTAR_SALA, new ListarSalasCommand());      
         
         // Prestamo
         commands.put(Evento.ALTA_PRESTAMO, new AltaPrestamoCommand());
@@ -221,6 +221,12 @@ public class FactoryCommandImp extends FactoryCommand {
         views.put(Evento.LISTAR_PRESTAMOS, FactoriaVistas.GUI_LISTAR_PRESTAMO);
         views.put(Evento.MOSTRAR_PRESTAMO, FactoriaVistas.GUI_MOSTRAR_PRESTAMO);
         views.put(Evento.MODIFICAR_PRESTAMO, FactoriaVistas.GUI_MODIFICAR_PRESTAMO);
+        
+        views.put(Evento.ALTA_SALA, FactoriaVistas.GUI_ALTA_SALA);
+        views.put(Evento.BAJA_SALA, FactoriaVistas.GUI_BAJA_SALA);
+        views.put(Evento.LISTAR_SALA, FactoriaVistas.GUI_LISTAR_SALA);
+        views.put(Evento.MOSTRAR_SALA, FactoriaVistas.GUI_MOSTRAR_SALA);
+        views.put(Evento.MODIFICAR_SALA, FactoriaVistas.GUI_MODIFICAR_SALA);
     }
     
     @Override

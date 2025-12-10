@@ -120,13 +120,13 @@ public class GUI_AltaSocio extends JFrame implements IGUI {
         aceptar=new JButton("Aceptar");
         aceptar.addActionListener(e->crearSocio());
 
-        gbc.gridx = 0; gbc.gridy = 3; gbc.gridwidth = 2;
+        gbc.gridx = 0; gbc.gridy = 4; gbc.gridwidth = 2;
         panel.add(panelAdulto, gbc);
 
-        gbc.gridy = 4;
+        gbc.gridy = 5;
         panel.add(panelInfantil, gbc);
 
-        gbc.gridy = 5;
+        gbc.gridy = 6;
         panel.add(aceptar, gbc);
         add(panel, BorderLayout.CENTER);
     }

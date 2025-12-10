@@ -83,6 +83,9 @@ public class GUI_MostrarClase extends JFrame implements IGUI {
                 info.append("Activo: ").append(
                         (clase.getActivo() != null && clase.getActivo()) ? "Sí" : "No"
                 ).append("\n");
+                info.append("ID Sala: ")
+                        .append(clase.getIdSala() != null ? clase.getIdSala() : "N/A")
+                        .append("\n");
 
                 JOptionPane.showMessageDialog(this, info.toString(),
                         "Detalles de la Clase", JOptionPane.INFORMATION_MESSAGE);

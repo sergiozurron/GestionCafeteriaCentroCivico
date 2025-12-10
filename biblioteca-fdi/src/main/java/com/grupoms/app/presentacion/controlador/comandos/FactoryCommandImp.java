@@ -186,6 +186,10 @@ public class FactoryCommandImp extends FactoryCommand {
         commands.put(Evento.MODIFICAR_SOCIO, new ModificarSocioCommand());
         commands.put(Evento.MOSTRAR_SOCIO, new MostrarSocioCommand());
         commands.put(Evento.LISTAR_SOCIOS,new ListarSociosCommand());
+        commands.put(Evento.VINCULAR_PROMOCION,new VincularPromocionASocioCommand());
+        commands.put(Evento.DESVINCULAR_PROMOCION,new DesvincularPromocionASocioCommand());
+        commands.put(Evento.MOSTRAR_SOCIOS_POR_PROMOCION,new MostrarSociosPorPromocionCommand());
+
         
         
         //VISTAS
@@ -273,8 +277,12 @@ public class FactoryCommandImp extends FactoryCommand {
         views.put(Evento.ALTA_SOCIO,FactoriaVistas.GUI_ALTA_SOCIO);
         views.put(Evento.BAJA_SOCIO, FactoriaVistas.GUI_BAJA_SOCIO);
         views.put(Evento.MODIFICAR_SOCIO, FactoriaVistas.GUI_MODIFICAR_SOCIO);
-        views.put(Evento.MOSTRAR_SOCIO, FactoriaVistas. GUI_MOSTRAR_SOCIO);
-        views.put(Evento.LISTAR_SOCIOS,FactoriaVistas. GUI_LISTAR_SOCIOS);
+        views.put(Evento.MOSTRAR_SOCIO, FactoriaVistas.GUI_MOSTRAR_SOCIO);
+        views.put(Evento.LISTAR_SOCIOS,FactoriaVistas.GUI_LISTAR_SOCIOS);
+        views.put(Evento.VINCULAR_PROMOCION,FactoriaVistas.GUI_VINCULAR_PROMOCION);
+        views.put(Evento.DESVINCULAR_PROMOCION,FactoriaVistas.GUI_DESVINCULAR_PROMOCION);
+        views.put(Evento.MOSTRAR_SOCIOS_POR_PROMOCION,FactoriaVistas.GUI_MOSTRAR_SOCIOS_POR_PROMOCION);
+
     }
     
     @Override

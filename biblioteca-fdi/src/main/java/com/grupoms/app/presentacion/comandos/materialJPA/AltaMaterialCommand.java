@@ -2,9 +2,7 @@ package com.grupoms.app.presentacion.comandos.materialJPA;
 
 import com.grupoms.app.negocio.factoria.FactoriaSA;
 import com.grupoms.app.negocio.materialJPA.MaterialSA;
-import com.grupoms.app.negocio.materialJPA.TLibro;
 import com.grupoms.app.negocio.materialJPA.TMaterial;
-import com.grupoms.app.negocio.materialJPA.TPintura;
 import com.grupoms.app.presentacion.controlador.Context;
 import com.grupoms.app.presentacion.controlador.Evento;
 import com.grupoms.app.presentacion.controlador.comandos.Command;

@@ -14,7 +14,7 @@ public class AltaSalaCommand implements Command {
         int idClase = FactoriaSA.getInstance().creaSASala().altaSala(sala);
 
         if (idClase == -1)
-            return new Context(Evento.ALTA_SALA_KO, null);
+            return new Context(Evento.ALTA_SALA_KO, idClase);
 
         return new Context(Evento.ALTA_SALA_OK, idClase);
     }

@@ -6,8 +6,8 @@ import jakarta.persistence.*;
 @Inheritance(strategy = InheritanceType.JOINED)
 @Entity
 @NamedQueries({
-	@NamedQuery(name = "com.grpoms.app.negocio.salaJPA.BOSala.findByName", query = "SELECT s FROM BOSala s WHERE s.nombre = :nombre"),
-	@NamedQuery(name = "com.grpoms.app.negocio.salaJPA.BOSala.findAll", query = "SELECT s FROM BOSala s")
+	@NamedQuery(name = "com.grupoms.app.negocio.salaJPA.BOSala.findByName", query = "SELECT s FROM BOSala s WHERE s.nombre = :nombre"),
+	@NamedQuery(name = "com.grupoms.app.negocio.salaJPA.BOSala.findAll", query = "SELECT s FROM BOSala s")
 })
 public class BOSala implements Serializable {
 	

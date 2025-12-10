@@ -242,6 +242,14 @@ public class FactoryCommandImp extends FactoryCommand {
         views.put(Evento.LISTAR_SALA, FactoriaVistas.GUI_LISTAR_SALA);
         views.put(Evento.MOSTRAR_SALA, FactoriaVistas.GUI_MOSTRAR_SALA);
         views.put(Evento.MODIFICAR_SALA, FactoriaVistas.GUI_MODIFICAR_SALA);
+
+        views.put(Evento.ALTA_CLASE, FactoriaVistas.GUI_ALTA_CLASE);
+        views.put(Evento.BAJA_CLASE, FactoriaVistas.GUI_BAJA_CLASE);
+        views.put(Evento.LISTAR_CLASES, FactoriaVistas.GUI_LISTAR_CLASE);
+        views.put(Evento.MOSTRAR_CLASE, FactoriaVistas.GUI_MOSTRAR_CLASE);
+        views.put(Evento.MODIFICAR_CLASE, FactoriaVistas.GUI_MODIFICAR_CLASE);
+        views.put(Evento.VINCULAR_EJEMPLAR_CLASE, FactoriaVistas.GUI_VINCULAR_EJEMPLAR_CLASE) ;
+        views.put(Evento.DESVINCULAR_EJEMPLAR_CLASE, FactoriaVistas.GUI_DESVINCULAR_EJEMPLAR_CLASE);
     }
     
     @Override

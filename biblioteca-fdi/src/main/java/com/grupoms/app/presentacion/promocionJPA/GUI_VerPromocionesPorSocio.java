@@ -1,24 +1,20 @@
 package com.grupoms.app.presentacion.promocionJPA;
 
-import javax.swing.*;
-import java.util.List;
-
 import com.grupoms.app.negocio.PromocionJPA.TPromocion;
 import com.grupoms.app.presentacion.IGUI;
 import com.grupoms.app.presentacion.controlador.Context;
 import com.grupoms.app.presentacion.controlador.Controlador;
 import com.grupoms.app.presentacion.controlador.Evento;
 
+import javax.swing.*;
 import java.awt.*;
+import java.util.List;
 
 public class GUI_VerPromocionesPorSocio extends JFrame implements IGUI {
-
     private static final long serialVersionUID = 1L;
-
-    private JTextField idSocioField;
-    private JButton verPromocionesBtn;
-
-    private JTextArea promocionesArea;
+    private JTextField idSocio;
+    private JButton verPromociones;
+    private JTextArea resultado;
 
     public GUI_VerPromocionesPorSocio() {
         super("Ver Promociones por Socio");
@@ -29,47 +25,45 @@ public class GUI_VerPromocionesPorSocio extends JFrame implements IGUI {
     }
 
     private void initGUI() {
+        setLayout(new BorderLayout());
         JPanel panel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 5, 5, 5);
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        // Campo ID Socio
         JLabel labelIdSocio = new JLabel("ID Socio:");
-        idSocioField = new JTextField(10);
-
-        verPromocionesBtn = new JButton("Ver Promociones");
-        verPromocionesBtn.addActionListener(e -> {
-            String idText = idSocioField.getText().trim();
-            Context context = new Context(Evento.VER_PROMOCIONES_POR_SOCIO, idText);
-            Controlador.getInstance().handle(context);
-        });
-
-        promocionesArea = new JTextArea(10, 30);
-        promocionesArea.setEditable(false);
-        JScrollPane scrollPane = new JScrollPane(promocionesArea);
-
-        int y = 0;
-
-        gbc.gridx = 0; gbc.gridy = y;
+        idSocio = new JTextField(20);
+        gbc.gridx = 0;
+        gbc.gridy = 0;
         panel.add(labelIdSocio, gbc);
         gbc.gridx = 1;
-        panel.add(idSocioField, gbc);
+        panel.add(idSocio, gbc);
 
-        y++;
-        gbc.gridx = 0; 
-        gbc.gridy = y; 
+        verPromociones = new JButton("Ver Promociones");
+        gbc.gridx = 0;
+        gbc.gridy = 1;
         gbc.gridwidth = 2;
-        panel.add(verPromocionesBtn, gbc);
+        panel.add(verPromociones, gbc);
 
-        y++;
-        gbc.gridx = 0; 
-        gbc.gridy = y;
+        // Configuración del JTextArea
+        resultado = new JTextArea(10, 40);
+        resultado.setEditable(false);
+        JScrollPane scrollPane = new JScrollPane(resultado);
+        gbc.gridx = 0;
+        gbc.gridy = 2;
         gbc.gridwidth = 2;
-        gbc.fill = GridBagConstraints.BOTH;
+        gbc.fill = GridBagConstraints.BOTH; // Importante para que se expanda
         panel.add(scrollPane, gbc);
 
         add(panel, BorderLayout.CENTER);
+
+        verPromociones.addActionListener(e -> {
+            String id = idSocio.getText().trim();
+            // Limpiamos el área antes de buscar
+            resultado.setText("");
+            Context context = new Context(Evento.VER_PROMOCIONES_POR_SOCIO, id);
+            Controlador.getInstance().handle(context);
+        });
     }
 
     @Override
@@ -78,37 +72,33 @@ public class GUI_VerPromocionesPorSocio extends JFrame implements IGUI {
             setVisible(true);
             return;
         }
-
         switch (context.getEvento()) {
-
-        case Evento.VER_PROMOCIONES_POR_SOCIO_OK:
-            @SuppressWarnings("unchecked")
-            List<TPromocion> lista = (List<TPromocion>) context.getDatos();
-
-            StringBuilder sb = new StringBuilder();
-
-            if (lista.isEmpty()) {
-                sb.append("Este socio no tiene promociones asociadas.");
-            } else {
-                for (TPromocion p : lista) {
-                    sb.append("ID: ").append(p.getId()).append("\n");
-                    sb.append("Tipo: ").append(p.getTipo()).append("\n");
-                    sb.append("Descuento: ").append(p.getDescuento()).append("\n");
-                    sb.append("Activo: ").append(p.getActivo() ? "Sí" : "No").append("\n");
-                    sb.append("---------------------------\n");
+            case Evento.VER_PROMOCIONES_POR_SOCIO_OK:
+                @SuppressWarnings("unchecked")
+                List<TPromocion> promociones = (List<TPromocion>) context.getDatos();
+                
+                StringBuilder mensaje = new StringBuilder();
+                if (promociones.isEmpty()) {
+                    mensaje.append("Este socio no tiene promociones activas.");
+                } else {
+                    for (TPromocion p : promociones) {
+                        String activo = p.getActivo() ? "Sí" : "No";
+                        
+                        mensaje.append("ID Promoción: ").append(p.getId())
+                               .append(" | Tipo: ").append(p.getTipo())
+                               .append(" | Descuento: ").append(p.getDescuento())
+                               .append(" | Activo: ").append(activo)
+                               .append("\n----------------------------------------------------\n");
+                    }
                 }
-            }
-
-            promocionesArea.setText(sb.toString());
-            break;
-
-        case Evento.VER_PROMOCIONES_POR_SOCIO_KO:
-            promocionesArea.setText("");
-            JOptionPane.showMessageDialog(this,
-                "Error: No se pudieron obtener las promociones del socio.",
-                "Error",
-                JOptionPane.ERROR_MESSAGE);
-            break;
+                // Aquí seteamos el texto en la caja en lugar del Popup
+                resultado.setText(mensaje.toString());
+                break;
+                
+            case Evento.VER_PROMOCIONES_POR_SOCIO_KO:
+                resultado.setText("Error al buscar promociones para este socio. Verifique el ID.");
+                JOptionPane.showMessageDialog(this, "Error al obtener promociones", "Error", JOptionPane.ERROR_MESSAGE);
+                break;
         }
     }
 }

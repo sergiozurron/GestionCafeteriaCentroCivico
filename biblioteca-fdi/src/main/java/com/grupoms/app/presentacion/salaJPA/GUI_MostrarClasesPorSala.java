@@ -109,7 +109,6 @@ public class GUI_MostrarClasesPorSala extends JFrame implements IGUI {
 			mensaje.append("Resultados para la Sala ID: ").append(idSalaField.getText()).append("\n");
 			mensaje.append("=========================================\n");
 			
-			// Formateador para la fecha (ej: 11/12/2025 10:30)
 			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 
 			if (clases.isEmpty()) {

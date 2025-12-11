@@ -13,79 +13,102 @@ import java.awt.*;
 
 public class GUI_VerPromocionesPorSocio extends JFrame implements IGUI {
 
-	private static final long serialVersionUID = 1L;
-	private JTextField idSocio;
-	private JButton verPromociones;
-	private JTextArea resultado;
+    private static final long serialVersionUID = 1L;
 
-	public GUI_VerPromocionesPorSocio() {
-		super("Ver Promociones por Socio");
-		initGUI();
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		pack();
-		setLocationRelativeTo(null);
-	}
+    private JTextField idSocioField;
+    private JButton verPromocionesBtn;
 
-	private void initGUI() {
-		setLayout(new BorderLayout());
-		JPanel panel = new JPanel(new GridBagLayout());
-		GridBagConstraints gbc = new GridBagConstraints();
-		gbc.insets = new Insets(5, 5, 5, 5);
-		gbc.fill = GridBagConstraints.HORIZONTAL;
+    private JTextArea promocionesArea;
 
-		JLabel labelIdSocio = new JLabel("ID Socio:");
-		idSocio = new JTextField(20);
-		gbc.gridx = 0;
-		gbc.gridy = 0;
-		panel.add(labelIdSocio, gbc);
-		gbc.gridx = 1;
-		panel.add(idSocio, gbc);
+    public GUI_VerPromocionesPorSocio() {
+        super("Ver Promociones por Socio");
+        initGUI();
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        pack();
+        setLocationRelativeTo(null);
+    }
 
-		verPromociones = new JButton("Ver Promociones");
-		gbc.gridx = 0;
-		gbc.gridy = 1;
-		gbc.gridwidth = 2;
-		panel.add(verPromociones, gbc);
+    private void initGUI() {
+        JPanel panel = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(5, 5, 5, 5);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
 
-		resultado = new JTextArea(10, 30);
-		resultado.setEditable(false);
-		JScrollPane scrollPane = new JScrollPane(resultado);
-		gbc.gridx = 0;
-		gbc.gridy = 2;
-		gbc.gridwidth = 2;
-		panel.add(scrollPane, gbc);
+        // Campo ID Socio
+        JLabel labelIdSocio = new JLabel("ID Socio:");
+        idSocioField = new JTextField(10);
 
-		add(panel, BorderLayout.CENTER);
+        verPromocionesBtn = new JButton("Ver Promociones");
+        verPromocionesBtn.addActionListener(e -> {
+            String idText = idSocioField.getText().trim();
+            Context context = new Context(Evento.VER_PROMOCIONES_POR_SOCIO, idText);
+            Controlador.getInstance().handle(context);
+        });
 
-		verPromociones.addActionListener(e -> {
-			String id = idSocio.getText().trim();
-			Context context = new Context(Evento.VER_PROMOCIONES_POR_SOCIO, id);
-			Controlador.getInstance().handle(context);
-		});
-	}
+        promocionesArea = new JTextArea(10, 30);
+        promocionesArea.setEditable(false);
+        JScrollPane scrollPane = new JScrollPane(promocionesArea);
 
-	@Override
-	public void actualizar(Context context) {
-		if (context == null) {
-			setVisible(true);
-			return;
-		}
-		switch (context.getEvento()) {
-		case Evento.VER_PROMOCIONES_POR_SOCIO_OK:
-			@SuppressWarnings("unchecked")
-			List<TPromocion> promociones = (List<TPromocion>) context.getDatos();
-			StringBuilder mensaje = new StringBuilder("Promociones por socio:\n");
-			for (TPromocion promo : promociones) {
-				mensaje.append("ID: ").append(promo.getId()).append(", Tipo: ").append(promo.getTipo())
-						.append(", Descuento: ").append(promo.getDescuento()).append("\n");
-			}
-			JOptionPane.showMessageDialog(this, mensaje.toString(), "Listado de Promociones por socio",
-					JOptionPane.INFORMATION_MESSAGE);
-			break;
-		case Evento.VER_PROMOCIONES_POR_SOCIO_KO:
-			JOptionPane.showMessageDialog(this, "Error al listar las promociones por socio", "Error",
-					JOptionPane.ERROR_MESSAGE);
-			break;
-		}
-	}
+        int y = 0;
+
+        gbc.gridx = 0; gbc.gridy = y;
+        panel.add(labelIdSocio, gbc);
+        gbc.gridx = 1;
+        panel.add(idSocioField, gbc);
+
+        y++;
+        gbc.gridx = 0; 
+        gbc.gridy = y; 
+        gbc.gridwidth = 2;
+        panel.add(verPromocionesBtn, gbc);
+
+        y++;
+        gbc.gridx = 0; 
+        gbc.gridy = y;
+        gbc.gridwidth = 2;
+        gbc.fill = GridBagConstraints.BOTH;
+        panel.add(scrollPane, gbc);
+
+        add(panel, BorderLayout.CENTER);
+    }
+
+    @Override
+    public void actualizar(Context context) {
+        if (context == null) {
+            setVisible(true);
+            return;
+        }
+
+        switch (context.getEvento()) {
+
+        case Evento.VER_PROMOCIONES_POR_SOCIO_OK:
+            @SuppressWarnings("unchecked")
+            List<TPromocion> lista = (List<TPromocion>) context.getDatos();
+
+            StringBuilder sb = new StringBuilder();
+
+            if (lista.isEmpty()) {
+                sb.append("Este socio no tiene promociones asociadas.");
+            } else {
+                for (TPromocion p : lista) {
+                    sb.append("ID: ").append(p.getId()).append("\n");
+                    sb.append("Tipo: ").append(p.getTipo()).append("\n");
+                    sb.append("Descuento: ").append(p.getDescuento()).append("\n");
+                    sb.append("Activo: ").append(p.getActivo() ? "Sí" : "No").append("\n");
+                    sb.append("---------------------------\n");
+                }
+            }
+
+            promocionesArea.setText(sb.toString());
+            break;
+
+        case Evento.VER_PROMOCIONES_POR_SOCIO_KO:
+            promocionesArea.setText("");
+            JOptionPane.showMessageDialog(this,
+                "Error: No se pudieron obtener las promociones del socio.",
+                "Error",
+                JOptionPane.ERROR_MESSAGE);
+            break;
+        }
+    }
 }

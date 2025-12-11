@@ -1,5 +1,6 @@
 package com.grupoms.app.negocio.PromocionJPA;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -132,16 +133,29 @@ public class PromocionSAImp implements PromocionSA {
 	}
 
 	public List<TPromocion> VerPromocionesPorSocio(Integer idSocio) {
-		EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
-		EntityTransaction t = em.getTransaction();
-		t.begin();
-		final TypedQuery<BOPromocion> query = em
-				.createNamedQuery("com.grupoms.app.negocio.PromocionJPA.BOPromocion.findBySocio", BOPromocion.class);
-		query.setParameter("idSocio", idSocio);
-		List<TPromocion> lista = query.getResultList().stream().map(PromocionAssembler::toDTO)
-				.collect(Collectors.toList());
-		t.commit();
-		em.close();
-		return lista;
-	}
+    EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
+    List<TPromocion> lista = null;
+
+    try {
+        TypedQuery<BOPromocion> query = em.createNamedQuery(
+                "com.grupoms.app.negocio.PromocionJPA.BOPromocion.findBySocio",
+                BOPromocion.class
+        );
+        query.setParameter("idSocio", idSocio);
+
+        lista = query.getResultList()
+                    .stream()
+                    .map(PromocionAssembler::toDTO)
+                    .collect(Collectors.toList());
+
+    } catch (Exception e) {
+        e.printStackTrace();
+        lista = Collections.emptyList();
+    } finally {
+        em.close();
+    }
+
+    return lista;
+}
+
 }

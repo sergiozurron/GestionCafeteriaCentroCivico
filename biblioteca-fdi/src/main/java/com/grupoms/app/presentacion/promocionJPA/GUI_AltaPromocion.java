@@ -78,10 +78,8 @@ public class GUI_AltaPromocion extends JFrame implements IGUI {
 			TPromocion promocion = new TPromocion(descuento, tipo);
 			Context contexto = new Context(Evento.ALTA_PROMOCION, promocion);
 			Controlador.getInstance().handle(contexto);
-
-			this.dispose();
 		} catch (Exception ex) {
-			
+			JOptionPane.showMessageDialog(this, "Hubo un error al crear la promoción.", "Error", JOptionPane.ERROR_MESSAGE);
 		}
 	}
 

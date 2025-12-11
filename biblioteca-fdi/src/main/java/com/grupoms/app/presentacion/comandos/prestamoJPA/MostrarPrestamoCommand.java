@@ -12,6 +12,9 @@ public class MostrarPrestamoCommand implements Command {
 	public Context execute(Object data) {
 		Integer idPrestamo = (Integer) data;
 		TPrestamo prestamo = FactoriaSA.getInstance().creaSAPrestamo().mostrarPrestamo(idPrestamo);
+		if (prestamo == null) {
+			return new Context(Evento.MOSTRAR_PRESTAMO_KO, null);
+		}
 		return new Context(Evento.MOSTRAR_PRESTAMO_OK, prestamo);
 	}
 

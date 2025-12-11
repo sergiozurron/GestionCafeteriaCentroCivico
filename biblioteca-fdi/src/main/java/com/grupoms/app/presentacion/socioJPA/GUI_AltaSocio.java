@@ -85,9 +85,9 @@ public class GUI_AltaSocio extends JFrame implements IGUI {
 		panelAdulto.add(labelMiembroPleno, gbcAdulto);
 		gbcAdulto.gridx = 0;
 		gbcAdulto.gridy = 1;
-		panelAdulto.add(si, gbc);
-		gbc.gridx = 1;
-		panelAdulto.add(no, gbc);
+		panelAdulto.add(si, gbcAdulto);
+		gbcAdulto.gridx = 1;
+		panelAdulto.add(no, gbcAdulto);
 		gbcAdulto.gridx = 0;
 		gbcAdulto.gridy = 2;
 		panelAdulto.setVisible(false);
@@ -177,7 +177,8 @@ public class GUI_AltaSocio extends JFrame implements IGUI {
 			Controlador.getInstance().handle(contexto);
 			setVisible(false);
 		} catch (NumberFormatException ex) {
-			JOptionPane.showMessageDialog(this, "Error en el formato de los datos", "Error", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(this, "Error en el formato de los datos", "Error",
+					JOptionPane.ERROR_MESSAGE);
 		}
 
 	}

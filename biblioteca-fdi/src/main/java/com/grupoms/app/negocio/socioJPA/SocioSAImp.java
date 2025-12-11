@@ -194,7 +194,7 @@ public class SocioSAImp implements SocioSA {
 	public List<TSocio> mostrarSociosPorPromocion(Integer idPromocion) {
 		EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
 
-		return em.createNamedQuery("BOSocio.findByPromocion", BOSocio.class)
+		return em.createNamedQuery("com.grupoms.app.negocio.socioJPA.BOSocio.findByPromocion", BOSocio.class)
 				.setParameter("idPromocion", idPromocion).getResultList().stream()
 				.map(SocioAssembler::entityToTransfer).toList();
 	}

@@ -11,10 +11,16 @@ public class MostrarSociosPorPromocionCommand implements Command {
 	@Override
 	public Context execute(Object data) {
 		int event;
-		Integer idPromocion = (Integer) data;
+		String idPromocion = (String) data;
 		SocioSA sa = FactoriaSA.getInstance().creaSASocio();
 
-		java.util.List<TSocio> socios = sa.mostrarSociosPorPromocion(idPromocion);
+        Integer id = null;
+        try {
+            id = Integer.parseInt(idPromocion);
+        } catch (NumberFormatException e) {
+            return new Context(Evento.MOSTRAR_SOCIOS_POR_PROMOCION_KO, null);
+        }
+		java.util.List<TSocio> socios = sa.mostrarSociosPorPromocion(id);
 		if (socios != null) {
 			event = Evento.MOSTRAR_SOCIOS_POR_PROMOCION_OK;
 		} else {

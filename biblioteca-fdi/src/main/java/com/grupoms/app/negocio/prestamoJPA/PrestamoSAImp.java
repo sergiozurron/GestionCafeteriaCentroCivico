@@ -86,7 +86,7 @@ public class PrestamoSAImp implements PrestamoSA {
 	            t.rollback();
 	            return -1;
 	        }
-
+ 
 	        // Si no ha sido devuelto y el ejemplar existe
 	        if (bo.getFechaDevuelto() == null && bo.getEjemplar() != null) {
 	            // Cambiamos el estado del ejemplar

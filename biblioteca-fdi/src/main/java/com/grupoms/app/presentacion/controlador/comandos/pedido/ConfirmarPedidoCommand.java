@@ -7,26 +7,26 @@ import com.grupoms.app.presentacion.controlador.Context;
 import com.grupoms.app.presentacion.controlador.Evento;
 import com.grupoms.app.presentacion.controlador.comandos.Command;
 
-public class ConfirmarPedidoCommand implements Command{
+public class ConfirmarPedidoCommand implements Command {
 
-    @Override
-    public Context execute(Object data) {
-      if (!(data instanceof TPedido)) {
-            return new Context(Evento.CONFIRMAR_PEDIDO_KO, "El objeto recibido no es un TPedido válido.");
-        }
+	@Override
+	public Context execute(Object data) {
+		if (!(data instanceof TPedido)) {
+			return new Context(Evento.CONFIRMAR_PEDIDO_KO, "El objeto recibido no es un TPedido válido.");
+		}
 
-        TPedido pedido = (TPedido) data;
-        SAPedido sa = FactoriaSA.getInstance().creaSAPedido();
+		TPedido pedido = (TPedido) data;
+		SAPedido sa = FactoriaSA.getInstance().creaSAPedido();
 
-        try {
-            Boolean ok = sa.confirmarPedido(pedido);
-            if (ok)
-                return new Context(Evento.CONFIRMAR_PEDIDO_OK, pedido);
-            else
-                return new Context(Evento.CONFIRMAR_PEDIDO_KO, "No se pudo confirmar el pedido.");
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new Context(Evento.CONFIRMAR_PEDIDO_KO, e.getMessage());
-        }
-    }    
+		try {
+			Boolean ok = sa.confirmarPedido(pedido);
+			if (ok)
+				return new Context(Evento.CONFIRMAR_PEDIDO_OK, pedido);
+			else
+				return new Context(Evento.CONFIRMAR_PEDIDO_KO, "No se pudo confirmar el pedido.");
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new Context(Evento.CONFIRMAR_PEDIDO_KO, e.getMessage());
+		}
+	}
 }

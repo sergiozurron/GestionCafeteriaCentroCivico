@@ -10,123 +10,123 @@ import java.util.List;
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @NamedQueries({
-    @NamedQuery(name = "com.grupoms.app.negocio.socioJPA.BOSocio.findByName", query = "SELECT s FROM BOSocio s WHERE s.nombreYapellido = :nombre"),
-    @NamedQuery(name = "com.grupoms.app.negocio.socioJPA.BOSocio.findByType", query = "SELECT s FROM BOSocio s WHERE s.tipoSocio = :tipo"),
-    @NamedQuery(name = "com.grupoms.app.negocio.socioJPA.BOSocio.findAll", query = "SELECT s FROM BOSocio s"),
-    @NamedQuery(name = "com.grupoms.app.negocio.socioJPA.BOSocio.findByPromocion", query = "SELECT s FROM BOSocio s JOIN s.promociones p WHERE p.id = :idPromocion")
-})
+		@NamedQuery(name = "com.grupoms.app.negocio.socioJPA.BOSocio.findByName", query = "SELECT s FROM BOSocio s WHERE s.nombreYapellido = :nombre"),
+		@NamedQuery(name = "com.grupoms.app.negocio.socioJPA.BOSocio.findByType", query = "SELECT s FROM BOSocio s WHERE s.tipoSocio = :tipo"),
+		@NamedQuery(name = "com.grupoms.app.negocio.socioJPA.BOSocio.findAll", query = "SELECT s FROM BOSocio s"),
+		@NamedQuery(name = "com.grupoms.app.negocio.socioJPA.BOSocio.findByPromocion", query = "SELECT s FROM BOSocio s JOIN s.promociones p WHERE p.id = :idPromocion") })
 public class BOSocio implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    protected Integer id;
-    protected String nombreYapellido;
-    protected String dni;
-    protected int tipoSocio;
-    protected Integer cuota;
-    protected Boolean activo;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	protected Integer id;
+	protected String nombreYapellido;
+	protected String dni;
+	protected int tipoSocio;
+	protected Integer cuota;
+	protected Boolean activo;
 
-    @Version
-    private int version;
-    
-    @OneToMany(mappedBy = "socio")
-    private List<BOPrestamo> prestamos;
+	@Version
+	private int version;
 
-    @ManyToMany
-    private List<BOPromocion> promociones;
+	@OneToMany(mappedBy = "socio")
+	private List<BOPrestamo> prestamos;
 
-    public BOSocio() {}
+	@ManyToMany
+	private List<BOPromocion> promociones;
 
-    public BOSocio(TSocio socio) {
-        this.nombreYapellido = socio.getNombreYapellido();
-        this.dni = socio.getDni();
-        this.tipoSocio = socio.getTipoSocio();
-        this.cuota = socio.getCuota();
-        this.activo = socio.getActivo();
-    }
+	public BOSocio() {
+	}
 
-    public Integer getId() {
-        return id;
-    }
+	public BOSocio(TSocio socio) {
+		this.nombreYapellido = socio.getNombreYapellido();
+		this.dni = socio.getDni();
+		this.tipoSocio = socio.getTipoSocio();
+		this.cuota = socio.getCuota();
+		this.activo = socio.getActivo();
+	}
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+	public Integer getId() {
+		return id;
+	}
 
-    public String getNombreYapellido() {
-        return nombreYapellido;
-    }
+	public void setId(Integer id) {
+		this.id = id;
+	}
 
-    public void setNombreYapellido(String nombreYapellido) {
-        this.nombreYapellido = nombreYapellido;
-    }
+	public String getNombreYapellido() {
+		return nombreYapellido;
+	}
 
-    public String getDni() {
-        return dni;
-    }
+	public void setNombreYapellido(String nombreYapellido) {
+		this.nombreYapellido = nombreYapellido;
+	}
 
-    public void setDni(String dni) {
-        this.dni = dni;
-    }
+	public String getDni() {
+		return dni;
+	}
 
-    public int getTipoSocio() {
-        return tipoSocio;
-    }
+	public void setDni(String dni) {
+		this.dni = dni;
+	}
 
-    public void setTipoSocio(int tipoSocio) {
-        this.tipoSocio = tipoSocio;
-    }
+	public int getTipoSocio() {
+		return tipoSocio;
+	}
 
-    public Integer getCuota() {
-        return cuota;
-    }
+	public void setTipoSocio(int tipoSocio) {
+		this.tipoSocio = tipoSocio;
+	}
 
-    public void setCuota(Integer cuota) {
-        this.cuota = cuota;
-    }
+	public Integer getCuota() {
+		return cuota;
+	}
 
-    public Boolean getActivo() {
-        return activo;
-    }
+	public void setCuota(Integer cuota) {
+		this.cuota = cuota;
+	}
 
-    public void setActivo(Boolean activo) {
-        this.activo = activo;
-    }
+	public Boolean getActivo() {
+		return activo;
+	}
 
-    public List<BOPrestamo> getPrestamos() {
-        if (prestamos == null) {
-            prestamos = new ArrayList<>();
-        }
-        return prestamos;
-    }
+	public void setActivo(Boolean activo) {
+		this.activo = activo;
+	}
 
-    public void setPrestamos(List<BOPrestamo> prestamos) {
-        this.prestamos = prestamos;
-    }
+	public List<BOPrestamo> getPrestamos() {
+		if (prestamos == null) {
+			prestamos = new ArrayList<>();
+		}
+		return prestamos;
+	}
 
-    public List<BOPromocion> getPromocion() {
-        if (promociones == null) {
-            promociones = new ArrayList<>();
-        }
-        return promociones;
-    }
+	public void setPrestamos(List<BOPrestamo> prestamos) {
+		this.prestamos = prestamos;
+	}
 
-    public void setPromocion(List<BOPromocion> promocions) {
-        this.promociones = promocions;
-    }
+	public List<BOPromocion> getPromocion() {
+		if (promociones == null) {
+			promociones = new ArrayList<>();
+		}
+		return promociones;
+	}
 
-    public void anyadirPromocion(BOPromocion promocion) {
-        if (this.promociones == null) {
-            this.promociones = new ArrayList<>();
-        }
-        this.promociones.add(promocion);
-    }
+	public void setPromocion(List<BOPromocion> promocions) {
+		this.promociones = promocions;
+	}
 
-    public void eliminarPromocion(BOPromocion promocion) {
-        if (this.promociones != null) {
-            this.promociones.remove(promocion);
-        }
-    }
+	public void anyadirPromocion(BOPromocion promocion) {
+		if (this.promociones == null) {
+			this.promociones = new ArrayList<>();
+		}
+		this.promociones.add(promocion);
+	}
+
+	public void eliminarPromocion(BOPromocion promocion) {
+		if (this.promociones != null) {
+			this.promociones.remove(promocion);
+		}
+	}
 }

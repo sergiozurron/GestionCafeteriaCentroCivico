@@ -57,13 +57,14 @@ public class GUI_BajaSala extends JFrame implements IGUI {
 			}
 		});
 
-		// Colocación
-		gbc.gridx = 0; gbc.gridy = 0;
+		gbc.gridx = 0;
+		gbc.gridy = 0;
 		panel.add(labelId, gbc);
 		gbc.gridx = 1;
 		panel.add(campoId, gbc);
 
-		gbc.gridx = 0; gbc.gridy = 1;
+		gbc.gridx = 0;
+		gbc.gridy = 1;
 		gbc.gridwidth = 2;
 		panel.add(btnBaja, gbc);
 
@@ -79,7 +80,7 @@ public class GUI_BajaSala extends JFrame implements IGUI {
 		switch (context.getEvento()) {
 		case Evento.BAJA_SALA_OK:
 			JOptionPane.showMessageDialog(this, "Sala dada de baja correctamente");
-			campoId.setText(""); // Limpiamos el campo al terminar con éxito
+			campoId.setText("");
 			break;
 		case Evento.BAJA_SALA_KO:
 			JOptionPane.showMessageDialog(this, "Error al dar de baja la sala", "Error", JOptionPane.ERROR_MESSAGE);

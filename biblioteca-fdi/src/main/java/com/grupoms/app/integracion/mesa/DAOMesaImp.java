@@ -12,265 +12,261 @@ import com.grupoms.app.negocio.mesa.TMesaTerraza;
 
 public class DAOMesaImp implements DAOMesa {
 
-    private static final String INSERT_MESA = "INSERT INTO MESAS(numero, ubicacion, capacidad, activo, sala_id, terraza_id) VALUES (?, ?, ?, ?, ?, ?)";
+	private static final String INSERT_MESA = "INSERT INTO MESAS(numero, ubicacion, capacidad, activo, sala_id, terraza_id) VALUES (?, ?, ?, ?, ?, ?)";
 
-    private static final String INSERT_TERRAZA = "INSERT INTO TERRAZAS(cubierta, suplemento) VALUES (?, ?)";
+	private static final String INSERT_TERRAZA = "INSERT INTO TERRAZAS(cubierta, suplemento) VALUES (?, ?)";
 
-    private static final String INSERT_SALA = "INSERT INTO SALAS(reservada, privacidad) VALUES (?, ?)";
+	private static final String INSERT_SALA = "INSERT INTO SALAS(reservada, privacidad) VALUES (?, ?)";
 
-    private static final String READ_BY_ID =
-    		"SELECT m.*, s.reservada, s.privacidad, t.cubierta, t.suplemento " +
-			"FROM MESAS m " +
-			"LEFT JOIN SALAS s ON m.sala_id = s.id " +
-			"LEFT JOIN TERRAZAS t ON m.terraza_id = t.id " +
-			"WHERE m.id = ?";
-	
+	private static final String READ_BY_ID = "SELECT m.*, s.reservada, s.privacidad, t.cubierta, t.suplemento "
+			+ "FROM MESAS m " + "LEFT JOIN SALAS s ON m.sala_id = s.id "
+			+ "LEFT JOIN TERRAZAS t ON m.terraza_id = t.id " + "WHERE m.id = ?";
+
 	private static final String DESACTIVAR_MESA = "UPDATE MESAS SET activo = ? WHERE id = ?";
 
-    private static final String UPDATE_MESA = "UPDATE MESAS SET numero = ?, ubicacion = ?, capacidad = ?, activo = ? WHERE id = ?";
+	private static final String UPDATE_MESA = "UPDATE MESAS SET numero = ?, ubicacion = ?, capacidad = ?, activo = ? WHERE id = ?";
 
-    private static final String UPDATE_TERRAZA = "UPDATE TERRAZAS SET cubierta = ?, suplemento = ? WHERE id = ?";
+	private static final String UPDATE_TERRAZA = "UPDATE TERRAZAS SET cubierta = ?, suplemento = ? WHERE id = ?";
 
-    private static final String UPDATE_SALA = "UPDATE SALAS SET reservada = ?, privacidad = ? WHERE id = ?";
+	private static final String UPDATE_SALA = "UPDATE SALAS SET reservada = ?, privacidad = ? WHERE id = ?";
 
-    private static final String ALL =
-            "SELECT m.*, s.reservada, s.privacidad, t.cubierta, t.suplemento " +
-            "FROM MESAS m " +
-            "LEFT JOIN SALAS s ON m.sala_id = s.id " +
-            "LEFT JOIN TERRAZAS t ON m.terraza_id = t.id";
-    
-    private static final String DELETE_MESA = "DELETE FROM MESA";
-    private static final String DELETE_SALA = "DELETE FROM SALA";
-    private static final String DELETE_TERRAZA = "DELETE FROM TERRAZA";
+	private static final String ALL = "SELECT m.*, s.reservada, s.privacidad, t.cubierta, t.suplemento "
+			+ "FROM MESAS m " + "LEFT JOIN SALAS s ON m.sala_id = s.id "
+			+ "LEFT JOIN TERRAZAS t ON m.terraza_id = t.id";
 
-    public void eliminaTodas() throws SQLException {
-    	try {
-            Transaction t = TransactionManager.getInstance().getTransaction();
-            Connection c = (Connection) t.getResource();
-            try (PreparedStatement ps = c.prepareStatement(DELETE_MESA)) {
-                ps.executeUpdate();
-            }
-            try (PreparedStatement ps = c.prepareStatement(DELETE_SALA)) {
-                ps.executeUpdate();
-            }
-            try (PreparedStatement ps = c.prepareStatement(DELETE_TERRAZA)) {
-                ps.executeUpdate();
-            }
-        } catch (SQLException e) {
-            System.err.println("Error al borrar todas las mesa: " + e.getMessage());
-        }
-    }
+	private static final String DELETE_MESA = "DELETE FROM MESA";
+	private static final String DELETE_SALA = "DELETE FROM SALA";
+	private static final String DELETE_TERRAZA = "DELETE FROM TERRAZA";
 
+	public void eliminaTodas() throws SQLException {
+		try {
+			Transaction t = TransactionManager.getInstance().getTransaction();
+			Connection c = (Connection) t.getResource();
+			try (PreparedStatement ps = c.prepareStatement(DELETE_MESA)) {
+				ps.executeUpdate();
+			}
+			try (PreparedStatement ps = c.prepareStatement(DELETE_SALA)) {
+				ps.executeUpdate();
+			}
+			try (PreparedStatement ps = c.prepareStatement(DELETE_TERRAZA)) {
+				ps.executeUpdate();
+			}
+		} catch (SQLException e) {
+			System.err.println("Error al borrar todas las mesa: " + e.getMessage());
+		}
+	}
 
-    @Override
-    public Integer altaMesa(TMesa mesa) {
-    	Integer idGenerado = null;
-        try {
-            Transaction t = TransactionManager.getInstance().getTransaction();
-            Connection c = (Connection) t.getResource();
+	@Override
+	public Integer altaMesa(TMesa mesa) {
+		Integer idGenerado = null;
+		try {
+			Transaction t = TransactionManager.getInstance().getTransaction();
+			Connection c = (Connection) t.getResource();
 
-            Integer salaId = null;
-            Integer terrazaId = null;
+			Integer salaId = null;
+			Integer terrazaId = null;
 
-            if (mesa instanceof TMesaSala) {
-                TMesaSala mesaS = (TMesaSala) mesa;
-                try (PreparedStatement ps = c.prepareStatement(INSERT_SALA, Statement.RETURN_GENERATED_KEYS)) {
-                    ps.setBoolean(1, mesaS.getReservada());
-                    ps.setString(2, mesaS.getPrivacidad());
-                    ps.executeUpdate();
-                    ResultSet rs = ps.getGeneratedKeys();
-                    if (rs.next()) salaId = rs.getInt(1);
-                }
-            } else if (mesa instanceof TMesaTerraza) {
-                TMesaTerraza mesaT = (TMesaTerraza) mesa;
-                try (PreparedStatement ps = c.prepareStatement(INSERT_TERRAZA, Statement.RETURN_GENERATED_KEYS)) {
-                    ps.setBoolean(1, mesaT.getCubierta());
-                    ps.setDouble(2, mesaT.getSuplemento());
-                    ps.executeUpdate();
-                    ResultSet rs = ps.getGeneratedKeys();
-                    if (rs.next()) terrazaId = rs.getInt(1);
-                }
-            }
+			if (mesa instanceof TMesaSala) {
+				TMesaSala mesaS = (TMesaSala) mesa;
+				try (PreparedStatement ps = c.prepareStatement(INSERT_SALA, Statement.RETURN_GENERATED_KEYS)) {
+					ps.setBoolean(1, mesaS.getReservada());
+					ps.setString(2, mesaS.getPrivacidad());
+					ps.executeUpdate();
+					ResultSet rs = ps.getGeneratedKeys();
+					if (rs.next())
+						salaId = rs.getInt(1);
+				}
+			} else if (mesa instanceof TMesaTerraza) {
+				TMesaTerraza mesaT = (TMesaTerraza) mesa;
+				try (PreparedStatement ps = c.prepareStatement(INSERT_TERRAZA, Statement.RETURN_GENERATED_KEYS)) {
+					ps.setBoolean(1, mesaT.getCubierta());
+					ps.setDouble(2, mesaT.getSuplemento());
+					ps.executeUpdate();
+					ResultSet rs = ps.getGeneratedKeys();
+					if (rs.next())
+						terrazaId = rs.getInt(1);
+				}
+			}
 
-            try (PreparedStatement ps = c.prepareStatement(INSERT_MESA, Statement.RETURN_GENERATED_KEYS)) {
-                ps.setInt(1, mesa.getNumero());
-                ps.setString(2, mesa.getUbicacion());
-                ps.setInt(3, mesa.getCapacidad());
-                ps.setBoolean(4, mesa.getActivo());
-                if (salaId != null) {
-                    ps.setInt(5, salaId);
-                    ps.setNull(6, java.sql.Types.INTEGER);
-                } else {
-                    ps.setNull(5, java.sql.Types.INTEGER);
-                    ps.setInt(6, terrazaId);
-                }
-                ps.executeUpdate();
+			try (PreparedStatement ps = c.prepareStatement(INSERT_MESA, Statement.RETURN_GENERATED_KEYS)) {
+				ps.setInt(1, mesa.getNumero());
+				ps.setString(2, mesa.getUbicacion());
+				ps.setInt(3, mesa.getCapacidad());
+				ps.setBoolean(4, mesa.getActivo());
+				if (salaId != null) {
+					ps.setInt(5, salaId);
+					ps.setNull(6, java.sql.Types.INTEGER);
+				} else {
+					ps.setNull(5, java.sql.Types.INTEGER);
+					ps.setInt(6, terrazaId);
+				}
+				ps.executeUpdate();
 
-                ResultSet rs = ps.getGeneratedKeys();
-                if (rs.next()) {
-                	idGenerado = rs.getInt(1);
-                	mesa.setId(idGenerado);
-                }
-            }
+				ResultSet rs = ps.getGeneratedKeys();
+				if (rs.next()) {
+					idGenerado = rs.getInt(1);
+					mesa.setId(idGenerado);
+				}
+			}
 
-        } catch (SQLException e) {
-            System.err.println("Error dando de alta mesa: " + e.getMessage());
-        }
+		} catch (SQLException e) {
+			System.err.println("Error dando de alta mesa: " + e.getMessage());
+		}
 
-        return idGenerado;
-    }
+		return idGenerado;
+	}
 
-    @Override
-    public Boolean bajaMesa(TMesa mesa) {
-    	boolean ok = false;
-        try {
-            Transaction t = TransactionManager.getInstance().getTransaction();
-            Connection c = (Connection) t.getResource();
-            
-            try (PreparedStatement ps = c.prepareStatement(DESACTIVAR_MESA)) {
-            	ps.setBoolean(1, mesa.getActivo());
-                ps.setInt(2, mesa.getId());
-                int rows = ps.executeUpdate();
-                
-                ok = rows > 0;
-            }
-        } catch (SQLException e) {
-            System.err.println("Error al dar de baja la mesa: " + e.getMessage());
-        }
-        return ok;
-    }
+	@Override
+	public Boolean bajaMesa(TMesa mesa) {
+		boolean ok = false;
+		try {
+			Transaction t = TransactionManager.getInstance().getTransaction();
+			Connection c = (Connection) t.getResource();
 
-    @Override
-    public TMesa mostrarMesa(Integer id) {
-        try {
-            Transaction t = TransactionManager.getInstance().getTransaction();
-            if (t == null) {
-                throw new IllegalStateException("No hay transacción activa al mostrar mesa");
-            }
-            Connection c = (Connection) t.getResource();
+			try (PreparedStatement ps = c.prepareStatement(DESACTIVAR_MESA)) {
+				ps.setBoolean(1, mesa.getActivo());
+				ps.setInt(2, mesa.getId());
+				int rows = ps.executeUpdate();
 
-            try (PreparedStatement ps = c.prepareStatement(READ_BY_ID)) {
-                ps.setInt(1, id);
-                try (ResultSet rs = ps.executeQuery()) {
-                    if (rs.next()) {
-                        Integer salaId = rs.getInt("sala_id");
-                        Integer terrazaId = rs.getInt("terraza_id");
+				ok = rows > 0;
+			}
+		} catch (SQLException e) {
+			System.err.println("Error al dar de baja la mesa: " + e.getMessage());
+		}
+		return ok;
+	}
 
-                        if (terrazaId != 0) {
-                            TMesaTerraza mesa = new TMesaTerraza();
-                            mesa.setId(rs.getInt("id"));
-                            mesa.setNumero(rs.getInt("numero"));
-                            mesa.setUbicacion(rs.getString("ubicacion"));
-                            mesa.setCapacidad(rs.getInt("capacidad"));
-                            mesa.setActivo(rs.getBoolean("activo"));
-                            mesa.setCubierta(rs.getBoolean("cubierta"));
-                            mesa.setSuplemento(rs.getDouble("suplemento"));
-                            return mesa;
-                        } else if (salaId != 0) {
-                            TMesaSala mesa = new TMesaSala();
-                            mesa.setId(rs.getInt("id"));
-                            mesa.setNumero(rs.getInt("numero"));
-                            mesa.setUbicacion(rs.getString("ubicacion"));
-                            mesa.setCapacidad(rs.getInt("capacidad"));
-                            mesa.setActivo(rs.getBoolean("activo"));
-                            mesa.setReservada(rs.getBoolean("reservada"));
-                            mesa.setPrivacidad(rs.getString("privacidad"));
-                            return mesa;
-                        }
-                    }
-                }
-            }
-        } catch (SQLException e) {
-            System.err.println("Error encontrando mesa: " + e.getMessage());
-        }
+	@Override
+	public TMesa mostrarMesa(Integer id) {
+		try {
+			Transaction t = TransactionManager.getInstance().getTransaction();
+			if (t == null) {
+				throw new IllegalStateException("No hay transacción activa al mostrar mesa");
+			}
+			Connection c = (Connection) t.getResource();
 
-        return null;
-    }
+			try (PreparedStatement ps = c.prepareStatement(READ_BY_ID)) {
+				ps.setInt(1, id);
+				try (ResultSet rs = ps.executeQuery()) {
+					if (rs.next()) {
+						Integer salaId = rs.getInt("sala_id");
+						Integer terrazaId = rs.getInt("terraza_id");
 
-    @Override
-    public List<TMesa> mostrarListaMesa() {
-        List<TMesa> lista = new ArrayList<>();
+						if (terrazaId != 0) {
+							TMesaTerraza mesa = new TMesaTerraza();
+							mesa.setId(rs.getInt("id"));
+							mesa.setNumero(rs.getInt("numero"));
+							mesa.setUbicacion(rs.getString("ubicacion"));
+							mesa.setCapacidad(rs.getInt("capacidad"));
+							mesa.setActivo(rs.getBoolean("activo"));
+							mesa.setCubierta(rs.getBoolean("cubierta"));
+							mesa.setSuplemento(rs.getDouble("suplemento"));
+							return mesa;
+						} else if (salaId != 0) {
+							TMesaSala mesa = new TMesaSala();
+							mesa.setId(rs.getInt("id"));
+							mesa.setNumero(rs.getInt("numero"));
+							mesa.setUbicacion(rs.getString("ubicacion"));
+							mesa.setCapacidad(rs.getInt("capacidad"));
+							mesa.setActivo(rs.getBoolean("activo"));
+							mesa.setReservada(rs.getBoolean("reservada"));
+							mesa.setPrivacidad(rs.getString("privacidad"));
+							return mesa;
+						}
+					}
+				}
+			}
+		} catch (SQLException e) {
+			System.err.println("Error encontrando mesa: " + e.getMessage());
+		}
 
-        try {
-            Transaction t = TransactionManager.getInstance().getTransaction();
-            Connection c = (Connection) t.getResource();
+		return null;
+	}
 
-            try (PreparedStatement ps = c.prepareStatement(ALL)) {
-                try (ResultSet rs = ps.executeQuery()) {
-                    while (rs.next()) {
-                        Integer salaId = rs.getInt("sala_id");
-                        Integer terrazaId = rs.getInt("terraza_id");
+	@Override
+	public List<TMesa> mostrarListaMesa() {
+		List<TMesa> lista = new ArrayList<>();
 
-                        if (terrazaId != 0) {
-                            TMesaTerraza mesa = new TMesaTerraza();
-                            mesa.setId(rs.getInt("id"));
-                            mesa.setNumero(rs.getInt("numero"));
-                            mesa.setUbicacion(rs.getString("ubicacion"));
-                            mesa.setCapacidad(rs.getInt("capacidad"));
-                            mesa.setActivo(rs.getBoolean("activo"));
-                            mesa.setCubierta(rs.getBoolean("cubierta"));
-                            mesa.setSuplemento(rs.getDouble("suplemento"));
-                            lista.add(mesa);
-                        } else if (salaId != 0){
-                            TMesaSala mesa = new TMesaSala();
-                            mesa.setId(rs.getInt("id"));
-                            mesa.setNumero(rs.getInt("numero"));
-                            mesa.setUbicacion(rs.getString("ubicacion"));
-                            mesa.setCapacidad(rs.getInt("capacidad"));
-                            mesa.setActivo(rs.getBoolean("activo"));
-                            mesa.setReservada(rs.getBoolean("reservada"));
-                            mesa.setPrivacidad(rs.getString("privacidad"));
-                            lista.add(mesa);
-                        }
-                    }
-                }
-            }
+		try {
+			Transaction t = TransactionManager.getInstance().getTransaction();
+			Connection c = (Connection) t.getResource();
 
-        } catch (SQLException e) {
-            System.err.println("Error leyendo todas las mesas: " + e.getMessage());
-        }
+			try (PreparedStatement ps = c.prepareStatement(ALL)) {
+				try (ResultSet rs = ps.executeQuery()) {
+					while (rs.next()) {
+						Integer salaId = rs.getInt("sala_id");
+						Integer terrazaId = rs.getInt("terraza_id");
 
-        return lista;
-    }
+						if (terrazaId != 0) {
+							TMesaTerraza mesa = new TMesaTerraza();
+							mesa.setId(rs.getInt("id"));
+							mesa.setNumero(rs.getInt("numero"));
+							mesa.setUbicacion(rs.getString("ubicacion"));
+							mesa.setCapacidad(rs.getInt("capacidad"));
+							mesa.setActivo(rs.getBoolean("activo"));
+							mesa.setCubierta(rs.getBoolean("cubierta"));
+							mesa.setSuplemento(rs.getDouble("suplemento"));
+							lista.add(mesa);
+						} else if (salaId != 0) {
+							TMesaSala mesa = new TMesaSala();
+							mesa.setId(rs.getInt("id"));
+							mesa.setNumero(rs.getInt("numero"));
+							mesa.setUbicacion(rs.getString("ubicacion"));
+							mesa.setCapacidad(rs.getInt("capacidad"));
+							mesa.setActivo(rs.getBoolean("activo"));
+							mesa.setReservada(rs.getBoolean("reservada"));
+							mesa.setPrivacidad(rs.getString("privacidad"));
+							lista.add(mesa);
+						}
+					}
+				}
+			}
 
-    @Override
-    public Boolean modificarMesa(TMesa mesa) {
-    	Boolean ok = false;
-        try {
-            Transaction t = TransactionManager.getInstance().getTransaction();
-            Connection c = (Connection) t.getResource();
+		} catch (SQLException e) {
+			System.err.println("Error leyendo todas las mesas: " + e.getMessage());
+		}
 
-            try (PreparedStatement ps = c.prepareStatement(UPDATE_MESA)) {
-                ps.setInt(1, mesa.getNumero());
-                ps.setString(2, mesa.getUbicacion());
-                ps.setInt(3, mesa.getCapacidad());
-                ps.setBoolean(4, mesa.getActivo());
-                ps.setInt(5, mesa.getId());
-                ps.executeUpdate();
-            }
-            int rows = 0;
+		return lista;
+	}
 
-            if (mesa instanceof TMesaSala) {
-                TMesaSala mesaS = (TMesaSala) mesa;
-                try (PreparedStatement ps = c.prepareStatement(UPDATE_SALA)) {
-                    ps.setBoolean(1, mesaS.getReservada());
-                    ps.setString(2, mesaS.getPrivacidad());
-                    ps.setInt(3, mesaS.getId());
-                    rows = ps.executeUpdate();
-                }
-            } else if (mesa instanceof TMesaTerraza) {
-                TMesaTerraza mesaT = (TMesaTerraza) mesa;
-                try (PreparedStatement ps = c.prepareStatement(UPDATE_TERRAZA)) {
-                    ps.setBoolean(1, mesaT.getCubierta());
-                    ps.setDouble(2, mesaT.getSuplemento());
-                    ps.setInt(3, mesaT.getId());
-                    rows = ps.executeUpdate();
-                }
-            }
-            ok = rows > 0;
-        } catch (SQLException e) {
-            System.err.println("Error actualizando mesa: " + e.getMessage());
-        }
-        return ok;
-    }
+	@Override
+	public Boolean modificarMesa(TMesa mesa) {
+		Boolean ok = false;
+		try {
+			Transaction t = TransactionManager.getInstance().getTransaction();
+			Connection c = (Connection) t.getResource();
+
+			try (PreparedStatement ps = c.prepareStatement(UPDATE_MESA)) {
+				ps.setInt(1, mesa.getNumero());
+				ps.setString(2, mesa.getUbicacion());
+				ps.setInt(3, mesa.getCapacidad());
+				ps.setBoolean(4, mesa.getActivo());
+				ps.setInt(5, mesa.getId());
+				ps.executeUpdate();
+			}
+			int rows = 0;
+
+			if (mesa instanceof TMesaSala) {
+				TMesaSala mesaS = (TMesaSala) mesa;
+				try (PreparedStatement ps = c.prepareStatement(UPDATE_SALA)) {
+					ps.setBoolean(1, mesaS.getReservada());
+					ps.setString(2, mesaS.getPrivacidad());
+					ps.setInt(3, mesaS.getId());
+					rows = ps.executeUpdate();
+				}
+			} else if (mesa instanceof TMesaTerraza) {
+				TMesaTerraza mesaT = (TMesaTerraza) mesa;
+				try (PreparedStatement ps = c.prepareStatement(UPDATE_TERRAZA)) {
+					ps.setBoolean(1, mesaT.getCubierta());
+					ps.setDouble(2, mesaT.getSuplemento());
+					ps.setInt(3, mesaT.getId());
+					rows = ps.executeUpdate();
+				}
+			}
+			ok = rows > 0;
+		} catch (SQLException e) {
+			System.err.println("Error actualizando mesa: " + e.getMessage());
+		}
+		return ok;
+	}
 }

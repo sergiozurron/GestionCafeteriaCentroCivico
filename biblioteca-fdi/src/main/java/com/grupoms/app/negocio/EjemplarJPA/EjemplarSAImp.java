@@ -18,7 +18,8 @@ public class EjemplarSAImp implements EjemplarSA {
 
 		try {
 			em.getTransaction().begin();
-			BOMaterial boMaterial = em.find(BOMaterial.class, ejemplar.getIdMaterial(), LockModeType.OPTIMISTIC_FORCE_INCREMENT);
+			BOMaterial boMaterial = em.find(BOMaterial.class, ejemplar.getIdMaterial(),
+					LockModeType.OPTIMISTIC_FORCE_INCREMENT);
 
 			if (boMaterial == null || !boMaterial.getActivo()) {
 				em.getTransaction().rollback();
@@ -73,14 +74,16 @@ public class EjemplarSAImp implements EjemplarSA {
 
 		try {
 			em.getTransaction().begin();
-			BOEjemplar boEjemplar = em.find(BOEjemplar.class, ejemplar.getId(), LockModeType.OPTIMISTIC_FORCE_INCREMENT);
+			BOEjemplar boEjemplar = em.find(BOEjemplar.class, ejemplar.getId(),
+					LockModeType.OPTIMISTIC_FORCE_INCREMENT);
 
 			if (boEjemplar == null || !boEjemplar.getActivo()) {
 				em.getTransaction().rollback();
 				return false;
 			}
 
-			BOMaterial boMaterial = em.find(BOMaterial.class, ejemplar.getIdMaterial(), LockModeType.OPTIMISTIC_FORCE_INCREMENT);
+			BOMaterial boMaterial = em.find(BOMaterial.class, ejemplar.getIdMaterial(),
+					LockModeType.OPTIMISTIC_FORCE_INCREMENT);
 
 			if (boMaterial == null || !boMaterial.getActivo()) {
 				em.getTransaction().rollback();

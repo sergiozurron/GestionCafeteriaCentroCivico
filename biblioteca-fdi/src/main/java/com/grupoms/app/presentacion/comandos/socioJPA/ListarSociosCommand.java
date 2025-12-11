@@ -10,15 +10,15 @@ import com.grupoms.app.presentacion.controlador.comandos.Command;
 import java.util.List;
 
 public class ListarSociosCommand implements Command {
-    @Override
-    public Context execute(Object data) {
-        SocioSA sa = FactoriaSA.getInstance().creaSASocio();
-        try {
-            List<TSocio> lista = sa.listarSocios();
-            return new Context(Evento.LISTAR_SOCIOS_OK, lista);
-        }catch (Exception e) {
-            // Cualquier excepción se traduce a KO
-            return new Context(Evento.LISTAR_SOCIOS_KO, null);
-        }
-    }
+	@Override
+	public Context execute(Object data) {
+		SocioSA sa = FactoriaSA.getInstance().creaSASocio();
+		try {
+			List<TSocio> lista = sa.listarSocios();
+			return new Context(Evento.LISTAR_SOCIOS_OK, lista);
+		} catch (Exception e) {
+
+			return new Context(Evento.LISTAR_SOCIOS_KO, null);
+		}
+	}
 }

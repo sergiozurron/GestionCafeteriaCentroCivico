@@ -20,108 +20,113 @@ import com.grupoms.app.presentacion.controlador.Evento;
 
 public class GUI_ModificarSala extends JFrame implements IGUI {
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    private JTextField campoId;
-    private JTextField campoNombre;
-    private JTextField campoCapacidad;
-    
-    private JButton btnModificar;
+	private JTextField campoId;
+	private JTextField campoNombre;
+	private JTextField campoCapacidad;
 
-    public GUI_ModificarSala() {
-        super("Modificar Sala");
-        initGUI();
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        pack(); 
-        setLocationRelativeTo(null);
-    }
+	private JButton btnModificar;
 
-    private void initGUI() {
-        setLayout(new BorderLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(8, 8, 8, 8);
-        gbc.fill = GridBagConstraints.HORIZONTAL;
+	public GUI_ModificarSala() {
+		super("Modificar Sala");
+		initGUI();
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		pack();
+		setLocationRelativeTo(null);
+	}
 
-        JPanel panel = new JPanel(new GridBagLayout());
+	private void initGUI() {
+		setLayout(new BorderLayout());
+		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.insets = new Insets(8, 8, 8, 8);
+		gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        JLabel labelId = new JLabel("ID Sala:");
-        campoId = new JTextField(10);
+		JPanel panel = new JPanel(new GridBagLayout());
 
-        JLabel labelNombre = new JLabel("Nombre:");
-        campoNombre = new JTextField(15);
+		JLabel labelId = new JLabel("ID Sala:");
+		campoId = new JTextField(10);
 
-        JLabel labelCapacidad = new JLabel("Capacidad:");
-        campoCapacidad = new JTextField(10);
+		JLabel labelNombre = new JLabel("Nombre:");
+		campoNombre = new JTextField(15);
 
-        btnModificar = new JButton("Modificar Sala");
+		JLabel labelCapacidad = new JLabel("Capacidad:");
+		campoCapacidad = new JTextField(10);
 
-        btnModificar.addActionListener(e -> {
-            try {
-                if(campoId.getText().isEmpty() || campoNombre.getText().isEmpty() || campoCapacidad.getText().isEmpty()) {
-                    JOptionPane.showMessageDialog(this, "Por favor, rellene todos los campos.");
-                    return;
-                }
+		btnModificar = new JButton("Modificar Sala");
 
-                int idSala = Integer.parseInt(campoId.getText());
-                String nombre = campoNombre.getText();
-                int capacidad = Integer.parseInt(campoCapacidad.getText());
+		btnModificar.addActionListener(e -> {
+			try {
+				if (campoId.getText().isEmpty() || campoNombre.getText().isEmpty()
+						|| campoCapacidad.getText().isEmpty()) {
+					JOptionPane.showMessageDialog(this, "Por favor, rellene todos los campos.");
+					return;
+				}
 
-                if (capacidad <= 0) {
-                     JOptionPane.showMessageDialog(this, "La capacidad debe ser mayor a 0");
-                     return;
-                }
+				int idSala = Integer.parseInt(campoId.getText());
+				String nombre = campoNombre.getText();
+				int capacidad = Integer.parseInt(campoCapacidad.getText());
 
-                TSala sala = new TSala();
-                sala.setId(idSala);
-                sala.setNombre(nombre);
-                sala.setCapacidad(capacidad);
+				if (capacidad <= 0) {
+					JOptionPane.showMessageDialog(this, "La capacidad debe ser mayor a 0");
+					return;
+				}
 
-                Context contexto = new Context(Evento.MODIFICAR_SALA, sala);
-                Controlador.getInstance().handle(contexto);
+				TSala sala = new TSala();
+				sala.setId(idSala);
+				sala.setNombre(nombre);
+				sala.setCapacidad(capacidad);
 
-            } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(this, "Error: ID y Capacidad deben ser números válidos");
-            }
-        });
+				Context contexto = new Context(Evento.MODIFICAR_SALA, sala);
+				Controlador.getInstance().handle(contexto);
 
-        // Posicionamiento
-        gbc.gridx = 0; gbc.gridy = 0; 
-        panel.add(labelId, gbc);
-        gbc.gridx = 1; 
-        panel.add(campoId, gbc);
+			} catch (NumberFormatException ex) {
+				JOptionPane.showMessageDialog(this, "Error: ID y Capacidad deben ser números válidos");
+			}
+		});
 
-        gbc.gridx = 0; gbc.gridy = 1; 
-        panel.add(labelNombre, gbc);
-        gbc.gridx = 1; 
-        panel.add(campoNombre, gbc);
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		panel.add(labelId, gbc);
+		gbc.gridx = 1;
+		panel.add(campoId, gbc);
 
-        gbc.gridx = 0; gbc.gridy = 2; 
-        panel.add(labelCapacidad, gbc);
-        gbc.gridx = 1; 
-        panel.add(campoCapacidad, gbc);
+		gbc.gridx = 0;
+		gbc.gridy = 1;
+		panel.add(labelNombre, gbc);
+		gbc.gridx = 1;
+		panel.add(campoNombre, gbc);
 
-        gbc.gridx = 0; gbc.gridy = 3; 
-        gbc.gridwidth = 2;
-        panel.add(btnModificar, gbc);
+		gbc.gridx = 0;
+		gbc.gridy = 2;
+		panel.add(labelCapacidad, gbc);
+		gbc.gridx = 1;
+		panel.add(campoCapacidad, gbc);
 
-        add(panel, BorderLayout.CENTER);
-    }
+		gbc.gridx = 0;
+		gbc.gridy = 3;
+		gbc.gridwidth = 2;
+		panel.add(btnModificar, gbc);
 
-    @Override
-    public void actualizar(Context context) {
-        if (context == null) {
-            setVisible(true);
-            return;
-        }
-        
-        if (context.getEvento() == Evento.MODIFICAR_SALA_OK) {
-            JOptionPane.showMessageDialog(this, "Sala modificada con éxito");
-            campoId.setText("");
-            campoNombre.setText("");
-            campoCapacidad.setText("");
-            
-        } else if (context.getEvento() == Evento.MODIFICAR_SALA_KO) {
-            JOptionPane.showMessageDialog(this, "No se ha podido modificar la sala", "Error", JOptionPane.ERROR_MESSAGE);
-        }
-    }
+		add(panel, BorderLayout.CENTER);
+	}
+
+	@Override
+	public void actualizar(Context context) {
+		if (context == null) {
+			setVisible(true);
+			return;
+		}
+
+		if (context.getEvento() == Evento.MODIFICAR_SALA_OK) {
+			JOptionPane.showMessageDialog(this, "Sala modificada con éxito");
+			campoId.setText("");
+			campoNombre.setText("");
+			campoCapacidad.setText("");
+
+		} else if (context.getEvento() == Evento.MODIFICAR_SALA_KO) {
+			JOptionPane.showMessageDialog(this, "No se ha podido modificar la sala", "Error",
+					JOptionPane.ERROR_MESSAGE);
+		}
+	}
 }

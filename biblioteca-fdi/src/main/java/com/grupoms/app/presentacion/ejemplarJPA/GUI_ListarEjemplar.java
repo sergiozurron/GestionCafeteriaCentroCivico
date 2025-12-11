@@ -33,7 +33,6 @@ public class GUI_ListarEjemplar extends JFrame implements IGUI {
 
 		JPanel panelPrincipal = new JPanel(new BorderLayout());
 
-		// Configuración de la tabla
 		modeloTabla = new DefaultTableModel();
 		modeloTabla.addColumn("ID");
 		modeloTabla.addColumn("Estado");
@@ -43,7 +42,6 @@ public class GUI_ListarEjemplar extends JFrame implements IGUI {
 		tabla = new JTable(modeloTabla);
 		JScrollPane scrollPane = new JScrollPane(tabla);
 
-		// Botón para cargar proveedores
 		btnCargar = new JButton("Cargar Ejemplares");
 		btnCargar.addActionListener(e -> {
 			try {
@@ -69,7 +67,7 @@ public class GUI_ListarEjemplar extends JFrame implements IGUI {
 			return;
 		}
 		if (context.getEvento() == Evento.LISTAR_EJEMPLARES_OK) {
-			modeloTabla.setRowCount(0); // Limpiar la tabla
+			modeloTabla.setRowCount(0);
 
 			List<TEjemplar> ejemplares = (List<TEjemplar>) context.getDatos();
 

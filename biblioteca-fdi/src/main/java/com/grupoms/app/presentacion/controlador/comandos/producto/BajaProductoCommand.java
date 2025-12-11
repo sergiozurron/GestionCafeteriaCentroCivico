@@ -8,19 +8,19 @@ import com.grupoms.app.presentacion.controlador.comandos.Command;
 
 public class BajaProductoCommand implements Command {
 
-    @Override
-    public Context execute(Object data) {
-        TProducto p = (TProducto) data;
-        try{
-            Boolean resultado = FactoriaSA.getInstance().creaSAProducto().bajaProducto(p);
-            if (resultado == null || !resultado) {
-                return new Context(Evento.BAJA_PRODUCTO_KO, null);
-            }
-            return new Context(Evento.BAJA_PRODUCTO_OK, p);
-        }catch (IllegalArgumentException e) {
+	@Override
+	public Context execute(Object data) {
+		TProducto p = (TProducto) data;
+		try {
+			Boolean resultado = FactoriaSA.getInstance().creaSAProducto().bajaProducto(p);
+			if (resultado == null || !resultado) {
+				return new Context(Evento.BAJA_PRODUCTO_KO, null);
+			}
+			return new Context(Evento.BAJA_PRODUCTO_OK, p);
+		} catch (IllegalArgumentException e) {
 			System.out.println(e.getMessage());
 			return new Context(Evento.BAJA_PRODUCTO_KO, null);
 		}
-    }
-    
+	}
+
 }

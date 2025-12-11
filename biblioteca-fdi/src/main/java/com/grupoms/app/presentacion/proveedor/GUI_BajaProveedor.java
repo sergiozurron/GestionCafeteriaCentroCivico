@@ -32,7 +32,8 @@ public class GUI_BajaProveedor extends JFrame implements IGUI {
 			JOptionPane.showMessageDialog(this, "Proveedor dado de baja con éxito");
 			campoId.setText("");
 		} else if (context.getEvento() == Evento.BAJA_PROVEEDOR_KO) {
-			JOptionPane.showMessageDialog(this, "Error al dar de baja al proveedor. Verifique que el ID existe y está activo.");
+			JOptionPane.showMessageDialog(this,
+					"Error al dar de baja al proveedor. Verifique que el ID existe y está activo.");
 		}
 	}
 
@@ -56,12 +57,10 @@ public class GUI_BajaProveedor extends JFrame implements IGUI {
 					return;
 				}
 
-				// Crear TProveedor con el ID
 				TProveedor proveedor = new TProveedor();
 				proveedor.setId(id);
-				proveedor.setActivo(false); // Baja lógica
+				proveedor.setActivo(false);
 
-				// Enviar al controlador
 				Context contexto = new Context(Evento.BAJA_PROVEEDOR, proveedor);
 				Controlador.getInstance().handle(contexto);
 
@@ -70,13 +69,14 @@ public class GUI_BajaProveedor extends JFrame implements IGUI {
 			}
 		});
 
-		// Colocación
-		gbc.gridx = 0; gbc.gridy = 0;
+		gbc.gridx = 0;
+		gbc.gridy = 0;
 		panel.add(labelId, gbc);
 		gbc.gridx = 1;
 		panel.add(campoId, gbc);
 
-		gbc.gridx = 0; gbc.gridy = 1;
+		gbc.gridx = 0;
+		gbc.gridy = 1;
 		gbc.gridwidth = 2;
 		panel.add(btnBaja, gbc);
 

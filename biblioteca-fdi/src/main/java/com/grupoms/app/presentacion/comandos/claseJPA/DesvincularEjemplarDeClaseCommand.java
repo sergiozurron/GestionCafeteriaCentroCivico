@@ -7,18 +7,17 @@ import com.grupoms.app.presentacion.controlador.comandos.Command;
 
 public class DesvincularEjemplarDeClaseCommand implements Command {
 
-    @Override
-    public Context execute(Object data) {
-        Integer[] params = (Integer[]) data;
-        Integer idClase = params[0];
-        Integer idEjemplar = params[1];
+	@Override
+	public Context execute(Object data) {
+		Integer[] params = (Integer[]) data;
+		Integer idClase = params[0];
+		Integer idEjemplar = params[1];
 
-        int res = FactoriaSA.getInstance().creaSAClase()
-                .desvincularEjemplarDeClase(idClase, idEjemplar);
+		int res = FactoriaSA.getInstance().creaSAClase().desvincularEjemplarDeClase(idClase, idEjemplar);
 
-        if (res <= 0)
-            return new Context(Evento.DESVINCULAR_EJEMPLAR_CLASE_KO, null);
+		if (res <= 0)
+			return new Context(Evento.DESVINCULAR_EJEMPLAR_CLASE_KO, null);
 
-        return new Context(Evento.DESVINCULAR_EJEMPLAR_CLASE_OK, params);
-    }
+		return new Context(Evento.DESVINCULAR_EJEMPLAR_CLASE_OK, params);
+	}
 }

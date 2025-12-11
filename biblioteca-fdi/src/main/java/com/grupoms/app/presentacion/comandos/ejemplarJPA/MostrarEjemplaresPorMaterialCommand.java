@@ -18,5 +18,5 @@ public class MostrarEjemplaresPorMaterialCommand implements Command {
 			return new Context(Evento.MOSTRAR_EJEMPLARMATERIAL_KO, null);
 		return new Context(Evento.MOSTRAR_EJEMPLARMATERIAL_OK, ejemplares);
 	}
-	
+
 }

@@ -9,19 +9,19 @@ import com.grupoms.app.presentacion.controlador.comandos.Command;
 
 public class ModificarSocioCommand implements Command {
 
-    @Override
-    public Context execute(Object data) {
-        if(!(data instanceof TSocio)) {
-            return new Context(Evento.MODIFICAR_SOCIO_KO,null);
-        }
+	@Override
+	public Context execute(Object data) {
+		if (!(data instanceof TSocio)) {
+			return new Context(Evento.MODIFICAR_SOCIO_KO, null);
+		}
 
-        TSocio s = (TSocio) data;
-        SocioSA sa = FactoriaSA.getInstance().creaSASocio();
-        Integer ok = sa.modificarSocio(s);
-        if(ok>-1) {
-            return new Context(Evento.MODIFICAR_SOCIO_OK,ok);
-        }else {
-            return new Context(Evento.MODIFICAR_SOCIO_KO,null);
-        }
-    }
+		TSocio s = (TSocio) data;
+		SocioSA sa = FactoriaSA.getInstance().creaSASocio();
+		Integer ok = sa.modificarSocio(s);
+		if (ok > -1) {
+			return new Context(Evento.MODIFICAR_SOCIO_OK, ok);
+		} else {
+			return new Context(Evento.MODIFICAR_SOCIO_KO, null);
+		}
+	}
 }

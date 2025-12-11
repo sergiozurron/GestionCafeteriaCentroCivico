@@ -23,5 +23,3 @@ public class MostrarListaProveedoresCommand implements Command {
 	}
 
 }
-
-

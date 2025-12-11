@@ -10,28 +10,27 @@ import com.grupoms.app.presentacion.controlador.comandos.Command;
 
 public class MostrarPedidoCommand implements Command {
 
-    @Override
-    public Context execute(Object data) {
-        Integer id = null;
+	@Override
+	public Context execute(Object data) {
+		Integer id = null;
 
-        if (data instanceof Integer) {
-            id = (Integer) data;
-        } else if (data instanceof TPedido) {
-            id = ((TPedido) data).getId();
-        } else {
-            return new Context(Evento.MOSTRAR_PEDIDO_KO, null);
-        }
+		if (data instanceof Integer) {
+			id = (Integer) data;
+		} else if (data instanceof TPedido) {
+			id = ((TPedido) data).getId();
+		} else {
+			return new Context(Evento.MOSTRAR_PEDIDO_KO, null);
+		}
 
-        SAPedido sa = FactoriaSA.getInstance().creaSAPedido();
+		SAPedido sa = FactoriaSA.getInstance().creaSAPedido();
 
-        try {
-            TPedido emp = sa.mostrarPedido(id);
-            return (emp != null)
-                ? new Context(Evento.MOSTRAR_PEDIDO_OK, emp)
-                : new Context(Evento.MOSTRAR_PEDIDO_KO, null);
-        } catch (IllegalArgumentException e) {
-            return new Context(Evento.MOSTRAR_PEDIDO_KO, null);
-        }
-    }
-    
+		try {
+			TPedido emp = sa.mostrarPedido(id);
+			return (emp != null) ? new Context(Evento.MOSTRAR_PEDIDO_OK, emp)
+					: new Context(Evento.MOSTRAR_PEDIDO_KO, null);
+		} catch (IllegalArgumentException e) {
+			return new Context(Evento.MOSTRAR_PEDIDO_KO, null);
+		}
+	}
+
 }

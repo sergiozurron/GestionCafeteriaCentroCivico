@@ -7,19 +7,19 @@ import com.grupoms.app.presentacion.controlador.Context;
 import com.grupoms.app.presentacion.controlador.Evento;
 
 public class BajaPromocionCommand implements Command {
-    @Override
-    public Context execute(Object data) {
-        int res = -1, event;
-        Integer id = (Integer) data;
-        PromocionSA sa = FactoriaSA.getInstance().creaSAPromocion();
+	@Override
+	public Context execute(Object data) {
+		int res = -1, event;
+		Integer id = (Integer) data;
+		PromocionSA sa = FactoriaSA.getInstance().creaSAPromocion();
 
-        res = sa.bajaPromocion(id);
-        if (res < 0) {
-            event = Evento.BAJA_PROMOCION_KO;
-        } else {
-            event = Evento.BAJA_PROMOCION_OK;
-        }
-        return new Context(event, res);
-    }
-    
+		res = sa.bajaPromocion(id);
+		if (res < 0) {
+			event = Evento.BAJA_PROMOCION_KO;
+		} else {
+			event = Evento.BAJA_PROMOCION_OK;
+		}
+		return new Context(event, res);
+	}
+
 }

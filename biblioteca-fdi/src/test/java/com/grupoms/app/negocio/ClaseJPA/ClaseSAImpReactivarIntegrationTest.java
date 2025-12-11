@@ -8,6 +8,6 @@ public class ClaseSAImpReactivarIntegrationTest {
 
     @Test
     public void placeholder() {
-        // reemplazado por ClaseSAImpReactivarIntegrationIT
+        
     }
 }

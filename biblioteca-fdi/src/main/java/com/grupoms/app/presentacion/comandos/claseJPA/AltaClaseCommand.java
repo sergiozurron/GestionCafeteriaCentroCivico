@@ -8,14 +8,14 @@ import com.grupoms.app.presentacion.controlador.comandos.Command;
 
 public class AltaClaseCommand implements Command {
 
-    @Override
-    public Context execute(Object data) {
-        TClase clase = (TClase) data;
-        int idClase = FactoriaSA.getInstance().creaSAClase().altaClase(clase);
+	@Override
+	public Context execute(Object data) {
+		TClase clase = (TClase) data;
+		int idClase = FactoriaSA.getInstance().creaSAClase().altaClase(clase);
 
-        if (idClase == -1)
-            return new Context(Evento.ALTA_CLASE_KO, null);
+		if (idClase == -1)
+			return new Context(Evento.ALTA_CLASE_KO, null);
 
-        return new Context(Evento.ALTA_CLASE_OK, idClase);
-    }
+		return new Context(Evento.ALTA_CLASE_OK, idClase);
+	}
 }

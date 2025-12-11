@@ -4,17 +4,17 @@ import java.util.List;
 import com.grupoms.app.negocio.ingrediente.*;
 
 public interface DAOIngrediente {
-    public Integer crearIngrediente(TIngrediente ingrediente);
+	public Integer crearIngrediente(TIngrediente ingrediente);
 
-    public TIngrediente mostrarIngrediente(Integer id);
+	public TIngrediente mostrarIngrediente(Integer id);
 
-    public List<TIngrediente> mostrarListaIngredientes() throws Exception;
-    
-    public List<TIngrediente> listarIngredientesPorProducto(Integer idProducto)throws Exception;
+	public List<TIngrediente> mostrarListaIngredientes() throws Exception;
 
-    public List<TIngrediente> mostrarProveedorPorIngrediente(Integer idProveedor);
+	public List<TIngrediente> listarIngredientesPorProducto(Integer idProducto) throws Exception;
 
-    public Boolean modificarIngrediente(TIngrediente tingrediente);
+	public List<TIngrediente> mostrarProveedorPorIngrediente(Integer idProveedor);
 
-    public Boolean bajaIngrediente(TIngrediente ingrediente);
+	public Boolean modificarIngrediente(TIngrediente tingrediente);
+
+	public Boolean bajaIngrediente(TIngrediente ingrediente);
 }

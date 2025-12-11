@@ -9,22 +9,20 @@ import com.grupoms.app.presentacion.controlador.comandos.Command;
 
 public class BajaEmpleadoCommand implements Command {
 
-    @Override
-    public Context execute(Object data) {
-        if (!(data instanceof TEmpleado)) {
-            return new Context(Evento.BAJA_EMPLEADO_KO, null);
-        }
+	@Override
+	public Context execute(Object data) {
+		if (!(data instanceof TEmpleado)) {
+			return new Context(Evento.BAJA_EMPLEADO_KO, null);
+		}
 
-        TEmpleado emp = (TEmpleado) data; // esperamos al menos el ID y activo=false
-        SAEmpleado sa = FactoriaSA.getInstance().creaSAEmpleado();
+		TEmpleado emp = (TEmpleado) data;
+		SAEmpleado sa = FactoriaSA.getInstance().creaSAEmpleado();
 
-        try {
-            Boolean ok = sa.bajaEmpleado(emp);
-            return ok
-                ? new Context(Evento.BAJA_EMPLEADO_OK, emp)
-                : new Context(Evento.BAJA_EMPLEADO_KO, null);
-        } catch (IllegalArgumentException e) {
-            return new Context(Evento.BAJA_EMPLEADO_KO, null);
-        }
-    }
+		try {
+			Boolean ok = sa.bajaEmpleado(emp);
+			return ok ? new Context(Evento.BAJA_EMPLEADO_OK, emp) : new Context(Evento.BAJA_EMPLEADO_KO, null);
+		} catch (IllegalArgumentException e) {
+			return new Context(Evento.BAJA_EMPLEADO_KO, null);
+		}
+	}
 }

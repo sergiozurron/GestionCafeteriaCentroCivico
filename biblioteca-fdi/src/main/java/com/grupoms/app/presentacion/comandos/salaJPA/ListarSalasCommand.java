@@ -9,17 +9,17 @@ import com.grupoms.app.presentacion.controlador.Context;
 import com.grupoms.app.presentacion.controlador.Evento;
 import com.grupoms.app.presentacion.controlador.comandos.Command;
 
-public class ListarSalasCommand implements Command{
+public class ListarSalasCommand implements Command {
 	@Override
 	public Context execute(Object data) {
 
 		SalaSA sa = FactoriaSA.getInstance().creaSASala();
 		try {
 			List<TSala> lista = sa.listarSala();
-            return new Context(Evento.LISTAR_SALAS_OK, lista);
-		}catch (Exception e) {
-            return new Context(Evento.LISTAR_SALAS_KO, null);
-        }
+			return new Context(Evento.LISTAR_SALAS_OK, lista);
+		} catch (Exception e) {
+			return new Context(Evento.LISTAR_SALAS_KO, null);
+		}
 	}
 
 }

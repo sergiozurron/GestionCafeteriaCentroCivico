@@ -11,11 +11,7 @@ public class TransactionMySQL implements Transaction {
 	private Connection conexion;
 
 	public TransactionMySQL() throws SQLException {
-		  conexion = DriverManager.getConnection(
-                DBConfig.getUrl(),
-                DBConfig.getUser(),
-                DBConfig.getPassword()
-        );
+		conexion = DriverManager.getConnection(DBConfig.getUrl(), DBConfig.getUser(), DBConfig.getPassword());
 	}
 
 	@Override

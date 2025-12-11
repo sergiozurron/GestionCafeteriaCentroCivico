@@ -8,19 +8,19 @@ import com.grupoms.app.presentacion.controlador.Context;
 import com.grupoms.app.presentacion.controlador.Evento;
 
 public class MostrarPromocionCommand implements Command {
-    @Override
-    public Context execute(Object data) {
-        int event;
-        Integer id = (Integer) data;
-        PromocionSA sa = FactoriaSA.getInstance().creaSAPromocion();
+	@Override
+	public Context execute(Object data) {
+		int event;
+		Integer id = (Integer) data;
+		PromocionSA sa = FactoriaSA.getInstance().creaSAPromocion();
 
-        TPromocion promocion = sa.mostrarPromocion(id);
-        if (promocion != null) {
-            event = Evento.MOSTRAR_PROMOCION_OK;
-        } else {
-            event = Evento.MOSTRAR_PROMOCION_KO;
-        }
-        return new Context(event, promocion);
-    }
-    
+		TPromocion promocion = sa.mostrarPromocion(id);
+		if (promocion != null) {
+			event = Evento.MOSTRAR_PROMOCION_OK;
+		} else {
+			event = Evento.MOSTRAR_PROMOCION_KO;
+		}
+		return new Context(event, promocion);
+	}
+
 }

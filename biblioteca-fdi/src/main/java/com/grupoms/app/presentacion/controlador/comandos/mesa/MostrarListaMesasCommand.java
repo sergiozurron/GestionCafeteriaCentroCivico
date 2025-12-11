@@ -8,12 +8,12 @@ import com.grupoms.app.presentacion.controlador.Context;
 import com.grupoms.app.presentacion.controlador.Evento;
 import com.grupoms.app.presentacion.controlador.comandos.Command;
 
-public class MostrarListaMesasCommand implements Command{
+public class MostrarListaMesasCommand implements Command {
 
 	@Override
 	public Context execute(Object data) {
 		List<TMesa> mesas = FactoriaSA.getInstance().creaSAMesa().mostrarListaMesa();
-		if(mesas.isEmpty()) {
+		if (mesas.isEmpty()) {
 			return new Context(Evento.MOSTRAR_LISTA_MESA_KO, null);
 		}
 		return new Context(Evento.MOSTRAR_LISTA_MESA_OK, mesas);

@@ -86,8 +86,7 @@ public class GUI_BajaClase extends JFrame implements IGUI {
 			JOptionPane.showMessageDialog(this, "Clase dada de baja correctamente");
 			break;
 		case Evento.BAJA_CLASE_KO:
-			JOptionPane.showMessageDialog(this, "Error al dar de baja la clase", "Error",
-					JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(this, "Error al dar de baja la clase", "Error", JOptionPane.ERROR_MESSAGE);
 			break;
 		default:
 			break;

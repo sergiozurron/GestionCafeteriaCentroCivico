@@ -34,7 +34,7 @@ public class ClaseSAImpReactivarIntegrationIT {
 
     @Test
     public void alta_reactivaClaseInactiva() {
-        // Insertar entidad inactiva
+        
         EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
         em.getTransaction().begin();
         BOClase bo = new BOClase();
@@ -48,7 +48,7 @@ public class ClaseSAImpReactivarIntegrationIT {
         em.getTransaction().commit();
         em.close();
 
-        // Intentar alta con mismo tipo+fecha -> debe reactivar y devolver id existente
+        
         TClase t = new TClase();
         t.setTipo("Pilates_IT");
         t.setFechaInicio(bo.getFechaInicio());
@@ -58,7 +58,7 @@ public class ClaseSAImpReactivarIntegrationIT {
         Integer res = servicio.altaClase(t);
         assertThat(res).isEqualTo(id);
 
-        // Comprobar activo
+        
         em = EntityManagerSingleton.getEMF().createEntityManager();
         BOClase comprobacion = em.find(BOClase.class, id);
         assertThat(comprobacion.getActivo()).isTrue();

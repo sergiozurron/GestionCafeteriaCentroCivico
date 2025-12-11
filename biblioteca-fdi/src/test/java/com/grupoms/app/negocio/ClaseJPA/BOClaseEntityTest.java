@@ -14,13 +14,13 @@ public class BOClaseEntityTest {
         BOEjemplar ej = new BOEjemplar();
         ej.setId(10);
 
-        // Add
+        
         clase.anyadirEjemplar(ej);
         assertThat(clase).isNotNull();
         assertThat(clase.getId()).isNull();
         assertThat(clase).extracting("ejemplares").asList().isNotEmpty();
 
-        // Remove
+        
         clase.eliminarEjemplar(ej);
         assertThat(clase).extracting("ejemplares").asList().isEmpty();
     }

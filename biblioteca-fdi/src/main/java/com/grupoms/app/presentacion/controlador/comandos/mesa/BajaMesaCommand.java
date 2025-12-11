@@ -6,7 +6,7 @@ import com.grupoms.app.presentacion.controlador.Context;
 import com.grupoms.app.presentacion.controlador.Evento;
 import com.grupoms.app.presentacion.controlador.comandos.Command;
 
-public class BajaMesaCommand implements Command{
+public class BajaMesaCommand implements Command {
 
 	@Override
 	public Context execute(Object data) {

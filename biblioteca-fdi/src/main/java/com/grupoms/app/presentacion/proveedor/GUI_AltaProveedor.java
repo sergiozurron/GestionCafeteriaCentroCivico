@@ -32,7 +32,7 @@ public class GUI_AltaProveedor extends JFrame implements IGUI {
 			setVisible(true);
 		} else if (context.getEvento() == Evento.ALTA_PROVEEDOR_OK) {
 			JOptionPane.showMessageDialog(this, "Proveedor creado con éxito");
-			// Limpiar campos
+
 			campoNombre.setText("");
 			campoTarifa.setText("");
 			campoTiempoEntrega.setText("");
@@ -77,13 +77,11 @@ public class GUI_AltaProveedor extends JFrame implements IGUI {
 					return;
 				}
 
-				// Crear TProveedor
 				TProveedor proveedor = new TProveedor();
 				proveedor.setNombre(nombre);
 				proveedor.setTarifa(tarifa);
 				proveedor.setTiempoEntrega(tiempoEntrega);
 
-				// Enviar al controlador
 				Context contexto = new Context(Evento.ALTA_PROVEEDOR, proveedor);
 				Controlador.getInstance().handle(contexto);
 
@@ -92,28 +90,29 @@ public class GUI_AltaProveedor extends JFrame implements IGUI {
 			}
 		});
 
-		// Colocación
-		gbc.gridx = 0; gbc.gridy = 0;
+		gbc.gridx = 0;
+		gbc.gridy = 0;
 		panel.add(labelNombre, gbc);
 		gbc.gridx = 1;
 		panel.add(campoNombre, gbc);
 
-		gbc.gridx = 0; gbc.gridy = 1;
+		gbc.gridx = 0;
+		gbc.gridy = 1;
 		panel.add(labelTarifa, gbc);
 		gbc.gridx = 1;
 		panel.add(campoTarifa, gbc);
 
-		gbc.gridx = 0; gbc.gridy = 2;
+		gbc.gridx = 0;
+		gbc.gridy = 2;
 		panel.add(labelTiempo, gbc);
 		gbc.gridx = 1;
 		panel.add(campoTiempoEntrega, gbc);
 
-		gbc.gridx = 0; gbc.gridy = 3;
+		gbc.gridx = 0;
+		gbc.gridy = 3;
 		gbc.gridwidth = 2;
 		panel.add(btnCrear, gbc);
 
 		add(panel, BorderLayout.CENTER);
 	}
 }
-
-

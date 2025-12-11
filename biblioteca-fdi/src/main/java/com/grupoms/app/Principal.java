@@ -16,13 +16,11 @@ public class Principal extends JFrame {
 		setLocationRelativeTo(null);
 		setLayout(new BorderLayout(15, 15));
 
-		// --- Título superior ---
 		JLabel titulo = new JLabel("Gestión Cafetería y Centro Cívico", SwingConstants.CENTER);
 		titulo.setFont(new Font("Segoe UI", Font.BOLD, 26));
 		titulo.setBorder(BorderFactory.createEmptyBorder(20, 0, 10, 0));
 		add(titulo, BorderLayout.NORTH);
 
-		// --- PANEL IZQUIERDA DAO ---
 		JPanel panelCafeteria = new JPanel(new GridLayout(2, 3, 20, 20));
 		panelCafeteria.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
 
@@ -67,7 +65,6 @@ public class Principal extends JFrame {
 						{ "Mostrar Producto", FactoriaVistas.GUI_MOSTRAR_PRODUCTO },
 						{ "Listar Productos", FactoriaVistas.GUI_LISTAR_PRODUCTOS } }));
 
-		// --- PANEL DERECHA JPA ---
 		JPanel panelCentroCivico = new JPanel();
 		panelCentroCivico.setLayout(new GridLayout(2, 3, 20, 20));
 		panelCentroCivico.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
@@ -107,8 +104,7 @@ public class Principal extends JFrame {
 		panelCentroCivico.add(crearPanelCategoria("Sala", new String[][] {
 				{ "Alta Sala", FactoriaVistas.GUI_ALTA_SALA }, { "Baja Sala", FactoriaVistas.GUI_BAJA_SALA },
 				{ "Listar Sala", FactoriaVistas.GUI_LISTAR_SALA }, { "Mostrar Sala", FactoriaVistas.GUI_MOSTRAR_SALA },
-				{ "Modificar Sala", FactoriaVistas.GUI_MODIFICAR_SALA },
-				{ "Mostrar Clases por Sala", FactoriaVistas.GUI_MOSTRAR_CLASES_POR_SALA } }));
+				{ "Modificar Sala", FactoriaVistas.GUI_MODIFICAR_SALA }}));
 
 		panelCentroCivico.add(crearPanelCategoria("Socio",
 				new String[][] { { "Alta Socio", FactoriaVistas.GUI_ALTA_SOCIO },
@@ -117,19 +113,16 @@ public class Principal extends JFrame {
 						{ "Mostrar Socio", FactoriaVistas.GUI_MOSTRAR_SOCIO },
 						{ "Modificar Socio", FactoriaVistas.GUI_MODIFICAR_SOCIO },
 						{ "Ver Socios por Promoción", FactoriaVistas.GUI_MOSTRAR_SOCIOS_POR_PROMOCION },
-						{ "Vincular Promoción a Socio", FactoriaVistas.GUI_VINCULAR_PROMOCION},
-						{ "Desvincular Promoción a Socio", FactoriaVistas.GUI_DESVINCULAR_PROMOCION}
-				}));
-		
-		panelCentroCivico.add(crearPanelCategoria("Prestamo", new String[][] {
-			{"Alta Préstamo", FactoriaVistas.GUI_ALTA_PRESTAMO},
-			{"Baja Préstamo", FactoriaVistas.GUI_BAJA_PRESTAMO},
-			{"Listar Préstamo", FactoriaVistas.GUI_LISTAR_PRESTAMO},
-			{"Mostrar Préstamo", FactoriaVistas.GUI_MOSTRAR_PRESTAMO},
-			{"Modificar Préstamo", FactoriaVistas.GUI_MODIFICAR_PRESTAMO}
-		}));
+						{ "Vincular Promoción a Socio", FactoriaVistas.GUI_VINCULAR_PROMOCION },
+						{ "Desvincular Promoción a Socio", FactoriaVistas.GUI_DESVINCULAR_PROMOCION } }));
 
-		// --- DIVISOR CENTRAL ---
+		panelCentroCivico.add(crearPanelCategoria("Prestamo",
+				new String[][] { { "Alta Préstamo", FactoriaVistas.GUI_ALTA_PRESTAMO },
+						{ "Baja Préstamo", FactoriaVistas.GUI_BAJA_PRESTAMO },
+						{ "Listar Préstamo", FactoriaVistas.GUI_LISTAR_PRESTAMO },
+						{ "Mostrar Préstamo", FactoriaVistas.GUI_MOSTRAR_PRESTAMO },
+						{ "Modificar Préstamo", FactoriaVistas.GUI_MODIFICAR_PRESTAMO } }));
+
 		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, panelCafeteria, panelCentroCivico);
 
 		splitPane.setResizeWeight(0.5);
@@ -138,7 +131,6 @@ public class Principal extends JFrame {
 
 		add(splitPane, BorderLayout.CENTER);
 
-		// --- Pie de página ---
 		JLabel footer = new JLabel("Gestión Cafetería y Centro Cívico - GrupoMS", SwingConstants.CENTER);
 		footer.setFont(new Font("Segoe UI", Font.PLAIN, 12));
 		footer.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));

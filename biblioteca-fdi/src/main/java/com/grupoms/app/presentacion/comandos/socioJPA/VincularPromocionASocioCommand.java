@@ -6,19 +6,18 @@ import com.grupoms.app.presentacion.controlador.Evento;
 import com.grupoms.app.presentacion.controlador.comandos.Command;
 
 public class VincularPromocionASocioCommand implements Command {
-    @Override
-    public Context execute(Object data) {
-        // Expected: Integer[] { idSocio, idPromocion }
-        Integer[] params = (Integer[]) data;
-        Integer idSocio = params[0];
-        Integer idPromocion = params[1];
+	@Override
+	public Context execute(Object data) {
 
-        int res = FactoriaSA.getInstance().creaSASocio()
-                .vincularPromocionASocio(idSocio, idPromocion);
+		Integer[] params = (Integer[]) data;
+		Integer idSocio = params[0];
+		Integer idPromocion = params[1];
 
-        if (res <= 0)
-            return new Context(Evento.VINCULAR_PROMOCION_KO, null);
+		int res = FactoriaSA.getInstance().creaSASocio().vincularPromocionASocio(idSocio, idPromocion);
 
-        return new Context(Evento.VINCULAR_PROMOCION_OK, params);
-    }
+		if (res <= 0)
+			return new Context(Evento.VINCULAR_PROMOCION_KO, null);
+
+		return new Context(Evento.VINCULAR_PROMOCION_OK, params);
+	}
 }

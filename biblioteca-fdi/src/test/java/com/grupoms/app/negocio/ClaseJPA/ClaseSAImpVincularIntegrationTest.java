@@ -8,6 +8,6 @@ public class ClaseSAImpVincularIntegrationTest {
 
     @Test
     public void placeholder() {
-        // reemplazado por ClaseSAImpVincularIntegrationIT
+        
     }
 }

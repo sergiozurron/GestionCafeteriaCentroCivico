@@ -9,23 +9,23 @@ import com.grupoms.app.presentacion.controlador.comandos.Command;
 
 public class AltaOrdenCommand implements Command {
 
-    @Override
-    public Context execute(Object data) {
-        if (!(data instanceof TOrden)) {
-            return new Context(Evento.ALTA_ORDEN_KO, null);
-        }
+	@Override
+	public Context execute(Object data) {
+		if (!(data instanceof TOrden)) {
+			return new Context(Evento.ALTA_ORDEN_KO, null);
+		}
 
-        TOrden orden = (TOrden) data;
-        SAOrden saOrden = FactoriaSA.getInstance().creaSAOrden();
+		TOrden orden = (TOrden) data;
+		SAOrden saOrden = FactoriaSA.getInstance().creaSAOrden();
 
-        try {
-            Integer resultado = saOrden.altaOrden(orden);
-            if (resultado == null || resultado <= 0) {
-                return new Context(Evento.ALTA_ORDEN_KO, null);
-            }
-            return new Context(Evento.ALTA_ORDEN_OK, orden);
-        } catch (Exception e) {
-            return new Context(Evento.ALTA_ORDEN_KO, null);
-        }
-    }
+		try {
+			Integer resultado = saOrden.altaOrden(orden);
+			if (resultado == null || resultado <= 0) {
+				return new Context(Evento.ALTA_ORDEN_KO, null);
+			}
+			return new Context(Evento.ALTA_ORDEN_OK, orden);
+		} catch (Exception e) {
+			return new Context(Evento.ALTA_ORDEN_KO, null);
+		}
+	}
 }

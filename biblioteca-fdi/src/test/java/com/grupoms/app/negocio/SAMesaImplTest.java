@@ -31,7 +31,7 @@ public class SAMesaImplTest {
 
     @Test
     void testAltaMesaSala_DeberiaCrearYDevolverId() throws Exception {
-        // GIVEN
+        
         TMesaSala nueva = new TMesaSala();
         nueva.setUbicacion("Sala Norte");
         nueva.setNumero(5);
@@ -39,10 +39,10 @@ public class SAMesaImplTest {
         nueva.setPrivacidad("Alta");
         nueva.setReservada(false);
 
-        // WHEN
+        
         int id = saMesa.altaMesa(nueva);
 
-        // THEN
+        
         assertTrue(id > 0);
         TMesa guardada = daoMesa.mostrarMesa(id);
         assertNotNull(guardada);
@@ -52,7 +52,7 @@ public class SAMesaImplTest {
 
     @Test
     void testAltaMesaTerraza_DeberiaCrearYDevolverId() throws Exception {
-        // GIVEN
+        
         TMesaTerraza nueva = new TMesaTerraza();
         nueva.setUbicacion("Terraza Sur");
         nueva.setNumero(8);
@@ -60,10 +60,10 @@ public class SAMesaImplTest {
         nueva.setCubierta(true);
         nueva.setSuplemento(3.5);
 
-        // WHEN
+        
         int id = saMesa.altaMesa(nueva);
 
-        // THEN
+        
         assertTrue(id > 0);
         TMesa guardada = daoMesa.mostrarMesa(id);
         assertNotNull(guardada);
@@ -73,7 +73,7 @@ public class SAMesaImplTest {
 
     @Test
     void testMostrarMesa_DeberiaDevolverMesaCorrecta() throws Exception {
-        // GIVEN
+        
         TMesaSala mesa = new TMesaSala();
         mesa.setUbicacion("Sala Este");
         mesa.setNumero(2);
@@ -82,17 +82,17 @@ public class SAMesaImplTest {
         mesa.setReservada(true);
         int id = saMesa.altaMesa(mesa);
 
-        // WHEN
+        
         TMesa recuperada = saMesa.mostrarMesa(id);
 
-        // THEN
+        
         assertNotNull(recuperada);
         assertEquals("Sala Este", recuperada.getUbicacion());
     }
 
     @Test
     void testModificarMesaSala_DeberiaActualizarDatos() throws Exception {
-        // GIVEN
+        
         TMesaSala mesa = new TMesaSala();
         mesa.setUbicacion("Sala Oeste");
         mesa.setNumero(4);
@@ -105,10 +105,10 @@ public class SAMesaImplTest {
         mesa.setPrivacidad("Alta");
         mesa.setReservada(true);
 
-        // WHEN
+        
         boolean ok = saMesa.modificarMesa(mesa);
 
-        // THEN
+        
         assertTrue(ok);
         TMesaSala actualizada = (TMesaSala) saMesa.mostrarMesa(id);
         assertEquals("Alta", actualizada.getPrivacidad());
@@ -117,7 +117,7 @@ public class SAMesaImplTest {
 
     @Test
     void testMostrarListaMesa_DeberiaDevolverSoloActivas() throws Exception {
-        // GIVEN
+        
         TMesaSala activa = new TMesaSala();
         activa.setUbicacion("Sala 1");
         activa.setNumero(1);
@@ -136,10 +136,10 @@ public class SAMesaImplTest {
         inactiva.setId(idInactiva);
         saMesa.bajaMesa(inactiva);
 
-        // WHEN
+        
         List<TMesa> lista = saMesa.mostrarListaMesa();
 
-        // THEN
+        
         assertNotNull(lista);
         assertFalse(lista.isEmpty());
         assertTrue(lista.stream().allMatch(TMesa::getActivo));
@@ -147,7 +147,7 @@ public class SAMesaImplTest {
 
     @Test
     void testBajaMesa_DeberiaDesactivarMesa() throws Exception {
-        // GIVEN
+        
         TMesaTerraza mesa = new TMesaTerraza();
         mesa.setUbicacion("Terraza Oeste");
         mesa.setNumero(7);
@@ -157,10 +157,10 @@ public class SAMesaImplTest {
         int id = saMesa.altaMesa(mesa);
         mesa.setId(id);
 
-        // WHEN
+        
         boolean ok = saMesa.bajaMesa(mesa);
 
-        // THEN
+        
         assertTrue(ok);
         TMesa desactivada = daoMesa.mostrarMesa(id);
         assertFalse(desactivada.getActivo());

@@ -8,18 +8,18 @@ import com.grupoms.app.presentacion.controlador.Context;
 import com.grupoms.app.presentacion.controlador.Evento;
 
 public class VerPromocionesPorSocioCommand implements Command {
-    @Override
-    public Context execute(Object data) {
-        int event;
-        Integer idSocio = (Integer) data;
-        PromocionSA sa = FactoriaSA.getInstance().creaSAPromocion();
+	@Override
+	public Context execute(Object data) {
+		int event;
+		Integer idSocio = (Integer) data;
+		PromocionSA sa = FactoriaSA.getInstance().creaSAPromocion();
 
-        java.util.List<TPromocion> promociones = sa.VerPromocionesPorSocio(idSocio);
-        if (promociones != null) {
-            event = Evento.VER_PROMOCIONES_POR_SOCIO_OK;
-        } else {
-            event = Evento.VER_PROMOCIONES_POR_SOCIO_KO;
-        }
-        return new Context(event, promociones);
-    }
+		java.util.List<TPromocion> promociones = sa.VerPromocionesPorSocio(idSocio);
+		if (promociones != null) {
+			event = Evento.VER_PROMOCIONES_POR_SOCIO_OK;
+		} else {
+			event = Evento.VER_PROMOCIONES_POR_SOCIO_KO;
+		}
+		return new Context(event, promociones);
+	}
 }

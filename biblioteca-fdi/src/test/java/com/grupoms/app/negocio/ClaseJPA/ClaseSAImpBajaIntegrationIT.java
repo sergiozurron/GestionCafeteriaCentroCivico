@@ -46,10 +46,10 @@ public class ClaseSAImpBajaIntegrationIT {
         assertThat(res).isEqualTo(1);
 
         TClase fetched = servicio.mostrarClase(id);
-        // mostrarClase devuelve null si la clase ya no está (según implementación) o devuelve DTO con activo=false
+        
         if (fetched == null) {
-            // en implementación actual, mostrarClase hace em.find y luego entityToTransfer; pero no filtra por activo
-            // así que esperamos que fetched != null; sin embargo aceptaremos null también por robustez
+            
+            
             assertThat(fetched).isNull();
         } else {
             assertThat(fetched.getActivo()).isFalse();

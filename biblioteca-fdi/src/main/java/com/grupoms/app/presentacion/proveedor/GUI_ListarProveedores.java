@@ -30,7 +30,6 @@ public class GUI_ListarProveedores extends JFrame implements IGUI {
 	private void initGUI() {
 		JPanel panelPrincipal = new JPanel(new BorderLayout());
 
-		// Configuración de la tabla
 		modeloTabla = new DefaultTableModel();
 		modeloTabla.addColumn("ID");
 		modeloTabla.addColumn("Nombre");
@@ -41,7 +40,6 @@ public class GUI_ListarProveedores extends JFrame implements IGUI {
 		tabla = new JTable(modeloTabla);
 		JScrollPane scrollPane = new JScrollPane(tabla);
 
-		// Botón para cargar proveedores
 		btnCargar = new JButton("Cargar Proveedores");
 		btnCargar.addActionListener(e -> {
 			try {
@@ -49,10 +47,8 @@ public class GUI_ListarProveedores extends JFrame implements IGUI {
 				Controlador.getInstance().handle(contexto);
 			} catch (Exception ex) {
 				ex.printStackTrace();
-				JOptionPane.showMessageDialog(this,
-					"Error al cargar proveedores: " + ex.getMessage(),
-					"Error",
-					JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(this, "Error al cargar proveedores: " + ex.getMessage(), "Error",
+						JOptionPane.ERROR_MESSAGE);
 			}
 		});
 
@@ -65,35 +61,25 @@ public class GUI_ListarProveedores extends JFrame implements IGUI {
 	@Override
 	public void actualizar(Context context) {
 
-		 if (context.getEvento() == Evento.MOSTRAR_LISTA_PROVEEDOR_OK) {
-			modeloTabla.setRowCount(0); // Limpiar la tabla
+		if (context.getEvento() == Evento.MOSTRAR_LISTA_PROVEEDOR_OK) {
+			modeloTabla.setRowCount(0);
 
-			
-			List<TProveedor> proveedores = (List<TProveedor>)context.getDatos();
+			List<TProveedor> proveedores = (List<TProveedor>) context.getDatos();
 
 			if (proveedores == null || proveedores.isEmpty()) {
-				JOptionPane.showMessageDialog(this,
-					"No hay proveedores activos en la base de datos.",
-					"Información",
-					JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(this, "No hay proveedores activos en la base de datos.", "Información",
+						JOptionPane.INFORMATION_MESSAGE);
 				return;
 			}
 
 			for (TProveedor proveedor : proveedores) {
-				Object[] fila = {
-					proveedor.getId(),
-					proveedor.getNombre(),
-					String.format("%.2f €", proveedor.getTarifa()),
-					proveedor.getTiempoEntrega(),
-					(proveedor.getActivo() != null && proveedor.getActivo()) ? "Sí" : "No"
-				};
+				Object[] fila = { proveedor.getId(), proveedor.getNombre(),
+						String.format("%.2f €", proveedor.getTarifa()), proveedor.getTiempoEntrega(),
+						(proveedor.getActivo() != null && proveedor.getActivo()) ? "Sí" : "No" };
 				modeloTabla.addRow(fila);
 			}
 		} else if (context.getEvento() == Evento.MOSTRAR_LISTA_PROVEEDOR_KO) {
-			JOptionPane.showMessageDialog(this,
-				"Error al cargar los proveedores.",
-				"Error",
-				JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(this, "Error al cargar los proveedores.", "Error", JOptionPane.ERROR_MESSAGE);
 		}
 	}
 }

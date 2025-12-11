@@ -8,18 +8,18 @@ import com.grupoms.app.presentacion.controlador.Evento;
 import com.grupoms.app.presentacion.controlador.comandos.Command;
 
 public class AltaSocioCommand implements Command {
-    @Override
-    public Context execute(Object data) {
-        int res = -1, event;
-        TSocio s = (TSocio) data;
-        SocioSA sa = FactoriaSA.getInstance().creaSASocio();
+	@Override
+	public Context execute(Object data) {
+		int res = -1, event;
+		TSocio s = (TSocio) data;
+		SocioSA sa = FactoriaSA.getInstance().creaSASocio();
 
-        res = sa.altaSocio(s);
-        if(res<0) {
-            event = Evento.ALTA_SOCIO_KO;
-        }else {
-            event=Evento.ALTA_SOCIO_OK;
-        }
-        return new Context(event,res);
-    }
+		res = sa.altaSocio(s);
+		if (res < 0) {
+			event = Evento.ALTA_SOCIO_KO;
+		} else {
+			event = Evento.ALTA_SOCIO_OK;
+		}
+		return new Context(event, res);
+	}
 }

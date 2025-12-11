@@ -23,151 +23,150 @@ import com.grupoms.app.presentacion.controlador.Evento;
 
 public class GUI_ModificarClase extends JFrame implements IGUI {
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    private JTextField campoId;
-    private JTextField campoTipo;
-    private JTextField campoFechaInicio;
-    private JTextField campoDuracion;
-    private JTextField campoIdSala;
-    
-    // Eliminado JCheckBox checkActivo
-    
-    private JButton btnModificar;
+	private JTextField campoId;
+	private JTextField campoTipo;
+	private JTextField campoFechaInicio;
+	private JTextField campoDuracion;
+	private JTextField campoIdSala;
 
-    public GUI_ModificarClase() {
-        super("Modificar Clase");
-        initGUI();
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        pack(); 
-        setLocationRelativeTo(null);
-    }
+	private JButton btnModificar;
 
-    private void initGUI() {
-        setLayout(new BorderLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(8, 8, 8, 8);
-        gbc.fill = GridBagConstraints.HORIZONTAL;
+	public GUI_ModificarClase() {
+		super("Modificar Clase");
+		initGUI();
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		pack();
+		setLocationRelativeTo(null);
+	}
 
-        JPanel panel = new JPanel(new GridBagLayout());
+	private void initGUI() {
+		setLayout(new BorderLayout());
+		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.insets = new Insets(8, 8, 8, 8);
+		gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        JLabel labelId = new JLabel("ID Clase:");
-        campoId = new JTextField(10);
+		JPanel panel = new JPanel(new GridBagLayout());
 
-        JLabel labelTipo = new JLabel("Tipo:");
-        campoTipo = new JTextField(15);
+		JLabel labelId = new JLabel("ID Clase:");
+		campoId = new JTextField(10);
 
-        JLabel labelFechaInicio = new JLabel("Fecha inicio (yyyy-MM-dd HH:mm):");
-        campoFechaInicio = new JTextField(15);
+		JLabel labelTipo = new JLabel("Tipo:");
+		campoTipo = new JTextField(15);
 
-        JLabel labelDuracion = new JLabel("Duración (minutos):");
-        campoDuracion = new JTextField(10);
+		JLabel labelFechaInicio = new JLabel("Fecha inicio (yyyy-MM-dd HH:mm):");
+		campoFechaInicio = new JTextField(15);
 
-        JLabel labelIdSala = new JLabel("ID Sala:");
-        campoIdSala = new JTextField(10);
+		JLabel labelDuracion = new JLabel("Duración (minutos):");
+		campoDuracion = new JTextField(10);
 
-        btnModificar = new JButton("Modificar Clase");
+		JLabel labelIdSala = new JLabel("ID Sala:");
+		campoIdSala = new JTextField(10);
 
-        btnModificar.addActionListener(e -> {
-            try {
-                // Validación campos vacíos
-                if (campoId.getText().isEmpty() || campoTipo.getText().isEmpty() || 
-                    campoFechaInicio.getText().isEmpty() || campoDuracion.getText().isEmpty() || 
-                    campoIdSala.getText().isEmpty()) {
-                    JOptionPane.showMessageDialog(this, "Por favor, rellene todos los campos.");
-                    return;
-                }
+		btnModificar = new JButton("Modificar Clase");
 
-                int idClase = Integer.parseInt(campoId.getText());
-                String tipo = campoTipo.getText();
-                int duracion = Integer.parseInt(campoDuracion.getText());
-                int idSala = Integer.parseInt(campoIdSala.getText());
+		btnModificar.addActionListener(e -> {
+			try {
 
-                // Validación lógica extra
-                if (duracion <= 0) {
-                     JOptionPane.showMessageDialog(this, "La duración debe ser mayor a 0");
-                     return;
-                }
+				if (campoId.getText().isEmpty() || campoTipo.getText().isEmpty() || campoFechaInicio.getText().isEmpty()
+						|| campoDuracion.getText().isEmpty() || campoIdSala.getText().isEmpty()) {
+					JOptionPane.showMessageDialog(this, "Por favor, rellene todos los campos.");
+					return;
+				}
 
-                Date fechaInicio;
-                try {
-                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-                    sdf.setLenient(false);
-                    fechaInicio = sdf.parse(campoFechaInicio.getText());
-                } catch (ParseException ex) {
-                    JOptionPane.showMessageDialog(this, "Formato de fecha incorrecto. Use: yyyy-MM-dd HH:mm");
-                    return;
-                }
+				int idClase = Integer.parseInt(campoId.getText());
+				String tipo = campoTipo.getText();
+				int duracion = Integer.parseInt(campoDuracion.getText());
+				int idSala = Integer.parseInt(campoIdSala.getText());
 
-                TClase clase = new TClase();
-                clase.setId(idClase);
-                clase.setTipo(tipo);
-                clase.setFechaInicio(fechaInicio);
-                clase.setDuracion(duracion);
-                clase.setIdSala(idSala);
-                // No tocamos activo, se mantiene el que tuviera
+				if (duracion <= 0) {
+					JOptionPane.showMessageDialog(this, "La duración debe ser mayor a 0");
+					return;
+				}
 
-                Context contexto = new Context(Evento.MODIFICAR_CLASE, clase);
-                Controlador.getInstance().handle(contexto);
+				Date fechaInicio;
+				try {
+					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+					sdf.setLenient(false);
+					fechaInicio = sdf.parse(campoFechaInicio.getText());
+				} catch (ParseException ex) {
+					JOptionPane.showMessageDialog(this, "Formato de fecha incorrecto. Use: yyyy-MM-dd HH:mm");
+					return;
+				}
 
-            } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(this, "Error: ID, Duración e ID Sala deben ser números válidos");
-            }
-        });
+				TClase clase = new TClase();
+				clase.setId(idClase);
+				clase.setTipo(tipo);
+				clase.setFechaInicio(fechaInicio);
+				clase.setDuracion(duracion);
+				clase.setIdSala(idSala);
 
-        // Posicionamiento
-        gbc.gridx = 0; gbc.gridy = 0;
-        panel.add(labelId, gbc);
-        gbc.gridx = 1;
-        panel.add(campoId, gbc);
+				Context contexto = new Context(Evento.MODIFICAR_CLASE, clase);
+				Controlador.getInstance().handle(contexto);
 
-        gbc.gridx = 0; gbc.gridy = 1;
-        panel.add(labelTipo, gbc);
-        gbc.gridx = 1;
-        panel.add(campoTipo, gbc);
+			} catch (NumberFormatException ex) {
+				JOptionPane.showMessageDialog(this, "Error: ID, Duración e ID Sala deben ser números válidos");
+			}
+		});
 
-        gbc.gridx = 0; gbc.gridy = 2;
-        panel.add(labelFechaInicio, gbc);
-        gbc.gridx = 1;
-        panel.add(campoFechaInicio, gbc);
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		panel.add(labelId, gbc);
+		gbc.gridx = 1;
+		panel.add(campoId, gbc);
 
-        gbc.gridx = 0; gbc.gridy = 3;
-        panel.add(labelDuracion, gbc);
-        gbc.gridx = 1;
-        panel.add(campoDuracion, gbc);
+		gbc.gridx = 0;
+		gbc.gridy = 1;
+		panel.add(labelTipo, gbc);
+		gbc.gridx = 1;
+		panel.add(campoTipo, gbc);
 
-        gbc.gridx = 0; gbc.gridy = 4;
-        panel.add(labelIdSala, gbc);
-        gbc.gridx = 1;
-        panel.add(campoIdSala, gbc);
+		gbc.gridx = 0;
+		gbc.gridy = 2;
+		panel.add(labelFechaInicio, gbc);
+		gbc.gridx = 1;
+		panel.add(campoFechaInicio, gbc);
 
-        // Botón subido porque ya no hay checkbox
-        gbc.gridx = 0; 
-        gbc.gridy = 5; 
-        gbc.gridwidth = 2;
-        panel.add(btnModificar, gbc);
+		gbc.gridx = 0;
+		gbc.gridy = 3;
+		panel.add(labelDuracion, gbc);
+		gbc.gridx = 1;
+		panel.add(campoDuracion, gbc);
 
-        add(panel, BorderLayout.CENTER);
-    }
+		gbc.gridx = 0;
+		gbc.gridy = 4;
+		panel.add(labelIdSala, gbc);
+		gbc.gridx = 1;
+		panel.add(campoIdSala, gbc);
 
-    @Override
-    public void actualizar(Context context) {
-        if (context == null) {
-            setVisible(true);
-            return;
-        }
-        
-        if (context.getEvento() == Evento.MODIFICAR_CLASE_OK) {
-            JOptionPane.showMessageDialog(this, "Clase modificada con éxito");
-            // Limpiar campos
-            campoId.setText("");
-            campoTipo.setText("");
-            campoFechaInicio.setText("");
-            campoDuracion.setText("");
-            campoIdSala.setText("");
-            
-        } else if (context.getEvento() == Evento.MODIFICAR_CLASE_KO) {
-            JOptionPane.showMessageDialog(this, "No se ha podido modificar la clase", "Error", JOptionPane.ERROR_MESSAGE);
-        }
-    }
+		gbc.gridx = 0;
+		gbc.gridy = 5;
+		gbc.gridwidth = 2;
+		panel.add(btnModificar, gbc);
+
+		add(panel, BorderLayout.CENTER);
+	}
+
+	@Override
+	public void actualizar(Context context) {
+		if (context == null) {
+			setVisible(true);
+			return;
+		}
+
+		if (context.getEvento() == Evento.MODIFICAR_CLASE_OK) {
+			JOptionPane.showMessageDialog(this, "Clase modificada con éxito");
+
+			campoId.setText("");
+			campoTipo.setText("");
+			campoFechaInicio.setText("");
+			campoDuracion.setText("");
+			campoIdSala.setText("");
+
+		} else if (context.getEvento() == Evento.MODIFICAR_CLASE_KO) {
+			JOptionPane.showMessageDialog(this, "No se ha podido modificar la clase", "Error",
+					JOptionPane.ERROR_MESSAGE);
+		}
+	}
 }

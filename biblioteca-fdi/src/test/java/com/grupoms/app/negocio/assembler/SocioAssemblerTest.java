@@ -13,7 +13,7 @@ public class SocioAssemblerTest {
     public void adultoEntityToDTO() {
         TAdulto t = new TAdulto("Ana Gomez", "11111111Z", 0, 30, true);
         BOAdulto bo = new BOAdulto(t);
-        // toDTO es estático en la implementación real, usaremos directamente
+        
         com.grupoms.app.negocio.socioJPA.TSocio dto = com.grupoms.app.negocio.assembler.AdultoAssembler.toDTO(bo);
         assertNotNull(dto);
         assertEquals("Ana Gomez", dto.getNombreYapellido());

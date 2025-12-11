@@ -11,10 +11,10 @@ public class Context {
 	}
 
 	public Context() {
-        //TODO Auto-generated constructor stub
-    }
 
-    public void setEvento(int evento) {
+	}
+
+	public void setEvento(int evento) {
 		this.evento = evento;
 	}
 
@@ -26,7 +26,7 @@ public class Context {
 		return datos;
 	}
 
-	public void setDato(Object dato){
+	public void setDato(Object dato) {
 		this.datos = dato;
 	}
 }

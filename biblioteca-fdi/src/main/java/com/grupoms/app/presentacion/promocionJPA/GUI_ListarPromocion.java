@@ -14,78 +14,73 @@ import java.util.List;
 
 public class GUI_ListarPromocion extends JFrame implements IGUI {
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    private JTable tabla;
-    private DefaultTableModel modeloTabla;
-    private JButton botonCargar;
+	private JTable tabla;
+	private DefaultTableModel modeloTabla;
+	private JButton botonCargar;
 
-    public GUI_ListarPromocion() {
-        setTitle("Listado de Promociones");
-        setSize(600, 400);
-        setLocationRelativeTo(null);
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        initGUI();
-    }
+	public GUI_ListarPromocion() {
+		setTitle("Listado de Promociones");
+		setSize(600, 400);
+		setLocationRelativeTo(null);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		initGUI();
+	}
 
-    private void initGUI() {
-        JPanel panelPrincipal = new JPanel(new BorderLayout());
+	private void initGUI() {
+		JPanel panelPrincipal = new JPanel(new BorderLayout());
 
-        // --- Configuración de la tabla ---
-        modeloTabla = new DefaultTableModel();
-        modeloTabla.addColumn("ID");
-        modeloTabla.addColumn("Tipo");
-        modeloTabla.addColumn("Descuento");
-        modeloTabla.addColumn("Activo");
+		modeloTabla = new DefaultTableModel();
+		modeloTabla.addColumn("ID");
+		modeloTabla.addColumn("Tipo");
+		modeloTabla.addColumn("Descuento");
+		modeloTabla.addColumn("Activo");
 
-        tabla = new JTable(modeloTabla);
-        JScrollPane scrollPane = new JScrollPane(tabla);
+		tabla = new JTable(modeloTabla);
+		JScrollPane scrollPane = new JScrollPane(tabla);
 
-        botonCargar = new JButton("Cargar Promociones");
-        botonCargar.addActionListener(e -> {
+		botonCargar = new JButton("Cargar Promociones");
+		botonCargar.addActionListener(e -> {
 
-        try {
-            Context contexto = new Context(Evento.LISTAR_PROMOCION, null);
-            Controlador.getInstance().handle(contexto);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Error al listar promociones: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        }
-        });
-        panelPrincipal.add(botonCargar, BorderLayout.NORTH);
-        
+			try {
+				Context contexto = new Context(Evento.LISTAR_PROMOCION, null);
+				Controlador.getInstance().handle(contexto);
+			} catch (Exception ex) {
+				ex.printStackTrace();
+				JOptionPane.showMessageDialog(this, "Error al listar promociones: " + ex.getMessage(), "Error",
+						JOptionPane.ERROR_MESSAGE);
+			}
+		});
+		panelPrincipal.add(botonCargar, BorderLayout.NORTH);
 
-        panelPrincipal.add(scrollPane, BorderLayout.CENTER);
-        add(panelPrincipal);
-    }
+		panelPrincipal.add(scrollPane, BorderLayout.CENTER);
+		add(panelPrincipal);
+	}
 
-    @SuppressWarnings("unchecked")
-    @Override
-    public void actualizar(Context context) {
-        if (context == null) {
-            setVisible(true);
-            return;
-        }
+	@SuppressWarnings("unchecked")
+	@Override
+	public void actualizar(Context context) {
+		if (context == null) {
+			setVisible(true);
+			return;
+		}
 
-        if (context.getEvento() == Evento.LISTAR_PROMOCION_OK) {
-            modeloTabla.setRowCount(0); // limpia la tabla
-            List<TPromocion> promociones = (List<TPromocion>) context.getDatos();
+		if (context.getEvento() == Evento.LISTAR_PROMOCION_OK) {
+			modeloTabla.setRowCount(0);
+			List<TPromocion> promociones = (List<TPromocion>) context.getDatos();
 
-            if (promociones == null || promociones.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "No hay promociones en la base de datos.");
-                return;
-            }
+			if (promociones == null || promociones.isEmpty()) {
+				JOptionPane.showMessageDialog(this, "No hay promociones en la base de datos.");
+				return;
+			}
 
-            for (TPromocion p : promociones) {
-                modeloTabla.addRow(new Object[]{
-                        p.getId(),
-                        p.getTipo(),
-                        p.getDescuento(),
-                        p.getActivo() ? "Sí" : "No"
-                });
-            }
-        } else if (context.getEvento() == Evento.LISTAR_PROMOCION_KO) {
-            JOptionPane.showMessageDialog(this, "Error al listar las promociones.");
-        }
-    }
+			for (TPromocion p : promociones) {
+				modeloTabla
+						.addRow(new Object[] { p.getId(), p.getTipo(), p.getDescuento(), p.getActivo() ? "Sí" : "No" });
+			}
+		} else if (context.getEvento() == Evento.LISTAR_PROMOCION_KO) {
+			JOptionPane.showMessageDialog(this, "Error al listar las promociones.");
+		}
+	}
 }

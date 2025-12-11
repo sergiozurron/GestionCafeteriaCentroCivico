@@ -13,37 +13,64 @@ import jakarta.persistence.*;
 @NamedQuery(name = "BOEjemplar.findBySocio", query = "SELECT e FROM BOEjemplar e JOIN e.prestamos p WHERE p.socio.id = :idSocio AND p.activo = true AND p.fechaDevuelto IS NULL")
 public class BOEjemplar {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-    private String estado; 
-    private Boolean activo;
-    
-    @ManyToOne
-    @JoinColumn(name = "material_id")
-    private BOMaterial material;
-    
-    @ManyToMany(mappedBy = "ejemplares")
-    private List<BOClase> clases;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer id;
+	private String estado;
+	private Boolean activo;
 
-    @Version
-    private int version;
+	@ManyToOne
+	@JoinColumn(name = "material_id")
+	private BOMaterial material;
 
-    
-    @OneToMany(mappedBy = "ejemplar")
-    private List<BOPrestamo> prestamos;
+	@ManyToMany(mappedBy = "ejemplares")
+	private List<BOClase> clases;
 
-    public Integer getId() { return id; }
-    public void setId(Integer id) { this.id = id; }
-    public String getEstado() { return estado; }
-    public void setEstado(String estado) { this.estado = estado; }
-    public Boolean getActivo() { return activo; }
-    public void setActivo(Boolean activo) { this.activo = activo; }
-    public BOMaterial getMaterial() { return material; }
-    public void setMaterial(BOMaterial material) { this.material = material; }
-    public List<BOPrestamo> getPrestamos() {
-        if (prestamos == null) prestamos = new ArrayList<>();
-        return prestamos;
-    }
-    public void setPrestamos(List<BOPrestamo> prestamos) { this.prestamos = prestamos; }
+	@Version
+	private int version;
+
+	@OneToMany(mappedBy = "ejemplar")
+	private List<BOPrestamo> prestamos;
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public String getEstado() {
+		return estado;
+	}
+
+	public void setEstado(String estado) {
+		this.estado = estado;
+	}
+
+	public Boolean getActivo() {
+		return activo;
+	}
+
+	public void setActivo(Boolean activo) {
+		this.activo = activo;
+	}
+
+	public BOMaterial getMaterial() {
+		return material;
+	}
+
+	public void setMaterial(BOMaterial material) {
+		this.material = material;
+	}
+
+	public List<BOPrestamo> getPrestamos() {
+		if (prestamos == null)
+			prestamos = new ArrayList<>();
+		return prestamos;
+	}
+
+	public void setPrestamos(List<BOPrestamo> prestamos) {
+		this.prestamos = prestamos;
+	}
 }

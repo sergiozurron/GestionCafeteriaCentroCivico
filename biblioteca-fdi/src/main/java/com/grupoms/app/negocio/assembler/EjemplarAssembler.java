@@ -6,6 +6,7 @@ import com.grupoms.app.negocio.materialJPA.MaterialSAImp;
 
 public class EjemplarAssembler {
 	private static MaterialSAImp matImp;
+
 	public static TEjemplar toTransferObject(BOEjemplar boEjemplar) {
 		if (boEjemplar == null) {
 			return null;
@@ -20,8 +21,8 @@ public class EjemplarAssembler {
 		return tEjemplar;
 	}
 
-	public static BOEjemplar transferToEntity(TEjemplar tEjemplar){
-		BOEjemplar bo=new BOEjemplar();
+	public static BOEjemplar transferToEntity(TEjemplar tEjemplar) {
+		BOEjemplar bo = new BOEjemplar();
 
 		bo.setId(tEjemplar.getId());
 		bo.setEstado(tEjemplar.getEstado());
@@ -30,5 +31,5 @@ public class EjemplarAssembler {
 
 		return bo;
 	}
-	
+
 }

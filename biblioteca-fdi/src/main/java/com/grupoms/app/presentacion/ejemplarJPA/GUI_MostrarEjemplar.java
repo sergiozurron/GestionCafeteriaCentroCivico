@@ -54,7 +54,6 @@ public class GUI_MostrarEjemplar extends JFrame implements IGUI {
 					return;
 				}
 
-				// Enviar al controlador
 				Context contexto = new Context(Evento.MOSTRAR_EJEMPLAR, id);
 				Controlador.getInstance().handle(contexto);
 

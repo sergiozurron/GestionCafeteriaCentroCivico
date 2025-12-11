@@ -42,7 +42,7 @@ public class ClaseSAImpModificarIntegrationIT {
         Integer id = servicio.altaClase(t);
         assertThat(id).isNotNull().isGreaterThan(-1);
 
-        // Modificar
+        
         TClase mod = new TClase();
         mod.setId(id);
         mod.setTipo("Modificado_IT");

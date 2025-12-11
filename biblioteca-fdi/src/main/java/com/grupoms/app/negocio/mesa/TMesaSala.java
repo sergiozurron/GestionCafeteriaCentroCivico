@@ -1,15 +1,14 @@
 package com.grupoms.app.negocio.mesa;
 
-public class TMesaSala extends TMesa{
+public class TMesaSala extends TMesa {
 	private Integer id;
 	private Boolean reservada;
 	private String privacidad;
-	
 
 	public TMesaSala() {
 		super("Sala");
 	}
-	
+
 	public Integer getId() {
 		return id;
 	}
@@ -34,4 +33,3 @@ public class TMesaSala extends TMesa{
 		this.privacidad = privacidad;
 	}
 }
-

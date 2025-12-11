@@ -114,19 +114,16 @@ public class GUI_AltaPrestamo extends JFrame implements IGUI {
 				return;
 			}
 
-			// Crear TPrestamo
 			TPrestamo prestamo = new TPrestamo();
 			prestamo.setPrecioMulta(precioMulta);
 			prestamo.setFechaMaxima(fechaDevolucion);
 			prestamo.setIdSocio(idSocio);
 			prestamo.setIdEjemplar(idEjemplar);
 
-			// Enviar al controlador
 			Context contexto = new Context(Evento.ALTA_PRESTAMO, prestamo);
 			Controlador.getInstance().handle(contexto);
 		});
 
-		// Colocación
 		gbc.gridx = 0;
 		gbc.gridy = 0;
 		panel.add(labelPrecioMulta, gbc);

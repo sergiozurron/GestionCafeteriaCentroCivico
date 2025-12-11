@@ -29,17 +29,17 @@ public class SAProveedorImplTest {
 
 	@Test
     void testAltaProveedor_DeberiaCrearYDevolverId() throws Exception {
-        // GIVEN
+        
         TProveedor nuevo = new TProveedor();
         nuevo.setNombre("Proveedor Nuevo");
         nuevo.setTarifa(100.0);
         nuevo.setTiempoEntrega(5);
         nuevo.setActivo(true);
 
-        // WHEN
+        
         int id = saProveedor.altaProveedor(nuevo);
 
-        // THEN
+        
         assertTrue(id > 0);
         TProveedor guardado = daoProveedor.buscaPorId(id);
         assertNotNull(guardado);
@@ -48,7 +48,7 @@ public class SAProveedorImplTest {
 
     @Test
     void testAltaProveedor_DeberiaDevolverMenosUno_ProveedorExistenteActivo() {
-        // GIVEN
+        
         TProveedor activo = new TProveedor();
         activo.setNombre("Proveedor Activo");
         activo.setTarifa(150.0);
@@ -56,14 +56,14 @@ public class SAProveedorImplTest {
         activo.setActivo(true);
         daoProveedor.crea(activo);
 
-        // WHEN
+        
         TProveedor intento = new TProveedor();
         intento.setNombre("Proveedor Activo");
         intento.setTarifa(180.0);
         intento.setTiempoEntrega(4);
         int resultado = saProveedor.altaProveedor(intento);
 
-        // THEN
+        
         assertEquals(-1, resultado);
 
         TProveedor persistido = daoProveedor.buscaPorNombre("Proveedor Activo");
@@ -73,7 +73,7 @@ public class SAProveedorImplTest {
 
     @Test
     void testAltaProveedor_ProveedorExistenteInactivo_DeberiaReactivarse() {
-        // GIVEN
+        
         TProveedor inactivo = new TProveedor();
         inactivo.setNombre("Proveedor Inactivo");
         inactivo.setTarifa(200.0);
@@ -81,14 +81,14 @@ public class SAProveedorImplTest {
         inactivo.setActivo(false);
         daoProveedor.crea(inactivo);
 
-        // WHEN
+        
         TProveedor intento = new TProveedor();
         intento.setNombre("Proveedor Inactivo");
         intento.setTarifa(220.0);
         intento.setTiempoEntrega(6);
         int id = saProveedor.altaProveedor(intento);
 
-        // THEN
+        
         assertEquals(inactivo.getId(), id);
         TProveedor reactivado = daoProveedor.buscaPorNombre("Proveedor Inactivo");
         assertNotNull(reactivado);

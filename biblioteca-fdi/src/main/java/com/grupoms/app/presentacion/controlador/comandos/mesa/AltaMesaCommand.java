@@ -7,30 +7,30 @@ import com.grupoms.app.presentacion.controlador.Context;
 import com.grupoms.app.presentacion.controlador.Evento;
 import com.grupoms.app.presentacion.controlador.comandos.Command;
 
-public class AltaMesaCommand implements Command{
+public class AltaMesaCommand implements Command {
 
 	@Override
 	public Context execute(Object data) {
 		if (!(data instanceof TMesa)) {
-            return new Context(Evento.ALTA_MESA_KO, null);
-        }
+			return new Context(Evento.ALTA_MESA_KO, null);
+		}
 
-        TMesa mesa = (TMesa) data;
-        SAMesa sa = FactoriaSA.getInstance().creaSAMesa();
+		TMesa mesa = (TMesa) data;
+		SAMesa sa = FactoriaSA.getInstance().creaSAMesa();
 
-        try {
-            // Llamada al SA para crear la mesa
-            Integer idGenerado = sa.altaMesa(mesa);
+		try {
 
-            if (idGenerado != null && idGenerado > 0) {
-                mesa.setId(idGenerado); // asignar ID generado
-                return new Context(Evento.ALTA_MESA_OK, mesa);
-            } else {
-                return new Context(Evento.ALTA_MESA_KO, null);
-            }
+			Integer idGenerado = sa.altaMesa(mesa);
 
-        } catch (IllegalArgumentException e) {
-            return new Context(Evento.ALTA_MESA_KO, null);
-        }
+			if (idGenerado != null && idGenerado > 0) {
+				mesa.setId(idGenerado);
+				return new Context(Evento.ALTA_MESA_OK, mesa);
+			} else {
+				return new Context(Evento.ALTA_MESA_KO, null);
+			}
+
+		} catch (IllegalArgumentException e) {
+			return new Context(Evento.ALTA_MESA_KO, null);
+		}
 	}
 }

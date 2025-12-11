@@ -74,19 +74,16 @@ public class GUI_ModificarEjemplar extends JFrame implements IGUI {
 				return;
 			}
 
-			// Crear TEjemplar
 			TEjemplar ejemplar = new TEjemplar();
 			ejemplar.setId(id);
 			ejemplar.setEstado(estado);
 			ejemplar.setIdMaterial(idMaterial);
 
-			// Enviar al controlador
 			Context contexto = new Context(Evento.MODIFICAR_EJEMPLAR, ejemplar);
 			Controlador.getInstance().handle(contexto);
 
 		});
 
-		// Colocación
 		gbc.gridx = 0;
 		gbc.gridy = 0;
 		panel.add(labelId, gbc);

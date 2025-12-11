@@ -29,14 +29,12 @@ import com.grupoms.app.negocio.salaJPA.SalaSAImp;
 import com.grupoms.app.negocio.socioJPA.SocioSA;
 import com.grupoms.app.negocio.socioJPA.SocioSAImp;
 
-
 public class FactoriaSAImp extends FactoriaSA {
-	
 
 	public SAProveedor creaSAProveedor() {
 		return new SAProveedorImpl();
 	}
-	
+
 	public SAMesa creaSAMesa() {
 		return new SAMesaImp();
 	}
@@ -66,8 +64,6 @@ public class FactoriaSAImp extends FactoriaSA {
 		return new SAEmpleadoImp();
 	}
 
-	// JPA
-
 	@Override
 	public MaterialSA creaSAMaterial() {
 		return new MaterialSAImp();
@@ -87,7 +83,7 @@ public class FactoriaSAImp extends FactoriaSA {
 
 	@Override
 	public SalaSA creaSASala() {
-		
+
 		return new SalaSAImp();
 	}
 
@@ -100,5 +96,5 @@ public class FactoriaSAImp extends FactoriaSA {
 	public PrestamoSA creaSAPrestamo() {
 		return new PrestamoSAImp();
 	}
-	
+
 }

@@ -25,236 +25,245 @@ import jakarta.persistence.TypedQuery;
 
 public class SocioSAImp implements SocioSA {
 
-    @Override
-    public Integer altaSocio(TSocio socio) {
-        BOSocio socioExistente = null;
-        Integer id = -1;
-        EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
-        EntityTransaction t = em.getTransaction();
-        
-        try {
-            t.begin();
-            TypedQuery<BOSocio> query = em.createNamedQuery("com.grupoms.app.negocio.socioJPA.BOSocio.findByName", BOSocio.class);
-            query.setParameter("nombre", socio.getNombreYapellido());
+	@Override
+	public Integer altaSocio(TSocio socio) {
+		BOSocio socioExistente = null;
+		Integer id = -1;
+		EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
+		EntityTransaction t = em.getTransaction();
 
-            try {
-                socioExistente = query.getSingleResult();
-            } catch (Exception e) {
-            }
+		try {
+			t.begin();
+			TypedQuery<BOSocio> query = em.createNamedQuery("com.grupoms.app.negocio.socioJPA.BOSocio.findByName",
+					BOSocio.class);
+			query.setParameter("nombre", socio.getNombreYapellido());
 
-            if (socioExistente != null) {
-                if (!socioExistente.getActivo()) {
-                    socioExistente.setActivo(true);
-                    id = socioExistente.getId();
-                } else {
-                    throw new IllegalStateException("El socio ya existe");
-                }
-            } else {
-                if (socio instanceof TAdulto) {
-                    BOAdulto adulto = new BOAdulto((TAdulto) socio);
-                    em.persist(adulto);
-                    em.flush();
-                    id = adulto.getId();
-                } else if (socio instanceof TInfantil) {
-                    BOInfantil infantil = new BOInfantil((TInfantil) socio);
-                    em.persist(infantil);
-                    em.flush();
-                    id = infantil.getId();
-                }
-            }
-            t.commit();
-        } catch (Exception e) {
-            if (t.isActive()) t.rollback();
-            e.printStackTrace();
-            return -1;
-        } finally {
-            em.close();
-        }
-        return id;
-    }
+			try {
+				socioExistente = query.getSingleResult();
+			} catch (Exception e) {
+			}
 
-    @Override
-    public Integer bajaSocio(Integer id) throws Exception {
-        EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
-        EntityTransaction t = em.getTransaction();
-        
-        try {
-            t.begin();
-            BOSocio socio = em.find(BOSocio.class, id);
+			if (socioExistente != null) {
+				if (!socioExistente.getActivo()) {
+					socioExistente.setActivo(true);
+					id = socioExistente.getId();
+				} else {
+					throw new IllegalStateException("El socio ya existe");
+				}
+			} else {
+				if (socio instanceof TAdulto) {
+					BOAdulto adulto = new BOAdulto((TAdulto) socio);
+					em.persist(adulto);
+					em.flush();
+					id = adulto.getId();
+				} else if (socio instanceof TInfantil) {
+					BOInfantil infantil = new BOInfantil((TInfantil) socio);
+					em.persist(infantil);
+					em.flush();
+					id = infantil.getId();
+				}
+			}
+			t.commit();
+		} catch (Exception e) {
+			if (t.isActive())
+				t.rollback();
+			e.printStackTrace();
+			return -1;
+		} finally {
+			em.close();
+		}
+		return id;
+	}
 
-            if (socio == null || !socio.getActivo()) {
-                t.rollback();
-                throw new Exception("El socio no existe o ya está inactivo.");
-            }
+	@Override
+	public Integer bajaSocio(Integer id) throws Exception {
+		EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
+		EntityTransaction t = em.getTransaction();
 
-            TypedQuery<BOPrestamo> query = em.createNamedQuery("BOPrestamo.findBySocio", BOPrestamo.class);
-            query.setParameter("idSocio", socio.getId());
-            List<BOPrestamo> prestamos = query.getResultList();
+		try {
+			t.begin();
+			BOSocio socio = em.find(BOSocio.class, id);
 
-            if (!prestamos.isEmpty()) {
-                t.rollback();
-                throw new Exception("El socio tiene préstamos pendientes.");
-            }
+			if (socio == null || !socio.getActivo()) {
+				t.rollback();
+				throw new Exception("El socio no existe o ya está inactivo.");
+			}
 
-            socio.setActivo(false);
-            t.commit();
-            return 1;
-        } catch (Exception e) {
-            if (t.isActive()) t.rollback();
-            throw e;
-        } finally {
-            em.close();
-        }
-    }
+			TypedQuery<BOPrestamo> query = em.createNamedQuery("BOPrestamo.findBySocio", BOPrestamo.class);
+			query.setParameter("idSocio", socio.getId());
+			List<BOPrestamo> prestamos = query.getResultList();
 
-    @Override
-    public Integer modificarSocio(TSocio socio) {
-        Integer id = -1;
-        EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
-        EntityTransaction t = em.getTransaction();
+			if (!prestamos.isEmpty()) {
+				t.rollback();
+				throw new Exception("El socio tiene préstamos pendientes.");
+			}
 
-        try {
-            t.begin();
-            BOSocio s = em.find(BOSocio.class, socio.getId(), LockModeType.OPTIMISTIC);
+			socio.setActivo(false);
+			t.commit();
+			return 1;
+		} catch (Exception e) {
+			if (t.isActive())
+				t.rollback();
+			throw e;
+		} finally {
+			em.close();
+		}
+	}
 
-            if (s == null) {
-                throw new IllegalArgumentException("El ID del Socio no existe.");
-            } else {
-                s.setNombreYapellido(socio.getNombreYapellido());
-                s.setDni(socio.getDni());
-                s.setTipoSocio(socio.getTipoSocio());
-                s.setCuota(socio.getCuota());
-                s.setActivo(true);
+	@Override
+	public Integer modificarSocio(TSocio socio) {
+		Integer id = -1;
+		EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
+		EntityTransaction t = em.getTransaction();
 
-                if (socio.getTipoSocio() == 0 && s instanceof BOAdulto) {
-                    ((BOAdulto) s).setMiembroPleno(((TAdulto) socio).getMiembroPleno());
-                } else if (socio.getTipoSocio() == 1 && s instanceof BOInfantil) {
-                    ((BOInfantil) s).setEdad(((TInfantil) socio).getEdad());
-                    ((BOInfantil) s).setReduccion(((TInfantil) socio).getReduccion());
-                }
-            }
-            t.commit();
-            id = socio.getId();
-        } catch (Exception e) {
-            if (t.isActive()) t.rollback();
-            e.printStackTrace();
-            return -1;
-        } finally {
-            em.close();
-        }
-        return id;
-    }
+		try {
+			t.begin();
+			BOSocio s = em.find(BOSocio.class, socio.getId(), LockModeType.OPTIMISTIC);
 
-    @Override
-    public TSocio mostrarSocio(Integer id) {
-        if (id == null || id < 0) return null;
-        EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
-        try {
-            BOSocio socio = em.find(BOSocio.class, id);
-            if (socio == null || !socio.getActivo()) {
-                return null;
-            }
-            if (socio instanceof BOAdulto) {
-                return AdultoAssembler.toDTO((BOAdulto) socio);
-            } else if (socio instanceof BOInfantil) {
-                return InfantilAssembler.toDTO((BOInfantil) socio);
-            } else {
-                return SocioAssembler.entityToTransfer(socio);
-            }
-        } finally {
-            em.close();
-        }
-    }
+			if (s == null) {
+				throw new IllegalArgumentException("El ID del Socio no existe.");
+			} else {
+				s.setNombreYapellido(socio.getNombreYapellido());
+				s.setDni(socio.getDni());
+				s.setTipoSocio(socio.getTipoSocio());
+				s.setCuota(socio.getCuota());
+				s.setActivo(true);
 
-    @Override
-    public List<TSocio> listarSocios() {
-        EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
-        try {
-            TypedQuery<BOSocio> query = em.createNamedQuery("com.grupoms.app.negocio.socioJPA.BOSocio.findAll", BOSocio.class);
-            return query.getResultList().stream().map(bo -> {
-                if (bo instanceof BOAdulto) return AdultoAssembler.toDTO((BOAdulto) bo);
-                else if (bo instanceof BOInfantil) return InfantilAssembler.toDTO((BOInfantil) bo);
-                else return SocioAssembler.entityToTransfer(bo);
-            }).collect(Collectors.toList());
-        } finally {
-            em.close();
-        }
-    }
+				if (socio.getTipoSocio() == 0 && s instanceof BOAdulto) {
+					((BOAdulto) s).setMiembroPleno(((TAdulto) socio).getMiembroPleno());
+				} else if (socio.getTipoSocio() == 1 && s instanceof BOInfantil) {
+					((BOInfantil) s).setEdad(((TInfantil) socio).getEdad());
+					((BOInfantil) s).setReduccion(((TInfantil) socio).getReduccion());
+				}
+			}
+			t.commit();
+			id = socio.getId();
+		} catch (Exception e) {
+			if (t.isActive())
+				t.rollback();
+			e.printStackTrace();
+			return -1;
+		} finally {
+			em.close();
+		}
+		return id;
+	}
 
+	@Override
+	public TSocio mostrarSocio(Integer id) {
+		if (id == null || id < 0)
+			return null;
+		EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
+		try {
+			BOSocio socio = em.find(BOSocio.class, id);
+			if (socio == null || !socio.getActivo()) {
+				return null;
+			}
+			if (socio instanceof BOAdulto) {
+				return AdultoAssembler.toDTO((BOAdulto) socio);
+			} else if (socio instanceof BOInfantil) {
+				return InfantilAssembler.toDTO((BOInfantil) socio);
+			} else {
+				return SocioAssembler.entityToTransfer(socio);
+			}
+		} finally {
+			em.close();
+		}
+	}
 
-    @Override
-    public List<TSocio> mostrarSociosPorPromocion(Integer idPromocion) {
-        EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
-        List<TSocio> lista = new ArrayList<>();
-        try {
-            BOPromocion promocion = em.find(BOPromocion.class, idPromocion);
-            if (promocion != null && promocion.getActivo()) {
-                for (BOSocio s : promocion.getSocios()) {
-                    if (s.getActivo()) {
-                        lista.add(SocioAssembler.entityToTransfer(s));
-                    }
-                }
-            }
-        } finally {
-            em.close();
-        }
-        return lista;
-    }
+	@Override
+	public List<TSocio> listarSocios() {
+		EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
+		try {
+			TypedQuery<BOSocio> query = em.createNamedQuery("com.grupoms.app.negocio.socioJPA.BOSocio.findAll",
+					BOSocio.class);
+			return query.getResultList().stream().map(bo -> {
+				if (bo instanceof BOAdulto)
+					return AdultoAssembler.toDTO((BOAdulto) bo);
+				else if (bo instanceof BOInfantil)
+					return InfantilAssembler.toDTO((BOInfantil) bo);
+				else
+					return SocioAssembler.entityToTransfer(bo);
+			}).collect(Collectors.toList());
+		} finally {
+			em.close();
+		}
+	}
 
+	@Override
+	public List<TSocio> mostrarSociosPorPromocion(Integer idPromocion) {
+		EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
+		List<TSocio> lista = new ArrayList<>();
+		try {
+			BOPromocion promocion = em.find(BOPromocion.class, idPromocion);
+			if (promocion != null && promocion.getActivo()) {
+				for (BOSocio s : promocion.getSocios()) {
+					if (s.getActivo()) {
+						lista.add(SocioAssembler.entityToTransfer(s));
+					}
+				}
+			}
+		} finally {
+			em.close();
+		}
+		return lista;
+	}
 
-    @Override
-    public Integer vincularPromocionASocio(Integer idSocio, Integer idPromocion) {
-        int res = -1;
-        EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
-        EntityTransaction t = em.getTransaction();
+	@Override
+	public Integer vincularPromocionASocio(Integer idSocio, Integer idPromocion) {
+		int res = -1;
+		EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
+		EntityTransaction t = em.getTransaction();
 
-        try {
-            t.begin();
-            BOSocio socio = em.find(BOSocio.class, idSocio, LockModeType.OPTIMISTIC);
-            BOPromocion promocion = em.find(BOPromocion.class, idPromocion, LockModeType.OPTIMISTIC);
+		try {
+			t.begin();
+			BOSocio socio = em.find(BOSocio.class, idSocio, LockModeType.OPTIMISTIC);
+			BOPromocion promocion = em.find(BOPromocion.class, idPromocion, LockModeType.OPTIMISTIC);
 
-            if (socio != null && socio.getActivo() && promocion != null && promocion.getActivo()) {
-                if (socio.getPromocion().contains(promocion)) {
-                    throw new Exception("El socio ya tiene esta promoción");
-                }
-                socio.anyadirPromocion(promocion);
-                res = 1;
-            }
-            t.commit();
-        } catch (Exception e) {
-            if (t.isActive()) t.rollback();
-            e.printStackTrace();
-        } finally {
-            em.close();
-        }
-        return res;
-    }
+			if (socio != null && socio.getActivo() && promocion != null && promocion.getActivo()) {
+				if (socio.getPromocion().contains(promocion)) {
+					throw new Exception("El socio ya tiene esta promoción");
+				}
+				socio.anyadirPromocion(promocion);
+				res = 1;
+			}
+			t.commit();
+		} catch (Exception e) {
+			if (t.isActive())
+				t.rollback();
+			e.printStackTrace();
+		} finally {
+			em.close();
+		}
+		return res;
+	}
 
-    @Override
-    public Integer desvincularPromocionASocio(Integer idSocio, Integer idPromocion) {
-        int res = -1;
-        EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
-        EntityTransaction t = em.getTransaction();
+	@Override
+	public Integer desvincularPromocionASocio(Integer idSocio, Integer idPromocion) {
+		int res = -1;
+		EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
+		EntityTransaction t = em.getTransaction();
 
-        try {
-            t.begin();
-            BOSocio socio = em.find(BOSocio.class, idSocio);
-            BOPromocion promocion = em.find(BOPromocion.class, idPromocion);
+		try {
+			t.begin();
+			BOSocio socio = em.find(BOSocio.class, idSocio);
+			BOPromocion promocion = em.find(BOPromocion.class, idPromocion);
 
-            if (socio != null && socio.getActivo() && promocion != null && promocion.getActivo()) {
-                if (!socio.getPromocion().contains(promocion)) {
-                    throw new Exception("El socio no tiene esta promoción");
-                }
-                socio.eliminarPromocion(promocion);
-                res = 1;
-            }
-            t.commit();
-        } catch (Exception e) {
-            if (t.isActive()) t.rollback();
-            e.printStackTrace();
-        } finally {
-            em.close();
-        }
-        return res;
-    }
+			if (socio != null && socio.getActivo() && promocion != null && promocion.getActivo()) {
+				if (!socio.getPromocion().contains(promocion)) {
+					throw new Exception("El socio no tiene esta promoción");
+				}
+				socio.eliminarPromocion(promocion);
+				res = 1;
+			}
+			t.commit();
+		} catch (Exception e) {
+			if (t.isActive())
+				t.rollback();
+			e.printStackTrace();
+		} finally {
+			em.close();
+		}
+		return res;
+	}
 }

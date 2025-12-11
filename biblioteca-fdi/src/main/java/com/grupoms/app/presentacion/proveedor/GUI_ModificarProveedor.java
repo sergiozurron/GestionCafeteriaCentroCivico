@@ -34,7 +34,7 @@ public class GUI_ModificarProveedor extends JFrame implements IGUI {
 			setVisible(true);
 		} else if (context.getEvento() == Evento.MODIFICAR_PROVEEDOR_OK) {
 			JOptionPane.showMessageDialog(this, "Proveedor modificado con éxito");
-			// Limpiar campos
+
 			campoId.setText("");
 			campoNombre.setText("");
 			campoTarifa.setText("");
@@ -94,7 +94,6 @@ public class GUI_ModificarProveedor extends JFrame implements IGUI {
 					return;
 				}
 
-				// Crear TProveedor
 				TProveedor proveedor = new TProveedor();
 				proveedor.setId(id);
 				proveedor.setNombre(nombre);
@@ -102,7 +101,6 @@ public class GUI_ModificarProveedor extends JFrame implements IGUI {
 				proveedor.setTiempoEntrega(tiempoEntrega);
 				proveedor.setActivo(activo);
 
-				// Enviar al controlador
 				Context contexto = new Context(Evento.MODIFICAR_PROVEEDOR, proveedor);
 				Controlador.getInstance().handle(contexto);
 
@@ -111,39 +109,44 @@ public class GUI_ModificarProveedor extends JFrame implements IGUI {
 			}
 		});
 
-		// Colocación
 		int y = 0;
-		gbc.gridx = 0; gbc.gridy = y;
+		gbc.gridx = 0;
+		gbc.gridy = y;
 		panel.add(labelId, gbc);
 		gbc.gridx = 1;
 		panel.add(campoId, gbc);
 
 		y++;
-		gbc.gridx = 0; gbc.gridy = y;
+		gbc.gridx = 0;
+		gbc.gridy = y;
 		panel.add(labelNombre, gbc);
 		gbc.gridx = 1;
 		panel.add(campoNombre, gbc);
 
 		y++;
-		gbc.gridx = 0; gbc.gridy = y;
+		gbc.gridx = 0;
+		gbc.gridy = y;
 		panel.add(labelTarifa, gbc);
 		gbc.gridx = 1;
 		panel.add(campoTarifa, gbc);
 
 		y++;
-		gbc.gridx = 0; gbc.gridy = y;
+		gbc.gridx = 0;
+		gbc.gridy = y;
 		panel.add(labelTiempo, gbc);
 		gbc.gridx = 1;
 		panel.add(campoTiempoEntrega, gbc);
 
 		y++;
-		gbc.gridx = 0; gbc.gridy = y;
+		gbc.gridx = 0;
+		gbc.gridy = y;
 		panel.add(labelActivo, gbc);
 		gbc.gridx = 1;
 		panel.add(checkActivo, gbc);
 
 		y++;
-		gbc.gridx = 0; gbc.gridy = y;
+		gbc.gridx = 0;
+		gbc.gridy = y;
 		gbc.gridwidth = 2;
 		panel.add(btnModificar, gbc);
 

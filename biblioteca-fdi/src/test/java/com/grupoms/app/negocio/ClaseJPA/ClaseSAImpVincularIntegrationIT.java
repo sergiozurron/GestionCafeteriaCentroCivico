@@ -35,7 +35,7 @@ public class ClaseSAImpVincularIntegrationIT {
 
     @Test
     public void vincularYDesvincularEjemplar_shouldUpdateRelation() {
-        // Crear clase
+        
         TClase t = new TClase();
         t.setTipo("Zumba_IT");
         t.setFechaInicio(new java.util.Date());
@@ -45,7 +45,7 @@ public class ClaseSAImpVincularIntegrationIT {
         Integer idClase = servicio.altaClase(t);
         assertThat(idClase).isNotNull().isGreaterThan(-1);
 
-        // Crear ejemplar directamente
+        
         EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
         em.getTransaction().begin();
         BOEjemplar ej = new BOEjemplar();
@@ -56,18 +56,18 @@ public class ClaseSAImpVincularIntegrationIT {
         em.getTransaction().commit();
         em.close();
 
-        // Vincular
+        
         int res = servicio.vincularEjemplarAClase(idClase, idEj);
         assertThat(res).isEqualTo(1);
 
-        // Comprobar relación
+        
         em = EntityManagerSingleton.getEMF().createEntityManager();
         BOClase clasePersist = em.find(BOClase.class, idClase);
         assertThat(clasePersist).isNotNull();
         assertThat(clasePersist).extracting("ejemplares").asList().isNotEmpty();
         em.close();
 
-        // Desvincular
+        
         int res2 = servicio.desvincularEjemplarDeClase(idClase, idEj);
         assertThat(res2).isEqualTo(1);
 

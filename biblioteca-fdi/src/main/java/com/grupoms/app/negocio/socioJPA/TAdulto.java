@@ -1,21 +1,22 @@
 package com.grupoms.app.negocio.socioJPA;
 
 public class TAdulto extends TSocio {
-    
-    private Boolean miembroPleno;
 
-    public TAdulto(String nombreYapellido, String dni, int tipoSocio, Integer cuota, Boolean miembroPleno) {
-        super(nombreYapellido, dni, tipoSocio, cuota);
-        this.miembroPleno = miembroPleno;
-    }
+	private Boolean miembroPleno;
 
-    public TAdulto() {}
+	public TAdulto(String nombreYapellido, String dni, int tipoSocio, Integer cuota, Boolean miembroPleno) {
+		super(nombreYapellido, dni, tipoSocio, cuota);
+		this.miembroPleno = miembroPleno;
+	}
 
-    public Boolean getMiembroPleno() {
-        return miembroPleno;
-    }
+	public TAdulto() {
+	}
 
-    public void setMiembroPleno(Boolean miembroPleno) {
-        this.miembroPleno = miembroPleno;
-    }
+	public Boolean getMiembroPleno() {
+		return miembroPleno;
+	}
+
+	public void setMiembroPleno(Boolean miembroPleno) {
+		this.miembroPleno = miembroPleno;
+	}
 }

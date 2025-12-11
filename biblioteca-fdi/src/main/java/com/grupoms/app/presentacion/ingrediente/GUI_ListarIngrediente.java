@@ -14,79 +14,71 @@ import java.util.List;
 
 public class GUI_ListarIngrediente extends JFrame implements IGUI {
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    private JTable tabla;
-    private DefaultTableModel modeloTabla;
-    private JButton botonCargar;
+	private JTable tabla;
+	private DefaultTableModel modeloTabla;
+	private JButton botonCargar;
 
-    public GUI_ListarIngrediente() {
-        setTitle("Listado de Ingredientes");
-        setSize(800, 500);
-        setLocationRelativeTo(null);
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        initGUI();
-    }
+	public GUI_ListarIngrediente() {
+		setTitle("Listado de Ingredientes");
+		setSize(800, 500);
+		setLocationRelativeTo(null);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		initGUI();
+	}
 
-    private void initGUI() {
-        JPanel panelPrincipal = new JPanel(new BorderLayout());
+	private void initGUI() {
+		JPanel panelPrincipal = new JPanel(new BorderLayout());
 
-        // --- Configuración de la tabla ---
-        modeloTabla = new DefaultTableModel();
-        modeloTabla.addColumn("ID");
-        modeloTabla.addColumn("Nombre");
-        modeloTabla.addColumn("Precio");
-        modeloTabla.addColumn("Activo");
-        modeloTabla.addColumn("ID Proveedor");
+		modeloTabla = new DefaultTableModel();
+		modeloTabla.addColumn("ID");
+		modeloTabla.addColumn("Nombre");
+		modeloTabla.addColumn("Precio");
+		modeloTabla.addColumn("Activo");
+		modeloTabla.addColumn("ID Proveedor");
 
-        tabla = new JTable(modeloTabla);
-        JScrollPane scrollPane = new JScrollPane(tabla);
+		tabla = new JTable(modeloTabla);
+		JScrollPane scrollPane = new JScrollPane(tabla);
 
-        // --- Botón para cargar ingredientes ---
-        botonCargar = new JButton("Cargar Ingredientes");
-        botonCargar.addActionListener(e -> {
-           try {
-                Context contexto = new Context(Evento.MOSTRAR_INGREDIENTES, null);
-                Controlador.getInstance().handle(contexto);
-            } catch (Exception ex) {
-                ex.printStackTrace();
-                JOptionPane.showMessageDialog(this, "Error al cargar ingredientes: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-            }
-        });
+		botonCargar = new JButton("Cargar Ingredientes");
+		botonCargar.addActionListener(e -> {
+			try {
+				Context contexto = new Context(Evento.MOSTRAR_INGREDIENTES, null);
+				Controlador.getInstance().handle(contexto);
+			} catch (Exception ex) {
+				ex.printStackTrace();
+				JOptionPane.showMessageDialog(this, "Error al cargar ingredientes: " + ex.getMessage(), "Error",
+						JOptionPane.ERROR_MESSAGE);
+			}
+		});
 
-        panelPrincipal.add(scrollPane, BorderLayout.CENTER);
-        panelPrincipal.add(botonCargar, BorderLayout.SOUTH);
+		panelPrincipal.add(scrollPane, BorderLayout.CENTER);
+		panelPrincipal.add(botonCargar, BorderLayout.SOUTH);
 
-        add(panelPrincipal);
-    }
+		add(panelPrincipal);
+	}
 
-    @Override
-    public void actualizar(Context context) {
-        
-          
-    	if (context.getEvento() == Evento.MOSTRAR_INGREDIENTES_OK) {
-            modeloTabla.setRowCount(0); // limpia la tabla
-            List<TIngrediente> ingredientes = (List<TIngrediente>) context.getDatos();
+	@Override
+	public void actualizar(Context context) {
 
-            if (ingredientes == null || ingredientes.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "No hay ingredientes activos en la base de datos.");
-                return;
-            }
+		if (context.getEvento() == Evento.MOSTRAR_INGREDIENTES_OK) {
+			modeloTabla.setRowCount(0);
+			List<TIngrediente> ingredientes = (List<TIngrediente>) context.getDatos();
 
-            for (TIngrediente ing : ingredientes) {
-                Object[] fila = {
-                    ing.getID(),
-                    ing.getNombre(),
-                    ing.getPrecio(),
-                    ing.getActivo() ? "Sí" : "No",
-                    ing.getIDProveedor()
-                };
-                modeloTabla.addRow(fila);
-            }
-        } 
-        else if (context.getEvento() == Evento.MOSTRAR_INGREDIENTES_KO) {
-            JOptionPane.showMessageDialog(this, "Error al cargar los ingredientes.");
-        }
+			if (ingredientes == null || ingredientes.isEmpty()) {
+				JOptionPane.showMessageDialog(this, "No hay ingredientes activos en la base de datos.");
+				return;
+			}
 
-    }
+			for (TIngrediente ing : ingredientes) {
+				Object[] fila = { ing.getID(), ing.getNombre(), ing.getPrecio(), ing.getActivo() ? "Sí" : "No",
+						ing.getIDProveedor() };
+				modeloTabla.addRow(fila);
+			}
+		} else if (context.getEvento() == Evento.MOSTRAR_INGREDIENTES_KO) {
+			JOptionPane.showMessageDialog(this, "Error al cargar los ingredientes.");
+		}
+
+	}
 }

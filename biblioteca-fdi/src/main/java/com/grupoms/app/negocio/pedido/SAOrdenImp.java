@@ -7,69 +7,76 @@ import com.grupoms.app.integracion.factoria.FactoriaDAO;
 
 public class SAOrdenImp implements SAOrden {
 
-    private DAOOrden dao = FactoriaDAO.getInstancia().creaDAOOrden();
+	private DAOOrden dao = FactoriaDAO.getInstancia().creaDAOOrden();
 
-    @Override
-    public Integer altaOrden(TOrden orden) {
-        Transaction t = null;
-        Integer idGenerado = null;
+	@Override
+	public Integer altaOrden(TOrden orden) {
+		Transaction t = null;
+		Integer idGenerado = null;
 
-        try {
-            if (orden == null || orden.getPedidoId() == null)
-                throw new IllegalArgumentException("La orden y el pedido asociado no pueden ser nulos");
-                
-            t = TransactionManager.getInstance().newTransaction();
-            t.start();
+		try {
+			if (orden == null || orden.getPedidoId() == null)
+				throw new IllegalArgumentException("La orden y el pedido asociado no pueden ser nulos");
 
-            orden.setPrecioVenta(0.0);
-            idGenerado = dao.altaOrden(orden);
-            
-            t.commit();
-        } catch (Exception e) {
-            e.printStackTrace();
-            if (t != null) {
-                try { t.rollback(); } catch(Exception ex) { ex.printStackTrace(); }
-            }
-            throw new IllegalArgumentException("Error al crear la orden", e);
-        }
+			t = TransactionManager.getInstance().newTransaction();
+			t.start();
 
-        return idGenerado;
-    }
+			orden.setPrecioVenta(0.0);
+			idGenerado = dao.altaOrden(orden);
 
-    public Boolean bajaOrden(TOrden orden){
-        if (orden.getId() == null || orden.getId() <= 0)
-            throw new IllegalArgumentException("ID de orden no válido.");
+			t.commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (t != null) {
+				try {
+					t.rollback();
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
+			}
+			throw new IllegalArgumentException("Error al crear la orden", e);
+		}
 
-        Transaction t = null;
-        Boolean exito = false;
-        try {
-            t = TransactionManager.getInstance().newTransaction();
-            t.start();
+		return idGenerado;
+	}
 
-            // Borrado físico
-            exito = dao.bajaOrden(orden.getId());
+	public Boolean bajaOrden(TOrden orden) {
+		if (orden.getId() == null || orden.getId() <= 0)
+			throw new IllegalArgumentException("ID de orden no válido.");
 
-            t.commit();
-        } catch (Exception e) {
-            e.printStackTrace();
-            if (t != null) {
-                try { t.rollback(); } catch (Exception ex) { ex.printStackTrace(); }
-            }
-            throw new IllegalArgumentException("Error al eliminar la orden.", e);
-        }
-        return exito;
-    }
+		Transaction t = null;
+		Boolean exito = false;
+		try {
+			t = TransactionManager.getInstance().newTransaction();
+			t.start();
 
-    @Override
-    public void vincularProducto(TOrden orden) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'vincularProducto'");
-    }
+			exito = dao.bajaOrden(orden.getId());
 
-    @Override
-    public TOrden mostrarOrden(Integer idOrden) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'mostrarOrden'");
-    }
+			t.commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (t != null) {
+				try {
+					t.rollback();
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
+			}
+			throw new IllegalArgumentException("Error al eliminar la orden.", e);
+		}
+		return exito;
+	}
+
+	@Override
+	public void vincularProducto(TOrden orden) {
+
+		throw new UnsupportedOperationException("Unimplemented method 'vincularProducto'");
+	}
+
+	@Override
+	public TOrden mostrarOrden(Integer idOrden) {
+
+		throw new UnsupportedOperationException("Unimplemented method 'mostrarOrden'");
+	}
 
 }

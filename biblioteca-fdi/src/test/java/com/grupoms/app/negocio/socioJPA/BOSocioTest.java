@@ -15,12 +15,12 @@ public class BOSocioTest {
         BOSocio s = new BOSocio();
         BOPromocion p = new BOPromocion();
         p.setID(1);
-        // Añadir
+        
         s.anyadirPromocion(p);
         List<BOPromocion> promos = s.getPromocion();
         assertNotNull(promos);
         assertEquals(1, promos.size());
-        // Eliminar
+        
         s.eliminarPromocion(p);
         assertEquals(0, s.getPromocion().size());
     }

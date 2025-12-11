@@ -11,52 +11,51 @@ import java.sql.SQLException;
 
 public class DAOOrdenImp implements DAOOrden {
 
-    @Override
-    public Integer altaOrden(TOrden orden) throws Exception {
-        Integer idGenerado = null;
-        Connection conn = (Connection) TransactionManager.getInstance().getTransaction().getResource();
-        
-        String sql = "INSERT INTO ordenes (pedido_id, producto_id, cantidad, precio_venta) VALUES (?, ?, ?, ?)";
-        try (PreparedStatement ps = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
-            ps.setInt(1, orden.getPedidoId());
-            ps.setObject(2, orden.getProductoId());
-            ps.setInt(3, orden.getCantidad() != null ? orden.getCantidad() : 0);
-            ps.setDouble(4, orden.getPrecio() != null ? orden.getPrecio() : 0.0);
+	@Override
+	public Integer altaOrden(TOrden orden) throws Exception {
+		Integer idGenerado = null;
+		Connection conn = (Connection) TransactionManager.getInstance().getTransaction().getResource();
 
-            ps.executeUpdate();
-            try (ResultSet rs = ps.getGeneratedKeys()) {
-                if (rs.next()) {
-                    idGenerado = rs.getInt(1);
-                    orden.setId(idGenerado);
-                }
-            }
-        }
+		String sql = "INSERT INTO ordenes (pedido_id, producto_id, cantidad, precio_venta) VALUES (?, ?, ?, ?)";
+		try (PreparedStatement ps = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
+			ps.setInt(1, orden.getPedidoId());
+			ps.setObject(2, orden.getProductoId());
+			ps.setInt(3, orden.getCantidad() != null ? orden.getCantidad() : 0);
+			ps.setDouble(4, orden.getPrecio() != null ? orden.getPrecio() : 0.0);
 
-        return idGenerado;
-    }
+			ps.executeUpdate();
+			try (ResultSet rs = ps.getGeneratedKeys()) {
+				if (rs.next()) {
+					idGenerado = rs.getInt(1);
+					orden.setId(idGenerado);
+				}
+			}
+		}
 
-    @Override
-    public Boolean bajaOrden(Integer id) throws Exception {
-   
-        Boolean exito = false;
-        Transaction t = null;
-        try {
-            t = com.grupoms.app.integracion.Transaction.TransactionManager.getInstance().getTransaction();
-            Connection conn = (Connection) t.getResource();
+		return idGenerado;
+	}
 
-            String sql = "DELETE FROM ordenes WHERE id = ?";
-            try (PreparedStatement ps = conn.prepareStatement(sql)) {
-                ps.setInt(1, id);
-                exito = ps.executeUpdate() > 0;
-            }
+	@Override
+	public Boolean bajaOrden(Integer id) throws Exception {
 
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new IllegalArgumentException("Error al eliminar la orden.", e);
-        }
+		Boolean exito = false;
+		Transaction t = null;
+		try {
+			t = com.grupoms.app.integracion.Transaction.TransactionManager.getInstance().getTransaction();
+			Connection conn = (Connection) t.getResource();
 
-        return exito;
-    }
+			String sql = "DELETE FROM ordenes WHERE id = ?";
+			try (PreparedStatement ps = conn.prepareStatement(sql)) {
+				ps.setInt(1, id);
+				exito = ps.executeUpdate() > 0;
+			}
 
-    
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new IllegalArgumentException("Error al eliminar la orden.", e);
+		}
+
+		return exito;
+	}
+
 }

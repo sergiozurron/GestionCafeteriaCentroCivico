@@ -8,22 +8,23 @@ import java.io.Serializable;
 @PrimaryKeyJoinColumn(referencedColumnName = "id")
 public class BOAdulto extends BOSocio implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    private Boolean miembroPleno;
+	private Boolean miembroPleno;
 
-    public BOAdulto() {}
+	public BOAdulto() {
+	}
 
-    public BOAdulto(TAdulto adulto) {
-        super(adulto);
-        this.miembroPleno = adulto.getMiembroPleno();
-    }
+	public BOAdulto(TAdulto adulto) {
+		super(adulto);
+		this.miembroPleno = adulto.getMiembroPleno();
+	}
 
-    public Boolean getMiembroPleno() {
-        return miembroPleno;
-    }
+	public Boolean getMiembroPleno() {
+		return miembroPleno;
+	}
 
-    public void setMiembroPleno(Boolean miembroPleno) {
-        this.miembroPleno = miembroPleno;
-    }
+	public void setMiembroPleno(Boolean miembroPleno) {
+		this.miembroPleno = miembroPleno;
+	}
 }

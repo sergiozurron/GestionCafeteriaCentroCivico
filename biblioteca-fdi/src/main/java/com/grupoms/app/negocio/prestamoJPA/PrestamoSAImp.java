@@ -16,155 +16,157 @@ import jakarta.persistence.TypedQuery;
 
 public class PrestamoSAImp implements PrestamoSA {
 
-    @Override
-    public Integer altaPrestamo(TPrestamo prestamo) {
-        Integer id = -1;
-        EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
-        EntityTransaction t = em.getTransaction();
+	@Override
+	public Integer altaPrestamo(TPrestamo prestamo) {
+		Integer id = -1;
+		EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
+		EntityTransaction t = em.getTransaction();
 
-        try {
-            t.begin();
+		try {
+			t.begin();
 
-            BOSocio socio = em.find(BOSocio.class, prestamo.getIdSocio());
-            if (socio == null || !socio.getActivo()) {
-                t.rollback();
-                return -1;
-            }
+			BOSocio socio = em.find(BOSocio.class, prestamo.getIdSocio());
+			if (socio == null || !socio.getActivo()) {
+				t.rollback();
+				return -1;
+			}
 
-            BOEjemplar ejemplar = em.find(BOEjemplar.class, prestamo.getIdEjemplar());
-            if (ejemplar == null || !ejemplar.getActivo()) {
-                t.rollback();
-                return -1; 
-            }
+			BOEjemplar ejemplar = em.find(BOEjemplar.class, prestamo.getIdEjemplar());
+			if (ejemplar == null || !ejemplar.getActivo()) {
+				t.rollback();
+				return -1;
+			}
 
-            if (!"DISPONIBLE".equalsIgnoreCase(ejemplar.getEstado())) {
-                t.rollback();
-                return -1; 
-            }
+			if (!"DISPONIBLE".equalsIgnoreCase(ejemplar.getEstado())) {
+				t.rollback();
+				return -1;
+			}
 
-            BOPrestamo boPrestamo = new BOPrestamo();
-            boPrestamo.setSocio(socio);
-            boPrestamo.setEjemplar(ejemplar);
-            boPrestamo.setFechaInicial(new Date()); // Usar la del transfer o new Date()
-            boPrestamo.setFechaMaxima(prestamo.getFechaMaxima());
-            boPrestamo.setActivo(true);
-            boPrestamo.setPrecioMulta(0.0);
-            
-            ejemplar.setEstado("PRESTADO");
+			BOPrestamo boPrestamo = new BOPrestamo();
+			boPrestamo.setSocio(socio);
+			boPrestamo.setEjemplar(ejemplar);
+			boPrestamo.setFechaInicial(new Date());
+			boPrestamo.setFechaMaxima(prestamo.getFechaMaxima());
+			boPrestamo.setActivo(true);
+			boPrestamo.setPrecioMulta(0.0);
 
-            em.persist(boPrestamo);
-            
-            socio.getPrestamos().add(boPrestamo);
-            ejemplar.getPrestamos().add(boPrestamo);
+			ejemplar.setEstado("PRESTADO");
 
-            t.commit();
-            id = boPrestamo.getId();
+			em.persist(boPrestamo);
 
-        } catch (Exception e) {
-            if (t.isActive()) t.rollback();
-            e.printStackTrace();
-            return -1;
-        } finally {
-            em.close();
-        }
-        return id;
-    }
+			socio.getPrestamos().add(boPrestamo);
+			ejemplar.getPrestamos().add(boPrestamo);
 
-    @Override
-    public Integer bajaPrestamo(Integer idPrestamo) {
-        EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
-        EntityTransaction t = em.getTransaction();
-        try {
-            t.begin();
-            
-            BOPrestamo bo = em.find(BOPrestamo.class, idPrestamo);
+			t.commit();
+			id = boPrestamo.getId();
 
-            if (bo == null || !bo.getActivo()) {
-                t.rollback();
-                return -1; 
-            }
+		} catch (Exception e) {
+			if (t.isActive())
+				t.rollback();
+			e.printStackTrace();
+			return -1;
+		} finally {
+			em.close();
+		}
+		return id;
+	}
 
-            bo.setActivo(false);
+	@Override
+	public Integer bajaPrestamo(Integer idPrestamo) {
+		EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
+		EntityTransaction t = em.getTransaction();
+		try {
+			t.begin();
 
-            if (bo.getFechaDevuelto() == null && bo.getEjemplar() != null) {
-                bo.getEjemplar().setEstado("DISPONIBLE");
-            }
+			BOPrestamo bo = em.find(BOPrestamo.class, idPrestamo);
 
-            t.commit();
-            return bo.getId(); 
+			if (bo == null || !bo.getActivo()) {
+				t.rollback();
+				return -1;
+			}
 
-        } catch (Exception e) {
-            if (t.isActive()) t.rollback();
-            e.printStackTrace();
-            return -1;
-        } finally {
-            em.close();
-        }
-    }
+			bo.setActivo(false);
 
-    @Override
-    public Integer modificarPrestamo(TPrestamo prestamo) {
-        EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
-        EntityTransaction t = em.getTransaction();
-        try {
-            t.begin();
+			if (bo.getFechaDevuelto() == null && bo.getEjemplar() != null) {
+				bo.getEjemplar().setEstado("DISPONIBLE");
+			}
 
-            BOPrestamo bo = em.find(BOPrestamo.class, prestamo.getId());
+			t.commit();
+			return bo.getId();
 
-            if (bo == null || !bo.getActivo()) {
-                t.rollback();
-                return -1;
-            }
+		} catch (Exception e) {
+			if (t.isActive())
+				t.rollback();
+			e.printStackTrace();
+			return -1;
+		} finally {
+			em.close();
+		}
+	}
 
-            bo.setFechaMaxima(prestamo.getFechaMaxima());
-            bo.setPrecioMulta(prestamo.getPrecioMulta());
-            
-            if (bo.getEjemplar() != null) {
-                 if ("PRESTADO".equalsIgnoreCase(bo.getEjemplar().getEstado())) {
-                     bo.getEjemplar().setEstado("DISPONIBLE");
-                 }
-            }
+	@Override
+	public Integer modificarPrestamo(TPrestamo prestamo) {
+		EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
+		EntityTransaction t = em.getTransaction();
+		try {
+			t.begin();
 
-            t.commit();
-            return bo.getId();
+			BOPrestamo bo = em.find(BOPrestamo.class, prestamo.getId());
 
-        } catch (Exception e) {
-            if (t.isActive()) t.rollback();
-            e.printStackTrace();
-            return -1;
-        } finally {
-            em.close();
-        }
-    }
+			if (bo == null || !bo.getActivo()) {
+				t.rollback();
+				return -1;
+			}
 
-    @Override
-    public TPrestamo mostrarPrestamo(Integer idPrestamo) {
-        EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
-        try {
-            BOPrestamo bo = em.find(BOPrestamo.class, idPrestamo);
-            if (bo == null || !bo.getActivo()) {
-                return null;
-            }
-            return PrestamoAssembler.toDTO(bo);
-        } finally {
-            em.close();
-        }
-    }
+			bo.setFechaMaxima(prestamo.getFechaMaxima());
+			bo.setPrecioMulta(prestamo.getPrecioMulta());
 
-    @Override
-    public List<TPrestamo> listarPrestamo() {
-        EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
-        try {
-            TypedQuery<BOPrestamo> query = em.createQuery("SELECT p FROM BOPrestamo p WHERE p.activo = true", BOPrestamo.class);
-            
-            return query.getResultList().stream()
-                    .map(PrestamoAssembler::toDTO)
-                    .collect(Collectors.toList());
-        } catch (Exception e) {
-            e.printStackTrace();
-            return Collections.emptyList();
-        } finally {
-            em.close();
-        }
-    }
+			if (bo.getEjemplar() != null) {
+				if ("PRESTADO".equalsIgnoreCase(bo.getEjemplar().getEstado())) {
+					bo.getEjemplar().setEstado("DISPONIBLE");
+				}
+			}
+
+			t.commit();
+			return bo.getId();
+
+		} catch (Exception e) {
+			if (t.isActive())
+				t.rollback();
+			e.printStackTrace();
+			return -1;
+		} finally {
+			em.close();
+		}
+	}
+
+	@Override
+	public TPrestamo mostrarPrestamo(Integer idPrestamo) {
+		EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
+		try {
+			BOPrestamo bo = em.find(BOPrestamo.class, idPrestamo);
+			if (bo == null || !bo.getActivo()) {
+				return null;
+			}
+			return PrestamoAssembler.toDTO(bo);
+		} finally {
+			em.close();
+		}
+	}
+
+	@Override
+	public List<TPrestamo> listarPrestamo() {
+		EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
+		try {
+			TypedQuery<BOPrestamo> query = em.createQuery("SELECT p FROM BOPrestamo p WHERE p.activo = true",
+					BOPrestamo.class);
+
+			return query.getResultList().stream().map(PrestamoAssembler::toDTO).collect(Collectors.toList());
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Collections.emptyList();
+		} finally {
+			em.close();
+		}
+	}
 }

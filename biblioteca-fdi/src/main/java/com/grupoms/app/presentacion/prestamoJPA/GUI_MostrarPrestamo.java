@@ -22,11 +22,10 @@ import com.grupoms.app.presentacion.controlador.Evento;
 public class GUI_MostrarPrestamo extends JFrame implements IGUI {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	private JTextField campoId;
 	private JButton btnMostrar;
 
-	// Text fields
 	private JTextField campoValorId;
 	private JTextField campoValorIdEjemplar;
 	private JTextField campoValorIdSocio;
@@ -60,7 +59,6 @@ public class GUI_MostrarPrestamo extends JFrame implements IGUI {
 					return;
 				}
 
-				// Enviar al controlador
 				Context contexto = new Context(Evento.MOSTRAR_PRESTAMO, id);
 				Controlador.getInstance().handle(contexto);
 
@@ -70,51 +68,43 @@ public class GUI_MostrarPrestamo extends JFrame implements IGUI {
 		});
 
 		JPanel panelCampos = new JPanel();
-		panelCampos.setLayout(new GridLayout(8, 2, 5, 5)); // 8 rows, 2 columns
+		panelCampos.setLayout(new GridLayout(8, 2, 5, 5));
 
-		// -------------------- ID --------------------
 		JTextField campoValorId = new JTextField(15);
 		campoValorId.setEditable(false);
 		JLabel labelIdValor = new JLabel("ID:");
 		labelIdValor.setPreferredSize(campoValorId.getPreferredSize());
 
-		// -------------------- ID Ejemplar --------------------
 		JTextField campoValorIdEjemplar = new JTextField(15);
 		campoValorIdEjemplar.setEditable(false);
 		JLabel labelIdEjemplarValor = new JLabel("ID Ejemplar:");
 		labelIdEjemplarValor.setPreferredSize(campoValorIdEjemplar.getPreferredSize());
 
-		// -------------------- ID Socio --------------------
 		JTextField campoValorIdSocio = new JTextField(15);
 		campoValorIdSocio.setEditable(false);
 		JLabel labelIdSocioValor = new JLabel("ID Socio:");
 		labelIdSocioValor.setPreferredSize(campoValorIdSocio.getPreferredSize());
 
-		// -------------------- Fecha Inicial --------------------
 		JTextField campoValorFechaInicial = new JTextField(15);
 		campoValorFechaInicial.setEditable(false);
 		JLabel labelFechaInicialValor = new JLabel("Fecha Inicial:");
 		labelFechaInicialValor.setPreferredSize(campoValorFechaInicial.getPreferredSize());
 
-		// -------------------- Fecha Máxima --------------------
 		JTextField campoValorFechaMaxima = new JTextField(15);
 		campoValorFechaMaxima.setEditable(false);
 		JLabel labelFechaMaximaValor = new JLabel("Fecha Máxima:");
 		labelFechaMaximaValor.setPreferredSize(campoValorFechaMaxima.getPreferredSize());
 
-		// -------------------- Fecha Devuelto --------------------
 		JTextField campoValorFechaDevuelto = new JTextField(15);
 		campoValorFechaDevuelto.setEditable(false);
 		JLabel labelFechaDevueltoValor = new JLabel("Fecha Devuelto:");
 		labelFechaDevueltoValor.setPreferredSize(campoValorFechaDevuelto.getPreferredSize());
 
-		// -------------------- Precio Multa --------------------
 		JTextField campoValorPrecioMulta = new JTextField(15);
 		campoValorPrecioMulta.setEditable(false);
 		JLabel labelPrecioMultaValor = new JLabel("Precio Multa:");
 		labelPrecioMultaValor.setPreferredSize(campoValorPrecioMulta.getPreferredSize());
 
-		// -------------------- Activo --------------------
 		JTextField campoValorActivo = new JTextField(15);
 		campoValorActivo.setEditable(false);
 		JLabel labelActivoValor = new JLabel("Activo:");
@@ -127,14 +117,13 @@ public class GUI_MostrarPrestamo extends JFrame implements IGUI {
 		panel.add(labelId, gbc);
 		gbc.gridx = 1;
 		panel.add(campoId, gbc);
-		
+
 		y++;
 		gbc.gridx = 0;
 		gbc.gridy = y;
 		gbc.gridwidth = 2;
 		panel.add(btnMostrar, gbc);
 
-		// -------------------- ID --------------------
 		y++;
 		gbc.gridwidth = 1;
 		gbc.gridx = 0;
@@ -143,7 +132,6 @@ public class GUI_MostrarPrestamo extends JFrame implements IGUI {
 		gbc.gridx = 1;
 		panel.add(campoValorId, gbc);
 
-		// -------------------- ID Ejemplar --------------------
 		y++;
 		gbc.gridx = 0;
 		gbc.gridy = y;
@@ -151,7 +139,6 @@ public class GUI_MostrarPrestamo extends JFrame implements IGUI {
 		gbc.gridx = 1;
 		panel.add(campoValorIdEjemplar, gbc);
 
-		// -------------------- ID Socio --------------------
 		y++;
 		gbc.gridx = 0;
 		gbc.gridy = y;
@@ -159,7 +146,6 @@ public class GUI_MostrarPrestamo extends JFrame implements IGUI {
 		gbc.gridx = 1;
 		panel.add(campoValorIdSocio, gbc);
 
-		// -------------------- Fecha Inicial --------------------
 		y++;
 		gbc.gridx = 0;
 		gbc.gridy = y;
@@ -167,7 +153,6 @@ public class GUI_MostrarPrestamo extends JFrame implements IGUI {
 		gbc.gridx = 1;
 		panel.add(campoValorFechaInicial, gbc);
 
-		// -------------------- Fecha Máxima --------------------
 		y++;
 		gbc.gridx = 0;
 		gbc.gridy = y;
@@ -175,7 +160,6 @@ public class GUI_MostrarPrestamo extends JFrame implements IGUI {
 		gbc.gridx = 1;
 		panel.add(campoValorFechaMaxima, gbc);
 
-		// -------------------- Fecha Devuelto --------------------
 		y++;
 		gbc.gridx = 0;
 		gbc.gridy = y;
@@ -183,7 +167,6 @@ public class GUI_MostrarPrestamo extends JFrame implements IGUI {
 		gbc.gridx = 1;
 		panel.add(campoValorFechaDevuelto, gbc);
 
-		// -------------------- Precio Multa --------------------
 		y++;
 		gbc.gridx = 0;
 		gbc.gridy = y;
@@ -191,7 +174,6 @@ public class GUI_MostrarPrestamo extends JFrame implements IGUI {
 		gbc.gridx = 1;
 		panel.add(campoValorPrecioMulta, gbc);
 
-		// -------------------- Activo --------------------
 		y++;
 		gbc.gridx = 0;
 		gbc.gridy = y;
@@ -218,10 +200,10 @@ public class GUI_MostrarPrestamo extends JFrame implements IGUI {
 			campoValorFechaDevuelto.setText(String.valueOf(prestamo.getFechaDevuelto()));
 			campoValorPrecioMulta.setText(String.valueOf(prestamo.getPrecioMulta()));
 
-			if (prestamo.getActivo()) {    // or getActivo()
-			    campoValorActivo.setText("Sí");
+			if (prestamo.getActivo()) {
+				campoValorActivo.setText("Sí");
 			} else {
-			    campoValorActivo.setText("No");
+				campoValorActivo.setText("No");
 			}
 
 		} else if (context.getEvento() == Evento.MOSTRAR_EJEMPLAR_KO) {

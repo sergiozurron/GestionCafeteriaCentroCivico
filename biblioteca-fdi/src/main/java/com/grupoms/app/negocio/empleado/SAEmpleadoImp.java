@@ -10,167 +10,172 @@ import com.grupoms.app.integracion.empleado.DAOEmpleadoImp;
 
 public class SAEmpleadoImp implements SAEmpleado {
 
-    DAOEmpleado dao = new DAOEmpleadoImp();
+	DAOEmpleado dao = new DAOEmpleadoImp();
 
-    @Override
-    public Integer crearEmpleado(TEmpleado empleado) {
-        Transaction t = null;
-        Integer idGenerado = null;
+	@Override
+	public Integer crearEmpleado(TEmpleado empleado) {
+		Transaction t = null;
+		Integer idGenerado = null;
 
-        try {
-            // 1. Iniciar transacción
-            t = TransactionManager.getInstance().newTransaction();
-            t.start();
+		try {
 
-            // 2. Inicializar campos del empleado
-            if (empleado == null)
-                throw new IllegalArgumentException("El empleado no puede ser nulo.");
-            empleado.setActivo(true); // por defecto alta lógica
+			t = TransactionManager.getInstance().newTransaction();
+			t.start();
 
-            // 3. Crear
-            idGenerado = dao.crearEmpleado(empleado);
+			if (empleado == null)
+				throw new IllegalArgumentException("El empleado no puede ser nulo.");
+			empleado.setActivo(true);
 
-            // 4. Commit
-            t.commit();
+			idGenerado = dao.crearEmpleado(empleado);
 
-        } catch (Exception e) {
-            e.printStackTrace();
-            if (t != null) {
-                try { t.rollback(); } catch (Exception ex) { ex.printStackTrace(); }
-            }
-        }
+			t.commit();
 
-        return idGenerado;
-    }
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (t != null) {
+				try {
+					t.rollback();
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
+			}
+		}
 
-    @Override
-    public Boolean bajaEmpleado(TEmpleado empleado) {
-        Transaction t = null;
-        Boolean exito = false;
+		return idGenerado;
+	}
 
-        try {
-            // 1. Iniciar transacción
-            t = TransactionManager.getInstance().newTransaction();
-            t.start();
+	@Override
+	public Boolean bajaEmpleado(TEmpleado empleado) {
+		Transaction t = null;
+		Boolean exito = false;
 
-            // 2. Validación e inicialización
-            if (empleado == null || empleado.getID() == null || empleado.getID() <= 0)
-                throw new IllegalArgumentException("El empleado debe tener un ID válido para dar de baja.");
+		try {
 
-            // baja lógica
-            empleado.setActivo(false);
+			t = TransactionManager.getInstance().newTransaction();
+			t.start();
 
-            // 3. Ejecutar
-            dao.bajaEmpleado(empleado);
+			if (empleado == null || empleado.getID() == null || empleado.getID() <= 0)
+				throw new IllegalArgumentException("El empleado debe tener un ID válido para dar de baja.");
 
-            // 4. Commit
-            t.commit();
-            exito = true;
+			empleado.setActivo(false);
 
-        } catch (Exception e) {
-            e.printStackTrace();
-            if (t != null) {
-                try { t.rollback(); } catch (Exception ex) { ex.printStackTrace(); }
-            }
-        }
+			dao.bajaEmpleado(empleado);
 
-        return exito;
-    }
+			t.commit();
+			exito = true;
 
-    @Override
-    public Boolean modificarEmpleado(TEmpleado empleado) {
-        Transaction t = null;
-        Boolean exito = false;
-        TEmpleado emp = null;
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (t != null) {
+				try {
+					t.rollback();
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
+			}
+		}
 
-        try {
-            // 1. Iniciar transacción
-            t = TransactionManager.getInstance().newTransaction();
-            t.start();
+		return exito;
+	}
 
-            // 2. Validaciones
-            if (empleado == null || empleado.getID() == null || empleado.getID() <= 0)
-                throw new IllegalArgumentException("El empleado debe tener un ID válido para modificar.");
+	@Override
+	public Boolean modificarEmpleado(TEmpleado empleado) {
+		Transaction t = null;
+		Boolean exito = false;
+		TEmpleado emp = null;
 
-            // 3. Comprobar existencia
-            emp = dao.mostrarEmpleado(empleado.getID());
-            if (emp == null)
-                throw new IllegalArgumentException("El empleado con ID " + empleado.getID() + " no existe.");
+		try {
 
-            // 4. Modificar
-            exito = dao.modificarEmpleado(empleado);
+			t = TransactionManager.getInstance().newTransaction();
+			t.start();
 
-            // 5. Commit
-            t.commit();
+			if (empleado == null || empleado.getID() == null || empleado.getID() <= 0)
+				throw new IllegalArgumentException("El empleado debe tener un ID válido para modificar.");
 
-        } catch (Exception e) {
-            e.printStackTrace();
-            if (t != null) {
-                try { t.rollback(); } catch (Exception ex) { ex.printStackTrace(); }
-            }
-        }
+			emp = dao.mostrarEmpleado(empleado.getID());
+			if (emp == null)
+				throw new IllegalArgumentException("El empleado con ID " + empleado.getID() + " no existe.");
 
-        return exito;
-    }
+			exito = dao.modificarEmpleado(empleado);
 
-    @Override
-    public TEmpleado mostrarEmpleado(Integer ID) {
-       if (ID == null || ID <= 0)
-        throw new IllegalArgumentException("El ID del empleado no es válido.");
+			t.commit();
 
-    Transaction t = null;
-    TEmpleado emp = null;
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (t != null) {
+				try {
+					t.rollback();
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
+			}
+		}
 
-    try {
-        // Iniciar transacción
-        t = TransactionManager.getInstance().newTransaction();
-        t.start();
+		return exito;
+	}
 
-        // Consultar empleado
-        emp = dao.mostrarEmpleado(ID);
+	@Override
+	public TEmpleado mostrarEmpleado(Integer ID) {
+		if (ID == null || ID <= 0)
+			throw new IllegalArgumentException("El ID del empleado no es válido.");
 
-        // Commit si todo va bien
-        t.commit();
+		Transaction t = null;
+		TEmpleado emp = null;
 
-    } catch (Exception e) {
-        e.printStackTrace();
-        if (t != null) {
-            try { t.rollback(); } catch (Exception ex) { ex.printStackTrace(); }
-        }
-        // No relanzamos excepción: dejamos que el Command decida qué hacer
-    }
+		try {
 
-    return emp; 
-    }
+			t = TransactionManager.getInstance().newTransaction();
+			t.start();
 
-    @Override
-    public List<TEmpleado> mostrarListaEmpleados() {
-        List<TEmpleado> listaEmpleadosActivos = new ArrayList<>();
-        Transaction t = null;
+			emp = dao.mostrarEmpleado(ID);
 
-        try {
-            // 1. Iniciar transacción
-            t = TransactionManager.getInstance().newTransaction();
-            t.start();
+			t.commit();
 
-            // 2. Obtener todos y filtrar activos
-            List<TEmpleado> todos = dao.mostrarListaEmpleados();
-            for (TEmpleado e : todos) {
-                if (e.getActivo()) {
-                    listaEmpleadosActivos.add(e);
-                }
-            }
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (t != null) {
+				try {
+					t.rollback();
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
+			}
 
-            // 3. Commit
-            t.commit();
+		}
 
-        } catch (Exception e) {
-            e.printStackTrace();
-            if (t != null) {
-                try { t.rollback(); } catch (Exception ex) { ex.printStackTrace(); }
-            }
-        }
+		return emp;
+	}
 
-        return listaEmpleadosActivos;
-    }
+	@Override
+	public List<TEmpleado> mostrarListaEmpleados() {
+		List<TEmpleado> listaEmpleadosActivos = new ArrayList<>();
+		Transaction t = null;
+
+		try {
+
+			t = TransactionManager.getInstance().newTransaction();
+			t.start();
+
+			List<TEmpleado> todos = dao.mostrarListaEmpleados();
+			for (TEmpleado e : todos) {
+				if (e.getActivo()) {
+					listaEmpleadosActivos.add(e);
+				}
+			}
+
+			t.commit();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (t != null) {
+				try {
+					t.rollback();
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
+			}
+		}
+
+		return listaEmpleadosActivos;
+	}
 }

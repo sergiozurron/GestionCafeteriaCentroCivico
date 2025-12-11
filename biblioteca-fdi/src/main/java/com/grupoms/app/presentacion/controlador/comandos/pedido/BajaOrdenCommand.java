@@ -7,23 +7,23 @@ import com.grupoms.app.presentacion.controlador.Context;
 import com.grupoms.app.presentacion.controlador.Evento;
 import com.grupoms.app.presentacion.controlador.comandos.Command;
 
-public class BajaOrdenCommand implements Command{
+public class BajaOrdenCommand implements Command {
 
-    @Override
-    public Context execute(Object data) {
-        if (!(data instanceof TOrden)) {
-            return new Context(Evento.BAJA_ORDEN_KO, null);
-        }
+	@Override
+	public Context execute(Object data) {
+		if (!(data instanceof TOrden)) {
+			return new Context(Evento.BAJA_ORDEN_KO, null);
+		}
 
-        TOrden orden = (TOrden) data;
-        SAOrden saOrden = FactoriaSA.getInstance().creaSAOrden();
+		TOrden orden = (TOrden) data;
+		SAOrden saOrden = FactoriaSA.getInstance().creaSAOrden();
 
-        try {
-            saOrden.bajaOrden(orden);
-            return new Context(Evento.BAJA_ORDEN_OK, orden);
-        } catch (Exception e) {
-            return new Context(Evento.BAJA_ORDEN_KO, null);
-        }
-    }
-    
+		try {
+			saOrden.bajaOrden(orden);
+			return new Context(Evento.BAJA_ORDEN_OK, orden);
+		} catch (Exception e) {
+			return new Context(Evento.BAJA_ORDEN_KO, null);
+		}
+	}
+
 }

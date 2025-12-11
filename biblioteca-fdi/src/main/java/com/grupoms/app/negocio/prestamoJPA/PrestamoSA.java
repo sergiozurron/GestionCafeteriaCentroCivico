@@ -4,14 +4,14 @@ import java.util.List;
 
 public interface PrestamoSA {
 
-    public Integer altaPrestamo(TPrestamo prestamo);
+	public Integer altaPrestamo(TPrestamo prestamo);
 
-    public Integer bajaPrestamo(Integer idPrestamo);
+	public Integer bajaPrestamo(Integer idPrestamo);
 
-    public Integer modificarPrestamo(TPrestamo prestamo);
+	public Integer modificarPrestamo(TPrestamo prestamo);
 
-    public TPrestamo mostrarPrestamo(Integer idPrestamo);
+	public TPrestamo mostrarPrestamo(Integer idPrestamo);
 
-    public List<TPrestamo> listarPrestamo();
+	public List<TPrestamo> listarPrestamo();
 
 }

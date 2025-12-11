@@ -51,11 +51,9 @@ public class GUI_AltaEjemplar extends JFrame implements IGUI {
 				return;
 			}
 
-			// Crear TEjemplar
 			TEjemplar ejemplar = new TEjemplar();
 			ejemplar.setIdMaterial(idMaterial);
 
-			// Enviar al controlador
 			Context contexto = new Context(Evento.ALTA_EJEMPLAR, ejemplar);
 			Controlador.getInstance().handle(contexto);
 

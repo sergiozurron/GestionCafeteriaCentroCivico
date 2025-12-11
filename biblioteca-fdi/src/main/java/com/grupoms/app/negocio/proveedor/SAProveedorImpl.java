@@ -22,9 +22,9 @@ public class SAProveedorImpl implements SAProveedor {
 			if (proveedorExistente != null) {
 				if (proveedorExistente.getActivo()) {
 					tx.commit();
-					return -1; // Ya existe y está activo
+					return -1;
 				}
-				// Reactivar proveedor existente
+
 				proveedorExistente.setActivo(true);
 				proveedorExistente.setTarifa(tProveedor.getTarifa());
 				proveedorExistente.setTiempoEntrega(tProveedor.getTiempoEntrega());
@@ -39,7 +39,11 @@ public class SAProveedorImpl implements SAProveedor {
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (tx != null) {
-				try { tx.rollback(); } catch (Exception ex) { ex.printStackTrace(); }
+				try {
+					tx.rollback();
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
 			}
 		}
 		return idGenerado;
@@ -54,14 +58,12 @@ public class SAProveedorImpl implements SAProveedor {
 			DAOProveedor daoProveedor = FactoriaDAO.getInstancia().creaDAOProveedor();
 			tx.start();
 
-			// Verificar existencia
 			TProveedor proveedorExistente = daoProveedor.buscaPorId(tProveedor.getId());
 			if (proveedorExistente == null || !proveedorExistente.getActivo()) {
 				tx.commit();
 				return false;
 			}
 
-			// Baja lógica
 			proveedorExistente.setActivo(false);
 			exito = daoProveedor.baja(proveedorExistente);
 
@@ -69,7 +71,11 @@ public class SAProveedorImpl implements SAProveedor {
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (tx != null) {
-				try { tx.rollback(); } catch (Exception ex) { ex.printStackTrace(); }
+				try {
+					tx.rollback();
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
 			}
 		}
 		return exito;
@@ -84,30 +90,31 @@ public class SAProveedorImpl implements SAProveedor {
 			DAOProveedor daoProveedor = FactoriaDAO.getInstancia().creaDAOProveedor();
 			tx.start();
 
-			// Verificar existencia
 			TProveedor proveedorExistente = daoProveedor.buscaPorId(tProveedor.getId());
 			if (proveedorExistente == null) {
 				tx.commit();
 				return false;
 			}
 
-			// Verificar nombre único si se cambió
 			if (!proveedorExistente.getNombre().equals(tProveedor.getNombre())) {
 				TProveedor otroPorNombre = daoProveedor.buscaPorNombre(tProveedor.getNombre());
 				if (otroPorNombre != null) {
 					tx.commit();
-					return false; // Nombre duplicado
+					return false;
 				}
 			}
 
-			// Modificar
 			exito = daoProveedor.actualiza(tProveedor);
 
 			tx.commit();
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (tx != null) {
-				try { tx.rollback(); } catch (Exception ex) { ex.printStackTrace(); }
+				try {
+					tx.rollback();
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
 			}
 		}
 		return exito;

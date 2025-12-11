@@ -11,188 +11,179 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.TypedQuery;
 
-public class MaterialSAImp implements MaterialSA{
+public class MaterialSAImp implements MaterialSA {
 
 	@Override
 	public Integer altaMaterial(TMaterial material) {
 		BOMaterial materialExistente = null;
 		Integer id = -1;
-		BOPintura pintura=null;
-		BOLibro libro =null;
-		
+		BOPintura pintura = null;
+		BOLibro libro = null;
+
 		EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
 		EntityTransaction t = em.getTransaction();
 		try {
 			t.begin();
-			TypedQuery<BOMaterial> query = em.createNamedQuery("com.grupoms.app.negocio.materialJPA.BOMaterial.findByName", BOMaterial.class);
+			TypedQuery<BOMaterial> query = em
+					.createNamedQuery("com.grupoms.app.negocio.materialJPA.BOMaterial.findByName", BOMaterial.class);
 			query.setParameter("nombre", material.getNombre());
 			try {
 				materialExistente = query.getSingleResult();
-			}catch(Exception e){
-				//No hay material existente con ese nombre
+			} catch (Exception e) {
+
 			}
-			if(materialExistente!=null) { //si ya existe
-				if(!materialExistente.getActivo()) { //si no esta activo, lo activo
+			if (materialExistente != null) {
+				if (!materialExistente.getActivo()) {
 					materialExistente.setActivo(true);
-					id=materialExistente.getID();
-				}else {
-					throw new IllegalStateException("El material con nombre "+ material.getNombre()+ " ya existe");
-				}	
-			}else {
-				 if (material instanceof TPintura pinturaDTO) {
+					id = materialExistente.getID();
+				} else {
+					throw new IllegalStateException("El material con nombre " + material.getNombre() + " ya existe");
+				}
+			} else {
+				if (material instanceof TPintura pinturaDTO) {
 
-			            pintura = new BOPintura(pinturaDTO);
-			            em.persist(pintura);
-			            em.flush();
-			            id = pintura.getID();
+					pintura = new BOPintura(pinturaDTO);
+					em.persist(pintura);
+					em.flush();
+					id = pintura.getID();
 
-			        } else if (material instanceof TLibro libroDTO) {
+				} else if (material instanceof TLibro libroDTO) {
 
-			            libro = new BOLibro(libroDTO);
-			            em.persist(libro);
-			            em.flush();
-			            id = libro.getID();
+					libro = new BOLibro(libroDTO);
+					em.persist(libro);
+					em.flush();
+					id = libro.getID();
 
-			        }
+				}
 			}
 			t.commit();
-		}catch(Exception e) {
-			if(t.isActive())
+		} catch (Exception e) {
+			if (t.isActive())
 				t.rollback();
 			throw e;
-		}finally {
+		} finally {
 			em.close();
 		}
 		return id;
 	}
-	
-	
+
 	@Override
 	public Integer bajaMaterial(Integer id) throws Exception {
-	    EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
-	    EntityTransaction t = em.getTransaction();
-	    try {
-	        t.begin();
+		EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
+		EntityTransaction t = em.getTransaction();
+		try {
+			t.begin();
 
-	        BOMaterial material = em.find(BOMaterial.class, id);
+			BOMaterial material = em.find(BOMaterial.class, id);
 
-	        if (material == null || !material.getActivo()) {
-	            t.rollback();
-	            throw new Exception("El material no existe o ya está inactivo.");
-	        }
+			if (material == null || !material.getActivo()) {
+				t.rollback();
+				throw new Exception("El material no existe o ya está inactivo.");
+			}
 
-	        if (!material.getEjemplares().isEmpty()) {
-	            t.rollback();
-	            throw new Exception("Elimine primero los ejemplares asociados a este material.");
-	        }
+			if (!material.getEjemplares().isEmpty()) {
+				t.rollback();
+				throw new Exception("Elimine primero los ejemplares asociados a este material.");
+			}
 
-	        material.setActivo(false);
-	        t.commit();
-	        return 1; 
-	    } catch (Exception e) {
-	        if (t.isActive()) t.rollback();
-	        throw e; 
-	    } finally {
-	        em.close();
-	    }
+			material.setActivo(false);
+			t.commit();
+			return 1;
+		} catch (Exception e) {
+			if (t.isActive())
+				t.rollback();
+			throw e;
+		} finally {
+			em.close();
+		}
 	}
 
 	@Override
 	public List<TMaterial> listarMateriales() {
-		//Empiezo la transaccion y creo el emf
+
 		EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
 		EntityTransaction t = em.getTransaction();
 		t.begin();
-		
-		//Ejecuto la query
-		final TypedQuery<BOMaterial> query = em.createNamedQuery("com.grupoms.app.negocio.materialJPA.BOMaterial.findAll", BOMaterial.class);
-		List<TMaterial> lista = query
-                .getResultList()
-                .stream()
-                .map(bo -> {
-                    if (bo instanceof BOLibro libro)
-                        return LibroAssembler.toDTO(libro);
-                    else if (bo instanceof BOPintura pintura)
-                        return PinturaAssembler.toDTO(pintura);
-                    else
-                        return MaterialAssembler.entityToTransfer(bo); // fallback
-                })
-                .collect(Collectors.toList());
-		
-		//guardo la transaccion
+
+		final TypedQuery<BOMaterial> query = em
+				.createNamedQuery("com.grupoms.app.negocio.materialJPA.BOMaterial.findAll", BOMaterial.class);
+		List<TMaterial> lista = query.getResultList().stream().map(bo -> {
+			if (bo instanceof BOLibro libro)
+				return LibroAssembler.toDTO(libro);
+			else if (bo instanceof BOPintura pintura)
+				return PinturaAssembler.toDTO(pintura);
+			else
+				return MaterialAssembler.entityToTransfer(bo);
+		}).collect(Collectors.toList());
+
 		t.commit();
-		
-		//cierro el em
+
 		em.close();
 		return lista;
 	}
-	
+
 	@Override
 	public Integer modificarMaterial(TMaterial material) {
-	    Integer id = -1;
-	    EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
-	    EntityTransaction t = em.getTransaction();
-	    t.begin();
-	    try {
-	        BOMaterial m = em.find(BOMaterial.class, material.getID());
+		Integer id = -1;
+		EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
+		EntityTransaction t = em.getTransaction();
+		t.begin();
+		try {
+			BOMaterial m = em.find(BOMaterial.class, material.getID());
 
-	        if (m == null) {
-	            em.close();
-	            throw new IllegalArgumentException("El ID del material no existe o no está activo.");
-	        }
-	        else {
-		        // Actualizar campos comunes
-		        m.setNombre(material.getNombre());
-		        m.setAutor(material.getAutor());
-		        m.setTipoMaterial(material.getTipoMaterial());
-		        
-		        // Actualizar campos específicos según tipo
-		        if (material.getTipoMaterial() == 0) {        // Pintura
-		            TPintura pintura = (TPintura) material;
-		            BOPintura boPintura = (BOPintura) m;
-		            boPintura.setFecha(pintura.getFecha());
-		            boPintura.setNumero(pintura.getNumero());
-	
-		        } else if (material.getTipoMaterial() == 1) { // Libro
-		            TLibro libro = (TLibro) material;
-		            BOLibro boLibro = (BOLibro) m;
-		            boLibro.setISBN(libro.getISBN());
-		            boLibro.setEditorial(libro.getEditorial());
-		        }
-	        }
-	        t.commit();
-	        id = material.getID();
+			if (m == null) {
+				em.close();
+				throw new IllegalArgumentException("El ID del material no existe o no está activo.");
+			} else {
 
-	    } finally {
-	        em.close();
-	    }
+				m.setNombre(material.getNombre());
+				m.setAutor(material.getAutor());
+				m.setTipoMaterial(material.getTipoMaterial());
 
-	    return id;
+				if (material.getTipoMaterial() == 0) {
+					TPintura pintura = (TPintura) material;
+					BOPintura boPintura = (BOPintura) m;
+					boPintura.setFecha(pintura.getFecha());
+					boPintura.setNumero(pintura.getNumero());
+
+				} else if (material.getTipoMaterial() == 1) {
+					TLibro libro = (TLibro) material;
+					BOLibro boLibro = (BOLibro) m;
+					boLibro.setISBN(libro.getISBN());
+					boLibro.setEditorial(libro.getEditorial());
+				}
+			}
+			t.commit();
+			id = material.getID();
+
+		} finally {
+			em.close();
+		}
+
+		return id;
 	}
-
 
 	@Override
 	public TMaterial mostrarMaterial(Integer id) {
-		if(id==null ||id<0)return null;
-		//Empiezo la transacccion
+		if (id == null || id < 0)
+			return null;
+
 		EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
 		BOMaterial material = em.find(BOMaterial.class, id);
-		if(material==null || !material.getActivo()) {
+		if (material == null || !material.getActivo()) {
 			em.close();
 			return null;
 		}
 		TMaterial dto;
 		if (material instanceof BOLibro libro) {
-		    dto = LibroAssembler.toDTO(libro);  // devuelve TLibro
+			dto = LibroAssembler.toDTO(libro);
 		} else if (material instanceof BOPintura pintura) {
-		    dto = PinturaAssembler.toDTO(pintura); // devuelve TPintura
+			dto = PinturaAssembler.toDTO(pintura);
 		} else {
-		    dto = MaterialAssembler.entityToTransfer(material); // solo TMaterial
+			dto = MaterialAssembler.entityToTransfer(material);
 		}
 		return dto;
-		
-		//usamos optimistic para poder detectar cambios concurrentes
-		
+
 	}
 
 }

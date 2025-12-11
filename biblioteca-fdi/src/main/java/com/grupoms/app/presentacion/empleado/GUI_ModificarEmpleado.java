@@ -11,134 +11,140 @@ import com.grupoms.app.presentacion.controlador.Evento;
 
 public class GUI_ModificarEmpleado extends JFrame implements IGUI {
 
-    private JTextField id;
-    private JTextField nombre;
-    private JTextField dondeAtiende;
-    private JTextField sueldo;
-    private JCheckBox activo;
+	private JTextField id;
+	private JTextField nombre;
+	private JTextField dondeAtiende;
+	private JTextField sueldo;
+	private JCheckBox activo;
 
-    private JButton modificar;
+	private JButton modificar;
 
-    public GUI_ModificarEmpleado() {
-        super("Modificar Empleado");
-        initGUI();
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        pack();
-        setLocationRelativeTo(null);
-    }
+	public GUI_ModificarEmpleado() {
+		super("Modificar Empleado");
+		initGUI();
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		pack();
+		setLocationRelativeTo(null);
+	}
 
-    @Override
-    public void actualizar(Context context) {
-    	if (context == null)
-    		setVisible(true);
-    	else if (context.getEvento() == Evento.MODIFICAR_EMPLEADO_OK) {
-            JOptionPane.showMessageDialog(this, "Empleado modificado con éxito");
-            // limpiar campos
-            id.setText("");
-            nombre.setText("");
-            dondeAtiende.setText("");
-            sueldo.setText("");
-            activo.setSelected(true);
-        } else if (context.getEvento() == Evento.MODIFICAR_EMPLEADO_KO) {
-            JOptionPane.showMessageDialog(this, "No se ha podido modificar el empleado");
-        }
-    }
+	@Override
+	public void actualizar(Context context) {
+		if (context == null)
+			setVisible(true);
+		else if (context.getEvento() == Evento.MODIFICAR_EMPLEADO_OK) {
+			JOptionPane.showMessageDialog(this, "Empleado modificado con éxito");
 
-    private void initGUI() {
-        setLayout(new BorderLayout());
-        JPanel panel = new JPanel(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(8, 8, 8, 8);
-        gbc.fill = GridBagConstraints.HORIZONTAL;
+			id.setText("");
+			nombre.setText("");
+			dondeAtiende.setText("");
+			sueldo.setText("");
+			activo.setSelected(true);
+		} else if (context.getEvento() == Evento.MODIFICAR_EMPLEADO_KO) {
+			JOptionPane.showMessageDialog(this, "No se ha podido modificar el empleado");
+		}
+	}
 
-        // Componentes
-        JLabel labelId = new JLabel("ID Empleado:");
-        id = new JTextField(10);
+	private void initGUI() {
+		setLayout(new BorderLayout());
+		JPanel panel = new JPanel(new GridBagLayout());
+		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.insets = new Insets(8, 8, 8, 8);
+		gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        JLabel labelNombre = new JLabel("Nombre Empleado:");
-        nombre = new JTextField(12);
+		JLabel labelId = new JLabel("ID Empleado:");
+		id = new JTextField(10);
 
-        JLabel labelDonde = new JLabel("Donde atiende:");
-        dondeAtiende = new JTextField(12);
+		JLabel labelNombre = new JLabel("Nombre Empleado:");
+		nombre = new JTextField(12);
 
-        JLabel labelSueldo = new JLabel("Sueldo:");
-        sueldo = new JTextField(10);
+		JLabel labelDonde = new JLabel("Donde atiende:");
+		dondeAtiende = new JTextField(12);
 
-        JLabel labelActivo = new JLabel("Activo:");
-        activo = new JCheckBox();
-        activo.setSelected(true);
+		JLabel labelSueldo = new JLabel("Sueldo:");
+		sueldo = new JTextField(10);
 
-        modificar = new JButton("Modificar Empleado");
-        modificar.addActionListener(e -> {
-            try {
-                Integer idEmp = Integer.parseInt(id.getText().trim());
-                String nombreEmp = nombre.getText().trim();
-                String dondeEmp = dondeAtiende.getText().trim();
-                Double sueldoEmp = Double.parseDouble(sueldo.getText().trim());
-                Boolean activoEmp = activo.isSelected();
+		JLabel labelActivo = new JLabel("Activo:");
+		activo = new JCheckBox();
+		activo.setSelected(true);
 
-                if (idEmp <= 0) {
-                    JOptionPane.showMessageDialog(this, "El ID debe ser mayor que 0");
-                    return;
-                }
-                if (nombreEmp.isEmpty()) {
-                    JOptionPane.showMessageDialog(this, "El nombre no puede estar vacío");
-                    return;
-                }
-                if (sueldoEmp < 0) {
-                    JOptionPane.showMessageDialog(this, "El sueldo no puede ser negativo");
-                    return;
-                }
+		modificar = new JButton("Modificar Empleado");
+		modificar.addActionListener(e -> {
+			try {
+				Integer idEmp = Integer.parseInt(id.getText().trim());
+				String nombreEmp = nombre.getText().trim();
+				String dondeEmp = dondeAtiende.getText().trim();
+				Double sueldoEmp = Double.parseDouble(sueldo.getText().trim());
+				Boolean activoEmp = activo.isSelected();
 
-                TEmpleado emp = new TEmpleado();
-                emp.setID(idEmp);
-                emp.setNombre(nombreEmp);
-                emp.setDondeAtiende(dondeEmp);
-                emp.setSueldo(sueldoEmp);
-                emp.setActivo(activoEmp);
+				if (idEmp <= 0) {
+					JOptionPane.showMessageDialog(this, "El ID debe ser mayor que 0");
+					return;
+				}
+				if (nombreEmp.isEmpty()) {
+					JOptionPane.showMessageDialog(this, "El nombre no puede estar vacío");
+					return;
+				}
+				if (sueldoEmp < 0) {
+					JOptionPane.showMessageDialog(this, "El sueldo no puede ser negativo");
+					return;
+				}
 
-                Context contexto = new Context(Evento.MODIFICAR_EMPLEADO, emp);
-                Controlador.getInstance().handle(contexto);
+				TEmpleado emp = new TEmpleado();
+				emp.setID(idEmp);
+				emp.setNombre(nombreEmp);
+				emp.setDondeAtiende(dondeEmp);
+				emp.setSueldo(sueldoEmp);
+				emp.setActivo(activoEmp);
 
-            } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(this, "Error: ID y sueldo deben ser numéricos válidos");
-            }
-        });
+				Context contexto = new Context(Evento.MODIFICAR_EMPLEADO, emp);
+				Controlador.getInstance().handle(contexto);
 
-        int y = 0;
-        gbc.gridx = 0; gbc.gridy = y;
-        panel.add(labelId, gbc);
-        gbc.gridx = 1;
-        panel.add(id, gbc);
+			} catch (NumberFormatException ex) {
+				JOptionPane.showMessageDialog(this, "Error: ID y sueldo deben ser numéricos válidos");
+			}
+		});
 
-        y++;
-        gbc.gridx = 0; gbc.gridy = y;
-        panel.add(labelNombre, gbc);
-        gbc.gridx = 1;
-        panel.add(nombre, gbc);
+		int y = 0;
+		gbc.gridx = 0;
+		gbc.gridy = y;
+		panel.add(labelId, gbc);
+		gbc.gridx = 1;
+		panel.add(id, gbc);
 
-        y++;
-        gbc.gridx = 0; gbc.gridy = y;
-        panel.add(labelDonde, gbc);
-        gbc.gridx = 1;
-        panel.add(dondeAtiende, gbc);
+		y++;
+		gbc.gridx = 0;
+		gbc.gridy = y;
+		panel.add(labelNombre, gbc);
+		gbc.gridx = 1;
+		panel.add(nombre, gbc);
 
-        y++;
-        gbc.gridx = 0; gbc.gridy = y;
-        panel.add(labelSueldo, gbc);
-        gbc.gridx = 1;
-        panel.add(sueldo, gbc);
+		y++;
+		gbc.gridx = 0;
+		gbc.gridy = y;
+		panel.add(labelDonde, gbc);
+		gbc.gridx = 1;
+		panel.add(dondeAtiende, gbc);
 
-        y++;
-        gbc.gridx = 0; gbc.gridy = y;
-        panel.add(labelActivo, gbc);
-        gbc.gridx = 1;
-        panel.add(activo, gbc);
+		y++;
+		gbc.gridx = 0;
+		gbc.gridy = y;
+		panel.add(labelSueldo, gbc);
+		gbc.gridx = 1;
+		panel.add(sueldo, gbc);
 
-        y++;
-        gbc.gridx = 0; gbc.gridy = y; gbc.gridwidth = 2;
-        panel.add(modificar, gbc);
+		y++;
+		gbc.gridx = 0;
+		gbc.gridy = y;
+		panel.add(labelActivo, gbc);
+		gbc.gridx = 1;
+		panel.add(activo, gbc);
 
-        add(panel, BorderLayout.CENTER);
-    }
+		y++;
+		gbc.gridx = 0;
+		gbc.gridy = y;
+		gbc.gridwidth = 2;
+		panel.add(modificar, gbc);
+
+		add(panel, BorderLayout.CENTER);
+	}
 }

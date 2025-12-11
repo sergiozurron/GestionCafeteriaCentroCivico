@@ -10,7 +10,7 @@ public class GUIVincularPromocionASocioTest {
     @Test
     public void actualizar_nullContext_doesNotThrow() {
         GUI_VincularPromocionASocio gui = new GUI_VincularPromocionASocio();
-        // Llamada a actualizar con null no debe lanzar excepciones
+        
         gui.actualizar(null);
         gui.dispose();
     }
@@ -20,7 +20,7 @@ public class GUIVincularPromocionASocioTest {
         GUI_VincularPromocionASocio gui = new GUI_VincularPromocionASocio();
         Context ok = new Context(Evento.VINCULAR_PROMOCION_OK, null);
         Context ko = new Context(Evento.VINCULAR_PROMOCION_KO, null);
-        // Llamadas: no lanzan excepciones
+        
         gui.actualizar(ok);
         gui.actualizar(ko);
         gui.dispose();

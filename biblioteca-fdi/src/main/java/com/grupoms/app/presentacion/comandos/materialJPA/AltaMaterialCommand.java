@@ -7,21 +7,21 @@ import com.grupoms.app.presentacion.controlador.Context;
 import com.grupoms.app.presentacion.controlador.Evento;
 import com.grupoms.app.presentacion.controlador.comandos.Command;
 
-public class AltaMaterialCommand implements Command{
+public class AltaMaterialCommand implements Command {
 
 	@Override
 	public Context execute(Object data) {
 		int res = -1, event;
-        TMaterial material = (TMaterial) data;
-        MaterialSA sa = FactoriaSA.getInstance().creaSAMaterial();
-        
-        res = sa.altaMaterial(material);
-        if(res<0) {
-        	event = Evento.ALTA_MATERIAL_KO;
-        }else {
-        	event=Evento.ALTA_MATERIAL_OK;
-        }
-        return new Context(event,res);
+		TMaterial material = (TMaterial) data;
+		MaterialSA sa = FactoriaSA.getInstance().creaSAMaterial();
+
+		res = sa.altaMaterial(material);
+		if (res < 0) {
+			event = Evento.ALTA_MATERIAL_KO;
+		} else {
+			event = Evento.ALTA_MATERIAL_OK;
+		}
+		return new Context(event, res);
 	}
 
 }

@@ -7,27 +7,27 @@ import com.grupoms.app.presentacion.controlador.Context;
 import com.grupoms.app.presentacion.controlador.Evento;
 import com.grupoms.app.presentacion.controlador.comandos.Command;
 
-public class ModificarPedidoCommand implements Command{
+public class ModificarPedidoCommand implements Command {
 
-    @Override
-    public Context execute(Object data) {
-         if (!(data instanceof TPedido)) {
-            return new Context(Evento.MODIFICAR_PEDIDO_KO, null);
-        }
+	@Override
+	public Context execute(Object data) {
+		if (!(data instanceof TPedido)) {
+			return new Context(Evento.MODIFICAR_PEDIDO_KO, null);
+		}
 
-        TPedido pedido = (TPedido) data;
-        SAPedido saPedido = FactoriaSA.getInstance().creaSAPedido();
+		TPedido pedido = (TPedido) data;
+		SAPedido saPedido = FactoriaSA.getInstance().creaSAPedido();
 
-        try {
-            Integer resultado = saPedido.modificarPedido(pedido);
-            if (resultado == null || resultado <= 0) {
-                return new Context(Evento.MODIFICAR_PEDIDO_KO, null);
-            }
-            pedido.setId(resultado);
-            return new Context(Evento.MODIFICAR_PEDIDO_OK, pedido);
-        } catch (Exception e) {
-            return new Context(Evento.MODIFICAR_PEDIDO_KO, null);
-        }
-    }
-    
+		try {
+			Integer resultado = saPedido.modificarPedido(pedido);
+			if (resultado == null || resultado <= 0) {
+				return new Context(Evento.MODIFICAR_PEDIDO_KO, null);
+			}
+			pedido.setId(resultado);
+			return new Context(Evento.MODIFICAR_PEDIDO_OK, pedido);
+		} catch (Exception e) {
+			return new Context(Evento.MODIFICAR_PEDIDO_KO, null);
+		}
+	}
+
 }

@@ -9,108 +9,111 @@ import com.grupoms.app.presentacion.controlador.Context;
 import com.grupoms.app.presentacion.controlador.Controlador;
 import com.grupoms.app.presentacion.controlador.Evento;
 
-public class GUI_ModificarIngrediente  extends JFrame implements IGUI{
-    private JTextField nombre;
-    private JTextField id;
-    private JTextField precio;
-    private JTextField prov;
+public class GUI_ModificarIngrediente extends JFrame implements IGUI {
+	private JTextField nombre;
+	private JTextField id;
+	private JTextField precio;
+	private JTextField prov;
 
-    
-    private JButton crear;
+	private JButton crear;
 
-    public GUI_ModificarIngrediente(){
-       super("Modificar Ingrediente");
-       initGUI(); //iniciamos el front por asi decirlo
-       setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); //destruye la ventana sin cerrar la app
-       pack(); //ajusta
-       setLocationRelativeTo(null); //centra
-    }
-    @Override
-    public void actualizar(Context context) {
-        if (context == null) {
-            setVisible(true);
-        } else if (context.getEvento() == Evento.MODIFICAR_INGREDIENTE_OK) {
-            // Muestra mensaje de éxito
-            JOptionPane.showMessageDialog(this, "Ingrediente modificado con éxito");
-            // Limpia los campos para la siguiente entrada
-            id.setText("");
-            nombre.setText("");
-            precio.setText("");
-            prov.setText("");
-        } else if(context.getEvento() == Evento.MODIFICAR_INGREDIENTE_KO){
-            JOptionPane.showMessageDialog(this, "No se ha podido modificar el ingrediente");
+	public GUI_ModificarIngrediente() {
+		super("Modificar Ingrediente");
+		initGUI();
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		pack();
+		setLocationRelativeTo(null);
+	}
 
-        }
-    }
-    
-    public void initGUI(){
-        setLayout(new BorderLayout()); //layout general
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(8, 8, 8, 8);
-        gbc.fill = GridBagConstraints.HORIZONTAL;
+	@Override
+	public void actualizar(Context context) {
+		if (context == null) {
+			setVisible(true);
+		} else if (context.getEvento() == Evento.MODIFICAR_INGREDIENTE_OK) {
 
-        JPanel panel = new JPanel(new GridBagLayout()); //panel principal
+			JOptionPane.showMessageDialog(this, "Ingrediente modificado con éxito");
 
-        JLabel labelId = new JLabel("ID Ingrediente:");
-        id = new JTextField(10);
-        JLabel labelNombre = new JLabel("Nombre Ingrediente:");
-        nombre = new JTextField(10);
+			id.setText("");
+			nombre.setText("");
+			precio.setText("");
+			prov.setText("");
+		} else if (context.getEvento() == Evento.MODIFICAR_INGREDIENTE_KO) {
+			JOptionPane.showMessageDialog(this, "No se ha podido modificar el ingrediente");
 
-        JLabel labelPrecio = new JLabel("Precio:");
-        precio = new JTextField(10);
+		}
+	}
 
-        JLabel labelProv = new JLabel("ID proveedor:");
-        prov = new JTextField(10);
+	public void initGUI() {
+		setLayout(new BorderLayout());
+		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.insets = new Insets(8, 8, 8, 8);
+		gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        crear = new JButton("Modificar Ingrediente");
-        crear.addActionListener(e -> {
-            try {
-                String nombrerI = nombre.getText();
-                Double precioI = Double.parseDouble(precio.getText());
-                Integer provI = Integer.parseInt(prov.getText());
-                Integer idi = Integer.parseInt(id.getText());
-                // Crear el TPedido directamente aquí
-                TIngrediente ingr = new TIngrediente();
-                ingr.setNombre(nombrerI);
-                ingr.setPrecio(precioI);
-                ingr.setIDProveedor(provI);
-                ingr.setID(idi);
-                // Enviar al controlador
-                Context contexto = new Context(Evento.MODIFICAR_INGREDIENTE, ingr);
-                Controlador.getInstance().handle(contexto);
+		JPanel panel = new JPanel(new GridBagLayout());
 
-            } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(this, "Error: los campos numéricos no son válidos");
-            }
-        });
+		JLabel labelId = new JLabel("ID Ingrediente:");
+		id = new JTextField(10);
+		JLabel labelNombre = new JLabel("Nombre Ingrediente:");
+		nombre = new JTextField(10);
 
-        gbc.gridx = 0; gbc.gridy = 0;
-        panel.add(labelId, gbc);
-        gbc.gridx = 1;
-        panel.add(id, gbc);
+		JLabel labelPrecio = new JLabel("Precio:");
+		precio = new JTextField(10);
 
-        gbc.gridx = 0; gbc.gridy = 1;
-        panel.add(labelNombre, gbc);
-        gbc.gridx = 1;
-        panel.add(nombre, gbc);
+		JLabel labelProv = new JLabel("ID proveedor:");
+		prov = new JTextField(10);
 
-        gbc.gridx = 0; gbc.gridy = 2;
-        panel.add(labelPrecio, gbc);
-        gbc.gridx = 1;
-        panel.add(precio, gbc);
+		crear = new JButton("Modificar Ingrediente");
+		crear.addActionListener(e -> {
+			try {
+				String nombrerI = nombre.getText();
+				Double precioI = Double.parseDouble(precio.getText());
+				Integer provI = Integer.parseInt(prov.getText());
+				Integer idi = Integer.parseInt(id.getText());
 
-        gbc.gridx = 0; gbc.gridy = 3;
-        panel.add(labelProv, gbc);
-        gbc.gridx = 1;
-        panel.add(prov, gbc);
+				TIngrediente ingr = new TIngrediente();
+				ingr.setNombre(nombrerI);
+				ingr.setPrecio(precioI);
+				ingr.setIDProveedor(provI);
+				ingr.setID(idi);
 
-        gbc.gridx = 0; gbc.gridy = 4; 
-        gbc.gridwidth = 2;
-        panel.add(crear, gbc);
-        
+				Context contexto = new Context(Evento.MODIFICAR_INGREDIENTE, ingr);
+				Controlador.getInstance().handle(contexto);
 
-        add(panel, BorderLayout.CENTER);
-    }
-    
-    
+			} catch (NumberFormatException ex) {
+				JOptionPane.showMessageDialog(this, "Error: los campos numéricos no son válidos");
+			}
+		});
+
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		panel.add(labelId, gbc);
+		gbc.gridx = 1;
+		panel.add(id, gbc);
+
+		gbc.gridx = 0;
+		gbc.gridy = 1;
+		panel.add(labelNombre, gbc);
+		gbc.gridx = 1;
+		panel.add(nombre, gbc);
+
+		gbc.gridx = 0;
+		gbc.gridy = 2;
+		panel.add(labelPrecio, gbc);
+		gbc.gridx = 1;
+		panel.add(precio, gbc);
+
+		gbc.gridx = 0;
+		gbc.gridy = 3;
+		panel.add(labelProv, gbc);
+		gbc.gridx = 1;
+		panel.add(prov, gbc);
+
+		gbc.gridx = 0;
+		gbc.gridy = 4;
+		gbc.gridwidth = 2;
+		panel.add(crear, gbc);
+
+		add(panel, BorderLayout.CENTER);
+	}
+
 }

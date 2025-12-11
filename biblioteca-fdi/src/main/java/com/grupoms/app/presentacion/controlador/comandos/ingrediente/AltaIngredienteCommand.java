@@ -8,25 +8,24 @@ import com.grupoms.app.presentacion.controlador.Context;
 import com.grupoms.app.presentacion.controlador.Evento;
 import com.grupoms.app.presentacion.controlador.comandos.Command;
 
-public class AltaIngredienteCommand implements Command{
+public class AltaIngredienteCommand implements Command {
 
-    @Override
-    public Context execute(Object data) {
-       if (!(data instanceof TIngrediente)) {
-            return new Context(Evento.ALTA_INGREDIENTE_KO, null);
-        }
+	@Override
+	public Context execute(Object data) {
+		if (!(data instanceof TIngrediente)) {
+			return new Context(Evento.ALTA_INGREDIENTE_KO, null);
+		}
 
-        TIngrediente ingr = (TIngrediente) data;
-        SAIngrediente sa = FactoriaSA.getInstance().creaSAIngrediente();
+		TIngrediente ingr = (TIngrediente) data;
+		SAIngrediente sa = FactoriaSA.getInstance().creaSAIngrediente();
 
-        try {
-            Integer id = sa.crearIngrediente(ingr);
-            return (id != null)
-                ? new Context(Evento.ALTA_INGREDIENTE_OK, ingr)
-                : new Context(Evento.ALTA_INGREDIENTE_KO, null);
-        } catch (IllegalArgumentException e) {
-            return new Context(Evento.ALTA_INGREDIENTE_KO, null);
-        }
-    }
-    
+		try {
+			Integer id = sa.crearIngrediente(ingr);
+			return (id != null) ? new Context(Evento.ALTA_INGREDIENTE_OK, ingr)
+					: new Context(Evento.ALTA_INGREDIENTE_KO, null);
+		} catch (IllegalArgumentException e) {
+			return new Context(Evento.ALTA_INGREDIENTE_KO, null);
+		}
+	}
+
 }

@@ -10,17 +10,17 @@ import com.grupoms.app.presentacion.controlador.Context;
 import com.grupoms.app.presentacion.controlador.Evento;
 import com.grupoms.app.presentacion.controlador.comandos.Command;
 
-public class ListarIngredientesPorProductoCommand implements Command{
+public class ListarIngredientesPorProductoCommand implements Command {
 
-    @Override
-    public Context execute(Object data) {
-        SAIngrediente saProducto = FactoriaSA.getInstance().creaSAIngrediente();
-        try {
-            List<TIngrediente> productos = saProducto.mostrarIngredientePorProducto((Integer) data);
-            return new Context(Evento.MOSTRAR_INGREDIENTES_OK, productos);
-        } catch (Exception e) {
-            return new Context(Evento.MOSTRAR_INGREDIENTES_KO, null);
-        }
-    }
-    
+	@Override
+	public Context execute(Object data) {
+		SAIngrediente saProducto = FactoriaSA.getInstance().creaSAIngrediente();
+		try {
+			List<TIngrediente> productos = saProducto.mostrarIngredientePorProducto((Integer) data);
+			return new Context(Evento.MOSTRAR_INGREDIENTES_OK, productos);
+		} catch (Exception e) {
+			return new Context(Evento.MOSTRAR_INGREDIENTES_KO, null);
+		}
+	}
+
 }

@@ -14,80 +14,74 @@ import java.util.List;
 
 public class GUI_ListarSala extends JFrame implements IGUI {
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    private JTable tabla;
-    private DefaultTableModel modeloTabla;
-    private JButton botonCargar;
+	private JTable tabla;
+	private DefaultTableModel modeloTabla;
+	private JButton botonCargar;
 
-    public GUI_ListarSala() {
-        setTitle("Listado de Salas");
-        // He reducido un poco el ancho ya que ahora hay una columna menos
-        setSize(500, 500); 
-        setLocationRelativeTo(null);
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        initGUI();
-    }
+	public GUI_ListarSala() {
+		setTitle("Listado de Salas");
 
-    private void initGUI() {
-        JPanel panelPrincipal = new JPanel(new BorderLayout());
+		setSize(500, 500);
+		setLocationRelativeTo(null);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		initGUI();
+	}
 
-        // --- Configuración de la tabla ---
-        modeloTabla = new DefaultTableModel();
-        modeloTabla.addColumn("ID");
-        modeloTabla.addColumn("Nombre");
-        modeloTabla.addColumn("Capacidad");
-        // Eliminada: modeloTabla.addColumn("Activo");
+	private void initGUI() {
+		JPanel panelPrincipal = new JPanel(new BorderLayout());
 
-        tabla = new JTable(modeloTabla);
-        JScrollPane scrollPane = new JScrollPane(tabla);
+		modeloTabla = new DefaultTableModel();
+		modeloTabla.addColumn("ID");
+		modeloTabla.addColumn("Nombre");
+		modeloTabla.addColumn("Capacidad");
 
-        // --- Botón para cargar salas ---
-        botonCargar = new JButton("Cargar Salas");
-        botonCargar.addActionListener(e -> {
-            try {
-                // Asegúrate de que el evento aquí coincida con el que espera tu controlador
-                Context contexto = new Context(Evento.LISTAR_SALA, null);
-                Controlador.getInstance().handle(contexto);
-            } catch (Exception ex) {
-                ex.printStackTrace();
-                JOptionPane.showMessageDialog(this, "Error al cargar salas: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-            }
-        });
+		tabla = new JTable(modeloTabla);
+		JScrollPane scrollPane = new JScrollPane(tabla);
 
-        panelPrincipal.add(scrollPane, BorderLayout.CENTER);
-        panelPrincipal.add(botonCargar, BorderLayout.SOUTH);
-        add(panelPrincipal);
-    }
+		botonCargar = new JButton("Cargar Salas");
+		botonCargar.addActionListener(e -> {
+			try {
 
-    @SuppressWarnings("unchecked")
-    @Override
-    public void actualizar(Context context) {
-        if (context == null) {
-            setVisible(true);
-            return;
-        }
+				Context contexto = new Context(Evento.LISTAR_SALA, null);
+				Controlador.getInstance().handle(contexto);
+			} catch (Exception ex) {
+				ex.printStackTrace();
+				JOptionPane.showMessageDialog(this, "Error al cargar salas: " + ex.getMessage(), "Error",
+						JOptionPane.ERROR_MESSAGE);
+			}
+		});
 
-        // IMPORTANTE: Asegúrate de que Evento.LISTAR_SALAS_OK es el nombre correcto del evento de éxito
-        if (context.getEvento() == Evento.LISTAR_SALAS_OK) { 
-            modeloTabla.setRowCount(0); // Limpia la tabla
-            List<TSala> salas = (List<TSala>) context.getDatos();
+		panelPrincipal.add(scrollPane, BorderLayout.CENTER);
+		panelPrincipal.add(botonCargar, BorderLayout.SOUTH);
+		add(panelPrincipal);
+	}
 
-            if (salas == null || salas.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "No hay salas en la base de datos.");
-                return;
-            }
+	@SuppressWarnings("unchecked")
+	@Override
+	public void actualizar(Context context) {
+		if (context == null) {
+			setVisible(true);
+			return;
+		}
 
-            for (TSala s : salas) {
-                modeloTabla.addRow(new Object[]{
-                    s.getId(),
-                    s.getNombre(),
-                    s.getCapacidad()
-                    // Eliminado el dato de activo del array de la fila
-                });
-            }
-        } else if (context.getEvento() == Evento.LISTAR_SALAS_KO) {
-            JOptionPane.showMessageDialog(this, "Error al cargar las salas.");
-        }
-    }
+		if (context.getEvento() == Evento.LISTAR_SALAS_OK) {
+			modeloTabla.setRowCount(0);
+			List<TSala> salas = (List<TSala>) context.getDatos();
+
+			if (salas == null || salas.isEmpty()) {
+				JOptionPane.showMessageDialog(this, "No hay salas en la base de datos.");
+				return;
+			}
+
+			for (TSala s : salas) {
+				modeloTabla.addRow(new Object[] { s.getId(), s.getNombre(), s.getCapacidad()
+
+				});
+			}
+		} else if (context.getEvento() == Evento.LISTAR_SALAS_KO) {
+			JOptionPane.showMessageDialog(this, "Error al cargar las salas.");
+		}
+	}
 }

@@ -8,9 +8,9 @@ import com.grupoms.app.presentacion.factoria.FactoriaVistas;
 public class App {
 
 	public static void main(String[] args) {
-		// Inicializar el EntityManager al inicio de la aplicación
+
 		EntityManagerSingleton.getEMF().createEntityManager();
-		FactoriaVistas.getInstance(); // Inicializar vistas
+		FactoriaVistas.getInstance();
 		SwingUtilities.invokeLater(() -> new Principal());
 	}
 }

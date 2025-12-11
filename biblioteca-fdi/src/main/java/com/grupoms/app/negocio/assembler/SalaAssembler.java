@@ -10,17 +10,17 @@ public class SalaAssembler {
 		dto.setNombre(bo.getNombre());
 		dto.setCapacidad(bo.getCapacidad());
 		dto.setActivo(bo.getActivo());
-		
+
 		return dto;
 	}
-	
+
 	protected static BOSala transferToEntity(TSala dto) {
 		BOSala bo = new BOSala();
 		bo.setId(dto.getId());
 		bo.setNombre(dto.getNombre());
 		bo.setCapacidad(bo.getCapacidad());
 		bo.setActivo(bo.getActivo());
-		
+
 		return bo;
 	}
 }

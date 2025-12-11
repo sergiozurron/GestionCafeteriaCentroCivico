@@ -2,7 +2,6 @@ package com.grupoms.app.negocio.assembler;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import com.grupoms.app.negocio.ClaseJPA.BOClase;
 import com.grupoms.app.negocio.ClaseJPA.TClase;
@@ -11,53 +10,49 @@ import com.grupoms.app.negocio.salaJPA.BOSala;
 
 public class ClaseAssembler {
 
-    // ---- 1) Entity -> Transfer ----
+	public static TClase entityToTransfer(BOClase bo) {
+		if (bo == null)
+			return null;
 
-    public static TClase entityToTransfer(BOClase bo) {
-        if (bo == null) return null;
+		TClase dto = new TClase();
+		dto.setId(bo.getId());
+		dto.setTipo(bo.getTipo());
+		dto.setFechaInicio(bo.getFechaInicio());
+		dto.setDuracion(bo.getDuracion());
+		dto.setActivo(bo.getActivo());
 
-        TClase dto = new TClase();
-        dto.setId(bo.getId());
-        dto.setTipo(bo.getTipo());
-        dto.setFechaInicio(bo.getFechaInicio());
-        dto.setDuracion(bo.getDuracion());
-        dto.setActivo(bo.getActivo());
+		if (bo.getSala() != null) {
+			dto.setIdSala(bo.getSala().getId());
+		}
 
-        // Mapeo de la Sala
-        if (bo.getSala() != null) {
-            dto.setIdSala(bo.getSala().getId());
-        }
+		List<Integer> idsEjemplares = new ArrayList<>();
 
-        List<Integer> idsEjemplares = new ArrayList<>();
-        
-        if (bo.getEjemplares() != null) {
-            
-            for (BOEjemplar ejemplar : bo.getEjemplares()) {
-                idsEjemplares.add(ejemplar.getId());
-            }
-        }
-        
-        dto.setEjemplares(idsEjemplares);
+		if (bo.getEjemplares() != null) {
 
-        return dto;
-    }
+			for (BOEjemplar ejemplar : bo.getEjemplares()) {
+				idsEjemplares.add(ejemplar.getId());
+			}
+		}
 
-    // ---- 2) Transfer -> Entity ----
+		dto.setEjemplares(idsEjemplares);
 
-    public static BOClase transferToEntity(TClase dto) {
-        BOClase bo = new BOClase();
-        bo.setId(dto.getId());
-        bo.setTipo(dto.getTipo());
-        bo.setFechaInicio(dto.getFechaInicio());
-        bo.setDuracion(dto.getDuracion());
-        bo.setActivo(dto.getActivo());
+		return dto;
+	}
 
-        if (dto.getIdSala() != null) {
-            BOSala salaProxy = new BOSala();
-            salaProxy.setId(dto.getIdSala());
-            bo.setSala(salaProxy);
-        }
+	public static BOClase transferToEntity(TClase dto) {
+		BOClase bo = new BOClase();
+		bo.setId(dto.getId());
+		bo.setTipo(dto.getTipo());
+		bo.setFechaInicio(dto.getFechaInicio());
+		bo.setDuracion(dto.getDuracion());
+		bo.setActivo(dto.getActivo());
 
-        return bo;
-    }
+		if (dto.getIdSala() != null) {
+			BOSala salaProxy = new BOSala();
+			salaProxy.setId(dto.getIdSala());
+			bo.setSala(salaProxy);
+		}
+
+		return bo;
+	}
 }

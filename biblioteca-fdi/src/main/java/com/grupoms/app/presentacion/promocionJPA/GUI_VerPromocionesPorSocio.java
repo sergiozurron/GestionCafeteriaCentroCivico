@@ -52,14 +52,13 @@ public class GUI_VerPromocionesPorSocio extends JFrame implements IGUI {
         gbc.gridx = 0;
         gbc.gridy = 2;
         gbc.gridwidth = 2;
-        gbc.fill = GridBagConstraints.BOTH; // Importante para que se expanda
+        gbc.fill = GridBagConstraints.BOTH; 
         panel.add(scrollPane, gbc);
 
         add(panel, BorderLayout.CENTER);
 
         verPromociones.addActionListener(e -> {
             String id = idSocio.getText().trim();
-            // Limpiamos el área antes de buscar
             resultado.setText("");
             Context context = new Context(Evento.VER_PROMOCIONES_POR_SOCIO, id);
             Controlador.getInstance().handle(context);
@@ -91,7 +90,6 @@ public class GUI_VerPromocionesPorSocio extends JFrame implements IGUI {
                                .append("\n----------------------------------------------------\n");
                     }
                 }
-                // Aquí seteamos el texto en la caja en lugar del Popup
                 resultado.setText(mensaje.toString());
                 break;
                 

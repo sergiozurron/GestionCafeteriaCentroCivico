@@ -45,21 +45,19 @@ public class GUI_MostrarSociosPorPromocion extends JFrame implements IGUI {
         gbc.gridwidth = 2;
         panel.add(verSocios, gbc);
 
-        // Configuración del JTextArea
         resultado = new JTextArea(10, 40);
         resultado.setEditable(false);
         JScrollPane scrollPane = new JScrollPane(resultado);
         gbc.gridx = 0;
         gbc.gridy = 2;
         gbc.gridwidth = 2;
-        gbc.fill = GridBagConstraints.BOTH; // Importante para que se expanda
+        gbc.fill = GridBagConstraints.BOTH;
         panel.add(scrollPane, gbc);
 
         add(panel, BorderLayout.CENTER);
 
         verSocios.addActionListener(e -> {
             String id = idPromocion.getText().trim();
-            // Limpiamos el área antes de buscar
             resultado.setText(""); 
             Context context = new Context(Evento.MOSTRAR_SOCIOS_POR_PROMOCION, id);
             Controlador.getInstance().handle(context);

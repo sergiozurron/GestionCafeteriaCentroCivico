@@ -112,7 +112,7 @@ public class GUI_MostrarClasesPorSala extends JFrame implements IGUI {
 			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 
 			if (clases.isEmpty()) {
-				mensaje.append("No se han encontrado clases asignadas a esta sala.");
+				JOptionPane.showMessageDialog(this, "Error al buscar las clases de la sala.\nComprueba que la sala existe.", "Error", JOptionPane.ERROR_MESSAGE);
 			} else {
 				for (TClase clase : clases) {
 					mensaje.append("ID Clase:     ").append(clase.getId()).append("\n");
@@ -136,11 +136,8 @@ public class GUI_MostrarClasesPorSala extends JFrame implements IGUI {
 			}
 
 			resultadoArea.setText(mensaje.toString());
-			// Posicionar el scroll arriba del todo
 			resultadoArea.setCaretPosition(0);
 			
-			// Opcional: Si quieres mantener el popup también
-			// JOptionPane.showMessageDialog(this, mensaje.toString(), "Listado de Clases por Sala", JOptionPane.INFORMATION_MESSAGE);
 			break;
 
 		case Evento.MOSTRAR_CLASES_POR_SALA_KO:

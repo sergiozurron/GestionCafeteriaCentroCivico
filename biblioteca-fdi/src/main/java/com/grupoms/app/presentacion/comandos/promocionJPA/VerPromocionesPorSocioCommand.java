@@ -11,10 +11,10 @@ public class VerPromocionesPorSocioCommand implements Command {
 	@Override
 	public Context execute(Object data) {
 		int event;
-		Integer idSocio = (Integer) data;
+		String idSocio = (String) data;
 		PromocionSA sa = FactoriaSA.getInstance().creaSAPromocion();
 
-		java.util.List<TPromocion> promociones = sa.VerPromocionesPorSocio(idSocio);
+		java.util.List<TPromocion> promociones = sa.VerPromocionesPorSocio(Integer.parseInt(idSocio));
 		if (promociones != null) {
 			event = Evento.VER_PROMOCIONES_POR_SOCIO_OK;
 		} else {

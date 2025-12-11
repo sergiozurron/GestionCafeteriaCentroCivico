@@ -26,12 +26,26 @@ import com.grupoms.app.presentacion.comandos.prestamoJPA.BajaPrestamoCommand;
 import com.grupoms.app.presentacion.comandos.prestamoJPA.ListarPrestamosCommand;
 import com.grupoms.app.presentacion.comandos.prestamoJPA.ModificarPrestamoCommand;
 import com.grupoms.app.presentacion.comandos.prestamoJPA.MostrarPrestamoCommand;
+import com.grupoms.app.presentacion.comandos.promocionJPA.AltaPromocionCommand;
+import com.grupoms.app.presentacion.comandos.promocionJPA.BajaPromocionCommand;
+import com.grupoms.app.presentacion.comandos.promocionJPA.ListarPromocionCommand;
+import com.grupoms.app.presentacion.comandos.promocionJPA.ModificarPromocionCommand;
+import com.grupoms.app.presentacion.comandos.promocionJPA.MostrarPromocionCommand;
+import com.grupoms.app.presentacion.comandos.promocionJPA.VerPromocionesPorSocioCommand;
 import com.grupoms.app.presentacion.comandos.salaJPA.AltaSalaCommand;
 import com.grupoms.app.presentacion.comandos.salaJPA.BajaSalaCommand;
 import com.grupoms.app.presentacion.comandos.salaJPA.ListarSalasCommand;
 import com.grupoms.app.presentacion.comandos.salaJPA.ModificarSalaCommand;
+import com.grupoms.app.presentacion.comandos.salaJPA.MostrarClasesPorSalaCommand;
 import com.grupoms.app.presentacion.comandos.salaJPA.MostrarSalaCommand;
-import com.grupoms.app.presentacion.comandos.socioJPA.*;
+import com.grupoms.app.presentacion.comandos.socioJPA.AltaSocioCommand;
+import com.grupoms.app.presentacion.comandos.socioJPA.BajaSocioCommand;
+import com.grupoms.app.presentacion.comandos.socioJPA.DesvincularPromocionASocioCommand;
+import com.grupoms.app.presentacion.comandos.socioJPA.ListarSociosCommand;
+import com.grupoms.app.presentacion.comandos.socioJPA.ModificarSocioCommand;
+import com.grupoms.app.presentacion.comandos.socioJPA.MostrarSocioCommand;
+import com.grupoms.app.presentacion.comandos.socioJPA.MostrarSociosPorPromocionCommand;
+import com.grupoms.app.presentacion.comandos.socioJPA.VincularPromocionASocioCommand;
 import com.grupoms.app.presentacion.controlador.Evento;
 import com.grupoms.app.presentacion.controlador.comandos.empleado.AltaEmpleadoCommand;
 import com.grupoms.app.presentacion.controlador.comandos.empleado.BajaEmpleadoCommand;
@@ -67,13 +81,6 @@ import com.grupoms.app.presentacion.controlador.comandos.proveedor.BajaProveedor
 import com.grupoms.app.presentacion.controlador.comandos.proveedor.ModificarProveedorCommand;
 import com.grupoms.app.presentacion.controlador.comandos.proveedor.MostrarListaProveedoresCommand;
 import com.grupoms.app.presentacion.controlador.comandos.proveedor.MostrarProveedorCommand;
-import com.grupoms.app.presentacion.comandos.promocionJPA.AltaPromocionCommand;
-import com.grupoms.app.presentacion.comandos.promocionJPA.BajaPromocionCommand;
-import com.grupoms.app.presentacion.comandos.promocionJPA.ListarPromocionCommand;
-import com.grupoms.app.presentacion.comandos.promocionJPA.ModificarPromocionCommand;
-import com.grupoms.app.presentacion.comandos.promocionJPA.MostrarPromocionCommand;
-import com.grupoms.app.presentacion.comandos.promocionJPA.VerPromocionesPorSocioCommand;
-
 import com.grupoms.app.presentacion.factoria.FactoriaVistas;
 
 public class FactoryCommandImp extends FactoryCommand {
@@ -150,6 +157,7 @@ public class FactoryCommandImp extends FactoryCommand {
 		commands.put(Evento.MODIFICAR_SALA, new ModificarSalaCommand());
 		commands.put(Evento.MOSTRAR_SALA, new MostrarSalaCommand());
 		commands.put(Evento.LISTAR_SALA, new ListarSalasCommand());
+		commands.put(Evento.MOSTRAR_CLASES_POR_SALA, new MostrarClasesPorSalaCommand());
 
 		commands.put(Evento.ALTA_PRESTAMO, new AltaPrestamoCommand());
 		commands.put(Evento.BAJA_PRESTAMO, new BajaPrestamoCommand());
@@ -244,6 +252,7 @@ public class FactoryCommandImp extends FactoryCommand {
 		views.put(Evento.LISTAR_SALA, FactoriaVistas.GUI_LISTAR_SALA);
 		views.put(Evento.MOSTRAR_SALA, FactoriaVistas.GUI_MOSTRAR_SALA);
 		views.put(Evento.MODIFICAR_SALA, FactoriaVistas.GUI_MODIFICAR_SALA);
+		views.put(Evento.MOSTRAR_CLASES_POR_SALA, FactoriaVistas.GUI_MOSTRAR_CLASES_POR_SALA);
 
 		views.put(Evento.ALTA_CLASE, FactoriaVistas.GUI_ALTA_CLASE);
 		views.put(Evento.BAJA_CLASE, FactoriaVistas.GUI_BAJA_CLASE);

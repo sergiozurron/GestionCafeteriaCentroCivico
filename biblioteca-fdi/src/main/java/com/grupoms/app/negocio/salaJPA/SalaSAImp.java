@@ -1,5 +1,6 @@
 package com.grupoms.app.negocio.salaJPA;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -185,27 +186,29 @@ public class SalaSAImp implements SalaSA {
 
 	@Override
 	public List<TClase> mostrarClasesPorSala(Integer idSala) {
-		EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
-		EntityTransaction t = em.getTransaction();
-		t.begin();
+	    EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
+	    
+	    List<TClase> lista = new ArrayList<>(); 
 
-		List<TClase> lista = Collections.emptyList();
+	    try {
+	        final TypedQuery<BOClase> query = em.createNamedQuery("com.grupoms.app.negocio.claseJPA.BOClase.findBySala", BOClase.class);
+	        query.setParameter("idSala", idSala);
 
-		try {
-			final TypedQuery<BOClase> query = em.createNamedQuery("com.grupoms.app.negocio.claseJPA.BOClase.findBySala",
-					BOClase.class);
-			query.setParameter("idSala", idSala);
+	        lista = query.getResultList().stream()
+	                     .map(ClaseAssembler::entityToTransfer)
+	                     .collect(Collectors.toList());
 
-			lista = query.getResultList().stream().map(ClaseAssembler::entityToTransfer).collect(Collectors.toList());
+	    } catch (Exception e) {
+	        System.err.println("Error al obtener clases por sala: " + e.getMessage());
+	        e.printStackTrace(); 
 
-			t.commit();
-		} catch (Exception e) {
-			if (t.isActive())
-				t.rollback();
-			e.printStackTrace();
-		} finally {
-			em.close();
-		}
-		return lista;
+	        
+	    } finally {
+	        if (em != null && em.isOpen()) {
+	            em.close();
+	        }
+	    }
+	    
+	    return lista;
 	}
 }

@@ -258,13 +258,9 @@ public class Evento {
 	public static final int LISTAR_SALAS_OK = 613;
 	public static final int LISTAR_SALAS_KO = 614;
 
-	public static final int VINCULAR_CLASE_SALA = 615;
-	public static final int VINCULAR_CLASE_SALA_OK = 616;
-	public static final int VINCULAR_CLASE_SALA_KO = 617;
-
-	public static final int DESVINCULAR_CLASE_SALA = 618;
-	public static final int DESVINCULAR_CLASE_SALA_OK = 619;
-	public static final int DESVINCULAR_CLASE_SALA_KO = 620;
+	public static final int MOSTRAR_CLASES_POR_SALA = 615;
+	public static final int MOSTRAR_CLASES_POR_SALA_OK = 616;
+	public static final int MOSTRAR_CLASES_POR_SALA_KO = 617;
 
 	public static final int ALTA_SOCIO = 650;
 	public static final int ALTA_SOCIO_OK = 651;

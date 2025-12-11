@@ -20,31 +20,29 @@ import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.Version;
 
-
 @Entity
 @NamedQueries({
-	@NamedQuery(
-	        name = "com.grupoms.app.negocio.claseJPA.BOClase.findByTipo",
-	        query = "SELECT c FROM BOClase c WHERE c.tipo = :tipo"
-	    ),
-	@NamedQuery(
-		    name = "com.grupoms.app.negocio.claseJPA.BOClase.findByTipoAndFecha",
-		    query = "SELECT c FROM BOClase c WHERE c.tipo = :tipo AND c.fechaInicio = :fechaInicio"
-		),
-	    @NamedQuery(
-	        name = "com.grupoms.app.negocio.claseJPA.BOClase.findAll",
-	        query = "SELECT c FROM BOClase c"
-	    ),
-	    @NamedQuery(
-	        name = "com.grupoms.app.negocio.claseJPA.BOClase.findBySala",
-	        query = "SELECT c FROM BOClase c WHERE c.sala.id = :idSala AND c.activo = true"
-	    )
-	})
+    @NamedQuery(
+        name = "com.grupoms.app.negocio.claseJPA.BOClase.findByTipo",
+        query = "SELECT c FROM BOClase c WHERE c.tipo = :tipo"
+    ),
+    @NamedQuery(
+        name = "com.grupoms.app.negocio.claseJPA.BOClase.findByTipoAndFecha",
+        query = "SELECT c FROM BOClase c WHERE c.tipo = :tipo AND c.fechaInicio = :fechaInicio"
+    ),
+    @NamedQuery(
+        name = "com.grupoms.app.negocio.claseJPA.BOClase.findAll",
+        query = "SELECT c FROM BOClase c"
+    ),
+    @NamedQuery(
+        name = "com.grupoms.app.negocio.claseJPA.BOClase.findBySala",
+        query = "SELECT c FROM BOClase c WHERE c.sala.id = :idSala AND c.activo = true"
+    )
+})
 public class BOClase implements Serializable {
 
     private static final long serialVersionUID = 0L;
 
-    // ---- 1) Fields ----
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -65,7 +63,8 @@ public class BOClase implements Serializable {
     @JoinColumn(name = "sala_id")
     private BOSala sala;
     
-    @ManyToMany
+    
+    @ManyToMany(fetch = FetchType.LAZY) 
     private List<BOEjemplar> ejemplares;
     
     public BOClase() {
@@ -129,16 +128,6 @@ public class BOClase implements Serializable {
         this.version = version;
     }
     
-    public void anyadirEjemplar(BOEjemplar ejemplar) {
-     if (this.ejemplares == null) this.ejemplares = new ArrayList<>();
-     ejemplares.add(ejemplar);
-    }
-    
-    public void eliminarEjemplar(BOEjemplar ejemplar) {
-     if (this.ejemplares == null) return;
-     ejemplares.remove(ejemplar);
-    }
-    
     public BOSala getSala() {
         return sala;
     }
@@ -147,4 +136,26 @@ public class BOClase implements Serializable {
         this.sala = sala;
     }
 
+    
+    public List<BOEjemplar> getEjemplares() {
+        return ejemplares;
+    }
+
+    public void setEjemplares(List<BOEjemplar> ejemplares) {
+        this.ejemplares = ejemplares;
+    }
+
+    public void anyadirEjemplar(BOEjemplar ejemplar) {
+        if (this.ejemplares == null) {
+            this.ejemplares = new ArrayList<>();
+        }
+        if (!this.ejemplares.contains(ejemplar)) {
+            this.ejemplares.add(ejemplar);
+        }
+    }
+    
+    public void eliminarEjemplar(BOEjemplar ejemplar) {
+        if (this.ejemplares == null) return;
+        this.ejemplares.remove(ejemplar);
+    }
 }

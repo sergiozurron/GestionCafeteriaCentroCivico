@@ -1,18 +1,7 @@
 package com.grupoms.app.presentacion.claseJPA;
 
-import java.awt.BorderLayout;
-import java.awt.Insets;
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-import java.text.SimpleDateFormat;
-import java.util.List;
-
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 
 import com.grupoms.app.negocio.ClaseJPA.TClase;
 import com.grupoms.app.presentacion.IGUI;
@@ -20,79 +9,98 @@ import com.grupoms.app.presentacion.controlador.Context;
 import com.grupoms.app.presentacion.controlador.Controlador;
 import com.grupoms.app.presentacion.controlador.Evento;
 
+import java.awt.*;
+import java.text.SimpleDateFormat;
+import java.util.List;
+
 public class GUI_ListarClase extends JFrame implements IGUI {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private JTextArea areaResultado;
-	private JButton btnListar;
+    private JTable tabla;
+    private DefaultTableModel modeloTabla;
+    private JButton botonCargar;
 
-	public GUI_ListarClase() {
-		setTitle("Listar Clases");
-		setSize(600, 400);
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setLocationRelativeTo(null);
+    public GUI_ListarClase() {
+        setTitle("Listado de Clases");
+        setSize(750, 500); // Aumentado el ancho para acomodar la nueva columna
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        initGUI();
+    }
 
-		setLayout(new BorderLayout());
+    private void initGUI() {
+        JPanel panelPrincipal = new JPanel(new BorderLayout());
 
-		JPanel panelSuperior = new JPanel(new GridBagLayout());
-		GridBagConstraints gbc = new GridBagConstraints();
-		gbc.insets = new Insets(8, 8, 8, 8);
+        // --- Configuración de la tabla ---
+        modeloTabla = new DefaultTableModel();
+        modeloTabla.addColumn("ID");
+        modeloTabla.addColumn("Tipo");
+        modeloTabla.addColumn("Fecha Inicio");
+        modeloTabla.addColumn("Duración (min)");
+        modeloTabla.addColumn("ID Sala");
+        modeloTabla.addColumn("IDs Ejemplares"); // <--- Nueva columna
 
-		btnListar = new JButton("Listar Clases");
-		btnListar.addActionListener(e -> {
-			Context contexto = new Context(Evento.LISTAR_CLASES, null);
-			Controlador.getInstance().handle(contexto);
-		});
+        tabla = new JTable(modeloTabla);
+        JScrollPane scrollPane = new JScrollPane(tabla);
 
-		gbc.gridx = 0;
-		gbc.gridy = 0;
-		panelSuperior.add(btnListar, gbc);
+        botonCargar = new JButton("Cargar Clases");
+        botonCargar.addActionListener(e -> {
+            try {
+                Context contexto = new Context(Evento.LISTAR_CLASES, null);
+                Controlador.getInstance().handle(contexto);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(this, "Error al cargar clases: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        });
 
-		areaResultado = new JTextArea();
-		areaResultado.setEditable(false);
+        panelPrincipal.add(scrollPane, BorderLayout.CENTER);
+        panelPrincipal.add(botonCargar, BorderLayout.SOUTH);
+        add(panelPrincipal);
+    }
 
-		add(panelSuperior, BorderLayout.NORTH);
-		add(new JScrollPane(areaResultado), BorderLayout.CENTER);
-	}
+    @SuppressWarnings("unchecked")
+    @Override
+    public void actualizar(Context context) {
+        if (context == null) {
+            setVisible(true);
+            return;
+        }
 
-	@Override
-	public void actualizar(Context context) {
-		if (context == null) {
-			setVisible(true);
-			return;
-		}
-		switch (context.getEvento()) {
-		case Evento.LISTAR_CLASES_OK:
-			@SuppressWarnings("unchecked")
-			List<TClase> lista = (List<TClase>) context.getDatos();
-			if (lista == null || lista.isEmpty()) {
-				areaResultado.setText("");
-				JOptionPane.showMessageDialog(this, "No hay clases registradas");
-			} else {
-				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-				StringBuilder sb = new StringBuilder();
-				for (TClase c : lista) {
-					sb.append("ID: ").append(c.getId()).append(" | ");
-					sb.append("Tipo: ").append(c.getTipo()).append(" | ");
-					sb.append("Fecha: ")
-							.append(c.getFechaInicio() != null ? sdf.format(c.getFechaInicio()) : "N/A")
-							.append(" | ");
-					sb.append("Duración: ").append(c.getDuracion()).append(" min | ");
-					sb.append("Activa: ").append(c.getActivo() != null && c.getActivo() ? "Sí" : "No");
-					sb.append("\n");
-				}
-				areaResultado.setText(sb.toString());
-			}
-			break;
-		case Evento.LISTAR_CLASES_KO:
-			areaResultado.setText("");
-			JOptionPane.showMessageDialog(this, "Error al listar las clases", "Error",
-					JOptionPane.ERROR_MESSAGE);
-			break;
-		default:
-			break;
-		}
-	}
+        if (context.getEvento() == Evento.LISTAR_CLASES_OK) {
+            modeloTabla.setRowCount(0); // Limpia la tabla
+            List<TClase> clases = (List<TClase>) context.getDatos();
 
+            if (clases == null || clases.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "No hay clases registradas.");
+                return;
+            }
+
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+
+            for (TClase c : clases) {
+                String fechaStr = (c.getFechaInicio() != null) ? sdf.format(c.getFechaInicio()) : "N/A";
+                
+                String ejemplaresStr = "";
+                // Asumimos que TClase tiene un método getEjemplares() que devuelve List<Integer>
+                // Si tu atributo se llama diferente, cámbialo aquí.
+                if (c.getEjemplares() != null && !c.getEjemplares().isEmpty()) {
+                    // Quitamos los corchetes [] de la lista para que quede más limpio: "1, 2, 3"
+                    ejemplaresStr = c.getEjemplares().toString().replace("[", "").replace("]", "");
+                }
+
+                modeloTabla.addRow(new Object[]{
+                    c.getId(),
+                    c.getTipo(),
+                    fechaStr,
+                    c.getDuracion(),
+                    c.getIdSala(),
+                    ejemplaresStr // <--- Se añade la cadena (vacía o con IDs)
+                });
+            }
+        } else if (context.getEvento() == Evento.LISTAR_CLASES_KO) {
+            JOptionPane.showMessageDialog(this, "Error al cargar las clases.");
+        }
+    }
 }

@@ -1,12 +1,9 @@
 package com.grupoms.app.negocio.ClaseJPA;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
-/**
- * Transfer object for Clase.
- * 1) Stores basic data for a class.
- * 2) Used to move data between layers without JPA annotations.
- */
 public class TClase {
 
     // ---- 1) Fields ----
@@ -16,8 +13,13 @@ public class TClase {
     protected Integer duracion;
     protected Boolean activo;
     protected Integer idSala;
+    
+    protected List<Integer> idsEjemplares;
 
-    // ---- 2) Getters & Setters ----
+    public TClase() {
+        this.idsEjemplares = new ArrayList<>();
+    }
+
 
     public Integer getId() {
         return id;
@@ -59,11 +61,19 @@ public class TClase {
         this.activo = activo;
     }
 
-       public Integer getIdSala() {
+    public Integer getIdSala() {
         return idSala;
     }
 
     public void setIdSala(Integer idSala) {
         this.idSala = idSala;
+    }
+
+    public List<Integer> getEjemplares() {
+        return idsEjemplares;
+    }
+
+    public void setEjemplares(List<Integer> idsEjemplares) {
+        this.idsEjemplares = idsEjemplares;
     }
 }

@@ -1,19 +1,21 @@
 package com.grupoms.app.negocio.assembler;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import com.grupoms.app.negocio.ClaseJPA.BOClase;
 import com.grupoms.app.negocio.ClaseJPA.TClase;
+import com.grupoms.app.negocio.EjemplarJPA.BOEjemplar;
 import com.grupoms.app.negocio.salaJPA.BOSala;
 
-/**
- * Assembler for Clase.
- * 1) Converts BOClase (entity) to TClase (transfer).
- * 2) Converts TClase (transfer) to BOClase (entity).
- */
 public class ClaseAssembler {
 
     // ---- 1) Entity -> Transfer ----
 
     public static TClase entityToTransfer(BOClase bo) {
+        if (bo == null) return null;
+
         TClase dto = new TClase();
         dto.setId(bo.getId());
         dto.setTipo(bo.getTipo());
@@ -21,16 +23,28 @@ public class ClaseAssembler {
         dto.setDuracion(bo.getDuracion());
         dto.setActivo(bo.getActivo());
 
+        // Mapeo de la Sala
         if (bo.getSala() != null) {
             dto.setIdSala(bo.getSala().getId());
         }
+
+        List<Integer> idsEjemplares = new ArrayList<>();
+        
+        if (bo.getEjemplares() != null) {
+            
+            for (BOEjemplar ejemplar : bo.getEjemplares()) {
+                idsEjemplares.add(ejemplar.getId());
+            }
+        }
+        
+        dto.setEjemplares(idsEjemplares);
 
         return dto;
     }
 
     // ---- 2) Transfer -> Entity ----
 
-    protected static BOClase transferToEntity(TClase dto) {
+    public static BOClase transferToEntity(TClase dto) {
         BOClase bo = new BOClase();
         bo.setId(dto.getId());
         bo.setTipo(dto.getTipo());

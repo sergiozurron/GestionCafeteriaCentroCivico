@@ -9,7 +9,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -30,7 +29,7 @@ public class GUI_AltaClase extends JFrame implements IGUI {
     private JTextField campoFechaInicio;
     private JTextField campoDuracion;
     private JTextField campoIdSala;
-    private JCheckBox checkActivo;
+    // Eliminado JCheckBox checkActivo
     private JButton btnCrear;
 
     public GUI_AltaClase() {
@@ -40,6 +39,10 @@ public class GUI_AltaClase extends JFrame implements IGUI {
         setLocationRelativeTo(null);
 
         setLayout(new BorderLayout());
+        initGUI();
+    }
+
+    private void initGUI() {
         JPanel panel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(8, 8, 8, 8);
@@ -56,9 +59,6 @@ public class GUI_AltaClase extends JFrame implements IGUI {
 
         JLabel labelIdSala = new JLabel("ID Sala:");
         campoIdSala = new JTextField(15);
-
-        checkActivo = new JCheckBox("Activa");
-        checkActivo.setSelected(true);
 
         btnCrear = new JButton("Crear Clase");
 
@@ -118,43 +118,39 @@ public class GUI_AltaClase extends JFrame implements IGUI {
             clase.setTipo(tipo);
             clase.setFechaInicio(fechaInicio);
             clase.setDuracion(duracion);
-            clase.setActivo(checkActivo.isSelected());
-            clase.setIdSala(idSala);  
+            clase.setActivo(true); // Siempre activa por defecto
+            clase.setIdSala(idSala); // Se asigna el ID de la sala introducido
+            
             Context contexto = new Context(Evento.ALTA_CLASE, clase);
             Controlador.getInstance().handle(contexto);
+            setVisible(false); // Cierra la ventana tras pulsar aceptar
         });
 
         // ---- Layout ----
-        gbc.gridx = 0;
-        gbc.gridy = 0;
+        gbc.gridx = 0; gbc.gridy = 0;
         panel.add(labelTipo, gbc);
         gbc.gridx = 1;
         panel.add(campoTipo, gbc);
 
-        gbc.gridx = 0;
-        gbc.gridy = 1;
+        gbc.gridx = 0; gbc.gridy = 1;
         panel.add(labelFechaInicio, gbc);
         gbc.gridx = 1;
         panel.add(campoFechaInicio, gbc);
 
-        gbc.gridx = 0;
-        gbc.gridy = 2;
+        gbc.gridx = 0; gbc.gridy = 2;
         panel.add(labelDuracion, gbc);
         gbc.gridx = 1;
         panel.add(campoDuracion, gbc);
 
-        gbc.gridx = 0;
-        gbc.gridy = 3;
+        gbc.gridx = 0; gbc.gridy = 3;
         panel.add(labelIdSala, gbc);
         gbc.gridx = 1;
         panel.add(campoIdSala, gbc);
 
+        // Botón subido a la posición 4 (donde antes estaba el checkbox)
         gbc.gridx = 0;
         gbc.gridy = 4;
         gbc.gridwidth = 2;
-        panel.add(checkActivo, gbc);
-
-        gbc.gridy = 5;
         panel.add(btnCrear, gbc);
 
         add(panel, BorderLayout.CENTER);
@@ -170,6 +166,11 @@ public class GUI_AltaClase extends JFrame implements IGUI {
         case Evento.ALTA_CLASE_OK:
             int idClase = (int) context.getDatos();
             JOptionPane.showMessageDialog(this, "Clase creada con ID: " + idClase);
+            // Limpiar campos
+            campoTipo.setText("");
+            campoFechaInicio.setText("");
+            campoDuracion.setText("");
+            campoIdSala.setText("");
             break;
         case Evento.ALTA_CLASE_KO:
             JOptionPane.showMessageDialog(this, "Error al crear la clase", "Error", JOptionPane.ERROR_MESSAGE);

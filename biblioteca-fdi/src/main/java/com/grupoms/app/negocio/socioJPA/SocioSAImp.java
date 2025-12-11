@@ -193,20 +193,10 @@ public class SocioSAImp implements SocioSA {
 	@Override
 	public List<TSocio> mostrarSociosPorPromocion(Integer idPromocion) {
 		EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
-		List<TSocio> lista = new ArrayList<>();
-		try {
-			BOPromocion promocion = em.find(BOPromocion.class, idPromocion);
-			if (promocion != null && promocion.getActivo()) {
-				for (BOSocio s : promocion.getSocios()) {
-					if (s.getActivo()) {
-						lista.add(SocioAssembler.entityToTransfer(s));
-					}
-				}
-			}
-		} finally {
-			em.close();
-		}
-		return lista;
+
+		return em.createNamedQuery("BOSocio.findByPromocion", BOSocio.class)
+				.setParameter("idPromocion", idPromocion).getResultList().stream()
+				.map(SocioAssembler::entityToTransfer).toList();
 	}
 
 	@Override

@@ -134,7 +134,7 @@ public class EjemplarSAImp implements EjemplarSA {
 	public List<TEjemplar> listarEjemplaresPorMaterial(Integer idMaterial) {
 		EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
 
-		return em.createNamedQuery("BOEjemplar.findByMaterialId", BOEjemplar.class)
+		return em.createNamedQuery("BOEjemplar.findByMa  terialId", BOEjemplar.class)
 				.setParameter("materialId", idMaterial).getResultList().stream()
 				.map(EjemplarAssembler::toTransferObject).toList();
 	}

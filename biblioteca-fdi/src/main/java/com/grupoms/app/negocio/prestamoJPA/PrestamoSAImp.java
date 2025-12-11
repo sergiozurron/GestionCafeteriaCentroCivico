@@ -73,36 +73,45 @@ public class PrestamoSAImp implements PrestamoSA {
 
 	@Override
 	public Integer bajaPrestamo(Integer idPrestamo) {
-		EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
-		EntityTransaction t = em.getTransaction();
-		try {
-			t.begin();
+	    EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
+	    EntityTransaction t = em.getTransaction();
 
-			BOPrestamo bo = em.find(BOPrestamo.class, idPrestamo);
+	    try {
+	        t.begin();
 
-			if (bo == null || !bo.getActivo()) {
-				t.rollback();
-				return -1;
-			}
+	        // Buscamos el préstamo
+	        BOPrestamo bo = em.find(BOPrestamo.class, idPrestamo);
 
-			bo.setActivo(false);
+	        if (bo == null || !bo.getActivo()) {
+	            t.rollback();
+	            return -1;
+	        }
 
-			if (bo.getFechaDevuelto() == null && bo.getEjemplar() != null) {
-				bo.getEjemplar().setEstado("DISPONIBLE");
-			}
+	        // Si no ha sido devuelto y el ejemplar existe
+	        if (bo.getFechaDevuelto() == null && bo.getEjemplar() != null) {
+	            // Cambiamos el estado del ejemplar
+	            bo.getEjemplar().setEstado("DISPONIBLE");
 
-			t.commit();
-			return bo.getId();
+	            // Asignamos la fecha de devolución como la fecha actual del sistema
+	            bo.setFechaDevuelto(new java.util.Date());  // java.util.Date para JPA
 
-		} catch (Exception e) {
-			if (t.isActive())
-				t.rollback();
-			e.printStackTrace();
-			return -1;
-		} finally {
-			em.close();
-		}
+	            // Si tu campo es LocalDateTime, usa:
+	            // bo.setFechaDevuelto(LocalDateTime.now());
+	        }
+
+	        t.commit();
+	        return bo.getId();
+
+	    } catch (Exception e) {
+	        if (t.isActive())
+	            t.rollback();
+	        e.printStackTrace();
+	        return -1;
+	    } finally {
+	        em.close();
+	    }
 	}
+
 
 	@Override
 	public Integer modificarPrestamo(TPrestamo prestamo) {

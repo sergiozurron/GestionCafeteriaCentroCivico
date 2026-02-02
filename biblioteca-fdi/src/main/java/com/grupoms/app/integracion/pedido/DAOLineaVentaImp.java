@@ -8,6 +8,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 public class DAOLineaVentaImp implements DAOLineaVenta {
 
@@ -42,7 +43,7 @@ public class DAOLineaVentaImp implements DAOLineaVenta {
 		Boolean exito = false;
 		Transaction t = null;
 		try {
-			t = com.grupoms.app.integracion.Transaction.TransactionManager.getInstance().getTransaction();
+			t = TransactionManager.getInstance().getTransaction();
 			Connection conn = (Connection) t.getResource();
 
 			String sql = "DELETE FROM ordenes WHERE id = ?";
@@ -57,6 +58,30 @@ public class DAOLineaVentaImp implements DAOLineaVenta {
 		}
 
 		return exito;
+	}
+
+	@Override
+	public Integer modificarLineaVenta(TLineaVenta tLineaVenta) {
+		try {
+			Transaction t = TransactionManager.getInstance().getTransaction();
+			Connection conn = (Connection) t.getResource();
+			PreparedStatement st = conn.prepareStatement("UPDATE orden SET pedido_id = ?, producto_id = ?, cantidad = ?, precio_venta = ? WHERE id = ?", Statement.RETURN_GENERATED_KEYS);
+			st.setInt(1, tLineaVenta.getPedidoId());
+			st.setInt(2,tLineaVenta.getProductoId());
+			st.setInt(3, tLineaVenta.getCantidad());
+			st.setDouble(4,tLineaVenta.getPrecio());
+			int affectedRows = st.executeUpdate();
+
+			st.close();
+
+			if (affectedRows == 0)
+				return -1;
+
+			return 0;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return -1;
+		}
 	}
 
 }

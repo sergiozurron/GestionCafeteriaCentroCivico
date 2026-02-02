@@ -6,4 +6,6 @@ public interface DAOLineaVenta {
 	Integer altaLineaVenta(TLineaVenta orden) throws Exception;
 
 	Boolean bajaLineaVenta(Integer id) throws Exception;
+	
+	Integer modificarLineaVenta(TLineaVenta tLineaVenta);
 }

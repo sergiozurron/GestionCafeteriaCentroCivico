@@ -1,6 +1,6 @@
 package com.grupoms.app.integracion.pedido;
 
-import com.grupoms.app.negocio.pedido.TOrden;
+import com.grupoms.app.negocio.pedido.TLineaVenta;
 import com.grupoms.app.integracion.Transaction.Transaction;
 import com.grupoms.app.integracion.Transaction.TransactionManager;
 
@@ -9,10 +9,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class DAOOrdenImp implements DAOOrden {
+public class DAOLineaVentaImp implements DAOLineaVenta {
+
 
 	@Override
-	public Integer altaOrden(TOrden orden) throws Exception {
+	public Integer altaLineaVenta(TLineaVenta orden) throws Exception {
 		Integer idGenerado = null;
 		Connection conn = (Connection) TransactionManager.getInstance().getTransaction().getResource();
 
@@ -36,7 +37,7 @@ public class DAOOrdenImp implements DAOOrden {
 	}
 
 	@Override
-	public Boolean bajaOrden(Integer id) throws Exception {
+	public Boolean bajaLineaVenta(Integer id) throws Exception {
 
 		Boolean exito = false;
 		Transaction t = null;

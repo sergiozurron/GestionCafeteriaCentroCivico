@@ -1,11 +1,11 @@
 package com.grupoms.app.negocio.pedido;
 
 public interface SAOrden {
-	Integer altaOrden(TOrden orden);
+	Integer altaOrden(TLineaVenta orden);
 
-	void vincularProducto(TOrden orden);
+	void vincularProducto(TLineaVenta orden);
 
-	TOrden mostrarOrden(Integer idOrden);
+	TLineaVenta mostrarOrden(Integer idOrden);
 
-	Boolean bajaOrden(TOrden orden);
+	Boolean bajaOrden(TLineaVenta orden);
 }

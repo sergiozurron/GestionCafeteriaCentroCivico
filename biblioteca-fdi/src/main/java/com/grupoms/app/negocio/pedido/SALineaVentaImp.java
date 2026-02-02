@@ -2,15 +2,15 @@ package com.grupoms.app.negocio.pedido;
 
 import com.grupoms.app.integracion.Transaction.Transaction;
 import com.grupoms.app.integracion.Transaction.TransactionManager;
-import com.grupoms.app.integracion.pedido.DAOOrden;
+import com.grupoms.app.integracion.pedido.DAOLineaVenta;
 import com.grupoms.app.integracion.factoria.FactoriaDAO;
 
-public class SAOrdenImp implements SAOrden {
+public class SALineaVentaImp implements SAOrden {
 
-	private DAOOrden dao = FactoriaDAO.getInstancia().creaDAOOrden();
+	private DAOLineaVenta dao = FactoriaDAO.getInstancia().creaDAOLineaVenta();
 
 	@Override
-	public Integer altaOrden(TOrden orden) {
+	public Integer altaOrden(TLineaVenta orden) {
 		Transaction t = null;
 		Integer idGenerado = null;
 
@@ -22,7 +22,7 @@ public class SAOrdenImp implements SAOrden {
 			t.start();
 
 			orden.setPrecioVenta(0.0);
-			idGenerado = dao.altaOrden(orden);
+			idGenerado = dao.altaLineaVenta(orden);
 
 			t.commit();
 		} catch (Exception e) {
@@ -40,7 +40,7 @@ public class SAOrdenImp implements SAOrden {
 		return idGenerado;
 	}
 
-	public Boolean bajaOrden(TOrden orden) {
+	public Boolean bajaOrden(TLineaVenta orden) {
 		if (orden.getId() == null || orden.getId() <= 0)
 			throw new IllegalArgumentException("ID de orden no válido.");
 
@@ -50,7 +50,7 @@ public class SAOrdenImp implements SAOrden {
 			t = TransactionManager.getInstance().newTransaction();
 			t.start();
 
-			exito = dao.bajaOrden(orden.getId());
+			exito = dao.bajaLineaVenta(orden.getId());
 
 			t.commit();
 		} catch (Exception e) {
@@ -68,13 +68,13 @@ public class SAOrdenImp implements SAOrden {
 	}
 
 	@Override
-	public void vincularProducto(TOrden orden) {
+	public void vincularProducto(TLineaVenta orden) {
 
 		throw new UnsupportedOperationException("Unimplemented method 'vincularProducto'");
 	}
 
 	@Override
-	public TOrden mostrarOrden(Integer idOrden) {
+	public TLineaVenta mostrarOrden(Integer idOrden) {
 
 		throw new UnsupportedOperationException("Unimplemented method 'mostrarOrden'");
 	}

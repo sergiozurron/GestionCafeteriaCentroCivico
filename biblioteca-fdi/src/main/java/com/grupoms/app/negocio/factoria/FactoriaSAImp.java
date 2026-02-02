@@ -15,7 +15,7 @@ import com.grupoms.app.negocio.materialJPA.MaterialSAImp;
 import com.grupoms.app.negocio.mesa.SAMesa;
 import com.grupoms.app.negocio.mesa.SAMesaImp;
 import com.grupoms.app.negocio.pedido.SAOrden;
-import com.grupoms.app.negocio.pedido.SAOrdenImp;
+import com.grupoms.app.negocio.pedido.SALineaVentaImp;
 import com.grupoms.app.negocio.pedido.SAPedido;
 import com.grupoms.app.negocio.pedido.SAPedidoImp;
 import com.grupoms.app.negocio.prestamoJPA.PrestamoSA;
@@ -56,7 +56,7 @@ public class FactoriaSAImp extends FactoriaSA {
 
 	@Override
 	public SAOrden creaSAOrden() {
-		return new SAOrdenImp();
+		return new SALineaVentaImp();
 	}
 
 	@Override

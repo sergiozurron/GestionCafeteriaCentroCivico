@@ -1,6 +1,6 @@
 package com.grupoms.app.negocio.pedido;
 
-public class TOrden {
+public class TLineaVenta {
 
 	private Integer id;
 	private Integer pedido_id;

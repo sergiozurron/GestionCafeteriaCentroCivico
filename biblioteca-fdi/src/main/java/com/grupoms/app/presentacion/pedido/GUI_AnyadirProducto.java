@@ -3,7 +3,7 @@ package com.grupoms.app.presentacion.pedido;
 import javax.swing.*;
 import java.awt.*;
 
-import com.grupoms.app.negocio.pedido.TOrden;
+import com.grupoms.app.negocio.pedido.TLineaVenta;
 import com.grupoms.app.presentacion.IGUI;
 import com.grupoms.app.presentacion.controlador.Context;
 import com.grupoms.app.presentacion.controlador.Controlador;
@@ -76,7 +76,7 @@ public class GUI_AnyadirProducto extends JFrame implements IGUI {
 				return;
 			}
 
-			TOrden orden = new TOrden();
+			TLineaVenta orden = new TLineaVenta();
 			orden.setPedidoID(idPedido);
 			orden.setProductID(idProducto);
 			orden.setCantidad(cantidad);

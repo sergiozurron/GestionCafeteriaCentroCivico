@@ -2,21 +2,23 @@ package com.grupoms.app.integracion.pedido;
 
 import com.grupoms.app.negocio.pedido.TPedido;
 
+
 import java.util.List;
 
 public interface DAOPedido {
-	public Integer altaPedido(TPedido pedido);
+	Integer cerrarPedido (TPedido pedido);
+	
+	TPedido mostrarPedido(Integer id);
+	
+	List<TPedido> listarPedidos();
+	
+	Boolean modificarPedido(TPedido pedido);
+	
+	Integer devolverPedido(Integer id);
 
-	public Boolean modificarPedido(TPedido pedido);
+	List<TPedido> mostrarPedidosPorEmpleado(Integer idEmpleado);
 
-	public TPedido mostrarPedido(Integer idPedido);
+	List<TPedido> mostrarPedidosPorMesa(Integer idMesa);
 
-	public List<TPedido> mostrarListaPedidos();
-
-	public void devolverPedido(TPedido pedido);
-
-	public List<TPedido> mostrarPedidosPorEmpleado(Integer idEmpleado);
-
-	public List<TPedido> mostrarPedidosPorMesa(Integer idMesa);
 
 }

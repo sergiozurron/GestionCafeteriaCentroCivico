@@ -1,21 +1,19 @@
 package com.grupoms.app.negocio.pedido;
 
-import java.util.List;
+
+import java.util.Set;
 
 public interface SAPedido {
+	
 	public Integer altaPedido(TPedido pedido);
 
-	public Boolean confirmarPedido(TPedido pedido);
+    TPedidoLinea cerrarPedido(TCarrito carrito);
 
-	public Integer modificarPedido(TPedido pedido);
+    TPedidoLinea mostrarPedidoPorID(int id);
 
-	public TPedido mostrarPedido(Integer idPedido);
+    Set<TPedido> listarPedidos();
 
-	public List<TPedido> mostrarPedidos();
+    boolean modificarPedido(TPedido pedido);
 
-	public void devolverPedido(TPedido pedido);
-
-	public List<TPedido> mostrarPedidosPorEmpleado(Integer idEmpleado);
-
-	public List<TPedido> mostrarPedidosPorMesa(Integer idMesa);
+    boolean devolverLinea(TLineaVenta linea);
 }

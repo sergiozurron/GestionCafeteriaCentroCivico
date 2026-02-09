@@ -3,21 +3,21 @@ package com.grupoms.app.negocio.pedido;
 public class TLineaVenta {
 
 	private Integer id;
-	private Integer pedido_id;
-	private Integer producto_id;
+	private Integer idPedido;
+	private Integer idProducto;
 	private Integer cantidad;
-	private Double precio_venta;
+	private Double precioVenta;
 
 	public Integer getId() {
 		return id;
 	}
 
 	public Integer getPedidoId() {
-		return pedido_id;
+		return idPedido;
 	}
 
 	public Integer getProductoId() {
-		return producto_id;
+		return idProducto;
 	}
 
 	public Integer getCantidad() {
@@ -25,7 +25,7 @@ public class TLineaVenta {
 	}
 
 	public Double getPrecio() {
-		return precio_venta;
+		return precioVenta;
 	}
 
 	public void setId(int int1) {
@@ -33,11 +33,11 @@ public class TLineaVenta {
 	}
 
 	public void setPedidoID(int int1) {
-		this.pedido_id = int1;
+		this.idPedido = int1;
 	}
 
 	public void setProductID(int int1) {
-		this.producto_id = int1;
+		this.idProducto = int1;
 	}
 
 	public void setCantidad(int int1) {
@@ -46,7 +46,7 @@ public class TLineaVenta {
 
 	public void setPrecioVenta(double double1) {
 
-		this.precio_venta = double1;
+		this.precioVenta = double1;
 	}
 
 }

@@ -9,7 +9,6 @@ import com.grupoms.app.negocio.ingrediente.SAIngrediente;
 import com.grupoms.app.negocio.materialJPA.MaterialSA;
 
 import com.grupoms.app.negocio.mesa.SAMesa;
-import com.grupoms.app.negocio.pedido.SAOrden;
 import com.grupoms.app.negocio.pedido.SAPedido;
 import com.grupoms.app.negocio.prestamoJPA.PrestamoSA;
 import com.grupoms.app.negocio.producto.SAProducto;
@@ -45,8 +44,6 @@ public abstract class FactoriaSA {
 	public abstract SAIngrediente creaSAIngrediente();
 
 	public abstract SAProducto creaSAProducto();
-
-	public abstract SAOrden creaSAOrden();
 
 	public abstract SAEmpleado creaSAEmpleado();
 

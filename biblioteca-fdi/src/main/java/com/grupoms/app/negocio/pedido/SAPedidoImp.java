@@ -1,252 +1,109 @@
 package com.grupoms.app.negocio.pedido;
 
-import java.util.ArrayList;
-import java.util.List;
+
+import java.util.Set;
 
 import com.grupoms.app.integracion.Transaction.Transaction;
 import com.grupoms.app.integracion.Transaction.TransactionManager;
 import com.grupoms.app.integracion.pedido.*;
+import com.grupoms.app.integracion.producto.DAOProducto;
+import com.grupoms.app.integracion.producto.DAOProductoImp;
+import com.grupoms.app.negocio.producto.TProducto;
 
 public class SAPedidoImp implements SAPedido {
 
-	private DAOPedido dao = new DAOPedidoImp();
+	private DAOPedido daoPedido = new DAOPedidoImp();
+	private DAOLineaVenta daoLinea = new DAOLineaVentaImp();
+	private DAOProducto daoProducto = new DAOProductoImp();
 
 	@Override
 	public Integer altaPedido(TPedido pedido) {
 		Transaction t = null;
-		Integer idGenerado = null;
-
+		Integer id = null;
 		try {
-			if (pedido == null)
-				throw new IllegalArgumentException("El pedido no puede ser nulo.");
-
+			if(pedido ==null)throw new IllegalArgumentException("El pedido no puede ser nulo");
 			t = TransactionManager.getInstance().newTransaction();
 			t.start();
-
 			pedido.setEstado("ABIERTO");
 			pedido.setTotal(0.0);
 			pedido.setActivo(true);
 			pedido.setFecha(new java.sql.Date(System.currentTimeMillis()));
-
-			idGenerado = dao.altaPedido(pedido);
-
+			
+			id = daoPedido.altaPedido(pedido);
 			t.commit();
-
-		} catch (Exception e) {
+		}catch(Exception e) {
 			e.printStackTrace();
-			if (t != null) {
-				try {
-					t.rollback();
-				} catch (Exception ex) {
-					ex.printStackTrace();
+            if (t != null) t.rollback();
+            throw new IllegalArgumentException("Error al crear el pedido", e);
+		}
+		return id;
+	}
+
+	@Override
+	public TPedidoLinea cerrarPedido(TCarrito carrito) {
+		TransactionManager tm = TransactionManager.getInstance();
+		try {
+			Transaction t = tm.newTransaction();
+			t.start();
+			if(!carrito.getLineasVenta().isEmpty()) {
+				double precio = 0;
+				for(TLineaVenta lineaV : carrito.getLineasVenta()) {
+					TProducto producto = daoProducto.mostrarProducto(lineaV.getProductoId());
+					if(producto!=null) {
+						if(producto.getActivo()) {
+							if(lineaV.getCantidad()<=producto.getStock()) {
+								producto.setStock(producto.getStock()-lineaV.getCantidad());
+								daoProducto.modificarProducto(producto);
+								double precio_linea = (lineaV.getCantidad()*producto.getPrecio());
+								lineaV.setPrecioVenta(precio_linea);
+								precio = precio+ precio_linea;
+							}
+							else {
+								t.rollback();
+								return -2;
+							}
+						}
+						else {
+							t.rollback();
+							return -2;
+						}
+					}else {
+						t.rollback();
+						return -2;
+					}
+				}
+				TPedido pedido = carrito.getPedido();
+				pedido.setTotal(precio);
+				int id = daoPedido.cerrarPedido(pedido);
+				if(id>0) {
+					for
 				}
 			}
-			throw new IllegalArgumentException("Error al crear el pedido", e);
-		}
-
-		return idGenerado;
-	}
-
-	@Override
-	public Boolean confirmarPedido(TPedido pedido) {
-		Transaction t = null;
-		Boolean exito = false;
-		try {
-			if (pedido == null || pedido.getId() == null)
-				throw new IllegalArgumentException("El pedido no puede ser nulo y debe tener ID.");
-
-			t = TransactionManager.getInstance().newTransaction();
-			t.start();
-
-			pedido.setEstado("EN PREPARACION");
-
-			dao.modificarPedido(pedido);
-			t.commit();
-			exito = true;
-		} catch (Exception e) {
-			e.printStackTrace();
-			try {
-				if (t != null)
-					t.rollback();
-			} catch (Exception ex) {
-				ex.printStackTrace();
-			}
-			throw new IllegalArgumentException("Error al confirmar el pedido.", e);
-		}
-		return exito;
-	}
-
-	@Override
-	public TPedido mostrarPedido(Integer idPedido) {
-		if (idPedido == null || idPedido <= 0)
-			throw new IllegalArgumentException("El ID del pedido no es válido.");
-
-		TPedido pedido = null;
-		Transaction t = null;
-		try {
-			t = TransactionManager.getInstance().newTransaction();
-			t.start();
-			pedido = dao.mostrarPedido(idPedido);
-			t.commit();
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (t != null) {
-				try {
-					t.rollback();
-				} catch (Exception ex) {
-					ex.printStackTrace();
-				}
-			}
-
-		}
-		return pedido;
-	}
-
-	@Override
-	public void devolverPedido(TPedido pedido) {
-		Transaction t = null;
-		try {
-			if (pedido == null || pedido.getId() == null)
-				throw new IllegalArgumentException("El pedido no puede ser nulo y debe tener ID.");
-
-			t = TransactionManager.getInstance().newTransaction();
-			t.start();
-
-			pedido.setActivo(false);
-			pedido.setEstado("DEVUELTO");
-			dao.modificarPedido(pedido);
-
-			t.commit();
-		} catch (Exception e) {
-			e.printStackTrace();
-			try {
-				if (t != null)
-					t.rollback();
-			} catch (Exception ex) {
-				ex.printStackTrace();
-			}
-			throw new IllegalArgumentException("Error al devolver el pedido.", e);
-
 		}
 	}
 
 	@Override
-	public Integer modificarPedido(TPedido pedido) {
-		if (pedido == null || pedido.getId() == null)
-			throw new IllegalArgumentException("El pedido no puede ser nulo y debe tener ID.");
-
-		Transaction t = null;
-		Integer resultado = -1;
-		try {
-			t = TransactionManager.getInstance().newTransaction();
-			t.start();
-
-			TPedido pedidoExistente = dao.mostrarPedido(pedido.getId());
-			if (pedidoExistente == null)
-				throw new IllegalArgumentException("El pedido con ID " + pedido.getId() + " no existe.");
-			if (!pedidoExistente.getEstado().equalsIgnoreCase("ABIERTO")
-					&& !pedidoExistente.getEstado().equalsIgnoreCase("EN PREPARACION")) {
-				throw new IllegalStateException("Solo se pueden modificar pedidos en estado Abierto o EN PREPARACION.");
-			}
-			Boolean exito = dao.modificarPedido(pedido);
-			if (exito) {
-				resultado = pedido.getId();
-			}
-
-			t.commit();
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (t != null) {
-				try {
-					t.rollback();
-				} catch (Exception ex) {
-					ex.printStackTrace();
-				}
-			}
-			throw new IllegalArgumentException("Error al modificar el pedido.", e);
-		}
-		return resultado;
+	public TPedidoLinea mostrarPedidoPorID(int id) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override
-	public List<TPedido> mostrarPedidosPorEmpleado(Integer idEmpleado) {
-		if (idEmpleado == null || idEmpleado <= 0)
-			throw new IllegalArgumentException("El ID del empleado no es válido.");
-
-		List<TPedido> listaPedidos = null;
-		Transaction t = null;
-		try {
-			t = TransactionManager.getInstance().newTransaction();
-			t.start();
-			listaPedidos = dao.mostrarPedidosPorEmpleado(idEmpleado);
-			t.commit();
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (t != null) {
-				try {
-					t.rollback();
-				} catch (Exception ex) {
-					ex.printStackTrace();
-				}
-			}
-			throw new IllegalArgumentException("Error al mostrar pedidos del empleado con ID: " + idEmpleado, e);
-		}
-		return listaPedidos;
+	public Set<TPedido> listarPedidos() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override
-	public List<TPedido> mostrarPedidosPorMesa(Integer idMesa) {
-		if (idMesa == null || idMesa <= 0)
-			throw new IllegalArgumentException("El ID de la mesa no es válido.");
-
-		List<TPedido> listaPedidos = null;
-		Transaction t = null;
-		try {
-			t = TransactionManager.getInstance().newTransaction();
-			t.start();
-			listaPedidos = dao.mostrarPedidosPorMesa(idMesa);
-			t.commit();
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (t != null) {
-				try {
-					t.rollback();
-				} catch (Exception ex) {
-					ex.printStackTrace();
-				}
-			}
-			throw new IllegalArgumentException("Error al mostrar pedidos de la mesa con ID: " + idMesa, e);
-		}
-		return listaPedidos;
+	public boolean modificarPedido(TPedido pedido) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 	@Override
-	public List<TPedido> mostrarPedidos() {
-		List<TPedido> listaPedidos = new ArrayList<>();
-		Transaction t = null;
-		try {
-			t = TransactionManager.getInstance().newTransaction();
-			t.start();
-			List<TPedido> todos = dao.mostrarListaPedidos();
-			for (TPedido p : todos) {
-				listaPedidos.add(p);
-			}
-			if (listaPedidos.isEmpty())
-				throw new IllegalArgumentException("No hay pedidos en la base de datos.");
-
-			t.commit();
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (t != null) {
-				try {
-					t.rollback();
-				} catch (Exception ex) {
-					ex.printStackTrace();
-				}
-			}
-			throw new IllegalArgumentException("Error al mostrar la lista de pedidos.", e);
-		}
-		return listaPedidos;
+	public boolean devolverLinea(TLineaVenta linea) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

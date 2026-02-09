@@ -9,6 +9,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.List;
 
 public class DAOLineaVentaImp implements DAOLineaVenta {
 
@@ -18,7 +19,7 @@ public class DAOLineaVentaImp implements DAOLineaVenta {
 		Integer idGenerado = null;
 		Connection conn = (Connection) TransactionManager.getInstance().getTransaction().getResource();
 
-		String sql = "INSERT INTO ordenes (pedido_id, producto_id, cantidad, precio_venta) VALUES (?, ?, ?, ?)";
+		String sql = "INSERT INTO linea_venta (pedido_id, producto_id, cantidad, precio_venta) VALUES (?, ?, ?, ?)";
 		try (PreparedStatement ps = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
 			ps.setInt(1, orden.getPedidoId());
 			ps.setObject(2, orden.getProductoId());
@@ -82,6 +83,38 @@ public class DAOLineaVentaImp implements DAOLineaVenta {
 			e.printStackTrace();
 			return -1;
 		}
+	}
+
+	@Override
+	public TLineaVenta mostrarLineaPedido(Integer idPedido, Integer idProducto) {
+		TLineaVenta linea = null;
+		try {
+			Connection c = (Connection) TransactionManager.getInstance().getTransaction().getResource();
+			PreparedStatement st = c.prepareStatement(
+					"SELECT * FROM linea_venta WHERE pedido_id = ? AND producto_id = ? FOR UPDATE", Statement.RETURN_GENERATED_KEYS
+					);
+			st.setInt(1,idPedido);
+			st.setInt(2, idProducto);
+			ResultSet result = st.executeQuery();
+			if(result.next()) {
+				linea = new TLineaVenta();
+				linea.setPedidoID(result.getInt(1));
+				linea.setProductID(result.getInt(2));
+				linea.setCantidad(result.getInt(3));
+				linea.setPrecioVenta(result.getDouble(4));
+			}
+			result.close();
+			st.close();
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return linea;
+	}
+
+	@Override
+	public List<TLineaVenta> listarLineas() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

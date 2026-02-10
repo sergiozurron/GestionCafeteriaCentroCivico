@@ -7,7 +7,7 @@ public interface SAPedido {
 	
 	public Integer altaPedido(TPedido pedido);
 
-    TPedidoLinea cerrarPedido(TCarrito carrito);
+    Integer cerrarPedido(TCarrito carrito);
 
     TPedidoLinea mostrarPedidoPorID(int id);
 

@@ -40,7 +40,7 @@ public class SAPedidoImp implements SAPedido {
 	}
 
 	@Override
-	public TPedidoLinea cerrarPedido(TCarrito carrito) {
+	public Integer cerrarPedido(TCarrito carrito) {
 		TransactionManager tm = TransactionManager.getInstance();
 		try {
 			Transaction t = tm.newTransaction();

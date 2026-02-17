@@ -12,7 +12,7 @@ public interface DAOPedido {
 	
 	List<TPedido> listarPedidos();
 	
-	Boolean modificarPedido(TPedido pedido);
+	int modificarPedido(TPedido pedido);
 	
 	Integer devolverPedido(Integer id);
 

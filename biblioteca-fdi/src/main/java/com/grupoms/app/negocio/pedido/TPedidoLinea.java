@@ -6,18 +6,18 @@ import java.util.Set;
 public class TPedidoLinea {
 
     private TPedido tPedido;                 
-    private Set<TLineaVenta> tLineasVenta;   
+    private Set<TPedidoLinea> tPedidoLinea;   
 
     // Getter 
-    public Set<TLineaVenta> gettLineasVenta() {
-        return tLineasVenta;
+    public Set<TPedidoLinea> gettLineasVenta() {
+        return tPedidoLinea;
     }
 
 
-    public void incluirLineaVenta(TLineaVenta linea) {
-        if (tLineasVenta == null)
-            tLineasVenta = new HashSet<>();
-        tLineasVenta.add(linea);
+    public void incluirLineaVenta(TPedidoLinea linea) {
+        if (tPedidoLinea == null)
+        	tPedidoLinea = new HashSet<>();
+        tPedidoLinea.add(linea);
     }
 
     // Getter y setter del pedido

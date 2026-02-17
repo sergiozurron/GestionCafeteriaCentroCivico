@@ -1,6 +1,7 @@
 package com.grupoms.app.integracion.pedido;
 
 import com.grupoms.app.negocio.pedido.TLineaVenta;
+import com.grupoms.app.negocio.pedido.TPedidoLinea;
 import com.grupoms.app.integracion.Transaction.Transaction;
 import com.grupoms.app.integracion.Transaction.TransactionManager;
 
@@ -9,6 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 public class DAOLineaVentaImp implements DAOLineaVenta {
@@ -115,6 +117,23 @@ public class DAOLineaVentaImp implements DAOLineaVenta {
 	public List<TLineaVenta> listarLineas() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public List<TPedidoLinea> mostrarLineaPedidoPorPedido(Integer idPedido) {
+		List<TPedidoLinea> lineasPedido = null;
+		try {
+			Connection c = (Connection) TransactionManager.getInstance().getTransaction().getResource();
+			PreparedStatement statement = c.prepareStatement(
+					"SELECT id_pedido, id_producto, cantidad, precio FROM linea_venta WHERE id:pedido = ? FOR UPDATE",Statement.RETURN_GENERATED_KEYS
+					);
+			statement.setInt(1,idPedido);
+			ResultSet result = statement.executeQuery();
+			lineasPedido = new ArrayList<TPedidoLinea>();
+			while(result.next()) {
+				Integer idP = result.getInt(1);
+			}
+		}
 	}
 
 }

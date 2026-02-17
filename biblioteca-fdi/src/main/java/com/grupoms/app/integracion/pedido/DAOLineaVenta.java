@@ -3,6 +3,7 @@ package com.grupoms.app.integracion.pedido;
 import java.util.List;
 
 import com.grupoms.app.negocio.pedido.TLineaVenta;
+import com.grupoms.app.negocio.pedido.TPedidoLinea;
 
 public interface DAOLineaVenta {
 	
@@ -15,4 +16,6 @@ public interface DAOLineaVenta {
 	public TLineaVenta mostrarLineaPedido(Integer idPedido, Integer idProducto);
 	
 	public List<TLineaVenta> listarLineas();
+	
+	public List<TPedidoLinea> mostrarLineaPedidoPorPedido(Integer idPedido);
 }

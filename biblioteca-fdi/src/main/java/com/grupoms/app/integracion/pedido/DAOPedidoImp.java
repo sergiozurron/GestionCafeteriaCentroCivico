@@ -13,8 +13,8 @@ public class DAOPedidoImp implements DAOPedido {
 
 	
 	@Override
-	public Boolean modificarPedido(TPedido pedido) {
-		boolean act = false;
+	public int modificarPedido(TPedido pedido) {
+		int act = -1;
 		try {
 			Connection c = (Connection) TransactionManager.getInstance().getTransaction().getResource();
 
@@ -28,8 +28,8 @@ public class DAOPedidoImp implements DAOPedido {
 				ps.setInt(6, pedido.getIdMesa());
 				ps.setInt(7, pedido.getId());
 
-				int rows = ps.executeUpdate();
-				act = (rows > 0);
+				act = ps.executeUpdate();
+
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -41,33 +41,42 @@ public class DAOLineaVentaImp implements DAOLineaVenta {
 	}
 
 	@Override
-	public Boolean bajaLineaVenta(Integer id) throws Exception {
-
-		Boolean exito = false;
-		Transaction t = null;
+	public TLineaVenta bajaLineaVenta(Integer idP, Integer idPr) throws Exception {
+		TLineaVenta lineaV = null;
 		try {
-			t = TransactionManager.getInstance().getTransaction();
-			Connection conn = (Connection) t.getResource();
-
-			String sql = "DELETE FROM ordenes WHERE id = ?";
-			try (PreparedStatement ps = conn.prepareStatement(sql)) {
-				ps.setInt(1, id);
-				exito = ps.executeUpdate() > 0;
+			Connection c = (Connection) TransactionManager.getInstance().getTransaction().getResource();
+			PreparedStatement statement = c.prepareStatement(
+					"DELETE FROM linea_venta WHERE id_pedido = ? AND id_producto = ?",
+					Statement.RETURN_GENERATED_KEYS
+					);
+			statement.setInt(1,idP);
+			statement.setInt(2,idPr);
+			
+			statement = c.prepareStatement(
+					"SELECT * FROM linea_venta WHERE id_pedido = ? AND id_producto = ? FOR UPDATE",
+					Statement.RETURN_GENERATED_KEYS
+					);
+			statement.setInt(1,idP);
+			statement.setInt(2,idPr);
+			ResultSet result = statement.executeQuery();
+			if(result.next()) {
+				lineaV = new TLineaVenta();
+				lineaV.setPedidoID(result.getInt(1));
+				lineaV.setProductID(2);
+				lineaV.setCantidad(3);
+				lineaV.setPrecioVenta(4);
 			}
-
-		} catch (SQLException e) {
+			statement.close();
+		}catch(Exception e) {
 			e.printStackTrace();
-			throw new IllegalArgumentException("Error al eliminar la orden.", e);
 		}
-
-		return exito;
+		return lineaV;
 	}
 
 	@Override
 	public Integer modificarLineaVenta(TLineaVenta tLineaVenta) {
 		try {
-			Transaction t = TransactionManager.getInstance().getTransaction();
-			Connection conn = (Connection) t.getResource();
+			Connection conn = (Connection) TransactionManager.getInstance().getTransaction().getResource();
 			PreparedStatement st = conn.prepareStatement("UPDATE orden SET pedido_id = ?, producto_id = ?, cantidad = ?, precio_venta = ? WHERE id = ?", Statement.RETURN_GENERATED_KEYS);
 			st.setInt(1, tLineaVenta.getPedidoId());
 			st.setInt(2,tLineaVenta.getProductoId());
@@ -115,13 +124,35 @@ public class DAOLineaVentaImp implements DAOLineaVenta {
 
 	@Override
 	public List<TLineaVenta> listarLineas() {
-		// TODO Auto-generated method stub
-		return null;
+		List<TLineaVenta> lineasPedido = null;
+		try {
+			Connection c = (Connection)TransactionManager.getInstance().getTransaction().getResource();
+			PreparedStatement statement = c.prepareStatement("SELECT * FROM lineas_venta");
+			ResultSet result = statement.executeQuery();
+			lineasPedido = new ArrayList<TLineaVenta>();
+			while(result.next()) {
+				Integer idP = result.getInt(1);
+				Integer idPR = result.getInt(2);
+				Integer cat = result.getInt(3);
+				Double tot = result.getDouble(4);
+				TLineaVenta p = new TLineaVenta();
+				p.setPedidoID(idP);
+				p.setProductID(idPR);
+				p.setCantidad(cat);
+				p.setPrecioVenta(tot);
+			}
+			result.close();
+			statement.close();
+			return lineasPedido;
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return lineasPedido;
 	}
 
 	@Override
-	public List<TPedidoLinea> mostrarLineaPedidoPorPedido(Integer idPedido) {
-		List<TPedidoLinea> lineasPedido = null;
+	public List<TLineaVenta> mostrarLineaPedidoPorPedido(Integer idPedido) {
+		List<TLineaVenta> lineasPedido = null;
 		try {
 			Connection c = (Connection) TransactionManager.getInstance().getTransaction().getResource();
 			PreparedStatement statement = c.prepareStatement(
@@ -129,11 +160,27 @@ public class DAOLineaVentaImp implements DAOLineaVenta {
 					);
 			statement.setInt(1,idPedido);
 			ResultSet result = statement.executeQuery();
-			lineasPedido = new ArrayList<TPedidoLinea>();
+			lineasPedido = new ArrayList<TLineaVenta>();
 			while(result.next()) {
 				Integer idP = result.getInt(1);
+				Integer idPR = result.getInt(2);
+				Integer cat = result.getInt(3);
+				Double tot = result.getDouble(4);
+				TLineaVenta p = new TLineaVenta();
+				p.setPedidoID(idP);
+				p.setProductID(idPR);
+				p.setCantidad(cat);
+				p.setPrecioVenta(tot);
 			}
+			result.close();
+			statement.close();
+			return lineasPedido;
+		}catch(Exception e) {
+			e.printStackTrace();
 		}
+		return lineasPedido;
 	}
+
+	
 
 }

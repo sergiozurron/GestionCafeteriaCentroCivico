@@ -13,5 +13,5 @@ public interface SAPedido {
 
     Integer modificarPedido(TPedido pedido);
 
-    boolean devolverLinea(TLineaVenta linea);
+    Integer devolverLinea(TLineaVenta linea);
 }

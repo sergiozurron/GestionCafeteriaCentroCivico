@@ -90,9 +90,9 @@ public class SAPedidoImp implements SAPedido {
 			TPedido pedido = daoPedido.mostrarPedido(id);
 			if(pedido !=null) {
 				pedidoLinea.settPedido(pedido);
-				List<TPedidoLinea> lineaPedido = daoLinea.mostrarLineaPedidoPorPedido(id);
+				List<TLineaVenta> lineaPedido = daoLinea.mostrarLineaPedidoPorPedido(id);
 				
-				for(TPedidoLinea tlinea: lineaPedido) {
+				for(TLineaVenta tlinea: lineaPedido) {
 					pedidoLinea.incluirLineaVenta(tlinea);
 				}
 				t.commit();
@@ -158,9 +158,55 @@ public class SAPedidoImp implements SAPedido {
 	}
 
 	@Override
-	public boolean devolverLinea(TLineaVenta linea) {
-		// TODO Auto-generated method stub
-		return false;
+	public Integer devolverLinea(TLineaVenta linea) {
+		TransactionManager tm = TransactionManager.getInstance();
+		int r = -1;
+		try {
+			Transaction t = tm.newTransaction();
+			t.start();
+			TPedido pedido = daoPedido.mostrarPedido(linea.getPedidoId());
+			if(pedido!=null && pedido.getActivo()) {
+				List<TLineaVenta> lineasPB = daoLinea.mostrarLineaPedidoPorPedido(pedido.getId());
+				for(TLineaVenta v : lineasPB) {
+					TProducto p = daoProducto.mostrarProducto(v.getProductoId());
+					if(p!=null) {
+						TLineaVenta lv = daoLinea.mostrarLineaPedido(linea.getPedidoId(),p.getId());
+						if(lv!=null) {
+							if(!p.getActivo()) {
+								t.rollback();
+								return -1;
+							}
+							p.setStock(p.getStock()+lv.getCantidad());
+							r = daoProducto.modificarProducto(p);
+							if(r<0) {
+								t.rollback();
+								return -1;
+							}
+							TLineaVenta baja = daoLinea.bajaLineaVenta(lv.getPedidoId(), lv.getProductoId());
+							r = baja == null ?1:-1;
+							if(r<0) {
+								t.rollback();
+								return -1;
+							}
+						}
+					}
+				}
+				r = daoPedido.devolverPedido(pedido.getId());
+				if(r<0) {
+					t.rollback();
+					return -1;
+				}else {
+					t.commit();
+					return 1;
+				}
+			}else {
+				t.rollback();
+				return -2;
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+			return r;
+		}
 	}
 
 }

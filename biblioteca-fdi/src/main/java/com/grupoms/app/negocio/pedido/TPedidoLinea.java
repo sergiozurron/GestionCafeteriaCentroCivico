@@ -6,15 +6,15 @@ import java.util.Set;
 public class TPedidoLinea {
 
     private TPedido tPedido;                 
-    private Set<TPedidoLinea> tPedidoLinea;   
+    private Set<TLineaVenta> tPedidoLinea;   
 
     // Getter 
-    public Set<TPedidoLinea> gettLineasVenta() {
+    public Set<TLineaVenta> gettLineasVenta() {
         return tPedidoLinea;
     }
 
 
-    public void incluirLineaVenta(TPedidoLinea linea) {
+    public void incluirLineaVenta(TLineaVenta linea) {
         if (tPedidoLinea == null)
         	tPedidoLinea = new HashSet<>();
         tPedidoLinea.add(linea);

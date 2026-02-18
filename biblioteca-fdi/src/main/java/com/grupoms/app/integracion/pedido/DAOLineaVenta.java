@@ -9,7 +9,7 @@ public interface DAOLineaVenta {
 	
 	Integer altaLineaVenta(TLineaVenta orden) throws Exception;
 
-	Boolean bajaLineaVenta(Integer id) throws Exception;
+	TLineaVenta bajaLineaVenta(Integer idP, Integer idPr ) throws Exception;
 	
 	Integer modificarLineaVenta(TLineaVenta tLineaVenta);
 	
@@ -17,5 +17,5 @@ public interface DAOLineaVenta {
 	
 	public List<TLineaVenta> listarLineas();
 	
-	public List<TPedidoLinea> mostrarLineaPedidoPorPedido(Integer idPedido);
+	public List<TLineaVenta> mostrarLineaPedidoPorPedido(Integer idPedido);
 }

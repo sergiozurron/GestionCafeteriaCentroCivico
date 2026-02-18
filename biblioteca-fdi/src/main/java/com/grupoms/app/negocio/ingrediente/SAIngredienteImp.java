@@ -14,31 +14,17 @@ public class SAIngredienteImp implements SAIngrediente {
 
 	@Override
 	public Integer crearIngrediente(TIngrediente ingrediente) {
-		Transaction t = null;
-		Integer idGenerado = null;
-
-		try {
-
-			t = TransactionManager.getInstance().newTransaction();
-			t.start();
-
-			ingrediente.setActivo(true);
-			idGenerado = dao.crearIngrediente(ingrediente);
-
-			t.commit();
-
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (t != null) {
-				try {
-					t.rollback();
-				} catch (Exception ex) {
-					ex.printStackTrace();
-				}
-			}
-		}
-
-		return idGenerado;
+		Transaction t = TransactionManager.getInstance().newTransaction();
+        try {
+            t.start();
+            ingrediente.setActivo(true);
+            Integer id = dao.crearIngrediente(ingrediente);
+            t.commit();
+            return id;
+        } catch (Exception e) {
+            t.rollback();
+            throw new RuntimeException("Error en SA al crear ingrediente", e);
+        }
 	}
 
 	@Override

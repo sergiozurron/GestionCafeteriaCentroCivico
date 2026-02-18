@@ -42,36 +42,44 @@ public class DAOLineaVentaImp implements DAOLineaVenta {
 
 	@Override
 	public TLineaVenta bajaLineaVenta(Integer idP, Integer idPr) throws Exception {
-		TLineaVenta lineaV = null;
-		try {
-			Connection c = (Connection) TransactionManager.getInstance().getTransaction().getResource();
-			PreparedStatement statement = c.prepareStatement(
-					"DELETE FROM linea_venta WHERE id_pedido = ? AND id_producto = ?",
-					Statement.RETURN_GENERATED_KEYS
-					);
-			statement.setInt(1,idP);
-			statement.setInt(2,idPr);
-			
-			statement = c.prepareStatement(
-					"SELECT * FROM linea_venta WHERE id_pedido = ? AND id_producto = ? FOR UPDATE",
-					Statement.RETURN_GENERATED_KEYS
-					);
-			statement.setInt(1,idP);
-			statement.setInt(2,idPr);
-			ResultSet result = statement.executeQuery();
-			if(result.next()) {
-				lineaV = new TLineaVenta();
-				lineaV.setPedidoID(result.getInt(1));
-				lineaV.setProductID(2);
-				lineaV.setCantidad(3);
-				lineaV.setPrecioVenta(4);
-			}
-			statement.close();
-		}catch(Exception e) {
-			e.printStackTrace();
-		}
-		return lineaV;
+	    TLineaVenta lineaV = null;
+	    Connection c = (Connection) TransactionManager.getInstance().getTransaction().getResource();
+
+	    try {
+	        String sqlSelect = "SELECT id_pedido, id_producto, cantidad, precio_venta FROM linea_venta " +
+	                           "WHERE id_pedido = ? AND id_producto = ? FOR UPDATE";
+	        try (PreparedStatement ps = c.prepareStatement(sqlSelect)) {
+	            ps.setInt(1, idP);
+	            ps.setInt(2, idPr);
+
+	            try (ResultSet rs = ps.executeQuery()) {
+	                if (rs.next()) {
+	                    lineaV = new TLineaVenta();
+	                    lineaV.setPedidoID(rs.getInt("id_pedido"));
+	                    lineaV.setProductID(rs.getInt("id_producto"));
+	                    lineaV.setCantidad(rs.getInt("cantidad"));
+	                    lineaV.setPrecioVenta(rs.getDouble("precio_venta"));
+	                } else {
+	                    return null;
+	                }
+	            }
+	        }
+
+	        String sqlUpdate = "UPDATE linea_venta SET activo = false WHERE id_pedido = ? AND id_producto = ?";
+	        try (PreparedStatement ps = c.prepareStatement(sqlUpdate)) {
+	            ps.setInt(1, idP);
+	            ps.setInt(2, idPr);
+	            ps.executeUpdate();
+	        }
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        throw e;
+	    }
+
+	    return lineaV;
 	}
+
 
 	@Override
 	public Integer modificarLineaVenta(TLineaVenta tLineaVenta) {

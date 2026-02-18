@@ -82,31 +82,40 @@ public class SAPedidoImp implements SAPedido {
 
 	@Override
 	public TPedidoLinea mostrarPedidoPorID(int id) {
-		TPedidoLinea pedidoLinea = new TPedidoLinea();
-		TPedido p = new TPedido();
-		try {
-			Transaction t = TransactionManager.getInstance().newTransaction();
-			t.start();
-			TPedido pedido = daoPedido.mostrarPedido(id);
-			if(pedido !=null) {
-				pedidoLinea.settPedido(pedido);
-				List<TLineaVenta> lineaPedido = daoLinea.mostrarLineaPedidoPorPedido(id);
-				
-				for(TLineaVenta tlinea: lineaPedido) {
-					pedidoLinea.incluirLineaVenta(tlinea);
-				}
-				t.commit();
-			}else {
-				p.setId(-2);
-				pedidoLinea.settPedido(p);
-				t.rollback();
-			}
-		}catch(Exception e) {
-			e.printStackTrace();
-			p.setId(-2);
-			pedidoLinea.settPedido(p);
-		}
-		return pedidoLinea;
+
+	    TPedidoLinea pedidoLinea = new TPedidoLinea();
+
+	    try {
+	        Transaction t = TransactionManager.getInstance().newTransaction();
+	        t.start();
+
+	        TPedido pedido = daoPedido.mostrarPedido(id);
+
+	        if (pedido == null) {
+	            t.rollback();
+	            return null;
+	        }
+
+	        pedidoLinea.settPedido(pedido);
+
+	        List<TLineaVenta> lineas = daoLinea.mostrarLineaPedidoPorPedido(id);
+
+	        for (TLineaVenta linea : lineas) {
+	            pedidoLinea.incluirLineaVenta(linea);
+
+	            TProducto producto = daoProducto.mostrarProducto(linea.getProductoId());
+	            if (producto != null) {
+	                pedidoLinea.incluirProducto(producto);
+	            }
+	        }
+
+	        t.commit();
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+
+	    return pedidoLinea;
 	}
 
 	@Override

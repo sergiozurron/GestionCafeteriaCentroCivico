@@ -64,9 +64,7 @@ import com.grupoms.app.presentacion.controlador.comandos.mesa.BajaMesaCommand;
 import com.grupoms.app.presentacion.controlador.comandos.mesa.ModificarMesaCommand;
 import com.grupoms.app.presentacion.controlador.comandos.mesa.MostrarListaMesasCommand;
 import com.grupoms.app.presentacion.controlador.comandos.mesa.MostrarMesaCommand;
-import com.grupoms.app.presentacion.controlador.comandos.pedido.AltaOrdenCommand;
-import com.grupoms.app.presentacion.controlador.comandos.pedido.AltaPedidoCommand;
-import com.grupoms.app.presentacion.controlador.comandos.pedido.ConfirmarPedidoCommand;
+import com.grupoms.app.presentacion.controlador.comandos.pedido.CerrarPedidoCommand;
 import com.grupoms.app.presentacion.controlador.comandos.pedido.DevolverPedidoCommand;
 import com.grupoms.app.presentacion.controlador.comandos.pedido.ListarPedidoCommand;
 import com.grupoms.app.presentacion.controlador.comandos.pedido.ModificarPedidoCommand;
@@ -89,8 +87,7 @@ public class FactoryCommandImp extends FactoryCommand {
 
 	protected FactoryCommandImp() {
 
-		commands.put(Evento.ALTA_ORDEN, new AltaOrdenCommand());
-		commands.put(Evento.BAJA_ORDEN, new AltaOrdenCommand());
+
 
 		commands.put(Evento.ALTA_MESA, new AltaMesaCommand());
 		commands.put(Evento.BAJA_MESA, new BajaMesaCommand());
@@ -99,9 +96,8 @@ public class FactoryCommandImp extends FactoryCommand {
 		commands.put(Evento.MOSTRAR_LISTA_MESA, new MostrarListaMesasCommand());
 
 		commands.put(Evento.MOSTRAR_PEDIDO, new MostrarPedidoCommand());
-		commands.put(Evento.ALTA_PEDIDO, new AltaPedidoCommand());
 		commands.put(Evento.DEVOLVER_PEDIDO, new DevolverPedidoCommand());
-		commands.put(Evento.CONFIRMAR_PEDIDO, new ConfirmarPedidoCommand());
+		commands.put(Evento.CONFIRMAR_PEDIDO, new CerrarPedidoCommand());
 		commands.put(Evento.MODIFICAR_PEDIDO, new ModificarPedidoCommand());
 		commands.put(Evento.MOSTRAR_PEDIDOS, new ListarPedidoCommand());
 

@@ -115,8 +115,8 @@ public class Evento {
 	public static final int ALTA_ORDEN_OK = 203;
 
 	public static final int BAJA_ORDEN = 204;
-	public static final int BAJA_ORDEN_KO = 205;
-	public static final int BAJA_ORDEN_OK = 206;
+	public static final int CERRAR_PEDIDO_KO = 205;
+	public static final int CERRAR_PEDIDO_OK = 206;
 
 	public static final int ALTA_EMPLEADO = 220;
 	public static final int ALTA_EMPLEADO_OK = 221;

@@ -16,7 +16,7 @@ public class ListarIngredientesPorProductoCommand implements Command {
 	public Context execute(Object data) {
 		SAIngrediente saProducto = FactoriaSA.getInstance().creaSAIngrediente();
 		try {
-			List<TIngrediente> productos = saProducto.mostrarIngredientePorProducto((Integer) data);
+			List<TIngrediente> productos = saProducto.mostrarIngredientesPorProducto((Integer) data);
 			return new Context(Evento.MOSTRAR_INGREDIENTES_OK, productos);
 		} catch (Exception e) {
 			return new Context(Evento.MOSTRAR_INGREDIENTES_KO, null);

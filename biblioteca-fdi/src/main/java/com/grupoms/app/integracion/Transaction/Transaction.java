@@ -4,11 +4,11 @@ import java.sql.Connection;
 
 public interface Transaction {
 
-	void start() throws Exception;
+	void start() ;
 
-	void commit() throws Exception;
+	void commit() ;
 
-	void rollback() throws Exception;
+	void rollback() ;
 
 	public Object getResource();
 

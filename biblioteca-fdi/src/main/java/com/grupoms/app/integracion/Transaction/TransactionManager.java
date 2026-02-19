@@ -11,9 +11,9 @@ public abstract class TransactionManager {
 		return instance;
 	}
 
-	public abstract Transaction newTransaction() throws Exception;
+	public abstract Transaction newTransaction() ;
 
 	public abstract Transaction getTransaction();
 
-	public abstract void deleteTransaction() throws Exception;
+	public abstract void deleteTransaction() ;
 }

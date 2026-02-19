@@ -11,7 +11,7 @@ public class TransactionManagerImp extends TransactionManager {
 	}
 
 	@Override
-	public Transaction newTransaction() throws Exception {
+	public Transaction newTransaction() {
 		Thread currentThread = Thread.currentThread();
 		Transaction existente = transacciones.get(currentThread);
 

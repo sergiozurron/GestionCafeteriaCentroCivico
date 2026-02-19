@@ -10,27 +10,51 @@ public class TransactionMySQL implements Transaction {
 
 	private Connection conexion;
 
-	public TransactionMySQL() throws SQLException {
-		conexion = DriverManager.getConnection(DBConfig.getUrl(), DBConfig.getUser(), DBConfig.getPassword());
+	public TransactionMySQL() {
+		try {
+            conexion = DriverManager.getConnection(DBConfig.getUrl(), DBConfig.getUser(), DBConfig.getPassword());
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al crear la conexión de la transacción", e);
+        }	}
+
+	@Override
+	public void start() {
+	    try {
+	        conexion.setAutoCommit(false);
+	    } catch (SQLException e) {
+	        throw new RuntimeException("Error iniciando transacción", e);
+	    }
 	}
 
 	@Override
-	public void start() throws Exception {
-		conexion.setAutoCommit(false);
+	public void commit() {
+	    try {
+	        conexion.commit();
+	    } catch (SQLException e) {
+	        throw new RuntimeException("Error en commit de transacción", e);
+	    } finally {
+	        try {
+	            conexion.close();
+	        } catch (SQLException e) {
+	            throw new RuntimeException("Error cerrando conexión tras commit", e);
+	        }
+	    }
 	}
 
 	@Override
-	public void commit() throws Exception {
-		conexion.commit();
-		conexion.close();
-		TransactionManager.getInstance().deleteTransaction();
-	}
-
-	@Override
-	public void rollback() throws Exception {
-		conexion.rollback();
-		conexion.close();
-		TransactionManager.getInstance().deleteTransaction();
+	public void rollback() {
+	    try {
+	        conexion.rollback();
+	    } catch (SQLException e) {
+	        throw new RuntimeException("Error en rollback de transacción", e);
+	    } finally {
+	        try {
+	            conexion.close();
+	        } catch (SQLException e) {
+	            throw new RuntimeException("Error cerrando conexión tras rollback", e);
+	        }
+	        TransactionManager.getInstance().deleteTransaction();
+	    }
 	}
 
 	@Override

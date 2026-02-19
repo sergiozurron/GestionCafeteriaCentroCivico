@@ -13,7 +13,7 @@ public interface SAIngrediente {
 
 	public List<TIngrediente> mostrarListaIngredientes();
 
-	public List<TIngrediente> mostrarIngredientePorProducto(Integer IDProducto);
+	public List<TIngrediente> mostrarIngredientesPorProducto(Integer IDProducto);
 
 	public List<TIngrediente> mostrarProveedorPorIngrediente(TIngrediente ingrediente);
 

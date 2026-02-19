@@ -8,13 +8,15 @@ public interface DAOIngrediente {
 
 	public TIngrediente mostrarIngrediente(Integer id);
 
-	public List<TIngrediente> mostrarListaIngredientes() throws Exception;
+	public List<TIngrediente> mostrarListaIngredientes();
 
-	public List<TIngrediente> listarIngredientesPorProducto(Integer idProducto) throws Exception;
+	public List<TIngrediente> listarIngredientesPorProducto(Integer idProducto);
 
 	public List<TIngrediente> mostrarProveedorPorIngrediente(Integer idProveedor);
 
 	public Boolean modificarIngrediente(TIngrediente tingrediente);
 
 	public Boolean bajaIngrediente(TIngrediente ingrediente);
+
+	public void vincularProducto(Integer idIngrediente, Integer idProducto, Integer cantidad);
 }

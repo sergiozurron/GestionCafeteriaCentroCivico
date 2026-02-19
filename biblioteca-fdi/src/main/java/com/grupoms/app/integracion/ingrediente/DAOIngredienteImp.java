@@ -38,7 +38,7 @@ public class DAOIngredienteImp implements DAOIngrediente {
 	                    }
 	                }
 	            }
-	        } catch (Exception e) {
+	        } catch (SQLException e) {
 	            e.printStackTrace();
 	            throw new RuntimeException("Error creando ingrediente", e);
 	        }
@@ -66,7 +66,7 @@ public class DAOIngredienteImp implements DAOIngrediente {
                     }
                 }
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             e.printStackTrace();
             throw new RuntimeException("Error mostrando ingrediente", e);
         }
@@ -74,7 +74,7 @@ public class DAOIngredienteImp implements DAOIngrediente {
 	}
 
 	@Override
-	public List<TIngrediente> mostrarListaIngredientes() throws Exception {
+	public List<TIngrediente> mostrarListaIngredientes(){
 		List<TIngrediente> listaIngredientes = new ArrayList<>();
 		try {
 			Transaction t = TransactionManager.getInstance().getTransaction();
@@ -95,7 +95,7 @@ public class DAOIngredienteImp implements DAOIngrediente {
 				}
 			}
 		} catch (SQLException e) {
-			System.err.println("Error mostrando la lista de ingredientes: " + e.getMessage());
+			throw new RuntimeException("Error mostrando la lista de ingredientes",e);
 		}
 		return listaIngredientes;
 	}
@@ -123,8 +123,8 @@ public class DAOIngredienteImp implements DAOIngrediente {
 					}
 				}
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (SQLException e) {
+			throw new RuntimeException("Error mostrando la lista de proveedores por ingrediente",e);
 		}
 		return listaIngredientes;
 	}
@@ -143,7 +143,7 @@ public class DAOIngredienteImp implements DAOIngrediente {
 	                ps.setInt(4, tingrediente.getID());
 	                return ps.executeUpdate() > 0;
 	            }
-	        } catch (Exception e) {
+	        } catch (SQLException e) {
 	            e.printStackTrace();
 	            throw new RuntimeException("Error modificando ingrediente", e);
 	        }
@@ -161,14 +161,14 @@ public class DAOIngredienteImp implements DAOIngrediente {
 	                ps.setInt(2, ingrediente.getID());
 	                return ps.executeUpdate() > 0;
 	            }
-	        } catch (Exception e) {
+	        } catch (SQLException e) {
 	            e.printStackTrace();
 	            throw new RuntimeException("Error dando de baja ingrediente", e);
 	        }
 	}
 
 	@Override
-	public List<TIngrediente> listarIngredientesPorProducto(Integer idProducto) throws Exception {
+	public List<TIngrediente> listarIngredientesPorProducto(Integer idProducto){
 		 List<TIngrediente> lista = new ArrayList<>();
 	        try {
 	            Transaction t = TransactionManager.getInstance().getTransaction();
@@ -192,41 +192,35 @@ public class DAOIngredienteImp implements DAOIngrediente {
 	                    }
 	                }
 	            }
-	        } catch (Exception e) {
+	        } catch (SQLException e) {
 	            e.printStackTrace();
 	            throw new RuntimeException("Error listando ingredientes por producto", e);
 	        }
 	        return lista;
 	}
+
+	@Override
+	public void vincularProducto(Integer idIngrediente, Integer idProducto, Integer cantidad) {
+
+	    try {
+	        Transaction t = TransactionManager.getInstance().getTransaction();
+	        Connection c = (Connection) t.getResource();
+
+	        String sql = "INSERT INTO producto_ingrediente (id_producto, id_ingrediente, cantidad) VALUES (?, ?, ?)";
+
+	        try (PreparedStatement ps = c.prepareStatement(sql)) {
+	            ps.setInt(1, idProducto);
+	            ps.setInt(2, idIngrediente);
+	            ps.setInt(3, cantidad);
+
+	            ps.executeUpdate();
+	        }
+
+	    } catch (SQLException e) {
+	        throw new RuntimeException("Error vinculando producto con ingrediente", e);
+	    }
+	}
+
 	
-
-	private Connection getConnection() throws SQLException {
-		Transaction tx = getTransaction();
-		if (tx == null) {
-			return DriverManager.getConnection(DBConfig.getUrl(), DBConfig.getUser(), DBConfig.getPassword());
-		}
-		return (Connection) tx.getResource();
-	}
-
-	private void closeConnection(Connection conn) {
-		if (conn == null) {
-			return;
-		}
-		try {
-			if (getTransaction() == null) {
-				conn.close();
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
-
-	private Transaction getTransaction() {
-		try {
-			return TransactionManager.getInstance().getTransaction();
-		} catch (IllegalStateException e) {
-			return null;
-		}
-	}
 
 }

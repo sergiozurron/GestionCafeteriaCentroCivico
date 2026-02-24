@@ -171,7 +171,7 @@ public class FactoriaVistas {
 		vistas.put(GUI_LISTAR_PRESTAMO, new GUI_ListarPrestamo());
 		vistas.put(GUI_MOSTRAR_PRESTAMO, new GUI_MostrarPrestamo());
 		vistas.put(GUI_MODIFICAR_PRESTAMO, new GUI_ModificarPrestamo());
-/* 
+
 		vistas.put(GUI_ALTA_PEDIDO, new GUI_AltaPedido());
 		vistas.put(GUI_MOSTRAR_PEDIDO, new GUI_MostrarPedido());
 		vistas.put(GUI_DEVOLVER_PEDIDO, new GUI_DevolverPedido());
@@ -189,7 +189,7 @@ public class FactoriaVistas {
 		vistas.put(GUI_BAJA_INGREDIENTE, new GUI_BajaIngrediente());
 		vistas.put(GUI_MOSTRAR_INGREDIENTE, new GUI_MostrarIngrediente());
 		vistas.put(GUI_LISTAR_INGREDIENTES, new GUI_ListarIngrediente());
-		vistas.put(GUI_MODIFICAR_INGREDIENTE, new GUI_ModificarIngrediente()); */
+		vistas.put(GUI_MODIFICAR_INGREDIENTE, new GUI_ModificarIngrediente());
 
 		vistas.put(GUI_ALTA_MESA, new GUI_AltaMesa());
 		vistas.put(GUI_BAJA_MESA, new GUI_BajaMesa());
@@ -197,7 +197,7 @@ public class FactoriaVistas {
 		vistas.put(GUI_LISTAR_MESAS, new GUI_ListarMesa());
 		vistas.put(GUI_MODIFICAR_MESA, new GUI_ModificarMesa());
 
-/*		vistas.put(GUI_ALTA_PRODUCTO, new GUI_AltaProducto());
+		vistas.put(GUI_ALTA_PRODUCTO, new GUI_AltaProducto());
 		vistas.put(GUI_BAJA_PRODUCTO, new GUI_BajaProducto());
 		vistas.put(GUI_MOSTRAR_PRODUCTO, new GUI_MostrarProducto());
 		vistas.put(GUI_LISTAR_PRODUCTOS, new GUI_ListarProducto());
@@ -207,7 +207,7 @@ public class FactoriaVistas {
 		vistas.put(GUI_BAJA_EMPLEADO, new GUI_BajaEmpleado());
 		vistas.put(GUI_MOSTRAR_EMPLEADO, new GUI_MostrarEmpleado());
 		vistas.put(GUI_LISTAR_EMPLEADOS, new GUI_ListarEmpleado());
-		vistas.put(GUI_MODIFICAR_EMPLEADO, new GUI_ModificarEmpleado()); */
+		vistas.put(GUI_MODIFICAR_EMPLEADO, new GUI_ModificarEmpleado());
 		
 	}
 

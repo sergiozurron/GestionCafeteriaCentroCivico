@@ -78,8 +78,6 @@ public class GUI_ListarMesa extends JFrame implements IGUI {
 		tablaMesas = new JTable(modeloTabla);
 		JScrollPane scroll = new JScrollPane(tablaMesas);
 		add(scroll, BorderLayout.CENTER);
-
-		setVisible(true);
 	}
 
 	private void actualizarTabla() {

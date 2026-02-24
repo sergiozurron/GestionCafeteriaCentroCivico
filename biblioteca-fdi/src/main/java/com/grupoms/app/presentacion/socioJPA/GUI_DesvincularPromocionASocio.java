@@ -1,13 +1,21 @@
 package com.grupoms.app.presentacion.socioJPA;
 
+import java.awt.BorderLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+
 import com.grupoms.app.presentacion.IGUI;
 import com.grupoms.app.presentacion.controlador.Context;
 import com.grupoms.app.presentacion.controlador.Controlador;
 import com.grupoms.app.presentacion.controlador.Evento;
-import org.apache.commons.lang3.tuple.Pair;
-
-import javax.swing.*;
-import java.awt.*;
 
 public class GUI_DesvincularPromocionASocio extends JFrame implements IGUI {
 	private static final long serialVersionUID = 1L;

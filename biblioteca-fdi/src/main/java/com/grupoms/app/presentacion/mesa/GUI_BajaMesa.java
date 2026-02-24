@@ -33,7 +33,6 @@ public class GUI_BajaMesa extends JFrame implements IGUI {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		pack();
 		setLocationRelativeTo(null);
-
 	}
 
 	@Override

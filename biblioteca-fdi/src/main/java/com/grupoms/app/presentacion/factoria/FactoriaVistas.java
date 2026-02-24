@@ -189,7 +189,7 @@ public class FactoriaVistas {
 		vistas.put(GUI_BAJA_INGREDIENTE, new GUI_BajaIngrediente());
 		vistas.put(GUI_MOSTRAR_INGREDIENTE, new GUI_MostrarIngrediente());
 		vistas.put(GUI_LISTAR_INGREDIENTES, new GUI_ListarIngrediente());
-		vistas.put(GUI_MODIFICAR_INGREDIENTE, new GUI_ModificarIngrediente());
+		vistas.put(GUI_MODIFICAR_INGREDIENTE, new GUI_ModificarIngrediente()); */
 
 		vistas.put(GUI_ALTA_MESA, new GUI_AltaMesa());
 		vistas.put(GUI_BAJA_MESA, new GUI_BajaMesa());
@@ -197,7 +197,7 @@ public class FactoriaVistas {
 		vistas.put(GUI_LISTAR_MESAS, new GUI_ListarMesa());
 		vistas.put(GUI_MODIFICAR_MESA, new GUI_ModificarMesa());
 
-		vistas.put(GUI_ALTA_PRODUCTO, new GUI_AltaProducto());
+/*		vistas.put(GUI_ALTA_PRODUCTO, new GUI_AltaProducto());
 		vistas.put(GUI_BAJA_PRODUCTO, new GUI_BajaProducto());
 		vistas.put(GUI_MOSTRAR_PRODUCTO, new GUI_MostrarProducto());
 		vistas.put(GUI_LISTAR_PRODUCTOS, new GUI_ListarProducto());

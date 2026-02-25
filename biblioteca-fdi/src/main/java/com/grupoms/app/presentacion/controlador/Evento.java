@@ -42,9 +42,6 @@ public class Evento {
 	public static final int MOSTRAR_LISTA_MESA_OK = 26;
 	public static final int MOSTRAR_LISTA_MESA_KO = 27;
 
-	public static final int ALTA_PEDIDO = 31;
-	public static final int ALTA_PEDIDO_OK = 32;
-	public static final int ALTA_PEDIDO_KO = 33;
 
 	public static final int CONFIRMAR_PEDIDO = 34;
 	public static final int CONFIRMAR_PEDIDO_OK = 35;
@@ -114,7 +111,7 @@ public class Evento {
 	public static final int ALTA_ORDEN_KO = 202;
 	public static final int ALTA_ORDEN_OK = 203;
 
-	public static final int BAJA_ORDEN = 204;
+	public static final int CERRAR_PEDIDO = 204;
 	public static final int CERRAR_PEDIDO_KO = 205;
 	public static final int CERRAR_PEDIDO_OK = 206;
 

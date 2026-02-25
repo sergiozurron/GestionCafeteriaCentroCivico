@@ -13,7 +13,7 @@ public class ListarPedidoCommand implements Command {
 	public Context execute(Object data) {
 		SAPedido sa = FactoriaSA.getInstance().creaSAPedido();
 		try {
-			List<TPedido> pedidos = sa.mostrarPedidos();
+			List<TPedido> pedidos = sa.listarPedidos();
 			return new Context(Evento.MOSTRAR_PEDIDOS_OK, pedidos);
 		} catch (Exception e) {
 			return new Context(Evento.MOSTRAR_PEDIDOS_KO, null);

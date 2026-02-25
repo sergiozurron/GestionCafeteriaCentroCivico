@@ -17,7 +17,7 @@ public class CerrarPedidoCommand implements Command {
 		if(res>-1) {
 			return new Context(Evento.CERRAR_PEDIDO_OK,res);
 		}else {
-			return new Context(Evento.CERRAR_PEDIDO_OK,res);
+			return new Context(Evento.CERRAR_PEDIDO_KO,res);
 
 		}
 	}

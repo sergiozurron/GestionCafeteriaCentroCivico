@@ -3,7 +3,9 @@ package com.grupoms.app.presentacion.pedido;
 import javax.swing.*;
 import java.awt.*;
 
+import com.grupoms.app.negocio.pedido.TLineaVenta;
 import com.grupoms.app.negocio.pedido.TPedido;
+import com.grupoms.app.negocio.pedido.TPedidoLinea;
 import com.grupoms.app.presentacion.IGUI;
 import com.grupoms.app.presentacion.controlador.Context;
 import com.grupoms.app.presentacion.controlador.Controlador;
@@ -48,9 +50,8 @@ public class GUI_DevolverPedido extends JFrame implements IGUI {
 		devolver.addActionListener(e -> {
 			try {
 				int idPedido = Integer.parseInt(campoID.getText());
-				TPedido pedido = new TPedido();
-				pedido.setId(idPedido);
-
+				TLineaVenta pedido = new TLineaVenta();
+				pedido.setPedidoID(idPedido);
 				Context contexto = new Context(Evento.DEVOLVER_PEDIDO, pedido);
 				Controlador.getInstance().handle(contexto);
 

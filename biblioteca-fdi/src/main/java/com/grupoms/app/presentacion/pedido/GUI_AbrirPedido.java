@@ -3,19 +3,20 @@ package com.grupoms.app.presentacion.pedido;
 import javax.swing.*;
 import java.awt.*;
 
+import com.grupoms.app.negocio.pedido.TCarrito;
 import com.grupoms.app.negocio.pedido.TPedido;
 import com.grupoms.app.presentacion.IGUI;
 import com.grupoms.app.presentacion.controlador.Context;
 import com.grupoms.app.presentacion.controlador.Controlador;
 import com.grupoms.app.presentacion.controlador.Evento;
 
-public class GUI_AltaPedido extends JFrame implements IGUI {
+public class GUI_AbrirPedido extends JFrame implements IGUI {
 
 	private JTextField campoMesa;
 	private JTextField campoEmpleado;
 	private JButton crearPedido;
 
-	public GUI_AltaPedido() {
+	public GUI_AbrirPedido() {
 		super("Alta Pedido");
 		initGUI();
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -65,8 +66,11 @@ public class GUI_AltaPedido extends JFrame implements IGUI {
 			TPedido pedido = new TPedido();
 			pedido.setIdMesa(idMesa);
 			pedido.setIdEmpleado(idEmpleado);
-
-			Context contexto = new Context(Evento.ALTA_PEDIDO, pedido);
+			
+			TCarrito carrito = new TCarrito();
+			carrito.setPedido(pedido);
+			
+			Context contexto = new Context(Evento.CERRAR_PEDIDO, pedido);
 			Controlador.getInstance().handle(contexto);
 
 		} catch (NumberFormatException ex) {
@@ -76,16 +80,22 @@ public class GUI_AltaPedido extends JFrame implements IGUI {
 
 	@Override
 	public void actualizar(Context context) {
-		if (context.getEvento() == Evento.ALTA_PEDIDO_OK) {
-			TPedido pedidoCreado = (TPedido) context.getDatos();
-			if (pedidoCreado != null && pedidoCreado.getId() != null) {
-				JOptionPane.showMessageDialog(this, "Pedido creado con éxito. ID del pedido: " + pedidoCreado.getId());
-
-				campoMesa.setText("");
-				campoEmpleado.setText("");
+		int resultado = (int) context.getDatos();
+		
+		if (context.getEvento() == Evento.CERRAR_PEDIDO_OK) {
+			JOptionPane.showMessageDialog(this,"Pedido creado con éxito");
+		}else if(context.getEvento()==Evento.CERRAR_PEDIDO_KO) {
+			switch(resultado) {
+			case -1: 
+				JOptionPane.showMessageDialog(this,"Se ha producido un erro");
+				break;
+			case -2:
+				JOptionPane.showMessageDialog(this,"Datos incorrectos");
+				break;
+			default:
+				JOptionPane.showMessageDialog(this,"Error desconocido");
+				break;
 			}
-		} else if (context.getEvento() == Evento.ALTA_PEDIDO_KO) {
-			JOptionPane.showMessageDialog(this, "Error al crear el pedido");
 		}
 	}
 }

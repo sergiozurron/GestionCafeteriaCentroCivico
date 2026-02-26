@@ -87,7 +87,9 @@ public class GUI_AltaPedido extends JFrame implements IGUI {
 
 	@Override
 	public void actualizar(Context context) {
-
+		if(context == null) {
+			setVisible(true);
+		}
 		switch (context.getEvento()) {
 
 		case Evento.ALTA_PEDIDO_OK:

@@ -25,12 +25,17 @@ public class Principal extends JFrame {
 		panelCafeteria.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
 
 		panelCafeteria.add(crearPanelCategoria("Pedidos",
-				new String[][] { { "Alta Pedido", FactoriaVistas.GUI_ALTA_PEDIDO },
+				new String[][] { 
+						{"Alta Pedido", FactoriaVistas.GUI_ALTA_PEDIDO },
 						{ "Mostrar Pedido", FactoriaVistas.GUI_MOSTRAR_PEDIDO },
 						{ "Devolver Pedido", FactoriaVistas.GUI_DEVOLVER_PEDIDO },
 						{ "Modificar Pedido", FactoriaVistas.GUI_MODIFICAR_PEDIDO },
 						{ "Listar Pedidos", FactoriaVistas.GUI_MOSTRAR_LISTA_PEDIDOS},
-						{ "Anyadir Producto", FactoriaVistas.GUI_ALTA_ORDEN } }));
+						{ "Listar Pedidos por Empleado", FactoriaVistas.GUI_MOSTRAR_PEDIDOS_EMPLEADO},
+						{ "Listar Pedidos por Mesa", FactoriaVistas.GUI_MOSTRAR_PEDIDOS_MESA},
+						{ "Quitar Producto", FactoriaVistas.GUI_DESVINCULAR_PRODUCTO_PEDIDO},
+						{ "Cerrar Pedido", FactoriaVistas.GUI_CERRAR_PEDIDO},
+						{ "Anyadir Producto", FactoriaVistas.GUI_VINCULAR_PRODUCTO_PEDIDO } }));
 
 		panelCafeteria.add(crearPanelCategoria("Mesas", new String[][] { { "Alta Mesa", FactoriaVistas.GUI_ALTA_MESA },
 				{ "Baja Mesa", FactoriaVistas.GUI_BAJA_MESA }, { "Modificar Mesa", FactoriaVistas.GUI_MODIFICAR_MESA },

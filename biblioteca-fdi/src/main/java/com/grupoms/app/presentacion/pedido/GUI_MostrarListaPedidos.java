@@ -61,6 +61,8 @@ public class GUI_MostrarListaPedidos extends JFrame implements IGUI {
 
 	@Override
 	public void actualizar(Context context) {
+		if (context == null)
+			setVisible(true);
 		if (context.getEvento() == Evento.MOSTRAR_PEDIDOS_OK) {
 			modeloTabla.setRowCount(0);
 			List<TPedido> pedidos = (List<TPedido>) context.getDatos();

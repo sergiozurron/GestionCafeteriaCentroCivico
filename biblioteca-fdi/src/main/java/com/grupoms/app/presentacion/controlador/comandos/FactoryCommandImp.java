@@ -64,6 +64,7 @@ import com.grupoms.app.presentacion.controlador.comandos.mesa.BajaMesaCommand;
 import com.grupoms.app.presentacion.controlador.comandos.mesa.ModificarMesaCommand;
 import com.grupoms.app.presentacion.controlador.comandos.mesa.MostrarListaMesasCommand;
 import com.grupoms.app.presentacion.controlador.comandos.mesa.MostrarMesaCommand;
+import com.grupoms.app.presentacion.controlador.comandos.pedido.AltaPedidoCommand;
 import com.grupoms.app.presentacion.controlador.comandos.producto.AltaProductoCommand;
 import com.grupoms.app.presentacion.controlador.comandos.producto.BajaProductoCommand;
 import com.grupoms.app.presentacion.controlador.comandos.producto.ModificarProductoCommand;
@@ -168,11 +169,26 @@ public class FactoryCommandImp extends FactoryCommand {
 		commands.put(Evento.DESVINCULAR_PROMOCION, new DesvincularPromocionASocioCommand());
 		commands.put(Evento.MOSTRAR_SOCIOS_POR_PROMOCION, new MostrarSociosPorPromocionCommand());
 
+		
+		commands.put(Evento.ALTA_PEDIDO,new AltaPedidoCommand());
+		
+		
+		
+		
+		
+		views.put(Evento.ALTA_PEDIDO, FactoriaVistas.GUI_ALTA_PEDIDO);
 		views.put(Evento.MOSTRAR_PEDIDO, FactoriaVistas.GUI_MOSTRAR_PEDIDO);
 		views.put(Evento.MODIFICAR_PEDIDO, FactoriaVistas.GUI_MODIFICAR_PEDIDO);
 		views.put(Evento.DEVOLVER_PEDIDO, FactoriaVistas.GUI_DEVOLVER_PEDIDO);
 		views.put(Evento.MOSTRAR_PEDIDOS, FactoriaVistas.GUI_MOSTRAR_LISTA_PEDIDOS);
+		views.put(Evento.MOSTRAR_PEDIDOS_EMPLEADO, FactoriaVistas.GUI_MOSTRAR_PEDIDOS_EMPLEADO);
+		views.put(Evento.MOSTRAR_PEDIDOS_MESA, FactoriaVistas.GUI_MOSTRAR_PEDIDOS_MESA);
+		views.put(Evento.MOSTRAR_PEDIDO, FactoriaVistas.GUI_MOSTRAR_PEDIDO);
+		views.put(Evento.VINCULAR_PRODUCTO_PEDIDO, FactoriaVistas.GUI_VINCULAR_PRODUCTO_PEDIDO);
+		views.put(Evento.DESVINCULAR_PRODUCTO_PEDIDO, FactoriaVistas.GUI_DESVINCULAR_PRODUCTO_PEDIDO);
 
+
+		
 		views.put(Evento.ALTA_INGREDIENTE, FactoriaVistas.GUI_ALTA_INGREDIENTE);
 		views.put(Evento.MODIFICAR_INGREDIENTE, FactoriaVistas.GUI_MODIFICAR_INGREDIENTE);
 		views.put(Evento.MOSTRAR_INGREDIENTE, FactoriaVistas.GUI_MOSTRAR_INGREDIENTE);

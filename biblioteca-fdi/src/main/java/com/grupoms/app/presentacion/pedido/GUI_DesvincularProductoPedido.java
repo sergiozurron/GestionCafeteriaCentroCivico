@@ -13,7 +13,7 @@ public class GUI_DesvincularProductoPedido extends JFrame implements IGUI {
 
 	private static final long serialVersionUID = 1L;
 
-	private JTextField campoIdLinea;
+	private JTextField campoIdPedido, campoIdProducto;
 	private JButton botonDesvincular;
 
 	public GUI_DesvincularProductoPedido() {
@@ -25,28 +25,41 @@ public class GUI_DesvincularProductoPedido extends JFrame implements IGUI {
 	}
 
 	private void initGUI() {
-
 		JPanel panel = new JPanel(new GridBagLayout());
 		GridBagConstraints gbc = new GridBagConstraints();
 
 		gbc.insets = new Insets(5, 5, 5, 5);
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 
-		JLabel labelLinea = new JLabel("ID Línea Pedido:");
-		campoIdLinea = new JTextField(10);
+		// ----- FILA 0: ID PEDIDO -----
+		JLabel labelPedido = new JLabel("ID Pedido:");
+		campoIdPedido = new JTextField(10);
 
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		gbc.gridwidth = 1;
+		panel.add(labelPedido, gbc);
+
+		gbc.gridx = 1;
+		panel.add(campoIdPedido, gbc);
+
+		// ----- FILA 1: ID PRODUCTO -----
+		JLabel labelProducto = new JLabel("ID Producto:");
+		campoIdProducto = new JTextField(10);
+
+		gbc.gridx = 0;
+		gbc.gridy = 1;
+		panel.add(labelProducto, gbc);
+
+		gbc.gridx = 1;
+		panel.add(campoIdProducto, gbc);
+
+		// ----- FILA 2: BOTÓN -----
 		botonDesvincular = new JButton("Desvincular");
 		botonDesvincular.addActionListener(e -> desvincularProducto());
 
 		gbc.gridx = 0;
-		gbc.gridy = 0;
-		panel.add(labelLinea, gbc);
-
-		gbc.gridx = 1;
-		panel.add(campoIdLinea, gbc);
-
-		gbc.gridx = 0;
-		gbc.gridy = 1;
+		gbc.gridy = 2;
 		gbc.gridwidth = 2;
 		panel.add(botonDesvincular, gbc);
 
@@ -54,12 +67,14 @@ public class GUI_DesvincularProductoPedido extends JFrame implements IGUI {
 	}
 
 	private void desvincularProducto() {
-
+		
 		try {
-			int idLinea = Integer.parseInt(campoIdLinea.getText());
 
+			int idProducto= Integer.parseInt(campoIdProducto.getText());
+			int idPedido = Integer.parseInt(campoIdPedido.getText());
 			TLineaPedido linea = new TLineaPedido();
-			linea.setId(idLinea);
+			linea.setPedidoID(idPedido);
+			linea.setProductID(idProducto);
 			linea.setActivo(false); // Baja lógica
 
 			Context contexto = new Context(
@@ -75,13 +90,16 @@ public class GUI_DesvincularProductoPedido extends JFrame implements IGUI {
 
 	@Override
 	public void actualizar(Context context) {
-
+		if(context == null) {
+			setVisible(true);
+		}
 		switch (context.getEvento()) {
 
 		case Evento.DESVINCULAR_PRODUCTO_PEDIDO_OK:
 			JOptionPane.showMessageDialog(this,
 					"Producto desvinculado correctamente");
-			campoIdLinea.setText("");
+			campoIdProducto.setText("");
+			campoIdPedido.setText("");
 			break;
 
 		case Evento.DESVINCULAR_PRODUCTO_PEDIDO_KO:

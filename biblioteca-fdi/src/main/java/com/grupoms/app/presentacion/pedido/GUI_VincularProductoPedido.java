@@ -101,7 +101,9 @@ public class GUI_VincularProductoPedido extends JFrame implements IGUI {
 
 	@Override
 	public void actualizar(Context context) {
-
+		if(context == null) {
+			setVisible(true);
+		}
 		switch (context.getEvento()) {
 
 		case Evento.VINCULAR_PRODUCTO_PEDIDO_OK:

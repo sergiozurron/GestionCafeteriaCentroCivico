@@ -120,7 +120,7 @@ public class GUI_MostrarPedido extends JFrame implements IGUI {
 	@Override
 	public void actualizar(Context context) {
 		if (context == null)
-			return;
+			setVisible(true);
 
 		SwingUtilities.invokeLater(() -> {
 			if (context.getEvento() == Evento.MOSTRAR_PEDIDO_OK) {

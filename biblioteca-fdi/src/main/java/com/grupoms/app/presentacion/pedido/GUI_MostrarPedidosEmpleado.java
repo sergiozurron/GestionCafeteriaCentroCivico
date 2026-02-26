@@ -75,7 +75,9 @@ public class GUI_MostrarPedidosEmpleado extends JFrame implements IGUI {
 
 	@Override
 	public void actualizar(Context context) {
-
+		if (context == null)
+			setVisible(true);
+		
 		if (context.getEvento() == Evento.MOSTRAR_PEDIDOS_EMPLEADO_OK) {
 
 			modeloTabla.setRowCount(0);

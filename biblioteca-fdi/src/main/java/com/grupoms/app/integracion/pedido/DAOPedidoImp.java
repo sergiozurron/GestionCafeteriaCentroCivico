@@ -192,40 +192,13 @@ public class DAOPedidoImp implements DAOPedido {
 		return lista;
 	}
 
-	private Connection getConnection() throws SQLException {
-		Transaction tx = getTransaction();
-		if (tx == null) {
-			return DriverManager.getConnection(DBConfig.getUrl(), DBConfig.getUser(), DBConfig.getPassword());
-		}
-		return (Connection) tx.getResource();
-	}
 
-	private void closeConnection(Connection conn) {
-		if (conn == null) {
-			return;
-		}
-		try {
-			if (getTransaction() == null) {
-				conn.close();
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
-
-	private Transaction getTransaction() {
-		try {
-			return TransactionManager.getInstance().getTransaction();
-		} catch (IllegalStateException e) {
-			return null;
-		}
-	}
 
 	@Override
 	public Integer cerrarPedido(TPedido pedido) {
 		int exito = -1;
 		try {
-			Connection c = getConnection();
+			Connection c = (Connection)TransactionManager.getInstance().getTransaction().getResource();
 			PreparedStatement st = c.prepareStatement("INSERT INTO pedidos(fecha, total_factura,activo) VALUES(?, NOW(),true",
 					Statement.RETURN_GENERATED_KEYS);
 			st.setDouble(1,pedido.getTotal());

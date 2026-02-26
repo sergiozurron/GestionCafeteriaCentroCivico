@@ -6,7 +6,6 @@ public class TLineaVenta {
 	private Integer idPedido;
 	private Integer idProducto;
 	private Integer cantidad;
-	private Double precioVenta;
 
 	public Integer getId() {
 		return id;
@@ -24,10 +23,6 @@ public class TLineaVenta {
 		return cantidad;
 	}
 
-	public Double getPrecio() {
-		return precioVenta;
-	}
-
 	public void setId(int int1) {
 		this.id = int1;
 	}
@@ -42,11 +37,6 @@ public class TLineaVenta {
 
 	public void setCantidad(int int1) {
 		this.cantidad = int1;
-	}
-
-	public void setPrecioVenta(double double1) {
-
-		this.precioVenta = double1;
 	}
 
 }

@@ -35,8 +35,7 @@ public class SAPedidoImp implements SAPedido {
 								producto.setStock(producto.getStock()-lineaV.getCantidad());
 								daoProducto.modificarProducto(producto);
 								double precio_linea = (lineaV.getCantidad()*producto.getPrecio());
-								lineaV.setPrecioVenta(precio_linea);
-								precio = precio+ precio_linea;
+								precio = precio + precio_linea;
 							}
 							else {
 								t.rollback();

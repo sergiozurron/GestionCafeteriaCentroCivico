@@ -12,110 +12,92 @@ import com.grupoms.app.negocio.mesa.TMesaTerraza;
 
 public class DAOMesaImp implements DAOMesa {
 
-	private static final String INSERT_MESA = "INSERT INTO MESAS(numero, ubicacion, capacidad, activo, sala_id, terraza_id) VALUES (?, ?, ?, ?, ?, ?)";
+	// Constantes de Inserción (Las que ya arreglamos)
+    private static final String INSERT_MESA = "INSERT INTO Mesa (numero, ubicacion, capacidad, activo) VALUES (?, ?, ?, ?)";
+    private static final String INSERT_SALA = "INSERT INTO MesaSala (id_mesa, reservada, privacidad) VALUES (?, ?, ?)";
+    private static final String INSERT_TERRAZA = "INSERT INTO MesaTerraza (id_mesa, cubierta, suplemento) VALUES (?, ?, ?)";
 
-	private static final String INSERT_TERRAZA = "INSERT INTO TERRAZAS(cubierta, suplemento) VALUES (?, ?)";
+    // ARREGLADO: JOINs correctos usando id_mesa y nombres en singular consistentes
+    // ARREGLADO: Añadido FOR UPDATE para el bloqueo pesimista
+    private static final String READ_BY_ID = 
+        "SELECT m.*, s.reservada, s.privacidad, t.cubierta, t.suplemento " +
+        "FROM Mesa m " + 
+        "LEFT JOIN MesaSala s ON m.id = s.id_mesa " +
+        "LEFT JOIN MesaTerraza t ON m.id = t.id_mesa " + 
+        "WHERE m.id = ? FOR UPDATE";
 
-	private static final String INSERT_SALA = "INSERT INTO SALAS(reservada, privacidad) VALUES (?, ?)";
+    private static final String ALL = 
+        "SELECT m.*, s.reservada, s.privacidad, t.cubierta, t.suplemento " +
+        "FROM Mesa m " + 
+        "LEFT JOIN MesaSala s ON m.id = s.id_mesa " +
+        "LEFT JOIN MesaTerraza t ON m.id = t.id_mesa";
 
-	private static final String READ_BY_ID = "SELECT m.*, s.reservada, s.privacidad, t.cubierta, t.suplemento "
-			+ "FROM MESAS m " + "LEFT JOIN SALAS s ON m.sala_id = s.id "
-			+ "LEFT JOIN TERRAZAS t ON m.terraza_id = t.id " + "WHERE m.id = ?";
-
-	private static final String DESACTIVAR_MESA = "UPDATE MESAS SET activo = ? WHERE id = ?";
-
-	private static final String UPDATE_MESA = "UPDATE MESAS SET numero = ?, ubicacion = ?, capacidad = ?, activo = ? WHERE id = ?";
-
-	private static final String UPDATE_TERRAZA = "UPDATE TERRAZAS SET cubierta = ?, suplemento = ? WHERE id = ?";
-
-	private static final String UPDATE_SALA = "UPDATE SALAS SET reservada = ?, privacidad = ? WHERE id = ?";
-
-	private static final String ALL = "SELECT m.*, s.reservada, s.privacidad, t.cubierta, t.suplemento "
-			+ "FROM MESAS m " + "LEFT JOIN SALAS s ON m.sala_id = s.id "
-			+ "LEFT JOIN TERRAZAS t ON m.terraza_id = t.id";
-
-	private static final String DELETE_MESA = "DELETE FROM MESA";
-	private static final String DELETE_SALA = "DELETE FROM SALA";
-	private static final String DELETE_TERRAZA = "DELETE FROM TERRAZA";
-
-	public void eliminaTodas() throws SQLException {
-		try {
-			Transaction t = TransactionManager.getInstance().getTransaction();
-			Connection c = (Connection) t.getResource();
-			try (PreparedStatement ps = c.prepareStatement(DELETE_MESA)) {
-				ps.executeUpdate();
-			}
-			try (PreparedStatement ps = c.prepareStatement(DELETE_SALA)) {
-				ps.executeUpdate();
-			}
-			try (PreparedStatement ps = c.prepareStatement(DELETE_TERRAZA)) {
-				ps.executeUpdate();
-			}
-		} catch (SQLException e) {
-			System.err.println("Error al borrar todas las mesa: " + e.getMessage());
-		}
-	}
-
+    // ARREGLADO: Sentencias de actualización consistentes
+    private static final String DESACTIVAR_MESA = "UPDATE Mesa SET activo = ? WHERE id = ?";
+    private static final String UPDATE_MESA = "UPDATE Mesa SET numero = ?, ubicacion = ?, capacidad = ?, activo = ? WHERE id = ?";
+    private static final String UPDATE_TERRAZA = "UPDATE MesaTerraza SET cubierta = ?, suplemento = ? WHERE id_mesa = ?";
+    private static final String UPDATE_SALA = "UPDATE MesaSala SET reservada = ?, privacidad = ? WHERE id_mesa = ?";
+    
 	@Override
 	public Integer altaMesa(TMesa mesa) {
-		Integer idGenerado = null;
-		try {
-			Transaction t = TransactionManager.getInstance().getTransaction();
-			Connection c = (Connection) t.getResource();
+	    Integer idGenerado = null;
+	    
+	    // Consultas SQL ajustadas (Mesa genera el ID, las hijas lo heredan)
+	    String INSERT_MESA = "INSERT INTO Mesa (numero, ubicacion, capacidad, activo) VALUES (?, ?, ?, ?)";
+	    String INSERT_SALA = "INSERT INTO MesaSala (id_mesa, reservada, privacidad) VALUES (?, ?, ?)";
+	    String INSERT_TERRAZA = "INSERT INTO MesaTerraza (id_mesa, cubierta, suplemento) VALUES (?, ?, ?)";
 
-			Integer salaId = null;
-			Integer terrazaId = null;
+	    try {
+	        Transaction t = TransactionManager.getInstance().getTransaction();
+	        // Idealmente, cambia tu Transaction para que esto no requiera (Connection)
+	        Connection c = (Connection) t.getResource(); 
 
-			if (mesa instanceof TMesaSala) {
-				TMesaSala mesaS = (TMesaSala) mesa;
-				try (PreparedStatement ps = c.prepareStatement(INSERT_SALA, Statement.RETURN_GENERATED_KEYS)) {
-					ps.setBoolean(1, mesaS.getReservada());
-					ps.setString(2, mesaS.getPrivacidad());
-					ps.executeUpdate();
-					ResultSet rs = ps.getGeneratedKeys();
-					if (rs.next())
-						salaId = rs.getInt(1);
-				}
-			} else if (mesa instanceof TMesaTerraza) {
-				TMesaTerraza mesaT = (TMesaTerraza) mesa;
-				try (PreparedStatement ps = c.prepareStatement(INSERT_TERRAZA, Statement.RETURN_GENERATED_KEYS)) {
-					ps.setBoolean(1, mesaT.getCubierta());
-					ps.setDouble(2, mesaT.getSuplemento());
-					ps.executeUpdate();
-					ResultSet rs = ps.getGeneratedKeys();
-					if (rs.next())
-						terrazaId = rs.getInt(1);
-				}
-			}
+	        // 1. Insertar PRIMERO en la tabla Padre (Mesa)
+	        try (PreparedStatement psMesa = c.prepareStatement(INSERT_MESA, Statement.RETURN_GENERATED_KEYS)) {
+	            psMesa.setInt(1, mesa.getNumero());
+	            psMesa.setString(2, mesa.getUbicacion());
+	            psMesa.setInt(3, mesa.getCapacidad());
+	            psMesa.setBoolean(4, mesa.getActivo());
+	            
+	            psMesa.executeUpdate();
+	            
+	            ResultSet rs = psMesa.getGeneratedKeys();
+	            if (rs.next()) {
+	                idGenerado = rs.getInt(1);
+	                mesa.setId(idGenerado); // Seteamos el ID en el Transfer Object
+	            }
+	        }
 
-			try (PreparedStatement ps = c.prepareStatement(INSERT_MESA, Statement.RETURN_GENERATED_KEYS)) {
-				ps.setInt(1, mesa.getNumero());
-				ps.setString(2, mesa.getUbicacion());
-				ps.setInt(3, mesa.getCapacidad());
-				ps.setBoolean(4, mesa.getActivo());
-				if (salaId != null) {
-					ps.setInt(5, salaId);
-					ps.setNull(6, java.sql.Types.INTEGER);
-				} else {
-					ps.setNull(5, java.sql.Types.INTEGER);
-					ps.setInt(6, terrazaId);
-				}
-				ps.executeUpdate();
+	        // 2. Insertar en la tabla Hija correspondiente usando el ID generado
+	        if (idGenerado != null) {
+	            if (mesa instanceof TMesaSala) {
+	                TMesaSala mesaS = (TMesaSala) mesa;
+	                try (PreparedStatement psSala = c.prepareStatement(INSERT_SALA)) {
+	                    psSala.setInt(1, idGenerado);
+	                    psSala.setBoolean(2, mesaS.getReservada());
+	                    psSala.setString(3, mesaS.getPrivacidad());
+	                    psSala.executeUpdate();
+	                }
+	            } else if (mesa instanceof TMesaTerraza) {
+	                TMesaTerraza mesaT = (TMesaTerraza) mesa;
+	                try (PreparedStatement psTerraza = c.prepareStatement(INSERT_TERRAZA)) {
+	                    psTerraza.setInt(1, idGenerado);
+	                    psTerraza.setBoolean(2, mesaT.getCubierta());
+	                    psTerraza.setDouble(3, mesaT.getSuplemento());
+	                    psTerraza.executeUpdate();
+	                }
+	            }
+	        }
 
-				ResultSet rs = ps.getGeneratedKeys();
-				if (rs.next()) {
-					idGenerado = rs.getInt(1);
-					mesa.setId(idGenerado);
-				}
-			}
+	    } catch (SQLException e) {
+	        // En un entorno real, aquí deberías lanzar una excepción de integración
+	        // para que la capa de negocio aborte la transacción entera.
+	        System.err.println("Error dando de alta mesa: " + e.getMessage());
+	        return null; 
+	    }
 
-		} catch (SQLException e) {
-			System.err.println("Error dando de alta mesa: " + e.getMessage());
-		}
-
-		return idGenerado;
+	    return idGenerado;
 	}
-
 	@Override
 	public Boolean bajaMesa(TMesa mesa) {
 		boolean ok = false;

@@ -42,6 +42,10 @@ public class Evento {
 	public static final int MOSTRAR_LISTA_MESA_OK = 26;
 	public static final int MOSTRAR_LISTA_MESA_KO = 27;
 
+	public static final int ALTA_PEDIDO = 28;
+	public static final int ALTA_PEDIDO_OK = 29;
+	public static final int ALTA_PEDIDO_KO = 30;
+
 
 	public static final int CONFIRMAR_PEDIDO = 34;
 	public static final int CONFIRMAR_PEDIDO_OK = 35;
@@ -322,5 +326,24 @@ public class Evento {
 	public static final int MODIFICAR_PRESTAMO = 712;
 	public static final int MODIFICAR_PRESTAMO_OK = 713;
 	public static final int MODIFICAR_PRESTAMO_KO = 714;
+	
+	public static final int VINCULAR_PRODUCTO_PEDIDO = 715;
+	public static final int VINCULAR_PRODUCTO_PEDIDO_OK = 716;
+	public static final int VINCULAR_PRODUCTO_PEDIDO_KO = 717;
+	
+	public static final int DESVINCULAR_PRODUCTO_PEDIDO = 718;
+	public static final int DESVINCULAR_PRODUCTO_PEDIDO_OK = 719;
+	public static final int DESVINCULAR_PRODUCTO_PEDIDO_KO = 720;
+	
+	public static final int MOSTRAR_PEDIDOS_EMPLEADO = 721;
+	public static final int MOSTRAR_PEDIDOS_EMPLEADO_OK = 722;	
+	public static final int MOSTRAR_PEDIDOS_EMPLEADO_KO = 723;
+	
+	public static final int MOSTRAR_PEDIDOS_MESA = 724;
+	public static final int MOSTRAR_PEDIDOS_MESA_OK = 725;
+	public static final int MOSTRAR_PEDIDOS_MESA_KO = 726;
+
+
+
 
 }

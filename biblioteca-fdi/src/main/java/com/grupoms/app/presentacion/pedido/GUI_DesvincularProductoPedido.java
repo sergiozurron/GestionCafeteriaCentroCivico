@@ -11,13 +11,13 @@ import com.grupoms.app.presentacion.controlador.Evento;
 
 public class GUI_DesvincularProductoPedido extends JFrame implements IGUI {
 
-	private JTextField campoPedido;
-	private JTextField campoProducto;
-	private JTextField campoCantidad;
-	private JButton botonAgregar;
+	private static final long serialVersionUID = 1L;
+
+	private JTextField campoIdLinea;
+	private JButton botonDesvincular;
 
 	public GUI_DesvincularProductoPedido() {
-		super("Añadir Producto");
+		super("Desvincular Producto de Pedido");
 		initGUI();
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		pack();
@@ -25,80 +25,91 @@ public class GUI_DesvincularProductoPedido extends JFrame implements IGUI {
 	}
 
 	private void initGUI() {
+
 		JPanel panel = new JPanel(new GridBagLayout());
 		GridBagConstraints gbc = new GridBagConstraints();
+
 		gbc.insets = new Insets(5, 5, 5, 5);
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 
-		JLabel labelPedido = new JLabel("ID Pedido:");
-		campoPedido = new JTextField(10);
-		JLabel labelProducto = new JLabel("ID Producto:");
-		campoProducto = new JTextField(10);
-		JLabel labelCantidad = new JLabel("Cantidad:");
-		campoCantidad = new JTextField(10);
+		JLabel labelLinea = new JLabel("ID Línea Pedido:");
+		campoIdLinea = new JTextField(10);
 
-		botonAgregar = new JButton("Añadir Producto");
-		botonAgregar.addActionListener(e -> agregarProducto());
+		botonDesvincular = new JButton("Desvincular");
+		botonDesvincular.addActionListener(e -> desvincularProducto());
 
 		gbc.gridx = 0;
 		gbc.gridy = 0;
-		panel.add(labelPedido, gbc);
+		panel.add(labelLinea, gbc);
+
 		gbc.gridx = 1;
-		panel.add(campoPedido, gbc);
+		panel.add(campoIdLinea, gbc);
+
 		gbc.gridx = 0;
 		gbc.gridy = 1;
-		panel.add(labelProducto, gbc);
-		gbc.gridx = 1;
-		panel.add(campoProducto, gbc);
-		gbc.gridx = 0;
-		gbc.gridy = 2;
-		panel.add(labelCantidad, gbc);
-		gbc.gridx = 1;
-		panel.add(campoCantidad, gbc);
-		gbc.gridx = 0;
-		gbc.gridy = 3;
 		gbc.gridwidth = 2;
-		gbc.anchor = GridBagConstraints.CENTER;
-		panel.add(botonAgregar, gbc);
+		panel.add(botonDesvincular, gbc);
 
 		add(panel);
 	}
 
-	private void agregarProducto() {
+	private void desvincularProducto() {
+
 		try {
-			int idPedido = Integer.parseInt(campoPedido.getText());
-			int idProducto = Integer.parseInt(campoProducto.getText());
-			int cantidad = Integer.parseInt(campoCantidad.getText());
+			int idLinea = Integer.parseInt(campoIdLinea.getText());
 
-			if (idPedido <= 0 || idProducto <= 0 || cantidad <= 0) {
-				JOptionPane.showMessageDialog(this, "Todos los valores deben ser mayores que 0");
-				return;
-			}
+			TLineaPedido linea = new TLineaPedido();
+			linea.setId(idLinea);
+			linea.setActivo(false); // Baja lógica
 
-			TLineaPedido orden = new TLineaPedido();
-			orden.setPedidoID(idPedido);
-			orden.setProductID(idProducto);
-			orden.setCantidad(cantidad);
+			Context contexto = new Context(
+					Evento.DESVINCULAR_PRODUCTO_PEDIDO, linea);
 
-			Context contexto = new Context(Evento.ALTA_ORDEN, orden);
 			Controlador.getInstance().handle(contexto);
 
 		} catch (NumberFormatException ex) {
-			JOptionPane.showMessageDialog(this, "Los campos deben ser numéricos");
+			JOptionPane.showMessageDialog(this,
+					"El ID debe ser numérico");
 		}
 	}
 
 	@Override
 	public void actualizar(Context context) {
-		if (context == null)
-			setVisible(true);
-		else if (context.getEvento() == Evento.ALTA_ORDEN_OK) {
-			JOptionPane.showMessageDialog(this, "Producto añadido al pedido correctamente");
-			campoProducto.setText("");
-			campoCantidad.setText("");
-		} else if (context.getEvento() == Evento.ALTA_ORDEN_KO) {
-			JOptionPane.showMessageDialog(this, "Error: No se pudo añadir el producto al pedido", "Error",
-					JOptionPane.ERROR_MESSAGE);
+
+		switch (context.getEvento()) {
+
+		case Evento.DESVINCULAR_PRODUCTO_PEDIDO_OK:
+			JOptionPane.showMessageDialog(this,
+					"Producto desvinculado correctamente");
+			campoIdLinea.setText("");
+			break;
+
+		case Evento.DESVINCULAR_PRODUCTO_PEDIDO_KO:
+
+			int error = (int) context.getDatos();
+
+			switch (error) {
+			case -1:
+				JOptionPane.showMessageDialog(this,
+						"La línea no existe");
+				break;
+			case -2:
+				JOptionPane.showMessageDialog(this,
+						"La línea ya estaba desactivada");
+				break;
+			case -3:
+				JOptionPane.showMessageDialog(this,
+						"El pedido está cerrado");
+				break;
+			default:
+				JOptionPane.showMessageDialog(this,
+						"Error desconocido");
+				break;
+			}
+			break;
+
+		default:
+			break;
 		}
 	}
 }

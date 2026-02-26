@@ -54,7 +54,7 @@ public class SAPedidoImp implements SAPedido {
 	}
 
 	@Override
-	public Integer cerrarPedido(Integer idPedido) {
+	public TPedido cerrarPedido(Integer idPedido) {
 		// TODO Auto-generated method stub
 		return null;
 	}

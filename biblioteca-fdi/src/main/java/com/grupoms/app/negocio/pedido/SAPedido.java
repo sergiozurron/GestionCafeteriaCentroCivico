@@ -18,6 +18,6 @@ public interface SAPedido {
 	
 	void devolverPedido(Integer idPedido);
 	
-	Integer cerrarPedido(Integer idPedido);
+	TPedido cerrarPedido(Integer idPedido);
 	
 }

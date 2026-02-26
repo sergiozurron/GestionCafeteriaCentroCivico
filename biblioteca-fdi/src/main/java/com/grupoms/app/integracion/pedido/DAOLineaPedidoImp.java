@@ -1,7 +1,6 @@
 package com.grupoms.app.integracion.pedido;
 
 import com.grupoms.app.negocio.pedido.TLineaPedido;
-import com.grupoms.app.negocio.pedido.TPedidoLinea;
 import com.grupoms.app.integracion.Transaction.Transaction;
 import com.grupoms.app.integracion.Transaction.TransactionManager;
 

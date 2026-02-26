@@ -65,7 +65,7 @@ public class Principal extends JFrame {
 						{ "Mostrar Producto", FactoriaVistas.GUI_MOSTRAR_PRODUCTO },
 						{ "Listar Productos", FactoriaVistas.GUI_LISTAR_PRODUCTOS } }));
 
-		JPanel panelCentroCivico = new JPanel();
+		/*JPanel panelCentroCivico = new JPanel();
 		panelCentroCivico.setLayout(new GridLayout(2, 3, 20, 20));
 		panelCentroCivico.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
 
@@ -123,8 +123,8 @@ public class Principal extends JFrame {
 						{ "Listar Préstamo", FactoriaVistas.GUI_LISTAR_PRESTAMO },
 						{ "Mostrar Préstamo", FactoriaVistas.GUI_MOSTRAR_PRESTAMO },
 						{ "Modificar Préstamo", FactoriaVistas.GUI_MODIFICAR_PRESTAMO } }));
-
-		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, panelCafeteria, panelCentroCivico);
+*/
+		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, panelCafeteria, null);
 
 		splitPane.setResizeWeight(0.5);
 		splitPane.setDividerSize(8);

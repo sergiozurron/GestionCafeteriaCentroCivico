@@ -2,7 +2,6 @@ package com.grupoms.app.presentacion.pedido;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-
 import com.grupoms.app.negocio.pedido.TPedido;
 import com.grupoms.app.presentacion.IGUI;
 import com.grupoms.app.presentacion.controlador.Context;
@@ -33,12 +32,11 @@ public class GUI_MostrarListaPedidos extends JFrame implements IGUI {
 
 		modeloTabla = new DefaultTableModel();
 		modeloTabla.addColumn("ID");
-		modeloTabla.addColumn("Fecha");
-		modeloTabla.addColumn("Total Factura");
-		modeloTabla.addColumn("Estado");
-		modeloTabla.addColumn("Activo");
 		modeloTabla.addColumn("Empleado ID");
 		modeloTabla.addColumn("Mesa ID");
+		modeloTabla.addColumn("Fecha");
+		modeloTabla.addColumn("Estado");
+		modeloTabla.addColumn("Total Factura");
 
 		tabla = new JTable(modeloTabla);
 		JScrollPane scrollPane = new JScrollPane(tabla);
@@ -74,12 +72,14 @@ public class GUI_MostrarListaPedidos extends JFrame implements IGUI {
 			}
 
 			for (TPedido pedido : pedidos) {
-				Object[] fila = { pedido.getId(), pedido.getFecha() != null ? pedido.getFecha() : "N/A",
-						pedido.getTotal() != null ? pedido.getTotal() : 0.0,
-						pedido.getEstado() != null ? pedido.getEstado() : "N/A",
-						pedido.getActivo() != null && pedido.getActivo() ? "Sí" : "No",
+				Object[] fila = {
+						pedido.getId() != null ? pedido.getId() : "N/A",
 						pedido.getIdEmpleado() != null ? pedido.getIdEmpleado() : "N/A",
-						pedido.getIdMesa() != null ? pedido.getIdMesa() : "N/A" };
+						pedido.getIdMesa() != null ? pedido.getIdMesa() : "N/A",
+						pedido.getFecha() != null ? pedido.getFecha() : "N/A",
+						pedido.getEstado() != null ? pedido.getEstado() : "N/A",
+						pedido.getTotal() != null ? pedido.getTotal() : 0.0
+				};
 				modeloTabla.addRow(fila);
 			}
 

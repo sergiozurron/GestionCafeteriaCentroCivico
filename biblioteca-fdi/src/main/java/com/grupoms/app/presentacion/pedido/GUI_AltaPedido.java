@@ -3,7 +3,6 @@ package com.grupoms.app.presentacion.pedido;
 import javax.swing.*;
 import java.awt.*;
 
-import com.grupoms.app.negocio.pedido.TCarrito;
 import com.grupoms.app.negocio.pedido.TPedido;
 import com.grupoms.app.presentacion.IGUI;
 import com.grupoms.app.presentacion.controlador.Context;
@@ -12,6 +11,10 @@ import com.grupoms.app.presentacion.controlador.Evento;
 
 public class GUI_AltaPedido extends JFrame implements IGUI {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JTextField campoMesa;
 	private JTextField campoEmpleado;
 	private JButton crearPedido;
@@ -25,8 +28,10 @@ public class GUI_AltaPedido extends JFrame implements IGUI {
 	}
 
 	private void initGUI() {
+
 		JPanel panel = new JPanel(new GridBagLayout());
 		GridBagConstraints gbc = new GridBagConstraints();
+
 		gbc.insets = new Insets(5, 5, 5, 5);
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 
@@ -42,13 +47,17 @@ public class GUI_AltaPedido extends JFrame implements IGUI {
 		gbc.gridx = 0;
 		gbc.gridy = 0;
 		panel.add(labelMesa, gbc);
+
 		gbc.gridx = 1;
 		panel.add(campoMesa, gbc);
+
 		gbc.gridx = 0;
 		gbc.gridy = 1;
 		panel.add(labelEmpleado, gbc);
+
 		gbc.gridx = 1;
 		panel.add(campoEmpleado, gbc);
+
 		gbc.gridx = 0;
 		gbc.gridy = 2;
 		gbc.gridwidth = 2;
@@ -58,6 +67,7 @@ public class GUI_AltaPedido extends JFrame implements IGUI {
 	}
 
 	private void crearPedido() {
+
 		try {
 			int idMesa = Integer.parseInt(campoMesa.getText());
 			int idEmpleado = Integer.parseInt(campoEmpleado.getText());
@@ -65,36 +75,58 @@ public class GUI_AltaPedido extends JFrame implements IGUI {
 			TPedido pedido = new TPedido();
 			pedido.setIdMesa(idMesa);
 			pedido.setIdEmpleado(idEmpleado);
-			
-			TCarrito carrito = new TCarrito();
-			carrito.setPedido(pedido);
-			
-			Context contexto = new Context(Evento.CERRAR_PEDIDO, pedido);
+
+			Context contexto = new Context(Evento.ALTA_PEDIDO, pedido);
 			Controlador.getInstance().handle(contexto);
 
 		} catch (NumberFormatException ex) {
-			JOptionPane.showMessageDialog(this, "Error: los campos numéricos no son válidos");
+			JOptionPane.showMessageDialog(this,
+					"Error: los campos deben ser numéricos");
 		}
 	}
 
 	@Override
 	public void actualizar(Context context) {
-		int resultado = (int) context.getDatos();
-		
-		if (context.getEvento() == Evento.CERRAR_PEDIDO_OK) {
-			JOptionPane.showMessageDialog(this,"Pedido creado con éxito");
-		}else if(context.getEvento()==Evento.CERRAR_PEDIDO_KO) {
-			switch(resultado) {
-			case -1: 
-				JOptionPane.showMessageDialog(this,"Se ha producido un erro");
+
+		switch (context.getEvento()) {
+
+		case Evento.ALTA_PEDIDO_OK:
+
+			// El controlador debería devolver el ID generado
+			int idGenerado = (int) context.getDatos();
+
+			JOptionPane.showMessageDialog(this,
+					"Pedido creado con éxito.\nID Pedido: " + idGenerado);
+
+			// Limpiar campos
+			campoMesa.setText("");
+			campoEmpleado.setText("");
+
+			break;
+
+		case Evento.ALTA_PEDIDO_KO:
+
+			int error = (int) context.getDatos();
+
+			switch (error) {
+			case -1:
+				JOptionPane.showMessageDialog(this,
+						"Error interno al crear pedido");
 				break;
 			case -2:
-				JOptionPane.showMessageDialog(this,"Datos incorrectos");
+				JOptionPane.showMessageDialog(this,
+						"Datos incorrectos");
 				break;
 			default:
-				JOptionPane.showMessageDialog(this,"Error desconocido");
+				JOptionPane.showMessageDialog(this,
+						"Error desconocido");
 				break;
 			}
+
+			break;
+
+		default:
+			break;
 		}
 	}
 }

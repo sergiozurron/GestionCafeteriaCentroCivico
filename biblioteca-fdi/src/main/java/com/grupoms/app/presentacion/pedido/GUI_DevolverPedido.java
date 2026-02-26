@@ -5,7 +5,6 @@ import java.awt.*;
 
 import com.grupoms.app.negocio.pedido.TLineaPedido;
 import com.grupoms.app.negocio.pedido.TPedido;
-import com.grupoms.app.negocio.pedido.TPedidoLinea;
 import com.grupoms.app.presentacion.IGUI;
 import com.grupoms.app.presentacion.controlador.Context;
 import com.grupoms.app.presentacion.controlador.Controlador;
@@ -24,8 +23,34 @@ public class GUI_DevolverPedido extends JFrame implements IGUI {
 			JOptionPane.showMessageDialog(this, "Pedido devuelto con éxito");
 			campoID.setText("");
 		} else if (context.getEvento() == Evento.DEVOLVER_PEDIDO_KO) {
-			JOptionPane.showMessageDialog(this, "Error: No se pudo devolver el pedido", "Error",
-					JOptionPane.ERROR_MESSAGE);
+
+		    int error = (int) context.getDatos();
+
+		    switch (error) {
+		        case -1:
+		            JOptionPane.showMessageDialog(this,
+		                "El pedido no existe",
+		                "Error", JOptionPane.ERROR_MESSAGE);
+		            break;
+
+		        case -2:
+		            JOptionPane.showMessageDialog(this,
+		                "El pedido ya estaba devuelto",
+		                "Error", JOptionPane.ERROR_MESSAGE);
+		            break;
+
+		        case -3:
+		            JOptionPane.showMessageDialog(this,
+		                "El pedido no está cerrado",
+		                "Error", JOptionPane.ERROR_MESSAGE);
+		            break;
+
+		        default:
+		            JOptionPane.showMessageDialog(this,
+		                "Error desconocido",
+		                "Error", JOptionPane.ERROR_MESSAGE);
+		            break;
+		    }
 		}
 	}
 
@@ -41,7 +66,6 @@ public class GUI_DevolverPedido extends JFrame implements IGUI {
 	public void initGUI() {
 		setLayout(new BorderLayout());
 		JPanel panel = new JPanel(new GridBagLayout());
-		setLayout(new BorderLayout());
 
 		JLabel labelIdPedido = new JLabel("ID Pedido:");
 		campoID = new JTextField(10);
@@ -50,9 +74,7 @@ public class GUI_DevolverPedido extends JFrame implements IGUI {
 		devolver.addActionListener(e -> {
 			try {
 				int idPedido = Integer.parseInt(campoID.getText());
-				TLineaPedido pedido = new TLineaPedido();
-				pedido.setPedidoID(idPedido);
-				Context contexto = new Context(Evento.DEVOLVER_PEDIDO, pedido);
+				Context contexto = new Context(Evento.DEVOLVER_PEDIDO, idPedido);
 				Controlador.getInstance().handle(contexto);
 
 			} catch (NumberFormatException ex) {

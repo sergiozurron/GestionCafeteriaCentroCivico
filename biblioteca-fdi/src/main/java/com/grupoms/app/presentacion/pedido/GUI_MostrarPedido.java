@@ -4,7 +4,6 @@ import javax.swing.*;
 import java.awt.*;
 
 import com.grupoms.app.negocio.pedido.TPedido;
-import com.grupoms.app.negocio.pedido.TPedidoLinea;
 import com.grupoms.app.presentacion.IGUI;
 import com.grupoms.app.presentacion.controlador.Context;
 import com.grupoms.app.presentacion.controlador.Controlador;
@@ -42,10 +41,8 @@ public class GUI_MostrarPedido extends JFrame implements IGUI {
 		btnMostrar.addActionListener(e -> {
 			try {
 				int idPedido = Integer.parseInt(campoPedido.getText().trim());
-				TPedidoLinea pedidoLinea = new TPedidoLinea();
-				TPedido pedido = pedidoLinea.gettPedido();
 
-				Context contexto = new Context(Evento.MOSTRAR_PEDIDO, pedido);
+				Context contexto = new Context(Evento.MOSTRAR_PEDIDO, idPedido);
 				Controlador.getInstance().handle(contexto);
 
 			} catch (NumberFormatException ex) {

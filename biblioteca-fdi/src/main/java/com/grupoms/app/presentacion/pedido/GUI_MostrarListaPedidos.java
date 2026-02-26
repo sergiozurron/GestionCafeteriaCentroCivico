@@ -12,7 +12,7 @@ import com.grupoms.app.presentacion.controlador.Evento;
 import java.awt.*;
 import java.util.List;
 
-public class GUI_ListarPedido extends JFrame implements IGUI {
+public class GUI_MostrarListaPedidos extends JFrame implements IGUI {
 
 	private static final long serialVersionUID = 1L;
 
@@ -20,7 +20,7 @@ public class GUI_ListarPedido extends JFrame implements IGUI {
 	private DefaultTableModel modeloTabla;
 	private JButton botonCargar;
 
-	public GUI_ListarPedido() {
+	public GUI_MostrarListaPedidos() {
 		setTitle("Listado de Pedidos");
 		setSize(900, 500);
 		setLocationRelativeTo(null);

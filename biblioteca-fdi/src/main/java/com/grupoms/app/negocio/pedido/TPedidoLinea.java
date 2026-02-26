@@ -8,14 +8,14 @@ import com.grupoms.app.negocio.producto.TProducto;
 public class TPedidoLinea {
 
     private TPedido tPedido;                 
-    private Set<TLineaVenta> tPedidoLinea;   
+    private Set<TLineaPedido> tPedidoLinea;   
     private Set<TProducto> productos;        
 
-    public Set<TLineaVenta> gettLineasVenta() {
+    public Set<TLineaPedido> gettLineasVenta() {
         return tPedidoLinea;
     }
 
-    public void incluirLineaVenta(TLineaVenta linea) {
+    public void incluirLineaVenta(TLineaPedido linea) {
         if (tPedidoLinea == null)
             tPedidoLinea = new HashSet<>();
         tPedidoLinea.add(linea);

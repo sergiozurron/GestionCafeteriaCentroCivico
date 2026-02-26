@@ -1,17 +1,17 @@
 package com.grupoms.app.negocio.pedido;
 
-import java.util.Set;
+import java.util.List;
 
 public class TCarrito {
 	private TPedido tPedido;
-	private Set<TLineaVenta> tLineasVenta;
+	private List<TLineaPedido> tLineasVenta;
 	
 	//Getters
 	public TPedido getPedido() {
 		return tPedido;
 	}
 	
-	public Set<TLineaVenta> getLineasVenta() {
+	public List<TLineaPedido> getLineasVenta() {
         return tLineasVenta;
     }
 
@@ -20,7 +20,7 @@ public class TCarrito {
         this.tPedido = tPedido;
     }
 
-    public void setLineasVenta(Set<TLineaVenta> tLineasVenta) {
+    public void setLineasVenta(List<TLineaPedido> tLineasVenta) {
         this.tLineasVenta = tLineasVenta;
     }
 

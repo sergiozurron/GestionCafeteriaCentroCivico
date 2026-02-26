@@ -10,13 +10,13 @@ import com.grupoms.app.presentacion.controlador.Context;
 import com.grupoms.app.presentacion.controlador.Controlador;
 import com.grupoms.app.presentacion.controlador.Evento;
 
-public class GUI_AbrirPedido extends JFrame implements IGUI {
+public class GUI_AltaPedido extends JFrame implements IGUI {
 
 	private JTextField campoMesa;
 	private JTextField campoEmpleado;
 	private JButton crearPedido;
 
-	public GUI_AbrirPedido() {
+	public GUI_AltaPedido() {
 		super("Alta Pedido");
 		initGUI();
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

@@ -3,218 +3,61 @@ package com.grupoms.app.negocio.pedido;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
-import com.grupoms.app.integracion.Transaction.Transaction;
-import com.grupoms.app.integracion.Transaction.TransactionManager;
+
+import com.grupoms.app.integracion.Transaction.*;
 import com.grupoms.app.integracion.pedido.*;
-import com.grupoms.app.integracion.producto.DAOProducto;
-import com.grupoms.app.integracion.producto.DAOProductoImp;
-import com.grupoms.app.negocio.producto.TProducto;
+import com.grupoms.app.integracion.producto.*;
 
 public class SAPedidoImp implements SAPedido {
 
-	private DAOPedido daoPedido = new DAOPedidoImp();
-	private DAOLineaVenta daoLinea = new DAOLineaVentaImp();
-	private DAOProducto daoProducto = new DAOProductoImp();
-
-
 	@Override
-	public Integer cerrarPedido(TCarrito carrito) {
-		TransactionManager tm = TransactionManager.getInstance();
-		try {
-			Transaction t = tm.newTransaction();
-			t.start();
-			if(!carrito.getLineasVenta().isEmpty()) {
-				double precio = 0;
-				for(TLineaVenta lineaV : carrito.getLineasVenta()) {
-					TProducto producto = daoProducto.mostrarProducto(lineaV.getProductoId());
-					if(producto!=null) {
-						if(producto.getActivo()) {
-							if(lineaV.getCantidad()<=producto.getStock()) {
-								producto.setStock(producto.getStock()-lineaV.getCantidad());
-								daoProducto.modificarProducto(producto);
-								double precio_linea = (lineaV.getCantidad()*producto.getPrecio());
-								precio = precio + precio_linea;
-							}
-							else {
-								t.rollback();
-								return -2;
-							}
-						}
-						else {
-							t.rollback();
-							return -2;
-						}
-					}else {
-						t.rollback();
-						return -2;
-					}
-				}
-				TPedido pedido = carrito.getPedido();
-				pedido.setTotal(precio);
-				int id = daoPedido.cerrarPedido(pedido);
-				if(id>0) {
-					for(TLineaVenta lv : carrito.getLineasVenta()) {
-						lv.setPedidoID(id);
-						int r = daoLinea.altaLineaVenta(lv);
-						if(r<0) {
-							t.rollback();
-							return -3;
-						}
-					}
-				}else {
-					t.rollback();
-					return -1;
-				}
-				t.commit();
-				return id;
-			}else {
-				t.rollback();
-				return -2;
-			}
-		}catch(Exception e) {
-			e.printStackTrace();
-			return -3;
-		}
+	public Boolean modificarPedido(TPedido pedido) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override
-	public TPedidoLinea mostrarPedidoPorID(int id) {
-
-	    TPedidoLinea pedidoLinea = new TPedidoLinea();
-
-	    try {
-	        Transaction t = TransactionManager.getInstance().newTransaction();
-	        t.start();
-
-	        TPedido pedido = daoPedido.mostrarPedido(id);
-
-	        if (pedido == null) {
-	            t.rollback();
-	            return null;
-	        }
-
-	        pedidoLinea.settPedido(pedido);
-
-	        List<TLineaVenta> lineas = daoLinea.mostrarLineaPedidoPorPedido(id);
-
-	        for (TLineaVenta linea : lineas) {
-	            pedidoLinea.incluirLineaVenta(linea);
-
-	            TProducto producto = daoProducto.mostrarProducto(linea.getProductoId());
-	            if (producto != null) {
-	                pedidoLinea.incluirProducto(producto);
-	            }
-	        }
-
-	        t.commit();
-
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	    }
-
-	    return pedidoLinea;
+	public Integer altaPedido(TPedido pedido) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override
-	public List<TPedido> listarPedidos() {
-		List<TPedido> pedidos = new ArrayList<>();
-		try {
-			Transaction t = TransactionManager.getInstance().newTransaction();
-			t.start();
-			List<TPedido> pedidosB = daoPedido.listarPedidos();
-			for(TPedido p: pedidosB) {
-				pedidos.add(p);
-			}
-			t.commit();
-		}catch(Exception e){
-			e.printStackTrace();
-		}
-		return pedidos;
+	public TCarrito mostrarPedido(Integer idPedido) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override
-	public Integer modificarPedido(TPedido pedido) {
-		int r = -1;
-		try {
-			Transaction t = TransactionManager.getInstance().newTransaction();
-			t.start();
-			TPedido pedidoB = daoPedido.mostrarPedido(pedido.getId());
-			if(pedidoB!=null) {
-				if(pedidoB.getActivo()) {
-					pedido.setTotal(pedidoB.getTotal());
-					pedido.setActivo(pedidoB.getActivo());
-					r = daoPedido.modificarPedido(pedido);
-					if(r<0) {
-						t.rollback();
-						return -1;
-					}
-				}else {
-					t.rollback();
-					return -1;
-				}
-			}else {
-				t.rollback();
-				return -1;
-			}
-		}catch(Exception e) {
-			e.printStackTrace();
-			return r;
-		}
-		return r;
+	public List<TPedido> mostrarListaPedidos() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override
-	public Integer devolverLinea(TLineaVenta linea) {
-		TransactionManager tm = TransactionManager.getInstance();
-		int r = -1;
-		try {
-			Transaction t = tm.newTransaction();
-			t.start();
-			TPedido pedido = daoPedido.mostrarPedido(linea.getPedidoId());
-			if(pedido!=null && pedido.getActivo()) {
-				List<TLineaVenta> lineasPB = daoLinea.mostrarLineaPedidoPorPedido(pedido.getId());
-				for(TLineaVenta v : lineasPB) {
-					TProducto p = daoProducto.mostrarProducto(v.getProductoId());
-					if(p!=null) {
-						TLineaVenta lv = daoLinea.mostrarLineaPedido(linea.getPedidoId(),p.getId());
-						if(lv!=null) {
-							if(!p.getActivo()) {
-								t.rollback();
-								return -1;
-							}
-							p.setStock(p.getStock()+lv.getCantidad());
-							r = daoProducto.modificarProducto(p);
-							if(r<0) {
-								t.rollback();
-								return -1;
-							}
-							TLineaVenta baja = daoLinea.bajaLineaVenta(lv.getPedidoId(), lv.getProductoId());
-							r = baja == null ?1:-1;
-							if(r<0) {
-								t.rollback();
-								return -1;
-							}
-						}
-					}
-				}
-				r = daoPedido.devolverPedido(pedido.getId());
-				if(r<0) {
-					t.rollback();
-					return -1;
-				}else {
-					t.commit();
-					return 1;
-				}
-			}else {
-				t.rollback();
-				return -2;
-			}
-		}catch(Exception e) {
-			e.printStackTrace();
-			return r;
-		}
+	public List<TPedido> mostrarPedidosPorMesa(Integer idMesa) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
+	@Override
+	public List<TPedido> mostrarPedidosPorEmpleado(Integer idEmpleado) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void devolverPedido(Integer idPedido) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Integer cerrarPedido(Integer idPedido) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	
 }

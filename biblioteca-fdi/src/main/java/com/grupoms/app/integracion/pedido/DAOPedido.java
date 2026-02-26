@@ -6,19 +6,19 @@ import com.grupoms.app.negocio.pedido.TPedido;
 import java.util.List;
 
 public interface DAOPedido {
-	Integer cerrarPedido (TPedido pedido);
+	
+	Boolean modificarPedido(TPedido pedido);
+	
+	Integer altaPedido (TPedido pedido);
 	
 	TPedido mostrarPedido(Integer id);
 	
-	List<TPedido> listarPedidos();
+	List<TPedido> mostrarListaPedidos();
 	
-	int modificarPedido(TPedido pedido);
-	
-	Integer devolverPedido(Integer id);
-
 	List<TPedido> mostrarPedidosPorEmpleado(Integer idEmpleado);
 
 	List<TPedido> mostrarPedidosPorMesa(Integer idMesa);
-
+	
+	Integer devolverPedido(Integer id);
 
 }

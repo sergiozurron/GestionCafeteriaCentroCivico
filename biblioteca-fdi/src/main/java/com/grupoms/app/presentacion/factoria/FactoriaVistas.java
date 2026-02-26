@@ -23,10 +23,15 @@ public class FactoriaVistas {
 
 	public static final String GUI_ALTA_PEDIDO = "GUI_AltaPedido";
 	public static final String GUI_MOSTRAR_PEDIDO = "GUI_MostrarPedido";
+	public static final String GUI_CERRAR_PEDIDO = "GUI_CerrarPedido";
 	public static final String GUI_DEVOLVER_PEDIDO = "GUI_DevolverPedido";
 	public static final String GUI_MODIFICAR_PEDIDO = "GUI_ModificarPedido";
-	public static final String GUI_LISTAR_PEDIDO = "GUI_ListarPedido";
-	public static final String GUI_ANYADIR_PRODUCTO = "GUI_AnyadirProducto";
+	public static final String GUI_MOSTRAR_LISTA_PEDIDOS = "GUI_MostrarListaPedidos";
+	public static final String GUI_MOSTRAR_PEDIDOS_EMPLEADO = "GUI_MostrarPedidosEmpleado";
+	public static final String GUI_MOSTRAR_PEDIDOS_MESA = "GUI_MostrarPedidosMesa";
+	public static final String GUI_VINCULAR_PRODUCTO_PEDIDO = "GUI_VincularProductoPedido";
+	public static final String GUI_DESVINCULAR_PRODUCTO_PEDIDO = "GUI_DesvincularProductoPedido";
+
 
 	public static final String GUI_ALTA_PROVEEDOR = "GUI_AltaProveedor";
 	public static final String GUI_BAJA_PROVEEDOR = "GUI_BajaProveedor";
@@ -172,11 +177,16 @@ public class FactoriaVistas {
 		vistas.put(GUI_MOSTRAR_PRESTAMO, new GUI_MostrarPrestamo());
 		vistas.put(GUI_MODIFICAR_PRESTAMO, new GUI_ModificarPrestamo());
 
+		vistas.put(GUI_ALTA_PEDIDO, new GUI_AltaPedido());
+		vistas.put(GUI_CERRAR_PEDIDO, new GUI_CerrarPedido());
+		vistas.put(GUI_MOSTRAR_PEDIDOS_EMPLEADO, new GUI_MostrarPedidosEmpleado());
+		vistas.put(GUI_MOSTRAR_PEDIDOS_MESA, new GUI_MostrarPedidosMesa());
+		vistas.put(GUI_VINCULAR_PRODUCTO_PEDIDO, new GUI_VincularProductoPedido());
 		vistas.put(GUI_MOSTRAR_PEDIDO, new GUI_MostrarPedido());
 		vistas.put(GUI_DEVOLVER_PEDIDO, new GUI_DevolverPedido());
 		vistas.put(GUI_MODIFICAR_PEDIDO, new GUI_ModificarPedido());
-		vistas.put(GUI_LISTAR_PEDIDO, new GUI_ListarPedido());
-		vistas.put(GUI_ANYADIR_PRODUCTO, new GUI_AnyadirProducto());
+		vistas.put(GUI_MOSTRAR_LISTA_PEDIDOS, new GUI_MostrarListaPedidos());
+		vistas.put(GUI_DESVINCULAR_PRODUCTO_PEDIDO, new GUI_DesvincularProductoPedido());
 
 		vistas.put(GUI_ALTA_PROVEEDOR, new GUI_AltaProveedor());
 		vistas.put(GUI_BAJA_PROVEEDOR, new GUI_BajaProveedor());

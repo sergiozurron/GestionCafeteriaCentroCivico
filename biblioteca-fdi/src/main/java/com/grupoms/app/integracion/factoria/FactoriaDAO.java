@@ -1,7 +1,7 @@
 package com.grupoms.app.integracion.factoria;
 
 import com.grupoms.app.integracion.mesa.DAOMesa;
-import com.grupoms.app.integracion.pedido.DAOLineaVenta;
+import com.grupoms.app.integracion.pedido.DAOLineaPedido;
 import com.grupoms.app.integracion.pedido.DAOPedido;
 import com.grupoms.app.integracion.proveedor.DAOProveedor;
 import com.grupoms.app.integracion.ingrediente.DAOIngrediente;
@@ -31,5 +31,5 @@ public abstract class FactoriaDAO {
 
 	public abstract DAOProducto creaDAOProducto();
 
-	public abstract DAOLineaVenta creaDAOLineaVenta();
+	public abstract DAOLineaPedido creaDAOLineaPedido();
 }

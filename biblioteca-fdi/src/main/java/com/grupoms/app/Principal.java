@@ -29,7 +29,7 @@ public class Principal extends JFrame {
 						{ "Mostrar Pedido", FactoriaVistas.GUI_MOSTRAR_PEDIDO },
 						{ "Devolver Pedido", FactoriaVistas.GUI_DEVOLVER_PEDIDO },
 						{ "Modificar Pedido", FactoriaVistas.GUI_MODIFICAR_PEDIDO },
-						{ "Listar Pedidos", FactoriaVistas.GUI_LISTAR_PEDIDO },
+						{ "Listar Pedidos", FactoriaVistas.GUI_MOSTRAR_LISTA_PEDIDOS},
 						{ "Anyadir Producto", FactoriaVistas.GUI_ALTA_ORDEN } }));
 
 		panelCafeteria.add(crearPanelCategoria("Mesas", new String[][] { { "Alta Mesa", FactoriaVistas.GUI_ALTA_MESA },

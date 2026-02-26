@@ -13,8 +13,8 @@ public class DAOPedidoImp implements DAOPedido {
 
 	
 	@Override
-	public int modificarPedido(TPedido pedido) {
-		int act = -1;
+	public Boolean modificarPedido(TPedido pedido) {
+		Boolean act = false;
 		try {
 			Connection c = (Connection) TransactionManager.getInstance().getTransaction().getResource();
 
@@ -28,7 +28,7 @@ public class DAOPedidoImp implements DAOPedido {
 				ps.setInt(6, pedido.getIdMesa());
 				ps.setInt(7, pedido.getId());
 
-				act = ps.executeUpdate();
+				act = ps.executeUpdate()>0;
 
 			}
 		} catch (Exception e) {
@@ -70,7 +70,7 @@ public class DAOPedidoImp implements DAOPedido {
 	}
 
 	@Override
-	public List<TPedido> listarPedidos() {
+	public List<TPedido> mostrarListaPedidos() {
 		List<TPedido> lista = new ArrayList<>();
 
 		try {
@@ -192,25 +192,10 @@ public class DAOPedidoImp implements DAOPedido {
 		return lista;
 	}
 
-
-
 	@Override
-	public Integer cerrarPedido(TPedido pedido) {
-		int exito = -1;
-		try {
-			Connection c = (Connection)TransactionManager.getInstance().getTransaction().getResource();
-			PreparedStatement st = c.prepareStatement("INSERT INTO pedidos(fecha, total_factura,activo) VALUES(?, NOW(),true",
-					Statement.RETURN_GENERATED_KEYS);
-			st.setDouble(1,pedido.getTotal());
-			st.executeUpdate();
-			ResultSet result = st.getGeneratedKeys();
-			if(result.next())exito = result.getInt(1);
-			st.close();
-			result.close();
-		}catch(Exception e) {
-			e.printStackTrace();
-		}
-		return exito;
+	public Integer altaPedido(TPedido pedido) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

@@ -6,8 +6,8 @@ import com.grupoms.app.integracion.ingrediente.DAOIngrediente;
 import com.grupoms.app.integracion.ingrediente.DAOIngredienteImp;
 import com.grupoms.app.integracion.mesa.DAOMesa;
 import com.grupoms.app.integracion.mesa.DAOMesaImp;
-import com.grupoms.app.integracion.pedido.DAOLineaVenta;
-import com.grupoms.app.integracion.pedido.DAOLineaVentaImp;
+import com.grupoms.app.integracion.pedido.DAOLineaPedido;
+import com.grupoms.app.integracion.pedido.DAOLineaPedidoImp;
 import com.grupoms.app.integracion.pedido.DAOPedido;
 import com.grupoms.app.integracion.pedido.DAOPedidoImp;
 import com.grupoms.app.integracion.proveedor.DAOProveedor;
@@ -53,9 +53,9 @@ public class FactoriaDAOImp extends FactoriaDAO {
 	}
 
 	@Override
-	public DAOLineaVenta creaDAOLineaVenta() {
+	public DAOLineaPedido creaDAOLineaPedido() {
 
-		return new DAOLineaVentaImp();
+		return new DAOLineaPedidoImp();
 	}
 
 }

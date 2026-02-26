@@ -3,20 +3,20 @@ package com.grupoms.app.presentacion.pedido;
 import javax.swing.*;
 import java.awt.*;
 
-import com.grupoms.app.negocio.pedido.TLineaVenta;
+import com.grupoms.app.negocio.pedido.TLineaPedido;
 import com.grupoms.app.presentacion.IGUI;
 import com.grupoms.app.presentacion.controlador.Context;
 import com.grupoms.app.presentacion.controlador.Controlador;
 import com.grupoms.app.presentacion.controlador.Evento;
 
-public class GUI_AnyadirProducto extends JFrame implements IGUI {
+public class GUI_DesvincularProductoPedido extends JFrame implements IGUI {
 
 	private JTextField campoPedido;
 	private JTextField campoProducto;
 	private JTextField campoCantidad;
 	private JButton botonAgregar;
 
-	public GUI_AnyadirProducto() {
+	public GUI_DesvincularProductoPedido() {
 		super("Añadir Producto");
 		initGUI();
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -75,7 +75,7 @@ public class GUI_AnyadirProducto extends JFrame implements IGUI {
 				return;
 			}
 
-			TLineaVenta orden = new TLineaVenta();
+			TLineaPedido orden = new TLineaPedido();
 			orden.setPedidoID(idPedido);
 			orden.setProductID(idProducto);
 			orden.setCantidad(cantidad);

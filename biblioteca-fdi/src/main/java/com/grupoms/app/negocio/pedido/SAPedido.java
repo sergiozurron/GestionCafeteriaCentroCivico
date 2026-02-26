@@ -4,14 +4,20 @@ package com.grupoms.app.negocio.pedido;
 import java.util.List;
 
 public interface SAPedido {
-
-    Integer cerrarPedido(TCarrito carrito);
-
-    TPedidoLinea mostrarPedidoPorID(int id);
-
-    List<TPedido> listarPedidos();
-
-    Integer modificarPedido(TPedido pedido);
-
-    Integer devolverLinea(TLineaVenta linea);
+	Boolean modificarPedido(TPedido pedido);
+	
+	Integer altaPedido(TPedido pedido);
+	
+	TCarrito mostrarPedido(Integer idPedido);
+	
+	List<TPedido> mostrarListaPedidos();
+	
+	List <TPedido> mostrarPedidosPorMesa(Integer idMesa);
+	
+	List<TPedido> mostrarPedidosPorEmpleado(Integer idEmpleado);
+	
+	void devolverPedido(Integer idPedido);
+	
+	Integer cerrarPedido(Integer idPedido);
+	
 }

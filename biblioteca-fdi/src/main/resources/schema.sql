@@ -103,12 +103,12 @@ CREATE TABLE entradas_recetas (
     FOREIGN KEY (ingrediente_id) REFERENCES ingredientes(id)
 ) ENGINE=InnoDB;
 
-CREATE TABLE linea_venta (
+CREATE TABLE linea_pedido (
     id INT AUTO_INCREMENT PRIMARY KEY,
     pedido_id INT,
     producto_id INT,
     cantidad INT NOT NULL,
-    precio_venta DECIMAL(10,2),
+    activo BOOLEAN NOT NULL,
     FOREIGN KEY (pedido_id) REFERENCES pedidos(id),
     FOREIGN KEY (producto_id) REFERENCES productos(id)
 ) ENGINE=InnoDB;

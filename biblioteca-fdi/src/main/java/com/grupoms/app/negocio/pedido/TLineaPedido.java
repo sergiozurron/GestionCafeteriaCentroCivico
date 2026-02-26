@@ -1,12 +1,17 @@
 package com.grupoms.app.negocio.pedido;
 
-public class TLineaVenta {
+public class TLineaPedido {
 
 	private Integer id;
 	private Integer idPedido;
 	private Integer idProducto;
 	private Integer cantidad;
+	private boolean activo;
 
+	public boolean getActivo() {
+		return activo;
+	}
+	
 	public Integer getId() {
 		return id;
 	}
@@ -23,6 +28,9 @@ public class TLineaVenta {
 		return cantidad;
 	}
 
+	public void setActivo(boolean ac) {
+		activo = ac;
+	}
 	public void setId(int int1) {
 		this.id = int1;
 	}

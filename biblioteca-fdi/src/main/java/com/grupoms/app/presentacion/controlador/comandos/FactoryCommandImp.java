@@ -64,11 +64,6 @@ import com.grupoms.app.presentacion.controlador.comandos.mesa.BajaMesaCommand;
 import com.grupoms.app.presentacion.controlador.comandos.mesa.ModificarMesaCommand;
 import com.grupoms.app.presentacion.controlador.comandos.mesa.MostrarListaMesasCommand;
 import com.grupoms.app.presentacion.controlador.comandos.mesa.MostrarMesaCommand;
-import com.grupoms.app.presentacion.controlador.comandos.pedido.CerrarPedidoCommand;
-import com.grupoms.app.presentacion.controlador.comandos.pedido.DevolverPedidoCommand;
-import com.grupoms.app.presentacion.controlador.comandos.pedido.ListarPedidoCommand;
-import com.grupoms.app.presentacion.controlador.comandos.pedido.ModificarPedidoCommand;
-import com.grupoms.app.presentacion.controlador.comandos.pedido.MostrarPedidoCommand;
 import com.grupoms.app.presentacion.controlador.comandos.producto.AltaProductoCommand;
 import com.grupoms.app.presentacion.controlador.comandos.producto.BajaProductoCommand;
 import com.grupoms.app.presentacion.controlador.comandos.producto.ModificarProductoCommand;
@@ -95,11 +90,7 @@ public class FactoryCommandImp extends FactoryCommand {
 		commands.put(Evento.MOSTRAR_MESA, new MostrarMesaCommand());
 		commands.put(Evento.MOSTRAR_LISTA_MESA, new MostrarListaMesasCommand());
 
-		commands.put(Evento.MOSTRAR_PEDIDO, new MostrarPedidoCommand());
-		commands.put(Evento.DEVOLVER_PEDIDO, new DevolverPedidoCommand());
-		commands.put(Evento.CONFIRMAR_PEDIDO, new CerrarPedidoCommand());
-		commands.put(Evento.MODIFICAR_PEDIDO, new ModificarPedidoCommand());
-		commands.put(Evento.MOSTRAR_PEDIDOS, new ListarPedidoCommand());
+
 
 		commands.put(Evento.ALTA_INGREDIENTE, new AltaIngredienteCommand());
 		commands.put(Evento.BAJA_INGREDIENTE, new BajaIngredienteCommand());
@@ -180,7 +171,7 @@ public class FactoryCommandImp extends FactoryCommand {
 		views.put(Evento.MOSTRAR_PEDIDO, FactoriaVistas.GUI_MOSTRAR_PEDIDO);
 		views.put(Evento.MODIFICAR_PEDIDO, FactoriaVistas.GUI_MODIFICAR_PEDIDO);
 		views.put(Evento.DEVOLVER_PEDIDO, FactoriaVistas.GUI_DEVOLVER_PEDIDO);
-		views.put(Evento.MOSTRAR_PEDIDOS, FactoriaVistas.GUI_LISTAR_PEDIDO);
+		views.put(Evento.MOSTRAR_PEDIDOS, FactoriaVistas.GUI_MOSTRAR_LISTA_PEDIDOS);
 
 		views.put(Evento.ALTA_INGREDIENTE, FactoriaVistas.GUI_ALTA_INGREDIENTE);
 		views.put(Evento.MODIFICAR_INGREDIENTE, FactoriaVistas.GUI_MODIFICAR_INGREDIENTE);

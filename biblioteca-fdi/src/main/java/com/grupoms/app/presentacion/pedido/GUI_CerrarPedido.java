@@ -25,7 +25,7 @@ public class GUI_CerrarPedido extends JFrame implements IGUI{
 	private static final long serialVersionUID = 1L;
 	private TCarrito carrito;
 
-	public GUI_CerrarPedido(TCarrito carrito) {
+	public GUI_CerrarPedido() {
 		setTitle("Cerrar Pedido");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setSize(400, 250);

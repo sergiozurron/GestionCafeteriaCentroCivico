@@ -21,12 +21,12 @@ public class SAMesaImplTest {
 
     @BeforeAll
     static void setup() throws Exception {
-        daoMesa.eliminaTodas(); 
+    //    daoMesa.eliminaTodas(); 
     }
 
     @AfterEach
     void cleanUp() throws Exception {
-        daoMesa.eliminaTodas();
+    //    daoMesa.eliminaTodas();
     }
 
     @Test

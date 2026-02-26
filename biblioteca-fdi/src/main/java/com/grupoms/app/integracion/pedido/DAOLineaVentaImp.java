@@ -21,12 +21,11 @@ public class DAOLineaVentaImp implements DAOLineaVenta {
 		Integer idGenerado = null;
 		Connection conn = (Connection) TransactionManager.getInstance().getTransaction().getResource();
 
-		String sql = "INSERT INTO linea_venta (pedido_id, producto_id, cantidad, precio_venta) VALUES (?, ?, ?, ?)";
+		String sql = "INSERT INTO linea_venta (pedido_id, producto_id, cantidad) VALUES (?, ?, ?)";
 		try (PreparedStatement ps = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
 			ps.setInt(1, orden.getPedidoId());
 			ps.setObject(2, orden.getProductoId());
 			ps.setInt(3, orden.getCantidad() != null ? orden.getCantidad() : 0);
-			ps.setDouble(4, orden.getPrecio() != null ? orden.getPrecio() : 0.0);
 
 			ps.executeUpdate();
 			try (ResultSet rs = ps.getGeneratedKeys()) {
@@ -46,7 +45,7 @@ public class DAOLineaVentaImp implements DAOLineaVenta {
 	    Connection c = (Connection) TransactionManager.getInstance().getTransaction().getResource();
 
 	    try {
-	        String sqlSelect = "SELECT id_pedido, id_producto, cantidad, precio_venta FROM linea_venta " +
+	        String sqlSelect = "SELECT id_pedido, id_producto, cantidad FROM linea_venta " +
 	                           "WHERE id_pedido = ? AND id_producto = ? FOR UPDATE";
 	        try (PreparedStatement ps = c.prepareStatement(sqlSelect)) {
 	            ps.setInt(1, idP);
@@ -58,7 +57,6 @@ public class DAOLineaVentaImp implements DAOLineaVenta {
 	                    lineaV.setPedidoID(rs.getInt("id_pedido"));
 	                    lineaV.setProductID(rs.getInt("id_producto"));
 	                    lineaV.setCantidad(rs.getInt("cantidad"));
-	                    lineaV.setPrecioVenta(rs.getDouble("precio_venta"));
 	                } else {
 	                    return null;
 	                }
@@ -85,11 +83,10 @@ public class DAOLineaVentaImp implements DAOLineaVenta {
 	public Integer modificarLineaVenta(TLineaVenta tLineaVenta) {
 		try {
 			Connection conn = (Connection) TransactionManager.getInstance().getTransaction().getResource();
-			PreparedStatement st = conn.prepareStatement("UPDATE orden SET pedido_id = ?, producto_id = ?, cantidad = ?, precio_venta = ? WHERE id = ?", Statement.RETURN_GENERATED_KEYS);
+			PreparedStatement st = conn.prepareStatement("UPDATE orden SET pedido_id = ?, producto_id = ?, cantidad = ? WHERE id = ?", Statement.RETURN_GENERATED_KEYS);
 			st.setInt(1, tLineaVenta.getPedidoId());
 			st.setInt(2,tLineaVenta.getProductoId());
 			st.setInt(3, tLineaVenta.getCantidad());
-			st.setDouble(4,tLineaVenta.getPrecio());
 			int affectedRows = st.executeUpdate();
 
 			st.close();
@@ -120,7 +117,6 @@ public class DAOLineaVentaImp implements DAOLineaVenta {
 				linea.setPedidoID(result.getInt(1));
 				linea.setProductID(result.getInt(2));
 				linea.setCantidad(result.getInt(3));
-				linea.setPrecioVenta(result.getDouble(4));
 			}
 			result.close();
 			st.close();
@@ -147,7 +143,6 @@ public class DAOLineaVentaImp implements DAOLineaVenta {
 				p.setPedidoID(idP);
 				p.setProductID(idPR);
 				p.setCantidad(cat);
-				p.setPrecioVenta(tot);
 			}
 			result.close();
 			statement.close();
@@ -164,7 +159,7 @@ public class DAOLineaVentaImp implements DAOLineaVenta {
 		try {
 			Connection c = (Connection) TransactionManager.getInstance().getTransaction().getResource();
 			PreparedStatement statement = c.prepareStatement(
-					"SELECT id_pedido, id_producto, cantidad, precio FROM linea_venta WHERE id:pedido = ? FOR UPDATE",Statement.RETURN_GENERATED_KEYS
+					"SELECT id_pedido, id_producto, cantidad FROM linea_venta WHERE id:pedido = ? FOR UPDATE",Statement.RETURN_GENERATED_KEYS
 					);
 			statement.setInt(1,idPedido);
 			ResultSet result = statement.executeQuery();
@@ -178,7 +173,6 @@ public class DAOLineaVentaImp implements DAOLineaVenta {
 				p.setPedidoID(idP);
 				p.setProductID(idPR);
 				p.setCantidad(cat);
-				p.setPrecioVenta(tot);
 			}
 			result.close();
 			statement.close();

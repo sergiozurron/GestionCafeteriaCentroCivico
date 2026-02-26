@@ -172,7 +172,6 @@ public class FactoriaVistas {
 		vistas.put(GUI_MOSTRAR_PRESTAMO, new GUI_MostrarPrestamo());
 		vistas.put(GUI_MODIFICAR_PRESTAMO, new GUI_ModificarPrestamo());
 
-		vistas.put(GUI_ALTA_PEDIDO, new GUI_AltaPedido());
 		vistas.put(GUI_MOSTRAR_PEDIDO, new GUI_MostrarPedido());
 		vistas.put(GUI_DEVOLVER_PEDIDO, new GUI_DevolverPedido());
 		vistas.put(GUI_MODIFICAR_PEDIDO, new GUI_ModificarPedido());

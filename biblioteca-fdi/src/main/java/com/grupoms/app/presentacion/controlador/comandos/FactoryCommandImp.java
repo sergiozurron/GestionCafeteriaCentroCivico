@@ -179,7 +179,6 @@ public class FactoryCommandImp extends FactoryCommand {
 
 		views.put(Evento.MOSTRAR_PEDIDO, FactoriaVistas.GUI_MOSTRAR_PEDIDO);
 		views.put(Evento.MODIFICAR_PEDIDO, FactoriaVistas.GUI_MODIFICAR_PEDIDO);
-		views.put(Evento.ALTA_PEDIDO, FactoriaVistas.GUI_ALTA_PEDIDO);
 		views.put(Evento.DEVOLVER_PEDIDO, FactoriaVistas.GUI_DEVOLVER_PEDIDO);
 		views.put(Evento.MOSTRAR_PEDIDOS, FactoriaVistas.GUI_LISTAR_PEDIDO);
 

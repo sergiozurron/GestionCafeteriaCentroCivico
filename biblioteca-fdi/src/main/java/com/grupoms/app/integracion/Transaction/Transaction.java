@@ -10,7 +10,5 @@ public interface Transaction {
 
 	void rollback() ;
 
-	public Object getResource();
-
 	Connection getConnection();
 }

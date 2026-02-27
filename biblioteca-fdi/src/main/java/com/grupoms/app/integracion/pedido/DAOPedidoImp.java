@@ -16,7 +16,7 @@ public class DAOPedidoImp implements DAOPedido {
 	public Boolean modificarPedido(TPedido pedido) {
 		Boolean act = false;
 		try {
-			Connection c = (Connection) TransactionManager.getInstance().getTransaction().getResource();
+			Connection c = TransactionManager.getInstance().getTransaction().getConnection();
 
 			String sql = "UPDATE pedidos SET fecha = ?, total_factura = ?, estado = ?, activo = ?, empleado_id = ?, mesa_id = ? WHERE id = ?";
 			try (PreparedStatement ps = c.prepareStatement(sql)) {
@@ -44,7 +44,7 @@ public class DAOPedidoImp implements DAOPedido {
 			Transaction t = TransactionManager.getInstance().getTransaction();
 			if (t == null)
 				throw new IllegalStateException("No hay transaccion activa");
-			Connection c = (Connection) t.getResource();
+			Connection c = t.getConnection();
 
 			String sql = "SELECT id, fecha, total_factura, estado, activo, empleado_id, mesa_id FROM pedidos WHERE id = ?";
 			try (PreparedStatement ps = c.prepareStatement(sql)) {
@@ -75,7 +75,7 @@ public class DAOPedidoImp implements DAOPedido {
 
 		try {
 			Transaction t = TransactionManager.getInstance().getTransaction();
-			Connection c = (Connection) t.getResource();
+			Connection c = t.getConnection();
 
 			String sql = "SELECT id, fecha, total_factura, estado, activo, empleado_id, mesa_id FROM pedidos";
 
@@ -106,7 +106,7 @@ public class DAOPedidoImp implements DAOPedido {
 		Boolean exito = false;
 		try {
 			Transaction t = TransactionManager.getInstance().getTransaction();
-			Connection c = (Connection) t.getResource();
+			Connection c = t.getConnection();
 
 			String sql = "UPDATE pedidos SET estado = ?, activo = ? WHERE id = ?";
 			try (PreparedStatement ps = c.prepareStatement(sql)) {
@@ -128,7 +128,7 @@ public class DAOPedidoImp implements DAOPedido {
 
 		try {
 			Transaction t = TransactionManager.getInstance().getTransaction();
-			Connection c = (Connection) t.getResource();
+			Connection c = t.getConnection();
 
 			String sql = "SELECT id, fecha, total_factura, estado, activo, empleado_id, mesa_id FROM pedidos WHERE empleado_id = ?";
 
@@ -163,7 +163,7 @@ public class DAOPedidoImp implements DAOPedido {
 
 		try {
 			Transaction t = TransactionManager.getInstance().getTransaction();
-			Connection c = (Connection) t.getResource();
+			Connection c = t.getConnection();
 
 			String sql = "SELECT id, fecha, total_factura, estado, activo, empleado_id, mesa_id FROM pedidos WHERE mesa_id = ?";
 

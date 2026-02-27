@@ -21,7 +21,7 @@ public class DAOIngredienteImp implements DAOIngrediente {
 		 Integer idGenerado = null;
 	        try {
 	            Transaction t = TransactionManager.getInstance().getTransaction();
-	            Connection c = (Connection) t.getResource();
+	            Connection c = t.getConnection();
 
 	            String sql = "INSERT INTO ingredientes(nombre, precio, activo, proveedor_id) VALUES (?, ?, ?, ?)";
 	            try (PreparedStatement ps = c.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
@@ -50,7 +50,7 @@ public class DAOIngredienteImp implements DAOIngrediente {
 		TIngrediente ing = null;
         try {
             Transaction t = TransactionManager.getInstance().getTransaction();
-            Connection c = (Connection) t.getResource();
+            Connection c = t.getConnection();
 
             String sql = "SELECT id, nombre, precio, activo, proveedor_id FROM ingredientes WHERE id = ?";
             try (PreparedStatement ps = c.prepareStatement(sql)) {
@@ -78,7 +78,7 @@ public class DAOIngredienteImp implements DAOIngrediente {
 		List<TIngrediente> listaIngredientes = new ArrayList<>();
 		try {
 			Transaction t = TransactionManager.getInstance().getTransaction();
-			Connection c = (Connection) t.getResource();
+			Connection c = t.getConnection();
 
 			String sql = "SELECT id, nombre, precio, activo, proveedor_id FROM ingredientes";
 			try (PreparedStatement ps = c.prepareStatement(sql)) {
@@ -105,7 +105,7 @@ public class DAOIngredienteImp implements DAOIngrediente {
 		List<TIngrediente> listaIngredientes = new ArrayList<>();
 		try {
 			Transaction t = TransactionManager.getInstance().getTransaction();
-			Connection c = (Connection) t.getResource();
+			Connection c = t.getConnection();
 
 			String sql = "SELECT id, nombre, precio, activo, proveedor_id FROM ingredientes WHERE proveedor_id = ?";
 			try (PreparedStatement ps = c.prepareStatement(sql)) {
@@ -133,7 +133,7 @@ public class DAOIngredienteImp implements DAOIngrediente {
 	public Boolean modificarIngrediente(TIngrediente tingrediente) {
 		 try {
 	            Transaction t = TransactionManager.getInstance().getTransaction();
-	            Connection c = (Connection) t.getResource();
+	            Connection c = t.getConnection();
 
 	            String sql = "UPDATE ingredientes SET nombre = ?, precio = ?, proveedor_id = ? WHERE id = ?";
 	            try (PreparedStatement ps = c.prepareStatement(sql)) {
@@ -153,7 +153,7 @@ public class DAOIngredienteImp implements DAOIngrediente {
 	public Boolean bajaIngrediente(TIngrediente ingrediente) {
 		 try {
 	            Transaction t = TransactionManager.getInstance().getTransaction();
-	            Connection c = (Connection) t.getResource();
+	            Connection c = t.getConnection();
 
 	            String sql = "UPDATE ingredientes SET activo = ? WHERE id = ?";
 	            try (PreparedStatement ps = c.prepareStatement(sql)) {
@@ -172,7 +172,7 @@ public class DAOIngredienteImp implements DAOIngrediente {
 		 List<TIngrediente> lista = new ArrayList<>();
 	        try {
 	            Transaction t = TransactionManager.getInstance().getTransaction();
-	            Connection c = (Connection) t.getResource();
+	            Connection c = t.getConnection();
 
 	            String sql = "SELECT i.id, i.nombre, i.precio, i.activo, i.proveedor_id " +
 	                         "FROM ingredientes i " +
@@ -204,7 +204,7 @@ public class DAOIngredienteImp implements DAOIngrediente {
 
 	    try {
 	        Transaction t = TransactionManager.getInstance().getTransaction();
-	        Connection c = (Connection) t.getResource();
+	        Connection c = t.getConnection();
 
 	        String sql = "INSERT INTO producto_ingrediente (id_producto, id_ingrediente, cantidad) VALUES (?, ?, ?)";
 

@@ -14,4 +14,6 @@ public interface DAOMesa {
 	List<TMesa> mostrarListaMesa();
 
 	Boolean bajaMesa(TMesa mesa);
+
+	TMesa leerMesaPorNumero(Integer numero);
 }

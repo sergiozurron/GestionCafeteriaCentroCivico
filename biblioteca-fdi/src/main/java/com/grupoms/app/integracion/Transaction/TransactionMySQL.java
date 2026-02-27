@@ -38,6 +38,7 @@ public class TransactionMySQL implements Transaction {
 	        } catch (SQLException e) {
 	            throw new RuntimeException("Error cerrando conexión tras commit", e);
 	        }
+	        TransactionManager.getInstance().deleteTransaction();
 	    }
 	}
 
@@ -59,11 +60,6 @@ public class TransactionMySQL implements Transaction {
 
 	@Override
 	public Connection getConnection() {
-		return conexion;
-	}
-
-	@Override
-	public Object getResource() {
 		return conexion;
 	}
 }

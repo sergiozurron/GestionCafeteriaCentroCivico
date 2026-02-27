@@ -25,7 +25,7 @@ public class DAOProductoImp implements DAOProducto {
 		Integer idGenerado = null;
 		try {
 			Transaction t = TransactionManager.getInstance().getTransaction();
-			Connection c = (Connection) t.getResource();
+			Connection c = t.getConnection();
 
 			try (PreparedStatement ps = c.prepareStatement(INSERT_PRODUCTO, Statement.RETURN_GENERATED_KEYS)) {
 				ps.setString(1, producto.getNombre());
@@ -65,7 +65,7 @@ public class DAOProductoImp implements DAOProducto {
 	public Integer bajaProducto(Integer id) {
 		try {
 			Transaction t = TransactionManager.getInstance().getTransaction();
-			Connection c = (Connection) t.getResource();
+			Connection c = t.getConnection();
 
 			try (PreparedStatement ps = c.prepareStatement(DESACTIVAR_PRODUCTO)) {
 				ps.setInt(1, id);
@@ -83,7 +83,7 @@ public class DAOProductoImp implements DAOProducto {
 	public Integer modificarProducto(TProducto producto) {
 		try {
 			Transaction t = TransactionManager.getInstance().getTransaction();
-			Connection c = (Connection) t.getResource();
+			Connection c = t.getConnection();
 
 			try (PreparedStatement ps = c.prepareStatement(UPDATE_PRODUCTO)) {
 				ps.setString(1, producto.getNombre());
@@ -118,7 +118,7 @@ public class DAOProductoImp implements DAOProducto {
 		TProducto producto = null;
 		try {
 			Transaction t = TransactionManager.getInstance().getTransaction();
-			Connection c = (Connection) t.getResource();
+			Connection c = t.getConnection();
 
 			try (PreparedStatement ps = c.prepareStatement(READ_BY_ID)) {
 				ps.setInt(1, id);
@@ -157,7 +157,7 @@ public class DAOProductoImp implements DAOProducto {
 		List<TProducto> listaProductos = new ArrayList<>();
 		try {
 			Transaction t = TransactionManager.getInstance().getTransaction();
-			Connection c = (Connection) t.getResource();
+			Connection c = t.getConnection();
 
 			try (PreparedStatement ps = c.prepareStatement(ALL); ResultSet rs = ps.executeQuery()) {
 
@@ -197,7 +197,7 @@ public class DAOProductoImp implements DAOProducto {
 	public void eliminaTodas() {
 		try {
 			Transaction t = TransactionManager.getInstance().getTransaction();
-			Connection c = (Connection) t.getResource();
+			Connection c = t.getConnection();
 
 			try (PreparedStatement ps = c.prepareStatement(DELETE_PRODUCTO)) {
 				ps.executeUpdate();
@@ -213,7 +213,7 @@ public class DAOProductoImp implements DAOProducto {
 		if (tx == null) {
 			return DriverManager.getConnection(DBConfig.getUrl(), DBConfig.getUser(), DBConfig.getPassword());
 		}
-		return (Connection) tx.getResource();
+		return (Connection) tx.getConnection();
 	}
 
 	private void closeConnection(Connection conn) {

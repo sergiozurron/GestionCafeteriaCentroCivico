@@ -19,7 +19,7 @@ public class DAOEmpleadoImp implements DAOEmpleado {
 		Integer idGenerado = null;
 		try {
 			Transaction t = TransactionManager.getInstance().getTransaction();
-			Connection c = (Connection) t.getResource();
+			Connection c = t.getConnection();
 
 			String sql = "INSERT INTO empleados (nombre, activo, donde_atiende, sueldo) VALUES (?, ?, ?, ?)";
 			try (PreparedStatement ps = c.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -52,7 +52,7 @@ public class DAOEmpleadoImp implements DAOEmpleado {
 			if (t == null) {
 				throw new IllegalStateException("No hay transacción activa al mostrar empleado");
 			}
-			Connection c = (Connection) t.getResource();
+			Connection c = t.getConnection();
 
 			String sql = "SELECT id, nombre, activo, donde_atiende, sueldo FROM empleados WHERE id = ?";
 			try (PreparedStatement ps = c.prepareStatement(sql)) {
@@ -83,7 +83,7 @@ public class DAOEmpleadoImp implements DAOEmpleado {
 		List<TEmpleado> lista = new ArrayList<>();
 		try {
 			Transaction t = TransactionManager.getInstance().getTransaction();
-			Connection c = (Connection) t.getResource();
+			Connection c = t.getConnection();
 
 			String sql = "SELECT id, nombre, activo, donde_atiende, sueldo FROM empleados";
 			try (PreparedStatement ps = c.prepareStatement(sql)) {
@@ -110,7 +110,7 @@ public class DAOEmpleadoImp implements DAOEmpleado {
 		Boolean exito = false;
 		try {
 			Transaction t = TransactionManager.getInstance().getTransaction();
-			Connection c = (Connection) t.getResource();
+			Connection c = t.getConnection();
 
 			String sql = "UPDATE empleados SET nombre = ?, activo = ?, donde_atiende = ?, sueldo = ? WHERE id = ?";
 			try (PreparedStatement st = c.prepareStatement(sql)) {
@@ -135,7 +135,7 @@ public class DAOEmpleadoImp implements DAOEmpleado {
 		Boolean exito = false;
 		try {
 			Transaction t = TransactionManager.getInstance().getTransaction();
-			Connection c = (Connection) t.getResource();
+			Connection c = t.getConnection();
 
 			String sql = "UPDATE empleados SET activo = ? WHERE id = ?";
 			try (PreparedStatement st = c.prepareStatement(sql)) {

@@ -19,23 +19,47 @@ public class SAMesaImp implements SAMesa {
 		try {
 			t = TransactionManager.getInstance().newTransaction();
 			t.start();
-			mesa.setActivo(true);
-			idGenerado = daoMesa.altaMesa(mesa);
-			if (idGenerado == -1) {
-				throw new RuntimeException("No se pudo dar de alta la mesa");
+
+			TMesa mesaExistente = daoMesa.leerMesaPorNumero(mesa.getNumero());
+
+			if (mesaExistente != null) {
+				if (mesaExistente.getActivo()) {
+
+					throw new IllegalArgumentException("Ya existe una mesa activa con el número: " + mesa.getNumero());
+				} else {
+
+					mesa.setId(mesaExistente.getId());
+					mesa.setActivo(true);
+
+					Boolean modificada = daoMesa.modificarMesa(mesa);
+					if (!modificada) {
+						throw new RuntimeException("Error al reactivar la mesa existente.");
+					}
+					idGenerado = mesa.getId();
+				}
+			} else {
+
+				mesa.setActivo(true);
+				idGenerado = daoMesa.altaMesa(mesa);
+
+				if (idGenerado == null) {
+
+					throw new RuntimeException("Error en integración al intentar insertar la mesa.");
+				}
 			}
-			mesa.setId(idGenerado);
+
 			t.commit();
 
 		} catch (Exception e) {
-			e.printStackTrace();
 			if (t != null) {
 				try {
 					t.rollback();
 				} catch (Exception ex) {
-					ex.printStackTrace();
+					System.err.println("Error fatal durante el rollback: " + ex.getMessage());
 				}
 			}
+
+			throw new RuntimeException(e.getMessage());
 		}
 
 		return idGenerado;
@@ -50,26 +74,43 @@ public class SAMesaImp implements SAMesa {
 			t = TransactionManager.getInstance().newTransaction();
 			t.start();
 
-			if (mesa == null || mesa.getId() == null || mesa.getId() <= 0)
+			if (mesa == null || mesa.getId() == null || mesa.getId() <= 0) {
 				throw new IllegalArgumentException("La mesa debe tener un id válido para dar de baja.");
+			}
+
+			TMesa mesaEnBD = daoMesa.mostrarMesa(mesa.getId());
+
+			if (mesaEnBD == null) {
+				throw new IllegalArgumentException(
+						"No se puede dar de baja: La mesa con ID " + mesa.getId() + " no existe.");
+			}
+
+			if (!mesaEnBD.getActivo()) {
+				throw new IllegalStateException(
+						"La mesa con ID " + mesa.getId() + " ya estaba dada de baja previamente.");
+			}
 
 			mesa.setActivo(false);
+			exito = daoMesa.bajaMesa(mesa);
 
-			daoMesa.bajaMesa(mesa);
+			if (!exito) {
+				throw new RuntimeException("Error en Integración: No se pudo actualizar el estado de la mesa.");
+			}
 
 			t.commit();
-			exito = true;
 
 		} catch (Exception e) {
-			e.printStackTrace();
+
 			if (t != null) {
 				try {
 					t.rollback();
 				} catch (Exception ex) {
-					ex.printStackTrace();
+					System.err.println("Error crítico durante el rollback: " + ex.getMessage());
 				}
 			}
+			throw new RuntimeException(e.getMessage());
 		}
+
 		return exito;
 	}
 
@@ -89,7 +130,18 @@ public class SAMesaImp implements SAMesa {
 			if (existente == null || !existente.getActivo())
 				throw new IllegalArgumentException("No existe una mesa activa con ID " + mesa.getId());
 
+			if (!existente.getNumero().equals(mesa.getNumero())) {
+				TMesa mesaConEseNumero = daoMesa.leerMesaPorNumero(mesa.getNumero());
+				if (mesaConEseNumero != null && !mesaConEseNumero.getId().equals(mesa.getId())) {
+					throw new IllegalArgumentException("Ya existe otra mesa con el número " + mesa.getNumero());
+				}
+			}
+
 			exito = daoMesa.modificarMesa(mesa);
+
+			if (!exito) {
+				throw new RuntimeException("Error en Integración: No se pudo modificar la mesa.");
+			}
 
 			t.commit();
 		} catch (Exception e) {
@@ -98,9 +150,10 @@ public class SAMesaImp implements SAMesa {
 				try {
 					t.rollback();
 				} catch (Exception ex) {
-					ex.printStackTrace();
+					System.err.println("Error crítico durante el rollback: " + ex.getMessage());
 				}
 			}
+			throw new RuntimeException(e.getMessage());
 		}
 		return exito;
 	}
@@ -108,51 +161,50 @@ public class SAMesaImp implements SAMesa {
 	@Override
 	public TMesa mostrarMesa(Integer ID) {
 		if (ID == null || ID <= 0)
-			throw new IllegalArgumentException("El ID del ingrediente no es válido.");
+			throw new IllegalArgumentException("El ID de la mesa no es válido.");
 		Transaction t = null;
-		TMesa ing = null;
+		TMesa mesa = null;
 
 		try {
 
 			t = TransactionManager.getInstance().newTransaction();
 			t.start();
 
-			ing = daoMesa.mostrarMesa(ID);
-			if (ing == null)
-				throw new IllegalArgumentException("El ingrediente con ID " + ID + " no existe.");
+			mesa = daoMesa.mostrarMesa(ID);
+			if (mesa == null)
+				throw new IllegalArgumentException("La mesa con ID " + ID + " no existe.");
 
 			t.commit();
 
 		} catch (Exception e) {
-			e.printStackTrace();
 			if (t != null) {
 				try {
 					t.rollback();
 				} catch (Exception ex) {
-					ex.printStackTrace();
+					System.err.println("Error crítico durante el rollback: " + ex.getMessage());
 				}
 			}
 			throw new RuntimeException(e.getMessage(), e);
 		}
-		return ing;
+		return mesa;
 	}
 
 	@Override
 	public List<TMesa> mostrarListaMesa() {
-		List<TMesa> listaIngredientes = new ArrayList<>();
+		List<TMesa> listaMesas = new ArrayList<>();
 		Transaction t = null;
 		try {
 			t = TransactionManager.getInstance().newTransaction();
 			t.start();
 
 			List<TMesa> todos = daoMesa.mostrarListaMesa();
-			for (TMesa ing : todos) {
-				if (ing.getActivo()) {
-					listaIngredientes.add(ing);
+			for (TMesa m : todos) {
+				if (m.getActivo()) {
+					listaMesas.add(m);
 				}
 			}
-			if (listaIngredientes.isEmpty()) {
-				throw new IllegalArgumentException("No hay ingredientes activos en la base de datos.");
+			if (listaMesas.isEmpty()) {
+				throw new IllegalArgumentException("No hay mesas activas en la base de datos.");
 			}
 			t.commit();
 		} catch (Exception e) {
@@ -164,9 +216,9 @@ public class SAMesaImp implements SAMesa {
 					ex.printStackTrace();
 				}
 			}
-			throw new IllegalArgumentException("Error al mostrar la lista de ingredientes", e);
+			throw new RuntimeException("Error al mostrar la lista de mesas: " + e.getMessage(), e);
 		}
-		return listaIngredientes;
+		return listaMesas;
 	}
 
 }

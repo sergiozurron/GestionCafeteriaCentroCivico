@@ -11,28 +11,26 @@ DROP TABLE IF EXISTS mesas;
 DROP TABLE IF EXISTS salas;
 DROP TABLE IF EXISTS terrazas;
 
-CREATE TABLE salas (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    reservada BOOLEAN NOT NULL,
-    privacidad VARCHAR(50)
-) ENGINE=InnoDB;
-
-CREATE TABLE terrazas (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    cubierta BOOLEAN NOT NULL,
-    suplemento DECIMAL(10,2)
-) ENGINE=InnoDB;
-
 CREATE TABLE mesas (
     id INT AUTO_INCREMENT PRIMARY KEY,
     numero INT NOT NULL UNIQUE,
     ubicacion VARCHAR(100),
     capacidad INT,
-    activo BOOLEAN NOT NULL,
-    sala_id INT,
-    terraza_id INT,
-    FOREIGN KEY (sala_id) REFERENCES salas(id),
-    FOREIGN KEY (terraza_id) REFERENCES terrazas(id)
+    activo BOOLEAN NOT NULL
+) ENGINE=InnoDB;
+
+CREATE TABLE salas (
+    id_mesa INT PRIMARY KEY,
+    reservada BOOLEAN NOT NULL,
+    privacidad VARCHAR(50),
+    FOREIGN KEY (id_mesa) REFERENCES mesas(id) ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+CREATE TABLE terrazas (
+    id_mesa INT PRIMARY KEY,
+    cubierta BOOLEAN NOT NULL,
+    suplemento DECIMAL(10,2),
+    FOREIGN KEY (id_mesa) REFERENCES mesas(id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 CREATE TABLE empleados (

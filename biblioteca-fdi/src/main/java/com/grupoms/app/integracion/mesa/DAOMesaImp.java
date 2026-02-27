@@ -21,9 +21,9 @@ public class DAOMesaImp implements DAOMesa {
     // ARREGLADO: Añadido FOR UPDATE para el bloqueo pesimista
     private static final String READ_BY_ID = 
         "SELECT m.*, s.reservada, s.privacidad, t.cubierta, t.suplemento " +
-        "FROM Mesa m " + 
-        "LEFT JOIN MesaSala s ON m.id = s.id_mesa " +
-        "LEFT JOIN MesaTerraza t ON m.id = t.id_mesa " + 
+        "FROM mesas m " + 
+        "LEFT JOIN salas s ON m.id = s.id " +
+        "LEFT JOIN terrazas t ON m.id = t.id " + 
         "WHERE m.id = ? FOR UPDATE";
 
     private static final String ALL = 

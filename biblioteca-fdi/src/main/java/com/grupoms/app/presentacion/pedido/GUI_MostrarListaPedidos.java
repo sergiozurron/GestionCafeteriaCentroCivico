@@ -61,8 +61,10 @@ public class GUI_MostrarListaPedidos extends JFrame implements IGUI {
 
 	@Override
 	public void actualizar(Context context) {
-		if (context == null)
+		if (context == null) {
 			setVisible(true);
+			return;
+		}
 		if (context.getEvento() == Evento.MOSTRAR_PEDIDOS_OK) {
 			modeloTabla.setRowCount(0);
 			List<TPedido> pedidos = (List<TPedido>) context.getDatos();
@@ -86,7 +88,7 @@ public class GUI_MostrarListaPedidos extends JFrame implements IGUI {
 			}
 
 		} else if (context.getEvento() == Evento.MOSTRAR_PEDIDOS_KO) {
-			JOptionPane.showMessageDialog(this, "Error al cargar los pedidos.", "Error", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(this, "Error la lista esta vacia.", "Error", JOptionPane.ERROR_MESSAGE);
 		}
 	}
 }

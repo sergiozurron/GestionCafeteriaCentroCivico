@@ -75,8 +75,9 @@ public class GUI_CerrarPedido extends JFrame implements IGUI {
 
 	@Override
 	public void actualizar(Context context) {
-		if(context == null) {
+		if (context == null) {
 			setVisible(true);
+			return;
 		}
 
 		if (context.getEvento() == Evento.CERRAR_PEDIDO_OK) {

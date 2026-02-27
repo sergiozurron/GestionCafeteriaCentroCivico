@@ -102,8 +102,8 @@ public class DAOPedidoImp implements DAOPedido {
 	}
 
 	@Override
-	public Integer devolverPedido(Integer id) {
-		int exito = -1;
+	public Boolean devolverPedido(Integer id) {
+		Boolean exito = false;
 		try {
 			Transaction t = TransactionManager.getInstance().getTransaction();
 			Connection c = (Connection) t.getResource();
@@ -114,7 +114,7 @@ public class DAOPedidoImp implements DAOPedido {
 				ps.setBoolean(2, false);
 				ps.setInt(3,id);
 
-				exito = ps.executeUpdate();
+				exito = (ps.executeUpdate() > 0);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

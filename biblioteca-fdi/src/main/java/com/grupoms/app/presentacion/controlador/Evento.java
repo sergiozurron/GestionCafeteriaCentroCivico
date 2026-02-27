@@ -47,10 +47,6 @@ public class Evento {
 	public static final int ALTA_PEDIDO_KO = 30;
 
 
-	public static final int CONFIRMAR_PEDIDO = 34;
-	public static final int CONFIRMAR_PEDIDO_OK = 35;
-	public static final int CONFIRMAR_PEDIDO_KO = 36;
-
 	public static final int MODIFICAR_PEDIDO = 37;
 	public static final int MODIFICAR_PEDIDO_OK = 38;
 	public static final int MODIFICAR_PEDIDO_KO = 39;

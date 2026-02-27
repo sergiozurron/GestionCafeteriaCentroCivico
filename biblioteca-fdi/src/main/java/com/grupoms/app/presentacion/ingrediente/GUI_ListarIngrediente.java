@@ -61,6 +61,10 @@ public class GUI_ListarIngrediente extends JFrame implements IGUI {
 
 	@Override
 	public void actualizar(Context context) {
+		if (context == null) {
+			setVisible(true);
+			return;
+		}
 
 		if (context.getEvento() == Evento.MOSTRAR_INGREDIENTES_OK) {
 			modeloTabla.setRowCount(0);

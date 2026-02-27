@@ -19,6 +19,6 @@ public interface DAOPedido {
 
 	List<TPedido> mostrarPedidosPorMesa(Integer idMesa);
 	
-	Integer devolverPedido(Integer id);
+	Boolean devolverPedido(Integer id);
 
 }

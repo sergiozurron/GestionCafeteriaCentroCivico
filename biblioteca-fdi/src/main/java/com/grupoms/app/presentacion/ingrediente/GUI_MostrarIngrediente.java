@@ -99,6 +99,10 @@ public class GUI_MostrarIngrediente extends JFrame implements IGUI {
 
 	@Override
 	public void actualizar(Context context) {
+		if (context == null) {
+			setVisible(true);
+			return;
+		}
 
 		if (context.getEvento() == Evento.MOSTRAR_INGREDIENTE_OK) {
 			TIngrediente ing = (TIngrediente) context.getDatos();

@@ -65,6 +65,15 @@ import com.grupoms.app.presentacion.controlador.comandos.mesa.ModificarMesaComma
 import com.grupoms.app.presentacion.controlador.comandos.mesa.MostrarListaMesasCommand;
 import com.grupoms.app.presentacion.controlador.comandos.mesa.MostrarMesaCommand;
 import com.grupoms.app.presentacion.controlador.comandos.pedido.AltaPedidoCommand;
+import com.grupoms.app.presentacion.controlador.comandos.pedido.CerrarPedidoCommand;
+import com.grupoms.app.presentacion.controlador.comandos.pedido.DesvincularProductoPedidoCommand;
+import com.grupoms.app.presentacion.controlador.comandos.pedido.DevolverPedidoCommand;
+import com.grupoms.app.presentacion.controlador.comandos.pedido.ModificarPedidoCommand;
+import com.grupoms.app.presentacion.controlador.comandos.pedido.MostrarListaPedidosCommand;
+import com.grupoms.app.presentacion.controlador.comandos.pedido.MostrarPedidoCommand;
+import com.grupoms.app.presentacion.controlador.comandos.pedido.MostrarPedidosEmpleadoCommand;
+import com.grupoms.app.presentacion.controlador.comandos.pedido.MostrarPedidosMesaCommand;
+import com.grupoms.app.presentacion.controlador.comandos.pedido.VincularProductoPedidoCommand;
 import com.grupoms.app.presentacion.controlador.comandos.producto.AltaProductoCommand;
 import com.grupoms.app.presentacion.controlador.comandos.producto.BajaProductoCommand;
 import com.grupoms.app.presentacion.controlador.comandos.producto.ModificarProductoCommand;
@@ -90,8 +99,6 @@ public class FactoryCommandImp extends FactoryCommand {
 		commands.put(Evento.MODIFICAR_MESA, new ModificarMesaCommand());
 		commands.put(Evento.MOSTRAR_MESA, new MostrarMesaCommand());
 		commands.put(Evento.MOSTRAR_LISTA_MESA, new MostrarListaMesasCommand());
-
-
 
 		commands.put(Evento.ALTA_INGREDIENTE, new AltaIngredienteCommand());
 		commands.put(Evento.BAJA_INGREDIENTE, new BajaIngredienteCommand());
@@ -171,6 +178,16 @@ public class FactoryCommandImp extends FactoryCommand {
 
 		
 		commands.put(Evento.ALTA_PEDIDO,new AltaPedidoCommand());
+		commands.put(Evento.CERRAR_PEDIDO,new CerrarPedidoCommand());
+		commands.put(Evento.MODIFICAR_PEDIDO,new ModificarPedidoCommand());
+		commands.put(Evento.VINCULAR_PRODUCTO_PEDIDO,new VincularProductoPedidoCommand());
+		commands.put(Evento.DESVINCULAR_PRODUCTO_PEDIDO,new DesvincularProductoPedidoCommand());
+		commands.put(Evento.DEVOLVER_PEDIDO,new DevolverPedidoCommand());
+		commands.put(Evento.MOSTRAR_PEDIDO,new MostrarPedidoCommand());
+		commands.put(Evento.MOSTRAR_PEDIDOS,new MostrarListaPedidosCommand());
+		commands.put(Evento.MOSTRAR_PEDIDOS_EMPLEADO,new MostrarPedidosEmpleadoCommand());
+		commands.put(Evento.MOSTRAR_PEDIDOS_MESA,new MostrarPedidosMesaCommand());
+
 		
 		
 		

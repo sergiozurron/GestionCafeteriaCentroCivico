@@ -16,7 +16,7 @@ public interface SAPedido {
 	
 	List<TPedido> mostrarPedidosPorEmpleado(Integer idEmpleado);
 	
-	void devolverPedido(Integer idPedido);
+	Boolean devolverPedido(Integer idPedido);
 	
 	TPedido cerrarPedido(Integer idPedido);
 	

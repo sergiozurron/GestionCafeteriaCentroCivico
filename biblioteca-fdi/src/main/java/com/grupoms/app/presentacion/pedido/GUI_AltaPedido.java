@@ -87,48 +87,42 @@ public class GUI_AltaPedido extends JFrame implements IGUI {
 
 	@Override
 	public void actualizar(Context context) {
-		if(context == null) {
+		if (context == null) {
 			setVisible(true);
+			return;
 		}
-		switch (context.getEvento()) {
 
-		case Evento.ALTA_PEDIDO_OK:
+	    int resultado = (int) context.getDatos();
 
-			// El controlador debería devolver el ID generado
-			int idGenerado = (int) context.getDatos();
+	    if (context.getEvento() == Evento.ALTA_PEDIDO_OK) {
 
-			JOptionPane.showMessageDialog(this,
-					"Pedido creado con éxito.\nID Pedido: " + idGenerado);
+	        JOptionPane.showMessageDialog(this,
+	                "Pedido creado correctamente con ID: " + resultado);
 
-			// Limpiar campos
-			campoMesa.setText("");
-			campoEmpleado.setText("");
+	    } else if (context.getEvento() == Evento.ALTA_PEDIDO_KO) {
 
-			break;
+	        switch (resultado) {
 
-		case Evento.ALTA_PEDIDO_KO:
+	            case -1:
+	                JOptionPane.showMessageDialog(this,
+	                        "El empleado no existe o no está activo");
+	                break;
 
-			int error = (int) context.getDatos();
+	            case -2:
+	                JOptionPane.showMessageDialog(this,
+	                        "La mesa no existe o no está activa");
+	                break;
 
-			switch (error) {
-			case -1:
-				JOptionPane.showMessageDialog(this,
-						"Error interno al crear pedido");
-				break;
-			case -2:
-				JOptionPane.showMessageDialog(this,
-						"Datos incorrectos");
-				break;
-			default:
-				JOptionPane.showMessageDialog(this,
-						"Error desconocido");
-				break;
-			}
+	            case -3:
+	                JOptionPane.showMessageDialog(this,
+	                        "Se ha producido un error interno");
+	                break;
 
-			break;
-
-		default:
-			break;
-		}
+	            default:
+	                JOptionPane.showMessageDialog(this,
+	                        "Error desconocido");
+	                break;
+	        }
+	    }
 	}
 }

@@ -90,8 +90,9 @@ public class GUI_DesvincularProductoPedido extends JFrame implements IGUI {
 
 	@Override
 	public void actualizar(Context context) {
-		if(context == null) {
+		if (context == null) {
 			setVisible(true);
+			return;
 		}
 		switch (context.getEvento()) {
 

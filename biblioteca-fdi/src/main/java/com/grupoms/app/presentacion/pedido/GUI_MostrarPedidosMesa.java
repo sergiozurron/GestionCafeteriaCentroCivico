@@ -74,8 +74,10 @@ public class GUI_MostrarPedidosMesa extends JFrame implements IGUI {
 
 	@Override
 	public void actualizar(Context context) {
-		if (context == null)
+		if (context == null) {
 			setVisible(true);
+			return;
+		}
 		if (context.getEvento() == Evento.MOSTRAR_PEDIDOS_MESA_OK) {
 
 			modeloTabla.setRowCount(0);

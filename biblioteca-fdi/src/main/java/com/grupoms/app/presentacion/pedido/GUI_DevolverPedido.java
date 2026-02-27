@@ -17,8 +17,10 @@ public class GUI_DevolverPedido extends JFrame implements IGUI {
 
 	@Override
 	public void actualizar(Context context) {
-		if (context == null)
+		if (context == null) {
 			setVisible(true);
+			return;
+		}
 		else if (context.getEvento() == Evento.DEVOLVER_PEDIDO_OK) {
 			JOptionPane.showMessageDialog(this, "Pedido devuelto con éxito");
 			campoID.setText("");

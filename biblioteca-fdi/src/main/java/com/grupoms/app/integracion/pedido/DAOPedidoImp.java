@@ -7,6 +7,8 @@ import java.util.List;
 import com.grupoms.app.integracion.DBConfig;
 import com.grupoms.app.integracion.Transaction.Transaction;
 import com.grupoms.app.integracion.Transaction.TransactionManager;
+import com.grupoms.app.integracion.factoria.FactoriaDAO;
+import com.grupoms.app.negocio.pedido.TLineaPedido;
 import com.grupoms.app.negocio.pedido.TPedido;
 
 public class DAOPedidoImp implements DAOPedido {
@@ -14,27 +16,24 @@ public class DAOPedidoImp implements DAOPedido {
 	
 	@Override
 	public Boolean modificarPedido(TPedido pedido) {
-		Boolean act = false;
-		try {
-			Connection c = (Connection) TransactionManager.getInstance().getTransaction().getResource();
-
-			String sql = "UPDATE pedidos SET fecha = ?, total_factura = ?, estado = ?, activo = ?, empleado_id = ?, mesa_id = ? WHERE id = ?";
-			try (PreparedStatement ps = c.prepareStatement(sql)) {
-				ps.setTimestamp(1, new java.sql.Timestamp(pedido.getFecha().getTime()));
-				ps.setDouble(2, pedido.getTotal());
-				ps.setString(3, pedido.getEstado());
-				ps.setBoolean(4, pedido.getActivo());
-				ps.setInt(5, pedido.getIdEmpleado());
-				ps.setInt(6, pedido.getIdMesa());
-				ps.setInt(7, pedido.getId());
-
-				act = ps.executeUpdate()>0;
-
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return act;
+		try { 
+			Transaction t = TransactionManager.getInstance().getTransaction(); 
+			Connection c = (Connection) t.getResource(); 
+			String sql = "UPDATE pedidos SET fecha = ?, total_factura = ?, estado = ?, empleado_id = ?, mesa_id = ? " + "WHERE id = ?"; 
+			try (PreparedStatement ps = c.prepareStatement(sql)) { 
+				ps.setDate(1, new java.sql.Date(pedido.getFecha().getTime())); 
+				ps.setDouble(2, pedido.getTotal()); 
+				ps.setString(3, pedido.getEstado()); 
+				ps.setInt(4, pedido.getIdEmpleado());
+				ps.setInt(5, pedido.getIdMesa()); 
+				ps.setInt(6, pedido.getId()); 
+				ps.executeUpdate(); 
+				} 
+			return true; 
+			} catch (Exception e) { 
+				e.printStackTrace(); 
+				return false; 
+				}
 	}
 
 	@Override
@@ -98,24 +97,34 @@ public class DAOPedidoImp implements DAOPedido {
 	}
 
 	@Override
-	public Boolean devolverPedido(Integer id) {
-		Boolean exito = false;
-		try {
-			Transaction t = TransactionManager.getInstance().getTransaction();
-			Connection c = (Connection) t.getResource();
-
-			String sql = "UPDATE pedidos SET estado = ?, activo = ? WHERE id = ?";
-			try (PreparedStatement ps = c.prepareStatement(sql)) {
-				ps.setString(1, "DEVUELTO");
-				ps.setBoolean(2, false);
-				ps.setInt(3,id);
-
-				exito = (ps.executeUpdate() > 0);
+	public Boolean devolverPedido(Integer idPedido) {
+		try { 
+			Transaction t = TransactionManager.getInstance().getTransaction(); 
+			if (t == null) 
+				throw new IllegalStateException("No hay transacción activa"); 
+			Connection c = (Connection) t.getResource(); 
+			// 1. Bloquear el pedido para modificarlo 
+			String sqlSelect = "SELECT id FROM pedidos WHERE id = ? AND activo = TRUE FOR UPDATE"; 
+			try (PreparedStatement ps = c.prepareStatement(sqlSelect)) { 
+				ps.setInt(1, idPedido); 
+				try (ResultSet rs = ps.executeQuery()) { 
+					if (!rs.next()) { 
+						return false; // no existe o ya está dado de baja 
+						} 
+					} 
+				} 
+			// 2. Dar de baja lógica al pedido 
+			String sqlUpdate = "UPDATE pedidos SET activo = FALSE WHERE id = ?"; 
+			try (PreparedStatement ps = c.prepareStatement(sqlUpdate)) { 
+				ps.setInt(1, idPedido); 
+				ps.executeUpdate(); 
+				} 
+			return true; 
+			
+			} catch (Exception e) { 
+				e.printStackTrace(); 
+				return false; 
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return exito;
 	}
 
 	@Override

@@ -18,8 +18,31 @@ public class SAPedidoImp implements SAPedido {
 
 	@Override
 	public Boolean modificarPedido(TPedido pedido) {
-		// TODO Auto-generated method stub
-		return null;
+		Transaction t = TransactionManager.getInstance().newTransaction();
+		try { 
+			t.start(); 
+			DAOPedido dao = FactoriaDAO.getInstancia().creaDAOPedido(); 
+			// 1. Leer el pedido actual desde BD con FOR UPDATE 
+			TPedido pedidoBD = dao.mostrarPedido(pedido.getId()); 
+			if (pedidoBD == null || !pedidoBD.getActivo()) { 
+				t.commit(); 
+				return false; // no existe o está dado de baja 
+			} // 2. Actualizar los campos permitidos 
+			pedidoBD.setFecha(pedido.getFecha()); 
+			pedidoBD.setEstado(pedido.getEstado()); 
+			pedidoBD.setIdEmpleado(pedido.getIdEmpleado()); 
+			pedidoBD.setIdMesa(pedido.getIdMesa()); 
+			pedidoBD.setTotal(pedido.getTotal()); // si lo permitís modificar 
+			// 3. Guardar cambios 
+			dao.modificarPedido(pedidoBD); 
+			t.commit(); 
+			return true; 
+			} catch (Exception e) { 
+				if (t != null) 
+					t.rollback(); 
+				e.printStackTrace(); 
+				return false;
+			}
 	}
 
 	@Override
@@ -157,8 +180,29 @@ public class SAPedidoImp implements SAPedido {
 
 	@Override
 	public Boolean devolverPedido(Integer idPedido) {
-		return null;
-		// TODO Auto-generated method stub
+		Transaction t = TransactionManager.getInstance().newTransaction(); 
+		try { 
+			t.start(); 
+			DAOPedido daoPedido = FactoriaDAO.getInstancia().creaDAOPedido(); 
+			DAOLineaPedido daoLinea = FactoriaDAO.getInstancia().creaDAOLineaPedido(); // 1. Leer el pedido con FOR UPDATE 
+			TPedido pedido = daoPedido.mostrarPedido(idPedido); // este método debe llevar FOR UPDATE 
+			if (pedido == null || !pedido.getActivo()) { 
+				t.commit(); 
+				return false; // no existe o ya está dado de baja 
+			} // 2. Leer las líneas con FOR UPDATE 
+			List<TLineaPedido> lineas = daoLinea.mostrarLineasPorPedido(idPedido); 
+			// 3. Dar de baja lógica al pedido 
+			pedido.setActivo(false); 
+			daoPedido.modificarPedido(pedido); 
+			
+			t.commit();
+			return true;
+		} catch (Exception e) { 
+			if (t != null) 
+				t.rollback(); 
+			e.printStackTrace(); 
+			return false; 
+		}
 		
 	}
 

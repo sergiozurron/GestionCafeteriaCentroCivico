@@ -130,42 +130,60 @@ public class DAOIngredienteImp implements DAOIngrediente {
 	}
 
 	@Override
-	public Boolean modificarIngrediente(TIngrediente tingrediente) {
-		 try {
-	            Transaction t = TransactionManager.getInstance().getTransaction();
-	            Connection c = (Connection) t.getResource();
+	public Boolean modificarIngrediente(TIngrediente ing) {
+	    try {
+	        Transaction t = TransactionManager.getInstance().getTransaction();
+	        Connection c = (Connection) t.getResource();
 
-	            String sql = "UPDATE ingredientes SET nombre = ?, precio = ?, proveedor_id = ? WHERE id = ?";
-	            try (PreparedStatement ps = c.prepareStatement(sql)) {
-	                ps.setString(1, tingrediente.getNombre());
-	                ps.setDouble(2, tingrediente.getPrecio());
-	                ps.setInt(3, tingrediente.getIDProveedor());
-	                ps.setInt(4, tingrediente.getID());
-	                return ps.executeUpdate() > 0;
-	            }
-	        } catch (SQLException e) {
-	            e.printStackTrace();
-	            throw new RuntimeException("Error modificando ingrediente", e);
+	        // 1. BLOQUEO
+	        String lock = "SELECT id FROM ingredientes WHERE id = ? FOR UPDATE";
+	        try (PreparedStatement ps = c.prepareStatement(lock)) {
+	            ps.setInt(1, ing.getID());
+	            ps.executeQuery();   // SELECT → executeQuery()
 	        }
+
+	        // 2. UPDATE REAL
+	        String sql = "UPDATE ingredientes SET nombre=?, precio=?, proveedor_id=? WHERE id=?";
+	        try (PreparedStatement ps = c.prepareStatement(sql)) {
+	            ps.setString(1, ing.getNombre());
+	            ps.setDouble(2, ing.getPrecio());
+	            ps.setInt(3, ing.getIDProveedor());
+	            ps.setInt(4, ing.getID());
+	            return ps.executeUpdate() > 0;
+	        }
+
+	    } catch (SQLException e) {
+	        throw new RuntimeException("Error modificando ingrediente", e);
+	    }
 	}
+
 
 	@Override
-	public Boolean bajaIngrediente(TIngrediente ingrediente) {
-		 try {
-	            Transaction t = TransactionManager.getInstance().getTransaction();
-	            Connection c = (Connection) t.getResource();
+	public Boolean bajaIngrediente(TIngrediente ing) {
+	    try {
+	        Transaction t = TransactionManager.getInstance().getTransaction();
+	        Connection c = (Connection) t.getResource();
 
-	            String sql = "UPDATE ingredientes SET activo = ? WHERE id = ?";
-	            try (PreparedStatement ps = c.prepareStatement(sql)) {
-	                ps.setBoolean(1, ingrediente.getActivo());
-	                ps.setInt(2, ingrediente.getID());
-	                return ps.executeUpdate() > 0;
-	            }
-	        } catch (SQLException e) {
-	            e.printStackTrace();
-	            throw new RuntimeException("Error dando de baja ingrediente", e);
+	        // 1. BLOQUEO
+	        String lock = "SELECT id FROM ingredientes WHERE id = ? FOR UPDATE";
+	        try (PreparedStatement ps = c.prepareStatement(lock)) {
+	            ps.setInt(1, ing.getID());
+	            ps.executeQuery();
 	        }
+
+	        // 2. UPDATE REAL
+	        String sql = "UPDATE ingredientes SET activo=? WHERE id=?";
+	        try (PreparedStatement ps = c.prepareStatement(sql)) {
+	            ps.setBoolean(1, ing.getActivo());
+	            ps.setInt(2, ing.getID());
+	            return ps.executeUpdate() > 0;
+	        }
+
+	    } catch (SQLException e) {
+	        throw new RuntimeException("Error dando de baja ingrediente", e);
+	    }
 	}
+
 
 	@Override
 	public List<TIngrediente> listarIngredientesPorProducto(Integer idProducto){

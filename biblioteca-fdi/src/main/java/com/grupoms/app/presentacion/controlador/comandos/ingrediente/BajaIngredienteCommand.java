@@ -20,7 +20,13 @@ public class BajaIngredienteCommand implements Command {
 
 		try {
 			Boolean ok = sa.bajaIngrediente(ingr);
-			return ok ? new Context(Evento.BAJA_INGREDIENTE_OK, ingr) : new Context(Evento.BAJA_INGREDIENTE_KO, null);
+			if(ok) {
+				return new Context(Evento.BAJA_INGREDIENTE_OK,ingr);
+			}
+			else {
+				return new Context(Evento.BAJA_INGREDIENTE_KO,ingr);
+
+			}
 		} catch (IllegalArgumentException e) {
 			return new Context(Evento.BAJA_INGREDIENTE_KO, null);
 		}

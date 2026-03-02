@@ -84,7 +84,7 @@ public class GUI_CerrarPedido extends JFrame implements IGUI {
 			TPedido pedido = (TPedido) context.getDatos();
 			if (pedido != null) {
 				labelEstado.setText("Estado: " + pedido.getEstado());
-				labelTotal.setText("Total: " + (pedido.getTotal() != null ? String.format("%.2f €", pedido.getTotal()) : "0.00 €"));
+				labelTotal.setText("Total: " + (pedido.getTotal()));
 			}
 			JOptionPane.showMessageDialog(this, "Pedido cerrado con éxito");
 		} else if (context.getEvento() == Evento.CERRAR_PEDIDO_KO) {

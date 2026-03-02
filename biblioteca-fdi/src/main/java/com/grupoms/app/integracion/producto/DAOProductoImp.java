@@ -14,8 +14,7 @@ import com.grupoms.app.negocio.producto.TProducto;
 public class DAOProductoImp implements DAOProducto {
 
 	private static final String INSERT_PRODUCTO = "INSERT INTO PRODUCTOS(nombre, precio, stock, activo, tipo, tamanho, tiempo_preparacion, calorias) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-	private static final String READ_BY_ID = "SELECT * FROM PRODUCTOS WHERE id = ?";
-	private static final String UPDATE_PRODUCTO = "UPDATE PRODUCTOS SET nombre = ?, precio = ?, stock = ?, activo = ?, tamanho = ?, tiempo_preparacion = ?, calorias = ? WHERE id = ?";
+	private static final String READ_BY_ID = "SELECT p.*, " + " c.tipo AS tipo_comida, c.calorias, c.tiempo_preparacion, " + " b.tipo AS tipo_bebida, b.tamaño " + "FROM productos p " + "LEFT JOIN comidas c ON p.id = c.id " + "LEFT JOIN bebidas b ON p.id = b.id " + "WHERE p.id = ?";	private static final String UPDATE_PRODUCTO = "UPDATE PRODUCTOS SET nombre = ?, precio = ?, stock = ?, activo = ?, tamanho = ?, tiempo_preparacion = ?, calorias = ? WHERE id = ?";
 	private static final String DESACTIVAR_PRODUCTO = "UPDATE PRODUCTOS SET activo = false WHERE id = ?";
 	private static final String ALL = "SELECT * FROM PRODUCTOS";
 	private static final String DELETE_PRODUCTO = "DELETE FROM PRODUCTOS";

@@ -194,6 +194,7 @@ public class FactoryCommandImp extends FactoryCommand {
 		
 		
 		views.put(Evento.ALTA_PEDIDO, FactoriaVistas.GUI_ALTA_PEDIDO);
+		views.put(Evento.CERRAR_PEDIDO,FactoriaVistas.GUI_CERRAR_PEDIDO);
 		views.put(Evento.MOSTRAR_PEDIDO, FactoriaVistas.GUI_MOSTRAR_PEDIDO);
 		views.put(Evento.MODIFICAR_PEDIDO, FactoriaVistas.GUI_MODIFICAR_PEDIDO);
 		views.put(Evento.DEVOLVER_PEDIDO, FactoriaVistas.GUI_DEVOLVER_PEDIDO);
@@ -207,6 +208,7 @@ public class FactoryCommandImp extends FactoryCommand {
 
 		
 		views.put(Evento.ALTA_INGREDIENTE, FactoriaVistas.GUI_ALTA_INGREDIENTE);
+		views.put(Evento.BAJA_INGREDIENTE,FactoriaVistas.GUI_BAJA_INGREDIENTE);
 		views.put(Evento.MODIFICAR_INGREDIENTE, FactoriaVistas.GUI_MODIFICAR_INGREDIENTE);
 		views.put(Evento.MOSTRAR_INGREDIENTE, FactoriaVistas.GUI_MOSTRAR_INGREDIENTE);
 		views.put(Evento.MOSTRAR_INGREDIENTES, FactoriaVistas.GUI_LISTAR_INGREDIENTES);

@@ -21,7 +21,7 @@ public class AltaPedidoCommand implements Command {
 
 			if (idGenerado != null && idGenerado > 0) {
 				pedido.setId(idGenerado);
-				return new Context(Evento.ALTA_PEDIDO_OK, pedido);
+				return new Context(Evento.ALTA_PEDIDO_OK, idGenerado);
 			} else {
 				return new Context(Evento.ALTA_PEDIDO_KO, null);
 			}

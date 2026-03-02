@@ -192,10 +192,28 @@ public class DAOPedidoImp implements DAOPedido {
 		return lista;
 	}
 
-	@Override
-	public Integer altaPedido(TPedido pedido) {
-		// TODO Auto-generated method stub
-		return null;
+	public Integer altaPedido(TPedido pedido) { 
+		Integer id = null; 
+		try { 
+			Connection conn = (Connection) TransactionManager.getInstance().getTransaction().getResource(); 
+			String sql = "INSERT INTO pedidos (fecha, total_factura, estado, activo, empleado_id, mesa_id) " + "VALUES (?, ?, ?, ?, ?, ?)"; 
+			PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS); 
+			ps.setDate(1, pedido.getFecha()); 
+			ps.setDouble(2, pedido.getTotal()); 
+			ps.setString(3, pedido.getEstado()); 
+			ps.setBoolean(4, pedido.getActivo()); 
+			ps.setInt(5, pedido.getIdEmpleado()); 
+			ps.setInt(6, pedido.getIdMesa()); 
+			ps.executeUpdate(); 
+			ResultSet rs = ps.getGeneratedKeys(); 
+			if (rs.next()) { 
+				id = rs.getInt(1); 
+				} 
+			} catch (SQLException e) { 
+				e.printStackTrace(); 
+				return null; 
+				} 
+		return id;
 	}
 
 }

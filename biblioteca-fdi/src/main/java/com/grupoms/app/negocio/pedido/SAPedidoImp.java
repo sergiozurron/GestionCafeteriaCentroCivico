@@ -25,11 +25,10 @@ public class SAPedidoImp implements SAPedido {
 	@Override
 	public Integer altaPedido(TPedido pedido) {
 
-	    Transaction t = null;
 	    Integer id = null;
 
+	    Transaction t = TransactionManager.getInstance().newTransaction();
 	    try {
-	        t = TransactionManager.getInstance().newTransaction();
 	        t.start();
 
 	        DAOPedido daoPedido = FactoriaDAO.getInstancia().creaDAOPedido();
@@ -41,13 +40,11 @@ public class SAPedidoImp implements SAPedido {
 
 	        // 1️ Comprobar empleado
 	        if (empleado == null || !empleado.getActivo()) {
-	            t.rollback();
 	            return -1;
 	        }
 
 	        // 2️ Comprobar mesa
 	        if (mesa == null || !mesa.getActivo()) {
-	            t.rollback();
 	            return -2;
 	        }
 

@@ -24,7 +24,7 @@ public class ejemplaresSociosPlenoPorFecha implements Query {
         try {
             TransactionManager tm = TransactionManager.getInstance();
             Transaction t = tm.getTransaction();
-            Connection c = t.getConnection();
+            Connection c = (Connection) t.getResource();
 
             String consulta = "SELECT E.* FROM Ejemplares E " +
                               "JOIN Prestamos P ON E.id = P.id_ejemplar " +

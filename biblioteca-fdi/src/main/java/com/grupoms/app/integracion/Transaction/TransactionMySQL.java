@@ -59,7 +59,7 @@ public class TransactionMySQL implements Transaction {
 	}
 
 	@Override
-	public Connection getConnection() {
+	public Object getResource() {
 		return conexion;
 	}
 }

@@ -38,7 +38,7 @@ public class DAOMesaImp implements DAOMesa {
 
 		try {
 			Transaction t = TransactionManager.getInstance().getTransaction();
-			Connection c = t.getConnection();
+			Connection c = (Connection) (Connection) t.getResource();
 
 			try (PreparedStatement psMesa = c.prepareStatement(INSERT_MESA, Statement.RETURN_GENERATED_KEYS)) {
 				psMesa.setInt(1, mesa.getNumero());
@@ -87,7 +87,7 @@ public class DAOMesaImp implements DAOMesa {
 		boolean ok = false;
 		try {
 			Transaction t = TransactionManager.getInstance().getTransaction();
-			Connection c = t.getConnection();
+			Connection c = (Connection) (Connection) t.getResource();
 
 			try (PreparedStatement ps = c.prepareStatement(DESACTIVAR_MESA)) {
 				ps.setBoolean(1, mesa.getActivo());
@@ -112,7 +112,7 @@ public class DAOMesaImp implements DAOMesa {
 				throw new IllegalStateException("No hay transacción activa al mostrar mesa");
 			}
 
-			Connection c = t.getConnection();
+			Connection c = (Connection) (Connection) t.getResource();
 
 			try (PreparedStatement ps = c.prepareStatement(READ_BY_ID)) {
 				ps.setInt(1, id);
@@ -159,7 +159,7 @@ public class DAOMesaImp implements DAOMesa {
 			if (t == null) {
 				throw new IllegalStateException("No hay transacción activa al mostrar lista de mesas");
 			}
-			Connection c = t.getConnection();
+			Connection c = (Connection) (Connection) t.getResource();
 
 			try (PreparedStatement ps = c.prepareStatement(ALL)) {
 				try (ResultSet rs = ps.executeQuery()) {
@@ -208,7 +208,7 @@ public class DAOMesaImp implements DAOMesa {
 			if (t == null) {
 				throw new IllegalStateException("No hay transacción activa al modificar la mesa");
 			}
-			Connection c = t.getConnection();
+			Connection c = (Connection) (Connection) t.getResource();
 
 			try (PreparedStatement ps = c.prepareStatement(UPDATE_MESA)) {
 				ps.setInt(1, mesa.getNumero());
@@ -255,7 +255,7 @@ public class DAOMesaImp implements DAOMesa {
 			Transaction t = TransactionManager.getInstance().getTransaction();
 			if (t == null)
 				throw new IllegalStateException("No hay transacción activa al buscar por número");
-			Connection c = t.getConnection();
+			Connection c = (Connection) (Connection) t.getResource();
 
 			try (PreparedStatement ps = c.prepareStatement(READ_BY_NUMERO)) {
 				ps.setInt(1, numero);

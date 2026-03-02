@@ -29,7 +29,7 @@ public class DAOProveedorImpl implements DAOProveedor {
 		Integer idGenerado = null;
 		try {
 			Transaction t = TransactionManager.getInstance().getTransaction();
-			Connection c = t.getConnection();
+			Connection c = (Connection) t.getResource();
 
 			try (PreparedStatement stmt = c.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS)) {
 				stmt.setString(1, proveedor.getNombre());
@@ -57,7 +57,8 @@ public class DAOProveedorImpl implements DAOProveedor {
 		TProveedor proveedor = null;
 		Connection c = null;
 		try {
-			c = getConnection();
+			Transaction t = TransactionManager.getInstance().getTransaction();
+			c = (Connection) t.getResource();			
 			try (PreparedStatement stmt = c.prepareStatement(READ_BY_ID)) {
 				stmt.setInt(1, id);
 
@@ -85,7 +86,7 @@ public class DAOProveedorImpl implements DAOProveedor {
 		TProveedor proveedor = null;
 		try {
 			Transaction t = TransactionManager.getInstance().getTransaction();
-			Connection c = t.getConnection();
+			Connection c = (Connection) t.getResource();
 
 			try (PreparedStatement stmt = c.prepareStatement(READ_BY_NAME)) {
 				stmt.setString(1, nombre);
@@ -112,7 +113,8 @@ public class DAOProveedorImpl implements DAOProveedor {
 		List<TProveedor> listaProveedores = new ArrayList<>();
 		Connection c = null;
 		try {
-			c = getConnection();
+			Transaction t = TransactionManager.getInstance().getTransaction();
+			c = (Connection) t.getResource();
 
 			try (PreparedStatement stmt = c.prepareStatement(READ_ALL); ResultSet rs = stmt.executeQuery()) {
 				while (rs.next()) {
@@ -138,7 +140,7 @@ public class DAOProveedorImpl implements DAOProveedor {
 		Boolean exito = false;
 		try {
 			Transaction t = TransactionManager.getInstance().getTransaction();
-			Connection c = t.getConnection();
+			Connection c = (Connection) t.getResource();
 
 			try (PreparedStatement stmt = c.prepareStatement(UPDATE)) {
 				stmt.setString(1, proveedor.getNombre());
@@ -161,7 +163,7 @@ public class DAOProveedorImpl implements DAOProveedor {
 		Boolean exito = false;
 		try {
 			Transaction t = TransactionManager.getInstance().getTransaction();
-			Connection c = t.getConnection();
+			Connection c = (Connection) t.getResource();
 
 			try (PreparedStatement stmt = c.prepareStatement(UPDATE_ACTIVO)) {
 				stmt.setBoolean(1, proveedor.getActivo());
@@ -180,7 +182,7 @@ public class DAOProveedorImpl implements DAOProveedor {
 	public void eliminaTodos() {
 		try {
 			Transaction t = TransactionManager.getInstance().getTransaction();
-			Connection c = t.getConnection();
+			Connection c = (Connection) t.getResource();
 
 			try (Statement stmt = c.createStatement()) {
 				stmt.executeUpdate(DELETE_ALL);
@@ -195,7 +197,7 @@ public class DAOProveedorImpl implements DAOProveedor {
 		if (tx == null) {
 			return DriverManager.getConnection(DBConfig.getUrl(), DBConfig.getUser(), DBConfig.getPassword());
 		}
-		return (Connection) tx.getConnection();
+		return (Connection) tx.getResource();
 	}
 
 	private void closeConnection(Connection conn) {

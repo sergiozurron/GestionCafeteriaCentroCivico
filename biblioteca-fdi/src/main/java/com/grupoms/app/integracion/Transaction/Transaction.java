@@ -1,7 +1,5 @@
 package com.grupoms.app.integracion.Transaction;
 
-import java.sql.Connection;
-
 public interface Transaction {
 
 	void start() ;
@@ -10,5 +8,6 @@ public interface Transaction {
 
 	void rollback() ;
 
-	Connection getConnection();
+	public Object getResource();
+	
 }

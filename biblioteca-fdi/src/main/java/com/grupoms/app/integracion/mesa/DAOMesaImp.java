@@ -16,9 +16,13 @@ public class DAOMesaImp implements DAOMesa {
 	private static final String INSERT_SALA = "INSERT INTO MesaSala (id_mesa, reservada, privacidad) VALUES (?, ?, ?)";
 	private static final String INSERT_TERRAZA = "INSERT INTO MesaTerraza (id_mesa, cubierta, suplemento) VALUES (?, ?, ?)";
 
-	private static final String READ_BY_ID = "SELECT m.*, s.reservada, s.privacidad, t.cubierta, t.suplemento "
-			+ "FROM mesas m " + "LEFT JOIN salas s ON m.id = s.id " + "LEFT JOIN terrazas t ON m.id = t.id "
-			+ "WHERE m.id = ? FOR UPDATE";
+	private static final String READ_BY_ID =
+		    "SELECT m.*, s.reservada, s.privacidad, t.cubierta, t.suplemento " +
+		    "FROM mesas m " +
+		    "LEFT JOIN salas s ON m.id = s.id_mesa " +
+		    "LEFT JOIN terrazas t ON m.id = t.id_mesa " +
+		    "WHERE m.id = ? FOR UPDATE";
+
 
 	private static final String ALL = "SELECT m.*, s.reservada, s.privacidad, t.cubierta, t.suplemento "
 			+ "FROM Mesa m " + "LEFT JOIN MesaSala s ON m.id = s.id_mesa "

@@ -27,9 +27,31 @@ public class DAOLineaPedidoImp implements DAOLineaPedido {
 	}
 
 	@Override
-	public List<TLineaPedido> mostrarLineasPorPedido(Integer id) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<TLineaPedido> mostrarLineasPorPedido(Integer idPedido) {
+		List<TLineaPedido> lista = new ArrayList<>(); 
+		try { 
+			Transaction t = TransactionManager.getInstance().getTransaction(); 
+			if (t == null) 
+				throw new IllegalStateException("No hay transaccion activa"); 
+			Connection c = (Connection) t.getResource(); 
+			String sql = "SELECT id, pedido_id, producto_id, cantidad FROM lineas_pedido WHERE pedido_id = ?"; 
+			try (PreparedStatement ps = c.prepareStatement(sql)) { 
+				ps.setInt(1, idPedido); 
+				try (ResultSet rs = ps.executeQuery()) { 
+					while (rs.next()) { 
+						TLineaPedido lp = new TLineaPedido(); 
+						lp.setId(rs.getInt("id")); 
+						lp.setPedidoID(rs.getInt("pedido_id")); 
+						lp.setProductID(rs.getInt("producto_id")); 
+						lp.setCantidad(rs.getInt("cantidad")); 
+						lista.add(lp); 
+						} 
+					} 
+				} 
+			} catch (Exception e) { 
+				e.printStackTrace(); 
+			} 
+		return lista;
 	}
 
 }

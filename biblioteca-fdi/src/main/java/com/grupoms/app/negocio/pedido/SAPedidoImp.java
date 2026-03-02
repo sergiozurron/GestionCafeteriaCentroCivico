@@ -68,8 +68,34 @@ public class SAPedidoImp implements SAPedido {
 
 	@Override
 	public TCarrito mostrarPedido(Integer idPedido) {
-		// TODO Auto-generated method stub
-		return null;
+		Transaction t = TransactionManager.getInstance().newTransaction();
+		TCarrito carrito = null;
+		try {
+			t.start();
+			DAOPedido daoPedido = FactoriaDAO.getInstancia().creaDAOPedido();
+			DAOLineaPedido daoLinea = FactoriaDAO.getInstancia().creaDAOLineaPedido();
+			
+			TPedido pedido = daoPedido.mostrarPedido(idPedido);
+			
+			if(pedido == null || !pedido.getActivo()) {
+				t.commit();
+				return null;
+			}
+			
+			List<TLineaPedido> lineas = daoLinea.mostrarLineasPorPedido(idPedido);
+			
+			carrito = new TCarrito();
+			carrito.setPedido(pedido);
+			carrito.setLineasVenta(lineas);
+			
+			t.commit();
+			return carrito;
+		}catch(Exception e) {
+			if (t != null) 
+				t.rollback(); 
+			e.printStackTrace(); 
+			return null;
+		}
 	}
 
 	@Override

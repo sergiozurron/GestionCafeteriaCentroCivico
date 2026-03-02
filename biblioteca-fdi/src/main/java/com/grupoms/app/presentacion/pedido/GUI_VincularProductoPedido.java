@@ -115,7 +115,14 @@ public class GUI_VincularProductoPedido extends JFrame implements IGUI {
 
 		case Evento.VINCULAR_PRODUCTO_PEDIDO_KO:
 
-			int error = (int) context.getDatos();
+			Object datos = context.getDatos();
+			Integer error = datos != null ? (Integer) datos : null;
+
+			if (error == null) {
+			    JOptionPane.showMessageDialog(this, "Error desconocido");
+			    break;
+			}
+
 
 			switch (error) {
 			case -1:

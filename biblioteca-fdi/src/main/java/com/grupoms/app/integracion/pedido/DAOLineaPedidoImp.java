@@ -103,7 +103,7 @@ public class DAOLineaPedidoImp implements DAOLineaPedido {
 			if (t == null) 
 				throw new IllegalStateException("No hay transaccion activa"); 
 			Connection c = (Connection) t.getResource(); 
-			String sql = "SELECT id, pedido_id, producto_id, cantidad FROM linea_pedido WHERE pedido_id = ? FOR UPDATE"; 
+			String sql = "SELECT id, pedido_id, producto_id, cantidad FROM linea_pedido WHERE pedido_id = ? AND activo = TRUE FOR UPDATE"; 
 			try (PreparedStatement ps = c.prepareStatement(sql)) { 
 				ps.setInt(1, idPedido); 
 				try (ResultSet rs = ps.executeQuery()) { 

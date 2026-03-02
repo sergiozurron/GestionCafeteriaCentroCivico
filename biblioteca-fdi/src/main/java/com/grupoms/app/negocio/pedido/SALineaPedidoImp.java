@@ -25,21 +25,31 @@ public class SALineaPedidoImp implements SALineaPedido {
 	        DAOProducto daoProducto = FactoriaDAO.getInstancia().creaDAOProducto();
 	        DAOLineaPedido daoLinea = FactoriaDAO.getInstancia().creaDAOLineaPedido();
 
-	        // 1. Comprobar que el pedido existe y está activo (FOR UPDATE en DAO)
+	        // 1. Comprobar pedido
 	        TPedido pedido = daoPedido.mostrarPedido(linea.getPedidoId());
 	        if (pedido == null || !pedido.getActivo()) {
 	            t.commit();
 	            return -1; // pedido no válido
 	        }
 
-	        // 2. Comprobar que el producto existe y está activo (FOR UPDATE en DAO)
+	        // 2. Comprobar producto
 	        TProducto producto = daoProducto.mostrarProducto(linea.getProductoId());
 	        if (producto == null || !producto.getActivo()) {
 	            t.commit();
 	            return -2; // producto no válido
 	        }
 
-	        // 3. Crear SIEMPRE una nueva línea
+	        // 3. Comprobar stock
+	        if (producto.getStock() < linea.getCantidad()) {
+	            t.commit();
+	            return -4; // cantidad inválida (sin stock)
+	        }
+
+	        // 4. Restar stock
+	        producto.setStock(producto.getStock() - linea.getCantidad());
+	        daoProducto.modificarProducto(producto);
+
+	        // 5. Crear línea
 	        linea.setActivo(true);
 	        Integer id = daoLinea.altaLineaPedido(linea);
 
@@ -55,7 +65,7 @@ public class SALineaPedidoImp implements SALineaPedido {
 
 
 	@Override
-	public Integer bajaLineaPedido(Integer idPedido, Integer idProducto) {
+	public Integer bajaLineaPedido(Integer idPedido,Integer idProducto) {
 
 	    Transaction t = TransactionManager.getInstance().newTransaction();
 
@@ -63,12 +73,12 @@ public class SALineaPedidoImp implements SALineaPedido {
 	        t.start();
 
 	        DAOLineaPedido daoLinea = FactoriaDAO.getInstancia().creaDAOLineaPedido();
-
-	        // Baja lógica directamente
-	        Integer idLinea = daoLinea.bajaLineaPedido(idPedido, idProducto);
+	        
+	        
+	        daoLinea.bajaLineaPedido(idPedido, idProducto);
 
 	        t.commit();
-	        return idLinea; // devuelve el id de la línea dada de baja
+	        return 1;
 
 	    } catch (Exception e) {
 	        if (t != null) t.rollback();
@@ -76,6 +86,7 @@ public class SALineaPedidoImp implements SALineaPedido {
 	        return -99;
 	    }
 	}
+
 
     @Override
     public List<TLineaPedido> mostrarLineasPorPedido(Integer idPedido) {

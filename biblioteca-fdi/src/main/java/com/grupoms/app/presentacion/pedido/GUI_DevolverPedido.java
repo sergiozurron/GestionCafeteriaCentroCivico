@@ -17,44 +17,23 @@ public class GUI_DevolverPedido extends JFrame implements IGUI {
 
 	@Override
 	public void actualizar(Context context) {
-		if (context == null) {
-			setVisible(true);
-			return;
-		}
-		else if (context.getEvento() == Evento.DEVOLVER_PEDIDO_OK) {
-			JOptionPane.showMessageDialog(this, "Pedido devuelto con éxito");
-			campoID.setText("");
-		} else if (context.getEvento() == Evento.DEVOLVER_PEDIDO_KO) {
+	    if (context == null) {
+	        setVisible(true);
+	        return;
+	    }
 
-		    int error = (int) context.getDatos();
-
-		    switch (error) {
-		        case -1:
-		            JOptionPane.showMessageDialog(this,
-		                "El pedido no existe",
-		                "Error", JOptionPane.ERROR_MESSAGE);
-		            break;
-
-		        case -2:
-		            JOptionPane.showMessageDialog(this,
-		                "El pedido ya estaba devuelto",
-		                "Error", JOptionPane.ERROR_MESSAGE);
-		            break;
-
-		        case -3:
-		            JOptionPane.showMessageDialog(this,
-		                "El pedido no está cerrado",
-		                "Error", JOptionPane.ERROR_MESSAGE);
-		            break;
-
-		        default:
-		            JOptionPane.showMessageDialog(this,
-		                "Error desconocido",
-		                "Error", JOptionPane.ERROR_MESSAGE);
-		            break;
-		    }
-		}
+	    if (context.getEvento() == Evento.DEVOLVER_PEDIDO_OK) {
+	        JOptionPane.showMessageDialog(this, "Pedido devuelto con éxito");
+	        campoID.setText("");
+	    } 
+	    else if (context.getEvento() == Evento.DEVOLVER_PEDIDO_KO) {
+	        JOptionPane.showMessageDialog(this,
+	            "No se ha podido devolver el pedido",
+	            "Error",
+	            JOptionPane.ERROR_MESSAGE);
+	    }
 	}
+
 
 	public GUI_DevolverPedido() {
 		super("Devolver Pedido");

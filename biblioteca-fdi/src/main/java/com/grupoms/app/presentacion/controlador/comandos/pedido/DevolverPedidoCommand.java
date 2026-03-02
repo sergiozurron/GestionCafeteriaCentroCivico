@@ -10,16 +10,22 @@ public class DevolverPedidoCommand implements Command{
 
 	@Override
 	public Context execute(Object data) {
-		Integer pedido = (Integer) data;
-		SAPedido sa = FactoriaSA.getInstance().creaSAPedido();
+	    Integer idPedido = (Integer) data;
+	    SAPedido sa = FactoriaSA.getInstance().creaSAPedido();
 
-		try {
+	    try {
+	        Boolean ok = sa.devolverPedido(idPedido);
 
-			sa.devolverPedido(pedido);
-			return new Context(Evento.ALTA_PEDIDO_OK, pedido);
-		} catch (Exception e) {
-			return new Context(Evento.ALTA_PEDIDO_KO, null);
-		}
+	        if (ok) {
+	            return new Context(Evento.DEVOLVER_PEDIDO_OK, idPedido);
+	        } else {
+	            return new Context(Evento.DEVOLVER_PEDIDO_KO, idPedido);
+	        }
+
+	    } catch (Exception e) {
+	        return new Context(Evento.DEVOLVER_PEDIDO_KO, idPedido);
+	    }
 	}
+
 
 }

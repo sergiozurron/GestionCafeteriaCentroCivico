@@ -13,6 +13,7 @@ import com.grupoms.app.integracion.pedido.*;
 import com.grupoms.app.integracion.producto.*;
 import com.grupoms.app.negocio.empleado.TEmpleado;
 import com.grupoms.app.negocio.mesa.TMesa;
+import com.grupoms.app.negocio.producto.TProducto;
 
 public class SAPedidoImp implements SAPedido {
 
@@ -189,11 +190,9 @@ public class SAPedidoImp implements SAPedido {
 			if (pedido == null || !pedido.getActivo()) { 
 				t.commit(); 
 				return false; // no existe o ya está dado de baja 
-			} // 2. Leer las líneas con FOR UPDATE 
-			List<TLineaPedido> lineas = daoLinea.mostrarLineasPorPedido(idPedido); 
-			// 3. Dar de baja lógica al pedido 
-			pedido.setActivo(false); 
-			daoPedido.modificarPedido(pedido); 
+			} 
+			// 2. Dar de baja lógica al pedido 
+			daoPedido.devolverPedido(pedido.getId()); 
 			
 			t.commit();
 			return true;
@@ -208,9 +207,48 @@ public class SAPedidoImp implements SAPedido {
 
 	@Override
 	public TPedido cerrarPedido(Integer idPedido) {
-		// TODO Auto-generated method stub
-		return null;
+
+	    Transaction t = TransactionManager.getInstance().newTransaction();
+
+	    try {
+	        t.start();
+
+	        DAOPedido daoPedido = FactoriaDAO.getInstancia().creaDAOPedido();
+	        DAOLineaPedido daoLinea = FactoriaDAO.getInstancia().creaDAOLineaPedido();
+	        DAOProducto daoProducto = FactoriaDAO.getInstancia().creaDAOProducto();
+
+	        // 1. Obtener pedido
+	        TPedido pedido = daoPedido.mostrarPedido(idPedido);
+	        if (pedido == null || !pedido.getActivo()) {
+	            t.commit();
+	            return null; // pedido no válido
+	        }
+
+	        // 2. Obtener líneas activas
+	        List<TLineaPedido> lineas = daoLinea.mostrarLineasPorPedido(idPedido);
+
+	        // 3. Calcular total
+	        double total = 0;
+	        for (TLineaPedido lp : lineas) {
+	            TProducto p = daoProducto.mostrarProducto(lp.getProductoId());
+	            total += p.getPrecio() * lp.getCantidad();
+	        }
+
+	        // 4. Actualizar pedido
+	        pedido.setTotal(total);
+	        pedido.setEstado("CERRADO");
+	        daoPedido.modificarPedido(pedido);
+
+	        t.commit();
+	        return pedido;
+
+	    } catch (Exception e) {
+	        if (t != null) t.rollback();
+	        e.printStackTrace();
+	        return null;
+	    }
 	}
+
 
 	
 }

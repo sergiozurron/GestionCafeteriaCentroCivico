@@ -100,20 +100,59 @@ public class SAPedidoImp implements SAPedido {
 
 	@Override
 	public List<TPedido> mostrarListaPedidos() {
-		// TODO Auto-generated method stub
-		return null;
+		Transaction t = TransactionManager.getInstance().newTransaction();
+		List<TPedido> lista = null;
+		
+		try {
+			t.start();
+			DAOPedido dao = FactoriaDAO.getInstancia().creaDAOPedido();
+			
+			lista = dao.mostrarListaPedidos();
+			t.commit();
+			return lista;
+		}catch(Exception e) {
+			if(t!=null)t.rollback();
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 	@Override
 	public List<TPedido> mostrarPedidosPorMesa(Integer idMesa) {
-		// TODO Auto-generated method stub
-		return null;
+		Transaction t = TransactionManager.getInstance().newTransaction();
+		List<TPedido> lista = null;
+		
+		try {
+			t.start();
+			DAOPedido dao = FactoriaDAO.getInstancia().creaDAOPedido();
+			
+			lista = dao.mostrarPedidosPorMesa(idMesa);
+			t.commit();
+			return lista;
+		}catch(Exception e) {
+			if(t!=null)t.rollback();
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 	@Override
 	public List<TPedido> mostrarPedidosPorEmpleado(Integer idEmpleado) {
-		// TODO Auto-generated method stub
-		return null;
+		Transaction t = TransactionManager.getInstance().newTransaction();
+		List<TPedido> lista = null;
+		
+		try {
+			t.start();
+			DAOPedido dao = FactoriaDAO.getInstancia().creaDAOPedido();
+			
+			lista = dao.mostrarPedidosPorEmpleado(idEmpleado);
+			t.commit();
+			return lista;
+		}catch(Exception e) {
+			if(t!=null)t.rollback();
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 	@Override

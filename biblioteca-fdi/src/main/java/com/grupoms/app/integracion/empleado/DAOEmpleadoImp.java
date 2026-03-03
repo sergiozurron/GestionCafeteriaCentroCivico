@@ -54,7 +54,7 @@ public class DAOEmpleadoImp implements DAOEmpleado {
 			}
 			Connection c = (Connection) (Connection) t.getResource();
 
-			String sql = "SELECT id, nombre, activo, donde_atiende, sueldo FROM empleados WHERE id = ?";
+			String sql = "SELECT id, nombre, activo, donde_atiende, sueldo FROM empleados WHERE id = ? FOR UPDATE";
 			try (PreparedStatement ps = c.prepareStatement(sql)) {
 				ps.setInt(1, id);
 

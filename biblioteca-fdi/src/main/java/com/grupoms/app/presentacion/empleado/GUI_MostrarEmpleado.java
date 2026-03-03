@@ -40,12 +40,11 @@ public class GUI_MostrarEmpleado extends JFrame implements IGUI {
 		btnMostrar.addActionListener(e -> {
 			try {
 				int id = Integer.parseInt(campoID.getText().trim());
-				TEmpleado emp = new TEmpleado();
-				emp.setID(id);
+				
 
 				Context contexto = new Context();
 				contexto.setEvento(Evento.MOSTRAR_EMPLEADO);
-				contexto.setDato(emp);
+				contexto.setDato(id);
 
 				Controlador.getInstance().handle(contexto);
 

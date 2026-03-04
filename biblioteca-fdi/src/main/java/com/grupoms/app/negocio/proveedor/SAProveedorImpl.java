@@ -47,7 +47,7 @@ public class SAProveedorImpl implements SAProveedor {
 				}
 			}
 		} finally {
-			TransactionManager.getInstance().deleteTransaction();
+			try { TransactionManager.getInstance().deleteTransaction(); } catch (Exception ignored) {}
 		}
 		return idGenerado;
 	}
@@ -81,7 +81,7 @@ public class SAProveedorImpl implements SAProveedor {
 				}
 			}
 		} finally {
-			TransactionManager.getInstance().deleteTransaction();
+			try { TransactionManager.getInstance().deleteTransaction(); } catch (Exception ignored) {}
 		}
 		return exito;
 	}
@@ -122,7 +122,7 @@ public class SAProveedorImpl implements SAProveedor {
 				}
 			}
 		} finally {
-			TransactionManager.getInstance().deleteTransaction();
+			try { TransactionManager.getInstance().deleteTransaction(); } catch (Exception ignored) {}
 		}
 		return exito;
 	}
@@ -149,7 +149,7 @@ public class SAProveedorImpl implements SAProveedor {
 				}
 			}
 		} finally {
-			TransactionManager.getInstance().deleteTransaction();
+			try { TransactionManager.getInstance().deleteTransaction(); } catch (Exception ignored) {}
 		}
 		return proveedor;
 	}
@@ -176,7 +176,7 @@ public class SAProveedorImpl implements SAProveedor {
 				}
 			}
 		} finally {
-			TransactionManager.getInstance().deleteTransaction();
+			try { TransactionManager.getInstance().deleteTransaction(); } catch (Exception ignored) {}
 		}
 		return lista;
 	}

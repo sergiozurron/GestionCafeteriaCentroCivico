@@ -58,5 +58,4 @@ public class TMesa {
 	public void setCapacidad(Integer capacidad) {
 		this.capacidad = capacidad;
 	}
-
 }

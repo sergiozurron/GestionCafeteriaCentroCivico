@@ -1,5 +1,6 @@
 package com.grupoms.app.presentacion.ingrediente;
 
+import java.util.List;
 import java.util.Set;
 
 import javax.swing.*;
@@ -17,7 +18,7 @@ public class GUI_ListarIngredienteProveedor extends JFrame implements IGUI {
 
 	private JTable tabla;
 	private DefaultTableModel modeloTabla;
-	private JTextField campoIDProducto;
+	private JTextField campoIDProveedor;
 	private JButton botonBuscar;
 
 	public GUI_ListarIngredienteProveedor() {
@@ -34,14 +35,14 @@ public class GUI_ListarIngredienteProveedor extends JFrame implements IGUI {
 
 		JPanel panelBusqueda = new JPanel(new FlowLayout());
 		panelBusqueda.add(new JLabel("ID del Proveedor:"));
-		campoIDProducto = new JTextField(10);
-		panelBusqueda.add(campoIDProducto);
+		campoIDProveedor = new JTextField(10);
+		panelBusqueda.add(campoIDProveedor);
 
 		botonBuscar = new JButton("Buscar Ingredientes");
 		botonBuscar.addActionListener(e -> {
 			try {
-				int idProducto = Integer.parseInt(campoIDProducto.getText());
-				Context contexto = new Context(Evento.LISTAR_INGREDIENTES_POR_PRODUCTO, idProducto);
+				int idProveedor = Integer.parseInt(campoIDProveedor.getText());
+				Context contexto = new Context(Evento.LISTAR_INGREDIENTES_POR_PROVEEDOR, idProveedor);
 				Controlador.getInstance().handle(contexto);
 			} catch (NumberFormatException ex) {
 				JOptionPane.showMessageDialog(this, "Introduce un ID de proveedor válido (número entero).");
@@ -70,7 +71,7 @@ public class GUI_ListarIngredienteProveedor extends JFrame implements IGUI {
 			setVisible(true);
 		else if (context.getEvento() == Evento.LISTAR_INGREDIENTES_POR_PROVEEDOR_OK) {
 			modeloTabla.setRowCount(0);
-			Set<TIngrediente> ingredientes = (Set<TIngrediente>) context.getDatos();
+			List<TIngrediente> ingredientes = (List<TIngrediente>) context.getDatos();
 			if (ingredientes == null || ingredientes.isEmpty()) {
 				JOptionPane.showMessageDialog(this, "No hay ingredientes asociados a este proveedor.", "Sin resultados",
 						JOptionPane.INFORMATION_MESSAGE);

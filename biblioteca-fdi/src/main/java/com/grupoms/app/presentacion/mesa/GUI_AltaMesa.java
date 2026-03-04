@@ -1,9 +1,9 @@
-
 package com.grupoms.app.presentacion.mesa;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ItemEvent;
+
 import com.grupoms.app.negocio.mesa.TMesa;
 import com.grupoms.app.negocio.mesa.TMesaSala;
 import com.grupoms.app.negocio.mesa.TMesaTerraza;
@@ -21,6 +21,7 @@ public class GUI_AltaMesa extends JFrame implements IGUI {
 	private JLabel lblPrivacidad, lblSuplemento;
 	private JTextField salaPrivacidad, terrazaSuplemento;
 	private JButton crear;
+	private ButtonGroup grupoTipo; // Lo subimos aquí para poder desmarcarlo
 
 	public GUI_AltaMesa() {
 		super("Alta Mesa");
@@ -33,26 +34,39 @@ public class GUI_AltaMesa extends JFrame implements IGUI {
 	@Override
 	public void actualizar(Context context) {
 		if (context == null) {
-	        setVisible(true);
-	        return;
-	    }
-		if (context.getEvento() == Evento.ALTA_MESA_OK) {
-			JOptionPane.showMessageDialog(this, "Mesa creada con éxito");
-			numero.setText("");
-			ubicacion.setText("");
-			capacidad.setText("");
-			salaReservada.setSelected(false);
-			salaPrivacidad.setText("");
-			terrazaCubierta.setSelected(false);
-			terrazaSuplemento.setText("");
-			rbtnSala.setSelected(false);
-			rbtnTerraza.setSelected(false);
-			panelSala.setVisible(false);
-			panelTerraza.setVisible(false);
-		} else if (context.getEvento() == Evento.ALTA_MESA_KO) {
-			JOptionPane.showMessageDialog(this, "Error al crear la mesa");
+			limpiarCampos(); // <-- ¡Aquí pasamos la fregona antes de mostrarla!
+			setVisible(true);
+			return;
 		}
+		
+		SwingUtilities.invokeLater(() -> {
+			if (context.getEvento() == Evento.ALTA_MESA_OK) {
+				JOptionPane.showMessageDialog(this, "Mesa creada con éxito", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+				dispose();
+			} else if (context.getEvento() == Evento.ALTA_MESA_KO) {
+				String mensaje = context.getDatos() != null ? context.getDatos().toString() : "Error al crear la mesa";
+				JOptionPane.showMessageDialog(this, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
+			}
+		});
+	}
 
+	// Método auxiliar para resetear todo a su estado original
+	private void limpiarCampos() {
+		numero.setText("");
+		ubicacion.setText("");
+		capacidad.setText("");
+		salaReservada.setSelected(false);
+		salaPrivacidad.setText("");
+		terrazaCubierta.setSelected(false);
+		terrazaSuplemento.setText("");
+		
+		if (grupoTipo != null) {
+			grupoTipo.clearSelection();
+		}
+		
+		panelSala.setVisible(false);
+		panelTerraza.setVisible(false);
+		pack(); // Reajustamos el tamaño de la ventana
 	}
 
 	private void initGUI() {
@@ -71,7 +85,7 @@ public class GUI_AltaMesa extends JFrame implements IGUI {
 
 		rbtnSala = new JRadioButton("Sala");
 		rbtnTerraza = new JRadioButton("Terraza");
-		ButtonGroup grupoTipo = new ButtonGroup();
+		grupoTipo = new ButtonGroup(); // Ya no creamos una variable local, usamos el atributo
 		grupoTipo.add(rbtnSala);
 		grupoTipo.add(rbtnTerraza);
 
@@ -119,31 +133,36 @@ public class GUI_AltaMesa extends JFrame implements IGUI {
 		crear.addActionListener(e -> {
 			try {
 				TMesa mesa;
-				if (rbtnTerraza.isSelected())
+				if (rbtnTerraza.isSelected()) {
 					mesa = new TMesaTerraza();
-				else
+				} else if (rbtnSala.isSelected()) {
 					mesa = new TMesaSala();
-				mesa.setNumero(Integer.parseInt(numero.getText()));
-				mesa.setUbicacion(ubicacion.getText());
-				mesa.setCapacidad(Integer.parseInt(capacidad.getText()));
+				} else {
+					JOptionPane.showMessageDialog(this, "Debes seleccionar un tipo de mesa (Sala o Terraza)", "Aviso", JOptionPane.WARNING_MESSAGE);
+					return;
+				}
+				
+				mesa.setNumero(Integer.parseInt(numero.getText().trim()));
+				mesa.setUbicacion(ubicacion.getText().trim());
+				mesa.setCapacidad(Integer.parseInt(capacidad.getText().trim()));
 				mesa.setActivo(true);
 
 				if (rbtnSala.isSelected()) {
 					TMesaSala mesaS = (TMesaSala) mesa;
 					mesaS.setReservada(salaReservada.isSelected());
-					mesaS.setPrivacidad(salaPrivacidad.getText());
+					mesaS.setPrivacidad(salaPrivacidad.getText().trim());
 					Context contexto = new Context(Evento.ALTA_MESA, mesaS);
 					Controlador.getInstance().handle(contexto);
 				} else if (rbtnTerraza.isSelected()) {
 					TMesaTerraza mesaT = (TMesaTerraza) mesa;
 					mesaT.setCubierta(terrazaCubierta.isSelected());
-					mesaT.setSuplemento(Double.parseDouble(terrazaSuplemento.getText()));
+					mesaT.setSuplemento(Double.parseDouble(terrazaSuplemento.getText().trim()));
 					Context contexto = new Context(Evento.ALTA_MESA, mesaT);
 					Controlador.getInstance().handle(contexto);
 				}
 
 			} catch (NumberFormatException ex) {
-				JOptionPane.showMessageDialog(this, "Error: los campos numéricos no son válidos");
+				JOptionPane.showMessageDialog(this, "Error: los campos numéricos no son válidos", "Error", JOptionPane.ERROR_MESSAGE);
 			}
 		});
 

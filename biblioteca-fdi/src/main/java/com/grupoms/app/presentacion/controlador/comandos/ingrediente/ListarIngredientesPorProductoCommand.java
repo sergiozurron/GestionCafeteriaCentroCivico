@@ -14,12 +14,12 @@ public class ListarIngredientesPorProductoCommand implements Command {
 
 	@Override
 	public Context execute(Object data) {
-		SAIngrediente saProducto = FactoriaSA.getInstance().creaSAIngrediente();
+		SAIngrediente saIngrediente = FactoriaSA.getInstance().creaSAIngrediente();
 		try {
-			List<TIngrediente> productos = saProducto.mostrarIngredientesPorProducto((Integer) data);
-			return new Context(Evento.MOSTRAR_INGREDIENTES_OK, productos);
+			List<TIngrediente> productos = saIngrediente.mostrarIngredientesPorProducto((Integer) data);
+			return new Context(Evento.LISTAR_INGREDIENTES_POR_PRODUCTO_OK, productos);
 		} catch (Exception e) {
-			return new Context(Evento.MOSTRAR_INGREDIENTES_KO, null);
+			return new Context(Evento.LISTAR_INGREDIENTES_POR_PRODUCTO_KO, null);
 		}
 	}
 

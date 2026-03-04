@@ -54,6 +54,8 @@ public class Principal extends JFrame {
 						{ "Baja Ingrediente", FactoriaVistas.GUI_BAJA_INGREDIENTE },
 						{ "Modificar Ingrediente", FactoriaVistas.GUI_MODIFICAR_INGREDIENTE },
 						{ "Mostrar Ingrediente", FactoriaVistas.GUI_MOSTRAR_INGREDIENTE },
+						{ "Ingredientes por Proveedor", FactoriaVistas.GUI_LISTAR_INGREDIENTE_PROVEEDOR},
+						{ "Ingredientes por Producto", FactoriaVistas.GUI_LISTAR_INGREDIENTE_PRODUCTO },
 						{ "Listar Ingredientes", FactoriaVistas.GUI_LISTAR_INGREDIENTES } }));
 
 		panelCafeteria.add(crearPanelCategoria("Empleados",
@@ -69,7 +71,9 @@ public class Principal extends JFrame {
 						{ "Modificar Producto", FactoriaVistas.GUI_MODIFICAR_PRODUCTO },
 						{ "Mostrar Producto", FactoriaVistas.GUI_MOSTRAR_PRODUCTO },
 						{ "Listar Productos", FactoriaVistas.GUI_LISTAR_PRODUCTOS }, 
-						{ "Productos por Proveedor", FactoriaVistas.GUI_PRODUCTOS_POR_PROVEEDOR }}));
+						{ "Productos por Proveedor", FactoriaVistas.GUI_PRODUCTOS_POR_PROVEEDOR },
+						{"Vincular Ingrediente", FactoriaVistas.GUI_VINCULAR_PRODUCTO_INGREDIENTE},
+						{"Desvincular Ingrediente", FactoriaVistas.GUI_DESVINCULAR_PRODUCTO_INGREDIENTE}}));
 
 		/*JPanel panelCentroCivico = new JPanel();
 		panelCentroCivico.setLayout(new GridLayout(2, 3, 20, 20));

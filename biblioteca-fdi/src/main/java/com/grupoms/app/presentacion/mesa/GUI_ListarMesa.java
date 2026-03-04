@@ -12,6 +12,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 
 import com.grupoms.app.negocio.mesa.TMesa;
@@ -24,7 +25,8 @@ import com.grupoms.app.presentacion.controlador.Evento;
 
 public class GUI_ListarMesa extends JFrame implements IGUI {
 
-	private JButton baja;
+	private JButton btnCerrar;
+	private JButton btnCargar;
 	private List<TMesa> listaMesas;
 	private JTable tablaMesas;
 	private DefaultTableModel modeloTabla;
@@ -40,14 +42,28 @@ public class GUI_ListarMesa extends JFrame implements IGUI {
 	@Override
 	@SuppressWarnings("unchecked")
 	public void actualizar(Context context) {
-		if (context == null)
+		if (context == null) {
 			setVisible(true);
-		else if (context.getEvento() == Evento.MOSTRAR_LISTA_MESA_OK) {
-			listaMesas = (List<TMesa>) context.getDatos();
-			actualizarTabla();
-		} else if (context.getEvento() == Evento.MOSTRAR_LISTA_MESA_KO) {
-			JOptionPane.showMessageDialog(this, "Error al mostrar lista de mesas", "Error", JOptionPane.ERROR_MESSAGE);
+			return;
 		}
+
+		SwingUtilities.invokeLater(() -> {
+			if (context.getEvento() == Evento.MOSTRAR_LISTA_MESA_OK) {
+				listaMesas = (List<TMesa>) context.getDatos();
+				actualizarTabla();
+			} else if (context.getEvento() == Evento.MOSTRAR_LISTA_MESA_KO) {
+				// 1. Vaciamos la tabla para que no sea confuso si había datos antes
+				if (modeloTabla != null) {
+					modeloTabla.setRowCount(0);
+				}
+				
+				// 2. Extraemos el mensaje que mandó el SA ("No hay mesas activas en la base de datos")
+				String mensaje = context.getDatos() != null ? context.getDatos().toString() : "No hay mesas activas.";
+				
+				// 3. Mostramos un mensaje informativo (y no un error crítico)
+				JOptionPane.showMessageDialog(this, mensaje, "Información", JOptionPane.INFORMATION_MESSAGE);
+			}
+		});
 	}
 
 	private void initGUI() {
@@ -58,11 +74,22 @@ public class GUI_ListarMesa extends JFrame implements IGUI {
 		gbc.insets = new Insets(5, 5, 5, 5);
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 
-		baja = new JButton("Cerrar");
-		baja.addActionListener(e -> dispose());
+		// --- BOTÓN: Cargar Mesas ---
+		btnCargar = new JButton("Cargar Mesas");
+		btnCargar.addActionListener(e -> {
+			Controlador.getInstance().handle(new Context(Evento.MOSTRAR_LISTA_MESA, null));
+		});
 		gbc.gridx = 0;
 		gbc.gridy = 0;
-		panelSuperior.add(baja, gbc);
+		panelSuperior.add(btnCargar, gbc);
+
+		// --- BOTÓN: Cerrar ---
+		btnCerrar = new JButton("Cerrar");
+		btnCerrar.addActionListener(e -> dispose());
+		gbc.gridx = 1;
+		gbc.gridy = 0;
+		panelSuperior.add(btnCerrar, gbc);
+
 		add(panelSuperior, BorderLayout.NORTH);
 
 		String[] columnas = { "Tipo", "ID", "Ubicación", "Número", "Capacidad", "Reservada", "Privacidad", "Cubierta",
@@ -83,34 +110,41 @@ public class GUI_ListarMesa extends JFrame implements IGUI {
 	private void actualizarTabla() {
 		modeloTabla.setRowCount(0);
 
-		if (listaMesas != null) {
-			for (TMesa mesa : listaMesas) {
+		if (listaMesas == null || listaMesas.isEmpty()) {
+			return; // La tabla ya está vacía, no hacemos nada más
+		}
 
-				String tipo = mesa.getTipo();
-				String id = String.valueOf(mesa.getId());
-				String ubicacion = mesa.getUbicacion();
-				String numero = String.valueOf(mesa.getNumero());
-				String capacidad = String.valueOf(mesa.getCapacidad());
-
-				String reservada = "N/A";
-				String cubierta = "N/A";
-				String privacidad = "N/A";
-				String suplemento = "N/A";
-
-				if (mesa instanceof TMesaSala) {
-					TMesaSala sala = (TMesaSala) mesa;
-					reservada = sala.getReservada() ? "Reservada" : "Sin reservar";
-					privacidad = sala.getPrivacidad();
-				} else if (mesa instanceof TMesaTerraza) {
-					TMesaTerraza terraza = (TMesaTerraza) mesa;
-					cubierta = terraza.getCubierta() ? "Cubierta" : "No cubierta";
-					suplemento = String.valueOf(terraza.getSuplemento());
-				}
-
-				Object[] fila = { tipo, id, ubicacion, numero, capacidad, reservada, privacidad, cubierta, suplemento };
-
-				modeloTabla.addRow(fila);
+		for (TMesa mesa : listaMesas) {
+			// Determinamos el tipo de forma robusta
+			String tipo = "Desconocido";
+			if (mesa instanceof TMesaSala) {
+				tipo = "Sala";
+			} else if (mesa instanceof TMesaTerraza) {
+				tipo = "Terraza";
 			}
+
+			String id = String.valueOf(mesa.getId());
+			String ubicacion = mesa.getUbicacion() != null ? mesa.getUbicacion() : "N/A";
+			String numero = String.valueOf(mesa.getNumero());
+			String capacidad = String.valueOf(mesa.getCapacidad());
+
+			String reservada = "N/A";
+			String cubierta = "N/A";
+			String privacidad = "N/A";
+			String suplemento = "N/A";
+
+			if (mesa instanceof TMesaSala) {
+				TMesaSala sala = (TMesaSala) mesa;
+				reservada = (sala.getReservada() != null && sala.getReservada()) ? "Sí" : "No";
+				privacidad = sala.getPrivacidad() != null ? sala.getPrivacidad() : "N/A";
+			} else if (mesa instanceof TMesaTerraza) {
+				TMesaTerraza terraza = (TMesaTerraza) mesa;
+				cubierta = (terraza.getCubierta() != null && terraza.getCubierta()) ? "Sí" : "No";
+				suplemento = terraza.getSuplemento() != null ? terraza.getSuplemento() + " €" : "N/A";
+			}
+
+			Object[] fila = { tipo, id, ubicacion, numero, capacidad, reservada, privacidad, cubierta, suplemento };
+			modeloTabla.addRow(fila);
 		}
 	}
 }

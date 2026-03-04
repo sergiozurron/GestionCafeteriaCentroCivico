@@ -14,6 +14,8 @@ import com.grupoms.app.integracion.proveedor.DAOProveedor;
 import com.grupoms.app.integracion.proveedor.DAOProveedorImpl;
 import com.grupoms.app.integracion.producto.DAOProducto;
 import com.grupoms.app.integracion.producto.DAOProductoImp;
+import com.grupoms.app.integracion.producto.DAOReceta;
+import com.grupoms.app.integracion.producto.DAORecetaImp;
 
 public class FactoriaDAOImp extends FactoriaDAO {
 
@@ -58,4 +60,10 @@ public class FactoriaDAOImp extends FactoriaDAO {
 		return new DAOLineaPedidoImp();
 	}
 
+	@Override
+	public DAOReceta creaDAOReceta() {
+		return new DAORecetaImp();
+	}
+
+	
 }

@@ -42,9 +42,7 @@ public class GUI_MostrarEmpleado extends JFrame implements IGUI {
 				int id = Integer.parseInt(campoID.getText().trim());
 				
 
-				Context contexto = new Context();
-				contexto.setEvento(Evento.MOSTRAR_EMPLEADO);
-				contexto.setDato(id);
+				Context contexto = new Context(Evento.MOSTRAR_EMPLEADO, id);
 
 				Controlador.getInstance().handle(contexto);
 
@@ -107,6 +105,7 @@ public class GUI_MostrarEmpleado extends JFrame implements IGUI {
 	@Override
 	public void actualizar(Context context) {
 		if (context == null) {
+			setVisible(true);
 			return;
 		}
 

@@ -9,7 +9,6 @@ import com.grupoms.app.integracion.factoria.FactoriaDAO;
 import com.grupoms.app.integracion.mesa.DAOMesa;
 
 public class SAMesaImp implements SAMesa {
-	private DAOMesa daoMesa = FactoriaDAO.getInstancia().creaDAOMesa();
 
 	@Override
 	public Integer altaMesa(TMesa mesa) {
@@ -19,7 +18,7 @@ public class SAMesaImp implements SAMesa {
 		try {
 			t = TransactionManager.getInstance().newTransaction();
 			t.start();
-
+			DAOMesa daoMesa = FactoriaDAO.getInstancia().creaDAOMesa();
 			TMesa mesaExistente = daoMesa.leerMesaPorNumero(mesa.getNumero());
 
 			if (mesaExistente != null) {
@@ -77,7 +76,7 @@ public class SAMesaImp implements SAMesa {
 			if (mesa == null || mesa.getId() == null || mesa.getId() <= 0) {
 				throw new IllegalArgumentException("La mesa debe tener un id válido para dar de baja.");
 			}
-
+			DAOMesa daoMesa = FactoriaDAO.getInstancia().creaDAOMesa();
 			TMesa mesaEnBD = daoMesa.mostrarMesa(mesa.getId());
 
 			if (mesaEnBD == null) {
@@ -118,25 +117,23 @@ public class SAMesaImp implements SAMesa {
 	public Boolean modificarMesa(TMesa mesa) {
 		Transaction t = null;
 		Boolean exito = false;
-
+		
 		if (mesa == null || mesa.getId() == null || mesa.getId() <= 0)
 			throw new IllegalArgumentException("La mesa a modificar no es válida.");
 
 		try {
 			t = TransactionManager.getInstance().newTransaction();
 			t.start();
+			DAOMesa daoMesa = FactoriaDAO.getInstancia().creaDAOMesa();
 
+			// 1. Comprobamos que la mesa que queremos modificar existe y está activa
 			TMesa existente = daoMesa.mostrarMesa(mesa.getId());
-			if (existente == null || !existente.getActivo())
+			if (existente == null || !existente.getActivo()) {
 				throw new IllegalArgumentException("No existe una mesa activa con ID " + mesa.getId());
-
-			if (!existente.getNumero().equals(mesa.getNumero())) {
-				TMesa mesaConEseNumero = daoMesa.leerMesaPorNumero(mesa.getNumero());
-				if (mesaConEseNumero != null && !mesaConEseNumero.getId().equals(mesa.getId())) {
-					throw new IllegalArgumentException("Ya existe otra mesa con el número " + mesa.getNumero());
-				}
 			}
 
+			// 2. ¡FUERA RESTRICCIONES! Como ya no exigimos número único, 
+			// mandamos modificar directamente al DAO sin hacer más comprobaciones.
 			exito = daoMesa.modificarMesa(mesa);
 
 			if (!exito) {
@@ -144,17 +141,23 @@ public class SAMesaImp implements SAMesa {
 			}
 
 			t.commit();
+			
+		} catch (IllegalArgumentException e) {
+			// Atrapamos validaciones de negocio limpias
+			if (t != null) {
+				try { t.rollback(); } catch (Exception ex) { }
+			}
+			throw e; 
+			
 		} catch (Exception e) {
+			// Fallos graves (BD caída, etc)
 			e.printStackTrace();
 			if (t != null) {
-				try {
-					t.rollback();
-				} catch (Exception ex) {
-					System.err.println("Error crítico durante el rollback: " + ex.getMessage());
-				}
+				try { t.rollback(); } catch (Exception ex) { }
 			}
-			throw new RuntimeException(e.getMessage());
+			throw new RuntimeException("Error fatal modificando: " + e.getMessage());
 		}
+		
 		return exito;
 	}
 
@@ -169,7 +172,7 @@ public class SAMesaImp implements SAMesa {
 
 			t = TransactionManager.getInstance().newTransaction();
 			t.start();
-
+			DAOMesa daoMesa = FactoriaDAO.getInstancia().creaDAOMesa();
 			mesa = daoMesa.mostrarMesa(ID);
 			if (mesa == null)
 				throw new IllegalArgumentException("La mesa con ID " + ID + " no existe.");
@@ -191,34 +194,24 @@ public class SAMesaImp implements SAMesa {
 
 	@Override
 	public List<TMesa> mostrarListaMesa() {
-		List<TMesa> listaMesas = new ArrayList<>();
-		Transaction t = null;
-		try {
-			t = TransactionManager.getInstance().newTransaction();
-			t.start();
+	    List<TMesa> listaMesas = new ArrayList<>();
+	    Transaction t = null;
+	    try {
+	        t = TransactionManager.getInstance().newTransaction();
+	        t.start();
+	        DAOMesa daoMesa = FactoriaDAO.getInstancia().creaDAOMesa();
+	        
+	        // El DAO hace el trabajo duro, el SA solo orquesta
+	        listaMesas = daoMesa.mostrarListaMesaActivas(); 
 
-			List<TMesa> todos = daoMesa.mostrarListaMesa();
-			for (TMesa m : todos) {
-				if (m.getActivo()) {
-					listaMesas.add(m);
-				}
-			}
-			if (listaMesas.isEmpty()) {
-				throw new IllegalArgumentException("No hay mesas activas en la base de datos.");
-			}
-			t.commit();
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (t != null) {
-				try {
-					t.rollback();
-				} catch (Exception ex) {
-					ex.printStackTrace();
-				}
-			}
-			throw new RuntimeException("Error al mostrar la lista de mesas: " + e.getMessage(), e);
-		}
-		return listaMesas;
+	        t.commit();
+	    } catch (Exception e) {
+	        if (t != null) {
+	            try { t.rollback(); } catch (Exception ex) { ex.printStackTrace(); }
+	        }
+	        throw new RuntimeException("Error al mostrar la lista de mesas: " + e.getMessage(), e);
+	    }
+	    return listaMesas;
 	}
 
 }

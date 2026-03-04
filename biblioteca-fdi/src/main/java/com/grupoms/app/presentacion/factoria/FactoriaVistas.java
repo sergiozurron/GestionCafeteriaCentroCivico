@@ -43,8 +43,8 @@ public class FactoriaVistas {
 	public static final String GUI_BAJA_INGREDIENTE = "GUI_BajaIngrediente";
 	public static final String GUI_MOSTRAR_INGREDIENTE = "GUI_VerIngrediente";
 	public static final String GUI_LISTAR_INGREDIENTES = "GUI_ListarIngredientes";
-	public static final String GUI_MOSTRAR_INGREDIENTES_PROVEEDOR = "GUI_MostrarIngredientesProveedor";
-	public static final String GUI_MOSTRAR_INGREDIENTES_PRODUCTO = "GUI_MostrarIngredientesProducto";
+	public static final String GUI_LISTAR_INGREDIENTE_PROVEEDOR = "GUI_ListarIngredienteProveedor";
+	public static final String GUI_LISTAR_INGREDIENTE_PRODUCTO = "GUI_ListarIngredienteProducto";
 	public static final String GUI_MODIFICAR_INGREDIENTE = "GUI_ModificarIngrediente";
 
 	public static final String GUI_ALTA_MESA = "GUI_AltaMesa";
@@ -59,6 +59,8 @@ public class FactoriaVistas {
 	public static final String GUI_LISTAR_PRODUCTOS = "GUI_ListarProductos";
 	public static final String GUI_MODIFICAR_PRODUCTO = "GUI_ModificarProducto";
 	public static final String GUI_PRODUCTOS_POR_PROVEEDOR = "GUI_ProductosPorProveedor";
+	public static final String GUI_VINCULAR_PRODUCTO_INGREDIENTE = "GUI_VincularProductoIngrediente";
+	public static final String GUI_DESVINCULAR_PRODUCTO_INGREDIENTE = "GUI_DesvincularProductoIngrediente";
 
 	public static final String GUI_ALTA_EMPLEADO = "GUI_AltaEmpleado";
 	public static final String GUI_BAJA_EMPLEADO = "GUI_BajaEmpleado";
@@ -199,7 +201,11 @@ public class FactoriaVistas {
 		vistas.put(GUI_BAJA_INGREDIENTE, new GUI_BajaIngrediente());
 		vistas.put(GUI_MOSTRAR_INGREDIENTE, new GUI_MostrarIngrediente());
 		vistas.put(GUI_LISTAR_INGREDIENTES, new GUI_ListarIngrediente());
+		vistas.put(GUI_LISTAR_INGREDIENTE_PRODUCTO, new GUI_ListarIngredienteProducto());
+		vistas.put(GUI_LISTAR_INGREDIENTE_PROVEEDOR, new GUI_ListarIngredienteProveedor());
 		vistas.put(GUI_MODIFICAR_INGREDIENTE, new GUI_ModificarIngrediente());
+		vistas.put(GUI_VINCULAR_PRODUCTO_INGREDIENTE,new GUI_VincularProductoIngrediente());
+		vistas.put(GUI_DESVINCULAR_PRODUCTO_INGREDIENTE,new GUI_DesvincularIngredienteProducto());
 
 		vistas.put(GUI_ALTA_MESA, new GUI_AltaMesa());
 		vistas.put(GUI_BAJA_MESA, new GUI_BajaMesa());

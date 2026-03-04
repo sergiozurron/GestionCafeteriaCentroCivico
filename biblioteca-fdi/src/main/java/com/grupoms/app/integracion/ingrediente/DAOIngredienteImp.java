@@ -101,7 +101,7 @@ public class DAOIngredienteImp implements DAOIngrediente {
 	}
 
 	@Override
-	public List<TIngrediente> mostrarProveedorPorIngrediente(Integer idProveedor) {
+	public List<TIngrediente> mostrarIngredientesProveedor(Integer idProveedor) {
 		List<TIngrediente> listaIngredientes = new ArrayList<>();
 		try {
 			Transaction t = TransactionManager.getInstance().getTransaction();
@@ -119,7 +119,7 @@ public class DAOIngredienteImp implements DAOIngrediente {
 						ingrediente.setPrecio(rs.getDouble("precio"));
 						ingrediente.setActivo(rs.getBoolean("activo"));
 						ingrediente.setIDProveedor(rs.getInt("proveedor_id"));
-						listaIngredientes.add(ingrediente);
+						if(ingrediente.getActivo())listaIngredientes.add(ingrediente);
 					}
 				}
 			}
@@ -194,8 +194,8 @@ public class DAOIngredienteImp implements DAOIngrediente {
 
 	            String sql = "SELECT i.id, i.nombre, i.precio, i.activo, i.proveedor_id " +
 	                         "FROM ingredientes i " +
-	                         "JOIN producto_ingrediente pi ON i.id = pi.id_ingrediente " +
-	                         "WHERE pi.id_producto = ?";
+	                         "JOIN entradas_recetas pi ON i.id = pi.ingrediente_id " +
+	                         "WHERE pi.producto_id = ?";
 	            try (PreparedStatement ps = c.prepareStatement(sql)) {
 	                ps.setInt(1, idProducto);
 	                try (ResultSet rs = ps.executeQuery()) {
@@ -216,29 +216,5 @@ public class DAOIngredienteImp implements DAOIngrediente {
 	        }
 	        return lista;
 	}
-
-	@Override
-	public void vincularProducto(Integer idIngrediente, Integer idProducto, Integer cantidad) {
-
-	    try {
-	        Transaction t = TransactionManager.getInstance().getTransaction();
-	        Connection c = (Connection) t.getResource();
-
-	        String sql = "INSERT INTO producto_ingrediente (id_producto, id_ingrediente, cantidad) VALUES (?, ?, ?)";
-
-	        try (PreparedStatement ps = c.prepareStatement(sql)) {
-	            ps.setInt(1, idProducto);
-	            ps.setInt(2, idIngrediente);
-	            ps.setInt(3, cantidad);
-
-	            ps.executeUpdate();
-	        }
-
-	    } catch (SQLException e) {
-	        throw new RuntimeException("Error vinculando producto con ingrediente", e);
-	    }
-	}
-
-	
 
 }

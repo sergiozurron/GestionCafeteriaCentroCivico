@@ -3,6 +3,7 @@ package com.grupoms.app.presentacion.ingrediente;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.util.List;
 import java.util.Set;
 
 import com.grupoms.app.negocio.ingrediente.TIngrediente;
@@ -66,11 +67,13 @@ public class GUI_ListarIngredienteProducto extends JFrame implements IGUI {
 	@Override
 	@SuppressWarnings("unchecked")
 	public void actualizar(Context context) {
-		if (context == null)
+		if (context == null) {
 			setVisible(true);
+			return;
+		}
 		else if (context.getEvento() == Evento.LISTAR_INGREDIENTES_POR_PRODUCTO_OK) {
 			modeloTabla.setRowCount(0);
-			Set<TIngrediente> ingredientes = (Set<TIngrediente>) context.getDatos();
+			List<TIngrediente> ingredientes = (List<TIngrediente>) context.getDatos();
 			if (ingredientes == null || ingredientes.isEmpty()) {
 				JOptionPane.showMessageDialog(this, "No hay ingredientes asociados a este producto.", "Sin resultados",
 						JOptionPane.INFORMATION_MESSAGE);

@@ -6,16 +6,15 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 
 import com.grupoms.app.negocio.mesa.TMesa;
 import com.grupoms.app.negocio.mesa.TMesaSala;
-import com.grupoms.app.negocio.mesa.TMesaTerraza;
 import com.grupoms.app.presentacion.IGUI;
 import com.grupoms.app.presentacion.controlador.Context;
 import com.grupoms.app.presentacion.controlador.Controlador;
@@ -25,7 +24,6 @@ public class GUI_BajaMesa extends JFrame implements IGUI {
 
 	private JTextField idMesa;
 	private JButton baja;
-	private JComboBox<String> tipoMesa;
 
 	public GUI_BajaMesa() {
 		super("Baja Mesa");
@@ -37,15 +35,21 @@ public class GUI_BajaMesa extends JFrame implements IGUI {
 
 	@Override
 	public void actualizar(Context context) {
-		if (context == null)
+		if (context == null) {
 			setVisible(true);
-		else if (context.getEvento() == Evento.BAJA_MESA_OK) {
-			JOptionPane.showMessageDialog(this, "Mesa dada de baja con éxito");
-			idMesa.setText("");
-		} else if (context.getEvento() == Evento.BAJA_MESA_KO) {
-			JOptionPane.showMessageDialog(this, "Error al dar de baja la mesa");
+			return;
 		}
-
+		
+		SwingUtilities.invokeLater(() -> {
+			if (context.getEvento() == Evento.BAJA_MESA_OK) {
+				JOptionPane.showMessageDialog(this, "Mesa dada de baja con éxito", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+				// Cerramos la ventana al terminar con éxito
+				dispose();
+			} else if (context.getEvento() == Evento.BAJA_MESA_KO) {
+				String mensaje = context.getDatos() != null ? context.getDatos().toString() : "Error al dar de baja la mesa";
+				JOptionPane.showMessageDialog(this, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
+			}
+		});
 	}
 
 	private void initGUI() {
@@ -58,25 +62,29 @@ public class GUI_BajaMesa extends JFrame implements IGUI {
 		JLabel labelmesa = new JLabel("ID Mesa:");
 		idMesa = new JTextField(10);
 
-		JLabel labelTipoMesa = new JLabel("Tipo de Mesa:");
-		tipoMesa = new JComboBox<>(new String[] { "Terraza", "Sala" });
-
 		baja = new JButton("Baja Mesa");
 		baja.addActionListener(e -> {
 			try {
-				String tipo = (String) tipoMesa.getSelectedItem();
-				TMesa mesa;
-				if ("terraza".equalsIgnoreCase(tipo))
-					mesa = new TMesaTerraza();
-				else
-					mesa = new TMesaSala();
-				mesa.setId(Integer.parseInt(idMesa.getText()));
+				Integer id = Integer.parseInt(idMesa.getText().trim());
+				
+				if (id <= 0) {
+					JOptionPane.showMessageDialog(this, "El ID debe ser mayor que 0");
+					return;
+				}
 
-				Context contexto = new Context(Evento.BAJA_MESA, mesa);
+				/* * Usamos TMesaSala (o TMesa si tu clase no es abstracta) únicamente
+				 * como DTO (Data Transfer Object) para transportar el ID hacia el SA.
+				 * El tipo real no importa porque el DAO solo necesita el ID para hacer
+				 * el UPDATE en la tabla principal.
+				 */
+				TMesa mesaTransporte = new TMesaSala();
+				mesaTransporte.setId(id);
+
+				Context contexto = new Context(Evento.BAJA_MESA, mesaTransporte);
 				Controlador.getInstance().handle(contexto);
 
 			} catch (NumberFormatException ex) {
-				JOptionPane.showMessageDialog(this, "Error: los campos numéricos no son válidos");
+				JOptionPane.showMessageDialog(this, "Error: el ID debe ser un número válido");
 			}
 		});
 
@@ -86,13 +94,6 @@ public class GUI_BajaMesa extends JFrame implements IGUI {
 		panel.add(labelmesa, gbc);
 		gbc.gridx = 1;
 		panel.add(idMesa, gbc);
-
-		y++;
-		gbc.gridx = 0;
-		gbc.gridy = y;
-		panel.add(labelTipoMesa, gbc);
-		gbc.gridx = 1;
-		panel.add(tipoMesa, gbc);
 
 		y++;
 		gbc.gridx = 0;

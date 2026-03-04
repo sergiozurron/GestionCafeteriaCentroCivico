@@ -6,7 +6,6 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -14,6 +13,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 
 import com.grupoms.app.negocio.mesa.TMesa;
@@ -27,7 +27,6 @@ import com.grupoms.app.presentacion.controlador.Evento;
 public class GUI_MostrarMesa extends JFrame implements IGUI {
 
 	private JTextField idMesa;
-	private JComboBox<String> tipoMesa;
 	private JButton mostrar;
 	private JTable tablaMesa;
 	private DefaultTableModel modeloTabla;
@@ -43,15 +42,24 @@ public class GUI_MostrarMesa extends JFrame implements IGUI {
 	@Override
 	public void actualizar(Context context) {
 		if (context == null) {
-	        setVisible(true);
-	        return;
-	    }
-		if (context.getEvento() == Evento.MOSTRAR_MESA_OK) {
-			TMesa mesa = (TMesa) context.getDatos();
-			actualizarTabla(mesa);
-		} else if (context.getEvento() == Evento.MOSTRAR_MESA_KO) {
-			JOptionPane.showMessageDialog(this, "Error al mostrar la mesa", "Error", JOptionPane.ERROR_MESSAGE);
+			setVisible(true);
+			return;
 		}
+		
+		SwingUtilities.invokeLater(() -> {
+			if (context.getEvento() == Evento.MOSTRAR_MESA_OK) {
+				TMesa mesa = (TMesa) context.getDatos();
+				if (mesa != null) {
+					actualizarTabla(mesa);
+				} else {
+					JOptionPane.showMessageDialog(this, "Mesa no encontrada en la base de datos.", "Aviso", JOptionPane.WARNING_MESSAGE);
+					modeloTabla.setRowCount(0);
+				}
+			} else if (context.getEvento() == Evento.MOSTRAR_MESA_KO) {
+				JOptionPane.showMessageDialog(this, "Error al mostrar la mesa", "Error", JOptionPane.ERROR_MESSAGE);
+				modeloTabla.setRowCount(0);
+			}
+		});
 	}
 
 	private void initGUI() {
@@ -65,22 +73,18 @@ public class GUI_MostrarMesa extends JFrame implements IGUI {
 		JLabel labelMesa = new JLabel("ID Mesa:");
 		idMesa = new JTextField(10);
 
-		JLabel labelTipoMesa = new JLabel("Tipo de Mesa:");
-		tipoMesa = new JComboBox<>(new String[] { "Sala", "Terraza" });
-
 		mostrar = new JButton("Mostrar Mesa");
 		mostrar.addActionListener(e -> {
 			try {
-				String tipo = (String) tipoMesa.getSelectedItem();
-				TMesa mesa;
-				if ("Terraza".equalsIgnoreCase(tipo))
-					mesa = new TMesaTerraza();
-				else
-					mesa = new TMesaSala();
+				Integer id = Integer.parseInt(idMesa.getText().trim());
+				
+				if (id <= 0) {
+					JOptionPane.showMessageDialog(this, "El ID debe ser mayor que 0");
+					return;
+				}
 
-				mesa.setId(Integer.parseInt(idMesa.getText()));
-
-				Context contexto = new Context(Evento.MOSTRAR_MESA, mesa);
+				// Ya no pasamos un objeto vacío, pasamos directamente el ID Integer
+				Context contexto = new Context(Evento.MOSTRAR_MESA, id);
 				Controlador.getInstance().handle(contexto);
 
 			} catch (NumberFormatException ex) {
@@ -94,13 +98,6 @@ public class GUI_MostrarMesa extends JFrame implements IGUI {
 		panelSuperior.add(labelMesa, gbc);
 		gbc.gridx = 1;
 		panelSuperior.add(idMesa, gbc);
-
-		y++;
-		gbc.gridx = 0;
-		gbc.gridy = y;
-		panelSuperior.add(labelTipoMesa, gbc);
-		gbc.gridx = 1;
-		panelSuperior.add(tipoMesa, gbc);
 
 		y++;
 		gbc.gridx = 0;
@@ -129,9 +126,16 @@ public class GUI_MostrarMesa extends JFrame implements IGUI {
 		modeloTabla.setRowCount(0);
 
 		if (mesa != null) {
-			String tipo = mesa.getTipo();
+			// Determinamos el tipo usando instanceof en lugar de depender de un String
+			String tipo = "Desconocido";
+			if (mesa instanceof TMesaSala) {
+				tipo = "Sala";
+			} else if (mesa instanceof TMesaTerraza) {
+				tipo = "Terraza";
+			}
+			
 			String id = String.valueOf(mesa.getId());
-			String ubicacion = mesa.getUbicacion();
+			String ubicacion = mesa.getUbicacion() != null ? mesa.getUbicacion() : "N/A";
 			String numero = String.valueOf(mesa.getNumero());
 			String capacidad = String.valueOf(mesa.getCapacidad());
 
@@ -142,12 +146,12 @@ public class GUI_MostrarMesa extends JFrame implements IGUI {
 
 			if (mesa instanceof TMesaSala) {
 				TMesaSala sala = (TMesaSala) mesa;
-				reservada = sala.getReservada() ? "Reservada" : "Sin reservar";
-				privacidad = sala.getPrivacidad();
+				reservada = (sala.getReservada() != null && sala.getReservada()) ? "Sí" : "No";
+				privacidad = sala.getPrivacidad() != null ? sala.getPrivacidad() : "N/A";
 			} else if (mesa instanceof TMesaTerraza) {
 				TMesaTerraza terraza = (TMesaTerraza) mesa;
-				cubierta = terraza.getCubierta() ? "Cubierta" : "No cubierta";
-				suplemento = String.valueOf(terraza.getSuplemento());
+				cubierta = (terraza.getCubierta() != null && terraza.getCubierta()) ? "Sí" : "No";
+				suplemento = terraza.getSuplemento() != null ? String.valueOf(terraza.getSuplemento()) + " €" : "N/A";
 			}
 
 			Object[] fila = { tipo, id, ubicacion, numero, capacidad, reservada, privacidad, cubierta, suplemento };

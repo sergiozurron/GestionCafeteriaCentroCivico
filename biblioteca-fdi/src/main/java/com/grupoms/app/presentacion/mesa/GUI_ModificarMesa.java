@@ -1,4 +1,3 @@
-
 package com.grupoms.app.presentacion.mesa;
 
 import javax.swing.*;
@@ -34,27 +33,21 @@ public class GUI_ModificarMesa extends JFrame implements IGUI {
 	@Override
 	public void actualizar(Context context) {
 		if (context == null) {
-	        setVisible(true);
-	        return;
-	    }
-		
-		if (context.getEvento() == Evento.MODIFICAR_MESA_OK) {
-			JOptionPane.showMessageDialog(this, "Mesa modificada con éxito");
-			numero.setText("");
-			ubicacion.setText("");
-			capacidad.setText("");
-			salaReservada.setSelected(false);
-			salaPrivacidad.setText("");
-			terrazaCubierta.setSelected(false);
-			terrazaSuplemento.setText("");
-			rbtnSala.setSelected(false);
-			rbtnTerraza.setSelected(false);
-			panelSala.setVisible(false);
-			panelTerraza.setVisible(false);
-		} else if (context.getEvento() == Evento.MODIFICAR_MESA_KO) {
-			JOptionPane.showMessageDialog(this, "Error al modificar la mesa");
+			setVisible(true);
+			return;
 		}
-
+		
+		SwingUtilities.invokeLater(() -> {
+			if (context.getEvento() == Evento.MODIFICAR_MESA_OK) {
+				JOptionPane.showMessageDialog(this, "Mesa modificada con éxito", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+				// Cerramos la ventana al terminar con éxito
+				dispose();
+			} else if (context.getEvento() == Evento.MODIFICAR_MESA_KO) {
+				// Mostramos el mensaje de error de negocio
+				String mensaje = context.getDatos() != null ? context.getDatos().toString() : "Error al modificar la mesa";
+				JOptionPane.showMessageDialog(this, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
+			}
+		});
 	}
 
 	private void initGUI() {
@@ -124,32 +117,45 @@ public class GUI_ModificarMesa extends JFrame implements IGUI {
 		modificar.addActionListener(e -> {
 			try {
 				TMesa mesa;
-				if (rbtnTerraza.isSelected())
+				if (rbtnTerraza.isSelected()) {
 					mesa = new TMesaTerraza();
-				else
+				} else if (rbtnSala.isSelected()) {
 					mesa = new TMesaSala();
-				mesa.setId(Integer.parseInt(id.getText()));
-				mesa.setNumero(Integer.parseInt(numero.getText()));
-				mesa.setUbicacion(ubicacion.getText());
-				mesa.setCapacidad(Integer.parseInt(capacidad.getText()));
+				} else {
+					JOptionPane.showMessageDialog(this, "Debes seleccionar un tipo de mesa (Sala o Terraza)", "Aviso", JOptionPane.WARNING_MESSAGE);
+					return;
+				}
+				
+				mesa.setId(Integer.parseInt(id.getText().trim()));
+				mesa.setNumero(Integer.parseInt(numero.getText().trim()));
+				mesa.setUbicacion(ubicacion.getText().trim());
+				mesa.setCapacidad(Integer.parseInt(capacidad.getText().trim()));
 				mesa.setActivo(true);
 
+				Context contexto = null;
 				if (rbtnSala.isSelected()) {
 					TMesaSala mesaS = (TMesaSala) mesa;
 					mesaS.setReservada(salaReservada.isSelected());
-					mesaS.setPrivacidad(salaPrivacidad.getText());
-					Context contexto = new Context(Evento.MODIFICAR_MESA, mesaS);
-					Controlador.getInstance().handle(contexto);
+					mesaS.setPrivacidad(salaPrivacidad.getText().trim());
+					contexto = new Context(Evento.MODIFICAR_MESA, mesaS);
 				} else if (rbtnTerraza.isSelected()) {
 					TMesaTerraza mesaT = (TMesaTerraza) mesa;
 					mesaT.setCubierta(terrazaCubierta.isSelected());
-					mesaT.setSuplemento(Double.parseDouble(terrazaSuplemento.getText()));
-					Context contexto = new Context(Evento.MODIFICAR_MESA, mesaT);
+					mesaT.setSuplemento(Double.parseDouble(terrazaSuplemento.getText().trim()));
+					contexto = new Context(Evento.MODIFICAR_MESA, mesaT);
+				}
+
+				try {
+					// Lanzamos la orden al controlador
 					Controlador.getInstance().handle(contexto);
+				} catch (Exception ex) {
+					// RED DE SEGURIDAD: Si el SA lanza una excepción (como la del número repetido)
+					// y el Comando no la atrapa, la atrapamos aquí en la vista.
+					actualizar(new Context(Evento.MODIFICAR_MESA_KO, ex.getMessage()));
 				}
 
 			} catch (NumberFormatException ex) {
-				JOptionPane.showMessageDialog(this, "Error: los campos numéricos no son válidos");
+				JOptionPane.showMessageDialog(this, "Error: los campos numéricos no son válidos", "Error", JOptionPane.ERROR_MESSAGE);
 			}
 		});
 

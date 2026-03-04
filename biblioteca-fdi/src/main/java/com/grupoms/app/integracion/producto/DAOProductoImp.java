@@ -201,47 +201,58 @@ public Boolean modificarProducto(TProducto producto) {
 	}
 
 	@Override
-	public List<TProducto> mostrarListaProductos() {
-		List<TProducto> listaProductos = new ArrayList<>();
-		try {
-			Transaction t = TransactionManager.getInstance().getTransaction();
-			Connection c = (Connection) t.getResource();
+	public List<TProducto> mostrarProductosPorProveedor(Integer idProveedor) {
 
-			try (PreparedStatement ps = c.prepareStatement(ALL)) {
-				ResultSet rs = ps.executeQuery();
-				while (rs.next()) {
-					TProducto producto;
+	    List<TProducto> listaProductos = new ArrayList<>();
 
-					if (rs.getObject("calorias") != null) {
-						TComida comida = new TComida();
-						comida.setTiempoPreparacion(rs.getInt("tiempo_preparacion"));
-						comida.setCalorias(rs.getInt("calorias"));
-						producto = comida;
-					} else if (rs.getObject("tamaño") != null) {
+	    try {
+	        Transaction t = TransactionManager.getInstance().getTransaction();
+	        Connection c = (Connection) t.getResource();
 
-                    TBebida bebida = new TBebida();
-                    bebida.setTamanho(rs.getInt("tamaño"));
-                    producto = bebida;
+	        try (PreparedStatement ps = c.prepareStatement(PRODUCTOS_POR_PROVEEDOR)) {
 
-                	} else {
-                    	continue; // caso inconsistente
-                	}
-					if (producto != null) {
-                       		producto.setId(rs.getInt("id"));
-                        	producto.setNombre(rs.getString("nombre"));
-                        	producto.setPrecio(rs.getDouble("precio"));
-                        	producto.setStock(rs.getInt("stock"));
-                        	producto.setActivo(rs.getBoolean("activo"));
-                    	}
-					listaProductos.add(producto);
-				}
-			}
+	            ps.setInt(1, idProveedor);
 
-		} catch (SQLException e) {
-			System.err.println("Error mostrando lista de productos: " + e.getMessage());
-		}
+	            try (ResultSet rs = ps.executeQuery()) {
 
-		return listaProductos;
+	                while (rs.next()) {
+
+	                    TProducto producto = null;
+
+	                    // Para detectar el tipo de producto
+	                    if (rs.getObject("calorias") != null) {
+
+	                        TComida comida = new TComida();
+	                        comida.setTiempoPreparacion(rs.getInt("tiempo_preparacion"));
+	                        comida.setCalorias(rs.getInt("calorias"));
+	                        producto = comida;
+
+	                    } else if (rs.getObject("tamaño") != null) {
+
+	                        TBebida bebida = new TBebida();
+	                        bebida.setTamanho(rs.getInt("tamaño"));
+	                        producto = bebida;
+
+	                    } else {
+	                        continue; 
+	                    }
+
+	                    producto.setId(rs.getInt("id"));
+	                    producto.setNombre(rs.getString("nombre"));
+	                    producto.setPrecio(rs.getDouble("precio"));
+	                    producto.setStock(rs.getInt("stock"));
+	                    producto.setActivo(rs.getBoolean("activo"));
+
+	                    listaProductos.add(producto);
+	                }
+	            }
+	        }
+
+	    } catch (SQLException e) {
+	        System.err.println("Error mostrando productos por proveedor: " + e.getMessage());
+	    }
+
+	    return listaProductos;
 	}
 
 	@Override

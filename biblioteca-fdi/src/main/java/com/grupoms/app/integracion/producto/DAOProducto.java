@@ -16,4 +16,6 @@ public interface DAOProducto {
 	public List<TProducto> mostrarListaProductos();
 
 	void eliminaTodas();
+	
+	public List<TProducto> mostrarProductosPorProveedor(Integer idProveedor);
 }

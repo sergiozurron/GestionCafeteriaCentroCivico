@@ -338,6 +338,10 @@ public class Evento {
 	public static final int MOSTRAR_PEDIDOS_MESA = 724;
 	public static final int MOSTRAR_PEDIDOS_MESA_OK = 725;
 	public static final int MOSTRAR_PEDIDOS_MESA_KO = 726;
+	
+	public static final int MOSTRAR_PRODUCTOS_POR_PROVEEDOR = 727;
+	public static final int MOSTRAR_PRODUCTOS_POR_PROVEEDOR_OK = 728;
+	public static final int MOSTRAR_PRODUCTOS_POR_PROVEEDOR_KO = 729;
 
 
 

@@ -119,6 +119,7 @@ public class FactoryCommandImp extends FactoryCommand {
 		commands.put(Evento.MODIFICAR_PRODUCTO, new ModificarProductoCommand());
 		commands.put(Evento.MOSTRAR_PRODUCTO, new MostrarProductoCommand());
 		commands.put(Evento.MOSTRAR_LISTA_PRODUCTO, new MostrarListaProductosCommand());
+		commands.put(Evento.MOSTRAR_PRODUCTOS_POR_PROVEEDOR, new MostrarProductosPorProveedorCommand());
 
 		commands.put(Evento.ALTA_PROVEEDOR, new AltaProveedorCommand());
 		commands.put(Evento.BAJA_PROVEEDOR, new BajaProveedorCommand());

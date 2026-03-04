@@ -68,7 +68,8 @@ public class Principal extends JFrame {
 						{ "Baja Producto", FactoriaVistas.GUI_BAJA_PRODUCTO },
 						{ "Modificar Producto", FactoriaVistas.GUI_MODIFICAR_PRODUCTO },
 						{ "Mostrar Producto", FactoriaVistas.GUI_MOSTRAR_PRODUCTO },
-						{ "Listar Productos", FactoriaVistas.GUI_LISTAR_PRODUCTOS } }));
+						{ "Listar Productos", FactoriaVistas.GUI_LISTAR_PRODUCTOS } 
+						{ "Productos por Proveedor", FactoriaVistas.GUI_PRODUCTOS_POR_PROVEEDOR }}));
 
 		/*JPanel panelCentroCivico = new JPanel();
 		panelCentroCivico.setLayout(new GridLayout(2, 3, 20, 20));

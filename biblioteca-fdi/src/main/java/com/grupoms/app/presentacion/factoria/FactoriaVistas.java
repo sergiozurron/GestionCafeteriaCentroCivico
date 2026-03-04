@@ -58,6 +58,7 @@ public class FactoriaVistas {
 	public static final String GUI_MOSTRAR_PRODUCTO = "GUI_VerProducto";
 	public static final String GUI_LISTAR_PRODUCTOS = "GUI_ListarProductos";
 	public static final String GUI_MODIFICAR_PRODUCTO = "GUI_ModificarProducto";
+	public static final String GUI_PRODUCTOS_POR_PROVEEDOR = "GUI_ProductosPorProveedor";
 
 	public static final String GUI_ALTA_EMPLEADO = "GUI_AltaEmpleado";
 	public static final String GUI_BAJA_EMPLEADO = "GUI_BajaEmpleado";
@@ -211,6 +212,7 @@ public class FactoriaVistas {
 		vistas.put(GUI_MOSTRAR_PRODUCTO, new GUI_MostrarProducto());
 		vistas.put(GUI_LISTAR_PRODUCTOS, new GUI_ListarProducto());
 		vistas.put(GUI_MODIFICAR_PRODUCTO, new GUI_ModificarProducto());
+		vistas.put(GUI_PRODUCTOS_POR_PROVEEDOR, new GUI_ProductosPorProveedor())
 
 		vistas.put(GUI_ALTA_EMPLEADO, new GUI_AltaEmpleado());
 		vistas.put(GUI_BAJA_EMPLEADO, new GUI_BajaEmpleado());

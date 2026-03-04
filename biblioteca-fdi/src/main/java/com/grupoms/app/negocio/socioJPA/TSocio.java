@@ -66,4 +66,10 @@ public class TSocio {
 	public void setActivo(Boolean activo) {
 		this.activo = activo;
 	}
+
+	@Override
+	public String toString() {
+		return "TSocio{id=" + id + ", nombre='" + nombreYapellido + "', dni='" + dni
+				+ "', tipoSocio=" + tipoSocio + ", cuota=" + cuota + ", activo=" + activo + "}";
+	}
 }

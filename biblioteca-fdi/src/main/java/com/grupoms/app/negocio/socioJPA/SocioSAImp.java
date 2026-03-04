@@ -29,6 +29,7 @@ public class SocioSAImp implements SocioSA {
 			TypedQuery<BOSocio> query = em.createNamedQuery("com.grupoms.app.negocio.socioJPA.BOSocio.findByName",
 					BOSocio.class);
 			query.setParameter("nombre", socio.getNombreYapellido());
+			query.setLockMode(LockModeType.OPTIMISTIC);
 
 			try {
 				socioExistente = query.getSingleResult();
@@ -74,21 +75,25 @@ public class SocioSAImp implements SocioSA {
 
 		try {
 			t.begin();
-			BOSocio socio = em.find(BOSocio.class, id);
+			BOSocio socio = em.find(BOSocio.class, id, LockModeType.OPTIMISTIC);
 
 			if (socio == null || !socio.getActivo()) {
 				t.rollback();
 				throw new Exception("El socio no existe o ya está inactivo.");
 			}
 
-			TypedQuery<BOPrestamo> query = em.createNamedQuery("BOPrestamo.findBySocio", BOPrestamo.class);
+			// Solo bloquear si tiene préstamos NO devueltos (pendientes)
+			TypedQuery<BOPrestamo> query = em.createNamedQuery("BOPrestamo.findPendientesBySocio", BOPrestamo.class);
 			query.setParameter("idSocio", socio.getId());
-			List<BOPrestamo> prestamos = query.getResultList();
+			List<BOPrestamo> prestamosPendientes = query.getResultList();
 
-			if (!prestamos.isEmpty()) {
+			if (!prestamosPendientes.isEmpty()) {
 				t.rollback();
-				throw new Exception("El socio tiene préstamos pendientes.");
+				throw new Exception("El socio tiene préstamos pendientes de devolver.");
 			}
+
+			// Limpiar promociones al dar de baja
+			socio.getPromociones().clear();
 
 			socio.setActivo(false);
 			t.commit();
@@ -188,7 +193,14 @@ public class SocioSAImp implements SocioSA {
 		try {
 			return em.createNamedQuery("com.grupoms.app.negocio.socioJPA.BOSocio.findByPromocion", BOSocio.class)
 					.setParameter("idPromocion", idPromocion).getResultList().stream()
-					.map(SocioAssembler::entityToTransfer).collect(Collectors.toList());
+					.map(bo -> {
+						if (bo instanceof BOAdulto)
+							return AdultoAssembler.toDTO((BOAdulto) bo);
+						else if (bo instanceof BOInfantil)
+							return InfantilAssembler.toDTO((BOInfantil) bo);
+						else
+							return SocioAssembler.entityToTransfer(bo);
+					}).collect(Collectors.toList());
 		} finally {
 			em.close();
 		}
@@ -231,8 +243,8 @@ public class SocioSAImp implements SocioSA {
 
 		try {
 			t.begin();
-			BOSocio socio = em.find(BOSocio.class, idSocio);
-			BOPromocion promocion = em.find(BOPromocion.class, idPromocion);
+			BOSocio socio = em.find(BOSocio.class, idSocio, LockModeType.OPTIMISTIC);
+			BOPromocion promocion = em.find(BOPromocion.class, idPromocion, LockModeType.OPTIMISTIC);
 
 			if (socio != null && socio.getActivo() && promocion != null && promocion.getActivo()) {
 				if (!socio.getPromociones().contains(promocion)) {

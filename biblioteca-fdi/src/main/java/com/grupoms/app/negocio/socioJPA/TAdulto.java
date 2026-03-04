@@ -19,4 +19,10 @@ public class TAdulto extends TSocio {
 	public void setMiembroPleno(Boolean miembroPleno) {
 		this.miembroPleno = miembroPleno;
 	}
+
+	@Override
+	public String toString() {
+		return "TAdulto{id=" + id + ", nombre='" + nombreYapellido + "', dni='" + dni
+				+ "', cuota=" + cuota + ", miembroPleno=" + miembroPleno + ", activo=" + activo + "}";
+	}
 }

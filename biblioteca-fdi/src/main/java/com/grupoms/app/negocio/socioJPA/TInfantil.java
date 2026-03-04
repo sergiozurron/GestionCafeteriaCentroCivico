@@ -39,4 +39,10 @@ public class TInfantil extends TSocio {
 	public void setReduccion(Double reduccion) {
 		this.reduccion = reduccion;
 	}
+
+	@Override
+	public String toString() {
+		return "TInfantil{id=" + id + ", nombre='" + nombreYapellido + "', dni='" + dni
+				+ "', cuota=" + cuota + ", edad=" + edad + ", reduccion=" + getReduccion() + ", activo=" + activo + "}";
+	}
 }

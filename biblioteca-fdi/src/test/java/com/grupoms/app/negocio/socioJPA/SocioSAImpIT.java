@@ -85,10 +85,10 @@ public class SocioSAImpIT {
         Integer id1 = servicio.altaSocio(t1);
         assertTrue(id1 > 0);
 
-        
+        // Alta duplicada de socio activo devuelve -1
         TAdulto t2 = new TAdulto("Maria Lopez", "22222222C", 0, 40, false);
-        Exception ex = assertThrows(IllegalStateException.class, () -> servicio.altaSocio(t2));
-        assertEquals("El socio ya existe", ex.getMessage());
+        Integer id2 = servicio.altaSocio(t2);
+        assertEquals(-1, id2);
     }
 
     

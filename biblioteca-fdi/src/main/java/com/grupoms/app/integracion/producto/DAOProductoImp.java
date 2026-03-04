@@ -13,11 +13,23 @@ import com.grupoms.app.negocio.producto.TProducto;
 
 public class DAOProductoImp implements DAOProducto {
 
-	private static final String INSERT_PRODUCTO = "INSERT INTO PRODUCTOS(nombre, precio, stock, activo, tipo, tamanho, tiempo_preparacion, calorias) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-	private static final String READ_BY_ID = "SELECT p.*, " + " c.tipo AS tipo_comida, c.calorias, c.tiempo_preparacion, " + " b.tipo AS tipo_bebida, b.tamaño " + "FROM productos p " + "LEFT JOIN comidas c ON p.id = c.id " + "LEFT JOIN bebidas b ON p.id = b.id " + "WHERE p.id = ?";	private static final String UPDATE_PRODUCTO = "UPDATE PRODUCTOS SET nombre = ?, precio = ?, stock = ?, activo = ?, tamanho = ?, tiempo_preparacion = ?, calorias = ? WHERE id = ?";
-	private static final String DESACTIVAR_PRODUCTO = "UPDATE PRODUCTOS SET activo = false WHERE id = ?";
-	private static final String ALL = "SELECT * FROM PRODUCTOS";
-	private static final String DELETE_PRODUCTO = "DELETE FROM PRODUCTOS";
+	private static final String INSERT_PRODUCTO = "INSERT INTO productos(nombre, precio, stock, activo) VALUES (?, ?, ?, ?)";
+	private static final String INSERT_COMIDA = "INSERT INTO comidas(id, tipo, calorias, tiempo_preparacion) VALUES (?, ?, ?, ?)";
+	private static final String INSERT_BEBIDA = "INSERT INTO bebidas(id, tipo, tamaño) VALUES (?, ?, ?)";
+	private static final String READ_BY_ID = "SELECT p.*, " + " c.tipo AS tipo_comida, c.calorias, c.tiempo_preparacion, " + " b.tipo AS tipo_bebida, b.tamaño " + "FROM productos p " + "LEFT JOIN comidas c ON p.id = c.id " + "LEFT JOIN bebidas b ON p.id = b.id " + "WHERE p.id = ?";
+	private static final String UPDATE_PRODUCTO =
+    "UPDATE productos SET nombre = ?, precio = ?, stock = ?, activo = ? WHERE id = ?";
+	private static final String UPDATE_COMIDA = "UPDATE comidas SET calorias = ?, tiempo_preparacion = ? WHERE id = ?";
+	private static final String UPDATE_BEBIDA = "UPDATE bebidas SET tamaño = ? WHERE id = ?";
+	private static final String DESACTIVAR_PRODUCTO = "UPDATE productos SET activo = false WHERE id = ?";
+	private static final String ALL =
+    	"SELECT p.*, " +
+    	"c.calorias, c.tiempo_preparacion, " +
+    	"b.tamaño " +
+    	"FROM productos p " +
+    	"LEFT JOIN comidas c ON p.id = c.id " +
+    	"LEFT JOIN bebidas b ON p.id = b.id";
+	private static final String DELETE_PRODUCTO = "DELETE FROM productos";
 	private static final String PRODUCTOS_POR_PROVEEDOR =
 		    "SELECT DISTINCT p.* " +
 		    "FROM productos p " +
@@ -26,97 +38,124 @@ public class DAOProductoImp implements DAOProducto {
 		    "WHERE i.proveedor_id = ?";
 
 	@Override
-	public Integer altaProducto(TProducto producto) {
-		Integer idGenerado = null;
-		try {
-			Transaction t = TransactionManager.getInstance().getTransaction();
-			Connection c = (Connection) t.getResource();
+public Integer altaProducto(TProducto producto) {
 
-			try (PreparedStatement ps = c.prepareStatement(INSERT_PRODUCTO, Statement.RETURN_GENERATED_KEYS)) {
-				ps.setString(1, producto.getNombre());
-				ps.setDouble(2, producto.getPrecio());
-				ps.setInt(3, producto.getStock());
-				ps.setBoolean(4, producto.getActivo());
+    Integer idGenerado = null;
 
-				if (producto instanceof TBebida) {
-					ps.setString(5, "Bebida");
-					ps.setInt(6, ((TBebida) producto).getTamanho());
-					ps.setNull(7, Types.INTEGER);
-					ps.setNull(8, Types.INTEGER);
-				} else if (producto instanceof TComida) {
-					ps.setString(5, "Comida");
-					ps.setNull(6, Types.INTEGER);
-					ps.setInt(7, ((TComida) producto).getTiempoPreparacion());
-					ps.setInt(8, ((TComida) producto).getCalorias());
-				}
+    try {
+        Transaction t = TransactionManager.getInstance().getTransaction();
+        Connection c = (Connection) t.getResource();
 
-				ps.executeUpdate();
+        try (PreparedStatement ps = c.prepareStatement(
+                INSERT_PRODUCTO,
+                Statement.RETURN_GENERATED_KEYS)) {
 
-				try (ResultSet rs = ps.getGeneratedKeys()) {
-					if (rs.next()) {
-						idGenerado = rs.getInt(1);
-						producto.setId(idGenerado);
-					}
-				}
-			}
+            ps.setString(1, producto.getNombre());
+            ps.setDouble(2, producto.getPrecio());
+            ps.setInt(3, producto.getStock());
+            ps.setBoolean(4, producto.getActivo());
 
-		} catch (SQLException e) {
-			System.err.println("Error dando de alta producto: " + e.getMessage());
-		}
-		return idGenerado;
-	}
+            ps.executeUpdate();
+
+            try (ResultSet rs = ps.getGeneratedKeys()) {
+                if (rs.next()) {
+                    idGenerado = rs.getInt(1);
+                    producto.setId(idGenerado);
+                }
+            }
+        }
+        if (producto instanceof TComida) {
+
+            try (PreparedStatement ps = c.prepareStatement(INSERT_COMIDA)) {
+                ps.setInt(1, idGenerado);
+                ps.setString(2, "Comida");
+                ps.setInt(3, ((TComida) producto).getCalorias());
+                ps.setInt(4, ((TComida) producto).getTiempoPreparacion());
+                ps.executeUpdate();
+            }
+
+        } else if (producto instanceof TBebida) {
+
+            try (PreparedStatement ps = c.prepareStatement(INSERT_BEBIDA)) {
+                ps.setInt(1, idGenerado);
+                ps.setString(2, "Bebida");
+                ps.setInt(3, ((TBebida) producto).getTamanho());
+                ps.executeUpdate();
+            }
+        }
+
+    } catch (SQLException e) {
+        throw new RuntimeException("Error dando de alta producto", e);
+    }
+
+    return idGenerado;
+}
 
 	@Override
-	public Integer bajaProducto(Integer id) {
+	public Boolean bajaProducto(TProducto producto) {
+		Boolean exito = false;
 		try {
 			Transaction t = TransactionManager.getInstance().getTransaction();
 			Connection c = (Connection) t.getResource();
 
 			try (PreparedStatement ps = c.prepareStatement(DESACTIVAR_PRODUCTO)) {
-				ps.setInt(1, id);
+				ps.setInt(1, producto.getId());
 				int rows = ps.executeUpdate();
-				return rows > 0 ? id : -1;
+				exito = rows > 0;
 			}
 
 		} catch (SQLException e) {
 			System.err.println("Error dando de baja producto: " + e.getMessage());
 		}
-		return -1;
+		return exito;
 	}
 
 	@Override
-	public Integer modificarProducto(TProducto producto) {
-		try {
-			Transaction t = TransactionManager.getInstance().getTransaction();
-			Connection c = (Connection) t.getResource();
+public Boolean modificarProducto(TProducto producto) {
 
-			try (PreparedStatement ps = c.prepareStatement(UPDATE_PRODUCTO)) {
-				ps.setString(1, producto.getNombre());
-				ps.setDouble(2, producto.getPrecio());
-				ps.setInt(3, producto.getStock());
-				ps.setBoolean(4, producto.getActivo());
+    boolean exito = false;
 
-				if (producto instanceof TBebida) {
-					ps.setInt(5, ((TBebida) producto).getTamanho());
-					ps.setNull(6, Types.INTEGER);
-					ps.setNull(7, Types.INTEGER);
-				} else if (producto instanceof TComida) {
-					ps.setNull(5, Types.INTEGER);
-					ps.setInt(6, ((TComida) producto).getTiempoPreparacion());
-					ps.setInt(7, ((TComida) producto).getCalorias());
-				}
+    try {
+        Transaction t = TransactionManager.getInstance().getTransaction();
+        Connection c = (Connection) t.getResource();
 
-				ps.setInt(8, producto.getId());
+        try (PreparedStatement ps = c.prepareStatement(UPDATE_PRODUCTO)) {
 
-				int rows = ps.executeUpdate();
-				return rows > 0 ? producto.getId() : -1;
-			}
+            ps.setString(1, producto.getNombre());
+            ps.setDouble(2, producto.getPrecio());
+            ps.setInt(3, producto.getStock());
+            ps.setBoolean(4, producto.getActivo());
+            ps.setInt(5, producto.getId());
 
-		} catch (SQLException e) {
-			System.err.println("Error modificando producto: " + e.getMessage());
-		}
-		return -1;
-	}
+            ps.executeUpdate();
+        }
+
+        if (producto instanceof TComida) {
+
+            try (PreparedStatement ps = c.prepareStatement(UPDATE_COMIDA)) {
+                ps.setInt(1, ((TComida) producto).getCalorias());
+                ps.setInt(2, ((TComida) producto).getTiempoPreparacion());
+                ps.setInt(3, producto.getId());
+                ps.executeUpdate();
+            }
+
+        } else if (producto instanceof TBebida) {
+
+            try (PreparedStatement ps = c.prepareStatement(UPDATE_BEBIDA)) {
+                ps.setInt(1, ((TBebida) producto).getTamanho());
+                ps.setInt(2, producto.getId());
+                ps.executeUpdate();
+            }
+        }
+
+        exito = true;
+
+    } catch (SQLException e) {
+        throw new RuntimeException("Error modificando producto", e);
+    }
+
+    return exito;
+}
 
 	@Override
 	public TProducto mostrarProducto(Integer id) {
@@ -130,23 +169,27 @@ public class DAOProductoImp implements DAOProducto {
 
 				try (ResultSet rs = ps.executeQuery()) {
 					if (rs.next()) {
-						String tipo = rs.getString("tipo");
-						if ("Bebida".equals(tipo)) {
-							TBebida bebida = new TBebida();
-							bebida.setTamanho(rs.getInt("tamanho"));
-							producto = bebida;
-						} else if ("Comida".equals(tipo)) {
-							TComida comida = new TComida();
-							comida.setTiempoPreparacion(rs.getInt("tiempo_preparacion"));
-							comida.setCalorias(rs.getInt("calorias"));
-							producto = comida;
-						}
+						if (rs.getObject("calorias") != null) {
 
-						producto.setId(rs.getInt("id"));
-						producto.setNombre(rs.getString("nombre"));
-						producto.setPrecio(rs.getDouble("precio"));
-						producto.setStock(rs.getInt("stock"));
-						producto.setActivo(rs.getBoolean("activo"));
+                        	TComida comida = new TComida();
+                        	comida.setTiempoPreparacion(rs.getInt("tiempo_preparacion"));
+                        	comida.setCalorias(rs.getInt("calorias"));
+                        	producto = comida;
+
+                    	} else if (rs.getObject("tamaño") != null) {
+
+                        	TBebida bebida = new TBebida();
+                        	bebida.setTamanho(rs.getInt("tamaño"));
+                        	producto = bebida;
+                    	}
+
+                    	if (producto != null) {
+                       		producto.setId(rs.getInt("id"));
+                        	producto.setNombre(rs.getString("nombre"));
+                        	producto.setPrecio(rs.getDouble("precio"));
+                        	producto.setStock(rs.getInt("stock"));
+                        	producto.setActivo(rs.getBoolean("activo"));
+                    	}
 					}
 				}
 			}
@@ -164,29 +207,32 @@ public class DAOProductoImp implements DAOProducto {
 			Transaction t = TransactionManager.getInstance().getTransaction();
 			Connection c = (Connection) t.getResource();
 
-			try (PreparedStatement ps = c.prepareStatement(ALL); ResultSet rs = ps.executeQuery()) {
-
+			try (PreparedStatement ps = c.prepareStatement(ALL)) {
+				ResultSet rs = ps.executeQuery();
 				while (rs.next()) {
 					TProducto producto;
-					String tipo = rs.getString("tipo");
 
-					if ("Bebida".equals(tipo)) {
-						TBebida bebida = new TBebida();
-						bebida.setTamanho(rs.getInt("tamanho"));
-						producto = bebida;
-					} else {
+					if (rs.getObject("calorias") != null) {
 						TComida comida = new TComida();
 						comida.setTiempoPreparacion(rs.getInt("tiempo_preparacion"));
 						comida.setCalorias(rs.getInt("calorias"));
 						producto = comida;
-					}
+					} else if (rs.getObject("tamaño") != null) {
 
-					producto.setId(rs.getInt("id"));
-					producto.setNombre(rs.getString("nombre"));
-					producto.setPrecio(rs.getDouble("precio"));
-					producto.setStock(rs.getInt("stock"));
-					producto.setActivo(rs.getBoolean("activo"));
+                    TBebida bebida = new TBebida();
+                    bebida.setTamanho(rs.getInt("tamaño"));
+                    producto = bebida;
 
+                	} else {
+                    	continue; // caso inconsistente
+                	}
+					if (producto != null) {
+                       		producto.setId(rs.getInt("id"));
+                        	producto.setNombre(rs.getString("nombre"));
+                        	producto.setPrecio(rs.getDouble("precio"));
+                        	producto.setStock(rs.getInt("stock"));
+                        	producto.setActivo(rs.getBoolean("activo"));
+                    	}
 					listaProductos.add(producto);
 				}
 			}

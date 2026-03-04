@@ -7,9 +7,9 @@ import com.grupoms.app.negocio.producto.TProducto;
 public interface DAOProducto {
 	public Integer altaProducto(TProducto producto);
 
-	public Integer bajaProducto(Integer id);
+	public Boolean bajaProducto(TProducto producto);
 
-	public Integer modificarProducto(TProducto producto);
+	public Boolean modificarProducto(TProducto producto);
 
 	public TProducto mostrarProducto(Integer id);
 

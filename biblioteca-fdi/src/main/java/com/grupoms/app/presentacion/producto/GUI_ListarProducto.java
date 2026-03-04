@@ -3,7 +3,7 @@ package com.grupoms.app.presentacion.producto;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.util.Set;
+import java.util.List;
 
 import com.grupoms.app.negocio.producto.TProducto;
 import com.grupoms.app.presentacion.IGUI;
@@ -52,7 +52,6 @@ public class GUI_ListarProducto extends JFrame implements IGUI {
 						JOptionPane.ERROR_MESSAGE);
 			}
 		});
-		panelPrincipal.add(botonCargar, BorderLayout.SOUTH);
 
 		panelPrincipal.add(scrollPane, BorderLayout.CENTER);
 		panelPrincipal.add(botonCargar, BorderLayout.SOUTH);
@@ -67,7 +66,7 @@ public class GUI_ListarProducto extends JFrame implements IGUI {
 			setVisible(true);
 		else if (context.getEvento() == Evento.MOSTRAR_LISTA_PRODUCTO_OK) {
 			modeloTabla.setRowCount(0);
-			Set<TProducto> productos = (Set<TProducto>) context.getDatos();
+			List<TProducto> productos = (List<TProducto>) context.getDatos();
 
 			if (productos == null || productos.isEmpty()) {
 				JOptionPane.showMessageDialog(this, "No hay productos activos en la base de datos.", "Sin datos",

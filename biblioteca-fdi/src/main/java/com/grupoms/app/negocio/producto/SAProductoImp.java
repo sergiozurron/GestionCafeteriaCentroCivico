@@ -21,15 +21,15 @@ public class SAProductoImp implements SAProducto {
 			t = TransactionManager.getInstance().newTransaction();
 			t.start();
 
+			if (producto == null) {
+				throw new IllegalArgumentException("El producto no puede ser nulo.");
+			}
 			producto.setActivo(true);
 
 			idGenerado = daoProducto.altaProducto(producto);
-			if (idGenerado == -1) {
+			if (idGenerado == null || idGenerado <= 0) {
 				throw new RuntimeException("No se pudo dar de alta el producto");
 			}
-
-			producto.setId(idGenerado);
-
 			t.commit();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -47,10 +47,6 @@ public class SAProductoImp implements SAProducto {
 
 	@Override
 	public Boolean bajaProducto(TProducto producto) {
-		if (producto == null || producto.getId() == null || producto.getId() <= 0) {
-			throw new IllegalArgumentException("El producto no es válido.");
-		}
-
 		Transaction t = null;
 		Boolean exito = false;
 
@@ -58,12 +54,11 @@ public class SAProductoImp implements SAProducto {
 			t = TransactionManager.getInstance().newTransaction();
 			t.start();
 
-			TProducto existente = daoProducto.mostrarProducto(producto.getId());
-			if (existente == null || !existente.getActivo()) {
-				throw new IllegalArgumentException("No existe un producto activo con ID " + producto.getId());
+			if (producto == null || producto.getId() == null || producto.getId() <= 0) {
+				throw new IllegalArgumentException("El producto no es válido.");
 			}
 
-			daoProducto.bajaProducto(producto.getId());
+			daoProducto.bajaProducto(producto);
 
 			t.commit();
 			exito = true;
@@ -83,26 +78,29 @@ public class SAProductoImp implements SAProducto {
 
 	@Override
 	public Boolean modificarProducto(TProducto producto) {
-		if (producto == null || producto.getId() == null || producto.getId() <= 0) {
-			throw new IllegalArgumentException("El producto no es válido.");
-		}
+		
 
 		Transaction t = null;
 		Boolean exito = false;
+		TProducto prod = null;
 
 		try {
 			t = TransactionManager.getInstance().newTransaction();
 			t.start();
 
-			TProducto existente = daoProducto.mostrarProducto(producto.getId());
-			if (existente == null || !existente.getActivo()) {
+			if (producto == null || producto.getId() == null || producto.getId() <= 0) {
+				throw new IllegalArgumentException("El producto no es válido.");
+			}
+
+			prod = daoProducto.mostrarProducto(producto.getId());
+			if (prod == null || !prod.getActivo()) {
 				throw new IllegalArgumentException("No existe un producto activo con ID " + producto.getId());
 			}
 
-			daoProducto.modificarProducto(producto);
+			exito = daoProducto.modificarProducto(producto);
 
 			t.commit();
-			exito = true;
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (t != null) {

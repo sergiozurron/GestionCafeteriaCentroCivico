@@ -12,7 +12,11 @@ import com.grupoms.app.presentacion.controlador.Evento;
 
 public class GUI_ProductosPorProveedor extends JFrame implements IGUI {
 
-    private JTextField campoIdProveedor;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private JTextField campoIdProveedor;
     private JButton buscar;
 
     public GUI_ProductosPorProveedor() {
@@ -105,7 +109,7 @@ public class GUI_ProductosPorProveedor extends JFrame implements IGUI {
                     } 
                     else if (producto.getTipo().equals("Comida")) {
                         info += "\nTiempo de Preparación: "
-                                + ((TComida) producto).getTiempoPreparacion()
+                                + producto.getTiempoPreparacion()
                                 + "\nCalorías: " + producto.getCalorias();
                     }
 

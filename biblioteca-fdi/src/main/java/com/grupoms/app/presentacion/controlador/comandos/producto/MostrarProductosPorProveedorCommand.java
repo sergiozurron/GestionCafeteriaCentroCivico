@@ -21,7 +21,7 @@ public class MostrarProductosPorProveedorCommand implements Command {
         SAProducto saProducto = FactoriaSA.getInstance().creaSAProducto();
 
         try {
-            List<TProducto> productos = saProducto.listarProductosPorProveedor(idProveedor);
+            List<TProducto> productos = saProducto.mostrarProductosPorProveedor(idProveedor);
             if (productos != null && !productos.isEmpty()) {
                 return new Context(Evento.MOSTRAR_LISTA_PRODUCTO_OK, productos);
             } else {

@@ -79,6 +79,7 @@ import com.grupoms.app.presentacion.controlador.comandos.producto.BajaProductoCo
 import com.grupoms.app.presentacion.controlador.comandos.producto.ModificarProductoCommand;
 import com.grupoms.app.presentacion.controlador.comandos.producto.MostrarListaProductosCommand;
 import com.grupoms.app.presentacion.controlador.comandos.producto.MostrarProductoCommand;
+import com.grupoms.app.presentacion.controlador.comandos.producto.MostrarProductosPorProveedorCommand;
 import com.grupoms.app.presentacion.controlador.comandos.proveedor.AltaProveedorCommand;
 import com.grupoms.app.presentacion.controlador.comandos.proveedor.BajaProveedorCommand;
 import com.grupoms.app.presentacion.controlador.comandos.proveedor.ModificarProveedorCommand;

@@ -130,13 +130,10 @@ public class SAIngredienteImp implements SAIngrediente {
 
         return lista;
     }
-
     @Override
-    public List<TIngrediente> mostrarProveedorPorIngrediente(TIngrediente ingrediente) {
+    public List<TIngrediente> mostrarIngredientesProveedor(Integer idProveedor) {
 
-        if (ingrediente == null || 
-            ingrediente.getIDProveedor() == null || 
-            ingrediente.getIDProveedor() <= 0)
+        if (idProveedor == null || idProveedor <= 0)
             throw new IllegalArgumentException("Proveedor no válido");
 
         Transaction t = null;
@@ -146,9 +143,10 @@ public class SAIngredienteImp implements SAIngrediente {
             t = TransactionManager.getInstance().newTransaction();
             t.start();
 
-            lista = dao.mostrarProveedorPorIngrediente(ingrediente.getIDProveedor());
+            // Llamada correcta al DAO
+            lista = dao.mostrarIngredientesProveedor(idProveedor);
 
-            // Solo activos
+            // Filtrar solo activos
             lista.removeIf(ing -> !ing.getActivo());
 
             t.commit();
@@ -159,40 +157,10 @@ public class SAIngredienteImp implements SAIngrediente {
                 try { t.rollback(); } 
                 catch (Exception ex) { ex.printStackTrace(); }
             }
-            throw new RuntimeException("Error en SA al mostrar ingredientes por proveedor", e);
+            throw new RuntimeException("Error al mostrar ingredientes por proveedor", e);
         }
 
         return lista;
     }
-
-
-    @Override
-    public void vincularProducto(Integer idIngrediente, Integer idProducto, Integer cantidad) {
-
-        if (idIngrediente == null || idIngrediente <= 0 ||
-            idProducto == null || idProducto <= 0 ||
-            cantidad == null || cantidad <= 0)
-            throw new IllegalArgumentException("Datos inválidos para vincular producto");
-
-        Transaction t = null;
-
-        try {
-            t = TransactionManager.getInstance().newTransaction();
-            t.start();
-
-            dao.vincularProducto(idIngrediente, idProducto, cantidad);
-
-            t.commit();
-        } 
-        catch (Exception e) {
-            e.printStackTrace();
-            if (t != null) {
-                try { t.rollback(); } 
-                catch (Exception ex) { ex.printStackTrace(); }
-            }
-            throw new RuntimeException("Error en SA al vincular producto e ingrediente", e);
-        }
-    }
-
 
 }

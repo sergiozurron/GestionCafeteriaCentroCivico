@@ -54,6 +54,8 @@ public class Principal extends JFrame {
 						{ "Baja Ingrediente", FactoriaVistas.GUI_BAJA_INGREDIENTE },
 						{ "Modificar Ingrediente", FactoriaVistas.GUI_MODIFICAR_INGREDIENTE },
 						{ "Mostrar Ingrediente", FactoriaVistas.GUI_MOSTRAR_INGREDIENTE },
+						{ "Ingredientes por Proveedor", FactoriaVistas.GUI_LISTAR_INGREDIENTE_PROVEEDOR},
+						{ "Ingredientes por Producto", FactoriaVistas.GUI_LISTAR_INGREDIENTE_PRODUCTO },
 						{ "Listar Ingredientes", FactoriaVistas.GUI_LISTAR_INGREDIENTES } }));
 
 		panelCafeteria.add(crearPanelCategoria("Empleados",

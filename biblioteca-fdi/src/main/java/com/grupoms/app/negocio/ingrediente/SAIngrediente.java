@@ -15,8 +15,6 @@ public interface SAIngrediente {
 
 	public List<TIngrediente> mostrarIngredientesPorProducto(Integer IDProducto);
 
-	public List<TIngrediente> mostrarProveedorPorIngrediente(TIngrediente ingrediente);
-
-	public void vincularProducto(Integer idIngrediente, Integer idProducto, Integer cantidad);
+	public List<TIngrediente> mostrarIngredientesProveedor(Integer idProveedor);
 
 }

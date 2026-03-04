@@ -13,4 +13,6 @@ public interface SAProducto {
 	TProducto mostrarProducto(Integer id);
 
 	List<TProducto> mostrarListaProductos();
+	
+	List<TProducto> mostrarProductosPorProveedor(Integer idProveedor);
 }

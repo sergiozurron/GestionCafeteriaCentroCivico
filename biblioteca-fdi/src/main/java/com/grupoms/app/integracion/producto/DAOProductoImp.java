@@ -18,6 +18,12 @@ public class DAOProductoImp implements DAOProducto {
 	private static final String DESACTIVAR_PRODUCTO = "UPDATE PRODUCTOS SET activo = false WHERE id = ?";
 	private static final String ALL = "SELECT * FROM PRODUCTOS";
 	private static final String DELETE_PRODUCTO = "DELETE FROM PRODUCTOS";
+	private static final String PRODUCTOS_POR_PROVEEDOR =
+		    "SELECT DISTINCT p.* " +
+		    "FROM productos p " +
+		    "JOIN entradas_recetas er ON p.id = er.producto_id " +
+		    "JOIN ingredientes i ON er.ingrediente_id = i.id " +
+		    "WHERE i.proveedor_id = ?";
 
 	@Override
 	public Integer altaProducto(TProducto producto) {
@@ -206,6 +212,56 @@ public class DAOProductoImp implements DAOProducto {
 			System.err.println("Error eliminando todos los productos: " + e.getMessage());
 		}
 	}
+	
+	@Override
+	public List<TProducto> mostrarProductosPorProveedor(Integer idProveedor) {
+
+	    List<TProducto> listaProductos = new ArrayList<>();
+
+	    try {
+	        Transaction t = TransactionManager.getInstance().getTransaction();
+	        Connection c = (Connection) t.getResource();
+
+	        try (PreparedStatement ps = c.prepareStatement(PRODUCTOS_POR_PROVEEDOR)) {
+
+	            ps.setInt(1, idProveedor);
+
+	            try (ResultSet rs = ps.executeQuery()) {
+
+	                while (rs.next()) {
+
+	                    TProducto producto;
+	                    String tipo = rs.getString("tipo");
+
+	                    if ("Bebida".equals(tipo)) {
+	                        TBebida bebida = new TBebida();
+	                        bebida.setTamanho(rs.getInt("tamanho"));
+	                        producto = bebida;
+	                    } 
+	                    else {
+	                        TComida comida = new TComida();
+	                        comida.setTiempoPreparacion(rs.getInt("tiempo_preparacion"));
+	                        comida.setCalorias(rs.getInt("calorias"));
+	                        producto = comida;
+	                    }
+
+	                    producto.setId(rs.getInt("id"));
+	                    producto.setNombre(rs.getString("nombre"));
+	                    producto.setPrecio(rs.getDouble("precio"));
+	                    producto.setStock(rs.getInt("stock"));
+	                    producto.setActivo(rs.getBoolean("activo"));
+
+	                    listaProductos.add(producto);
+	                }
+	            }
+	        }
+
+	    } catch (SQLException e) {
+	        System.err.println("Error mostrando productos por proveedor: " + e.getMessage());
+	    }
+
+	    return listaProductos;
+	}
 
 	private Connection getConnection() throws SQLException {
 		Transaction tx = getTransaction();
@@ -235,4 +291,5 @@ public class DAOProductoImp implements DAOProducto {
 			return null;
 		}
 	}
+	
 }

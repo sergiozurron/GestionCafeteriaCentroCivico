@@ -186,4 +186,49 @@ public class SAProductoImp implements SAProducto {
 
 		return listaProductos;
 	}
+	
+	@Override
+	public List<TProducto> mostrarProductosPorProveedor(Integer idProveedor) {
+
+	    if (idProveedor == null || idProveedor <= 0) {
+	        throw new IllegalArgumentException("El ID del proveedor no es válido.");
+	    }
+
+	    List<TProducto> listaProductos = new ArrayList<>();
+	    Transaction t = null;
+
+	    try {
+	        t = TransactionManager.getInstance().newTransaction();
+	        t.start();
+
+	        List<TProducto> todos = daoProducto.mostrarProductosPorProveedor(idProveedor);
+
+	        for (TProducto producto : todos) {
+	            if (producto.getActivo()) {
+	                listaProductos.add(producto);
+	            }
+	        }
+
+	        if (listaProductos.isEmpty()) {
+	            throw new IllegalArgumentException(
+	                "No hay productos activos asociados al proveedor con ID " + idProveedor);
+	        }
+
+	        t.commit();
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        if (t != null) {
+	            try {
+	                t.rollback();
+	            } catch (Exception ex) {
+	                ex.printStackTrace();
+	            }
+	        }
+	        throw new IllegalArgumentException(
+	            "Error al mostrar los productos por proveedor.", e);
+	    }
+
+	    return listaProductos;
+	}
 }

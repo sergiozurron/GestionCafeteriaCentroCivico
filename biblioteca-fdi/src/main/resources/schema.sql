@@ -1,12 +1,12 @@
-DROP TABLE IF EXISTS linea_pedido;
-DROP TABLE IF EXISTS entradas_recetas;
+USE cafeteria;
+DROP TABLE IF EXISTS empleados;
 DROP TABLE IF EXISTS bebidas;
 DROP TABLE IF EXISTS comidas;
-DROP TABLE IF EXISTS productos;
 DROP TABLE IF EXISTS ingredientes;
+DROP TABLE IF EXISTS linea_pedido;
 DROP TABLE IF EXISTS proveedores;
+DROP TABLE IF EXISTS productos;
 DROP TABLE IF EXISTS pedidos;
-DROP TABLE IF EXISTS empleados;
 DROP TABLE IF EXISTS mesas;
 DROP TABLE IF EXISTS salas;
 DROP TABLE IF EXISTS terrazas;

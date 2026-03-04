@@ -3,11 +3,9 @@ package com.grupoms.app.negocio.socioJPA;
 import java.io.Serializable;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.NamedQueries;
 import jakarta.persistence.PrimaryKeyJoinColumn;
 
 @Entity
-@NamedQueries({})
 @PrimaryKeyJoinColumn(referencedColumnName = "id")
 public class BOInfantil extends BOSocio implements Serializable {
 

@@ -119,6 +119,7 @@ public class GUI_MostrarProveedor extends JFrame implements IGUI {
 	@Override
 	public void actualizar(Context context) {
 		if (context == null) {
+			setVisible(true);
 			return;
 		}
 

@@ -4,15 +4,15 @@ import java.util.List;
 
 public class TCarrito {
 	private TPedido tPedido;
-	private List<TLineaPedido> tLineasVenta;
-	
+	private List<TLineaPedido> tLineasPedido;
+
 	//Getters
 	public TPedido getPedido() {
 		return tPedido;
 	}
 	
-	public List<TLineaPedido> getLineasVenta() {
-        return tLineasVenta;
+	public List<TLineaPedido> getLineasPedido() {
+        return tLineasPedido;
     }
 
     // Setters
@@ -20,8 +20,8 @@ public class TCarrito {
         this.tPedido = tPedido;
     }
 
-    public void setLineasVenta(List<TLineaPedido> tLineasVenta) {
-        this.tLineasVenta = tLineasVenta;
+    public void setLineasPedido(List<TLineaPedido> tLineasPedido) {
+        this.tLineasPedido = tLineasPedido;
     }
 
 }

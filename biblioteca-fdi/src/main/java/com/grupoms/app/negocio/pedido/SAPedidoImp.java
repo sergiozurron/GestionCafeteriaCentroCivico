@@ -110,8 +110,8 @@ public class SAPedidoImp implements SAPedido {
 			
 			carrito = new TCarrito();
 			carrito.setPedido(pedido);
-			carrito.setLineasVenta(lineas);
-			
+			carrito.setLineasPedido(lineas);
+
 			t.commit();
 			return carrito;
 		}catch(Exception e) {

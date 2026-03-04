@@ -17,11 +17,11 @@ public class BOSocioTest {
         p.setID(1);
         
         s.anyadirPromocion(p);
-        List<BOPromocion> promos = s.getPromocion();
+        List<BOPromocion> promos = s.getPromociones();
         assertNotNull(promos);
         assertEquals(1, promos.size());
         
         s.eliminarPromocion(p);
-        assertEquals(0, s.getPromocion().size());
+        assertEquals(0, s.getPromociones().size());
     }
 }

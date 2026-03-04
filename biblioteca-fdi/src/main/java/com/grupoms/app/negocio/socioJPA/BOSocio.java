@@ -106,15 +106,15 @@ public class BOSocio implements Serializable {
 		this.prestamos = prestamos;
 	}
 
-	public List<BOPromocion> getPromocion() {
+	public List<BOPromocion> getPromociones() {
 		if (promociones == null) {
 			promociones = new ArrayList<>();
 		}
 		return promociones;
 	}
 
-	public void setPromocion(List<BOPromocion> promocions) {
-		this.promociones = promocions;
+	public void setPromociones(List<BOPromocion> promociones) {
+		this.promociones = promociones;
 	}
 
 	public void anyadirPromocion(BOPromocion promocion) {

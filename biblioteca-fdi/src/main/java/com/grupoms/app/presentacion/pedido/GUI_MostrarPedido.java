@@ -156,7 +156,7 @@ public class GUI_MostrarPedido extends JFrame implements IGUI {
                     modeloTabla.setRowCount(0);
 
                     // AÑADIR LÍNEAS
-                    for (TLineaPedido lp : carrito.getLineasVenta()) {
+                    for (TLineaPedido lp : carrito.getLineasPedido()) {
                         modeloTabla.addRow(new Object[]{
                                 lp.getProductoId(),
                                 lp.getCantidad()

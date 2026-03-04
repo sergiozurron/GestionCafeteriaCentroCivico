@@ -1,11 +1,7 @@
 package com.grupoms.app.negocio.socioJPA;
 
-import java.util.Date;
 import java.util.List;
 
-import org.apache.commons.lang3.tuple.Pair;
-
-import com.grupoms.app.negocio.EjemplarJPA.TEjemplar;
 
 public interface SocioSA {
 

@@ -1,7 +1,6 @@
 package com.grupoms.app.integracion.proveedor;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -9,7 +8,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.grupoms.app.integracion.DBConfig;
 import com.grupoms.app.integracion.Transaction.Transaction;
 import com.grupoms.app.integracion.Transaction.TransactionManager;
 import com.grupoms.app.negocio.proveedor.TProveedor;
@@ -55,10 +53,9 @@ public class DAOProveedorImpl implements DAOProveedor {
 	@Override
 	public TProveedor buscaPorId(int id) {
 		TProveedor proveedor = null;
-		Connection c = null;
 		try {
 			Transaction t = TransactionManager.getInstance().getTransaction();
-			c = (Connection) t.getResource();			
+			Connection c = (Connection) t.getResource();
 			try (PreparedStatement stmt = c.prepareStatement(READ_BY_ID)) {
 				stmt.setInt(1, id);
 
@@ -75,8 +72,6 @@ public class DAOProveedorImpl implements DAOProveedor {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-		} finally {
-			closeConnection(c);
 		}
 		return proveedor;
 	}
@@ -111,10 +106,9 @@ public class DAOProveedorImpl implements DAOProveedor {
 	@Override
 	public List<TProveedor> listar() {
 		List<TProveedor> listaProveedores = new ArrayList<>();
-		Connection c = null;
 		try {
 			Transaction t = TransactionManager.getInstance().getTransaction();
-			c = (Connection) t.getResource();
+			Connection c = (Connection) t.getResource();
 
 			try (PreparedStatement stmt = c.prepareStatement(READ_ALL); ResultSet rs = stmt.executeQuery()) {
 				while (rs.next()) {
@@ -129,8 +123,6 @@ public class DAOProveedorImpl implements DAOProveedor {
 			}
 		} catch (SQLException e) {
 			System.err.println("Error al listar proveedores: " + e.getMessage());
-		} finally {
-			closeConnection(c);
 		}
 		return listaProveedores;
 	}
@@ -192,33 +184,5 @@ public class DAOProveedorImpl implements DAOProveedor {
 		}
 	}
 
-	private Connection getConnection() throws SQLException {
-		Transaction tx = getTransaction();
-		if (tx == null) {
-			return DriverManager.getConnection(DBConfig.getUrl(), DBConfig.getUser(), DBConfig.getPassword());
-		}
-		return (Connection) tx.getResource();
-	}
-
-	private void closeConnection(Connection conn) {
-		if (conn == null) {
-			return;
-		}
-		try {
-			if (getTransaction() == null) {
-				conn.close();
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
-
-	private Transaction getTransaction() {
-		try {
-			return TransactionManager.getInstance().getTransaction();
-		} catch (IllegalStateException e) {
-			return null;
-		}
-	}
 
 }

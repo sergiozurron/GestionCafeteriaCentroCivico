@@ -1,19 +1,11 @@
 package com.grupoms.app.negocio.socioJPA;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-import org.apache.commons.lang3.tuple.Pair;
-
 import com.grupoms.app.integracion.factoria.EntityManagerSingleton;
-import com.grupoms.app.negocio.EjemplarJPA.BOEjemplar;
-import com.grupoms.app.negocio.EjemplarJPA.TEjemplar;
 import com.grupoms.app.negocio.PromocionJPA.BOPromocion;
 import com.grupoms.app.negocio.assembler.AdultoAssembler;
-import com.grupoms.app.negocio.assembler.EjemplarAssembler;
 import com.grupoms.app.negocio.assembler.InfantilAssembler;
 import com.grupoms.app.negocio.assembler.SocioAssembler;
 import com.grupoms.app.negocio.prestamoJPA.BOPrestamo;
@@ -193,10 +185,13 @@ public class SocioSAImp implements SocioSA {
 	@Override
 	public List<TSocio> mostrarSociosPorPromocion(Integer idPromocion) {
 		EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
-
-		return em.createNamedQuery("com.grupoms.app.negocio.socioJPA.BOSocio.findByPromocion", BOSocio.class)
-				.setParameter("idPromocion", idPromocion).getResultList().stream()
-				.map(SocioAssembler::entityToTransfer).toList();
+		try {
+			return em.createNamedQuery("com.grupoms.app.negocio.socioJPA.BOSocio.findByPromocion", BOSocio.class)
+					.setParameter("idPromocion", idPromocion).getResultList().stream()
+					.map(SocioAssembler::entityToTransfer).collect(Collectors.toList());
+		} finally {
+			em.close();
+		}
 	}
 
 	@Override
@@ -211,7 +206,7 @@ public class SocioSAImp implements SocioSA {
 			BOPromocion promocion = em.find(BOPromocion.class, idPromocion, LockModeType.OPTIMISTIC);
 
 			if (socio != null && socio.getActivo() && promocion != null && promocion.getActivo()) {
-				if (socio.getPromocion().contains(promocion)) {
+				if (socio.getPromociones().contains(promocion)) {
 					throw new Exception("El socio ya tiene esta promoción");
 				}
 				socio.anyadirPromocion(promocion);
@@ -240,7 +235,7 @@ public class SocioSAImp implements SocioSA {
 			BOPromocion promocion = em.find(BOPromocion.class, idPromocion);
 
 			if (socio != null && socio.getActivo() && promocion != null && promocion.getActivo()) {
-				if (!socio.getPromocion().contains(promocion)) {
+				if (!socio.getPromociones().contains(promocion)) {
 					throw new Exception("El socio no tiene esta promoción");
 				}
 				socio.eliminarPromocion(promocion);

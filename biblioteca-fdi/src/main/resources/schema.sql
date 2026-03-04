@@ -1,4 +1,4 @@
-DROP TABLE IF EXISTS ordenes;
+DROP TABLE IF EXISTS linea_pedido;
 DROP TABLE IF EXISTS entradas_recetas;
 DROP TABLE IF EXISTS bebidas;
 DROP TABLE IF EXISTS comidas;

@@ -1,5 +1,6 @@
 package com.grupoms.app.negocio.proveedor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.grupoms.app.integracion.Transaction.Transaction;
@@ -45,6 +46,8 @@ public class SAProveedorImpl implements SAProveedor {
 					ex.printStackTrace();
 				}
 			}
+		} finally {
+			TransactionManager.getInstance().deleteTransaction();
 		}
 		return idGenerado;
 	}
@@ -77,6 +80,8 @@ public class SAProveedorImpl implements SAProveedor {
 					ex.printStackTrace();
 				}
 			}
+		} finally {
+			TransactionManager.getInstance().deleteTransaction();
 		}
 		return exito;
 	}
@@ -116,17 +121,63 @@ public class SAProveedorImpl implements SAProveedor {
 					ex.printStackTrace();
 				}
 			}
+		} finally {
+			TransactionManager.getInstance().deleteTransaction();
 		}
 		return exito;
 	}
 
 	@Override
 	public TProveedor mostrarProveedor(Integer id) {
-		return FactoriaDAO.getInstancia().creaDAOProveedor().buscaPorId(id);
+		Transaction tx = null;
+		TProveedor proveedor = null;
+		try {
+			tx = TransactionManager.getInstance().newTransaction();
+			DAOProveedor daoProveedor = FactoriaDAO.getInstancia().creaDAOProveedor();
+			tx.start();
+
+			proveedor = daoProveedor.buscaPorId(id);
+
+			tx.commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (tx != null) {
+				try {
+					tx.rollback();
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
+			}
+		} finally {
+			TransactionManager.getInstance().deleteTransaction();
+		}
+		return proveedor;
 	}
 
 	@Override
 	public List<TProveedor> mostrarListaProveedores() {
-		return FactoriaDAO.getInstancia().creaDAOProveedor().listar();
+		Transaction tx = null;
+		List<TProveedor> lista = new ArrayList<>();
+		try {
+			tx = TransactionManager.getInstance().newTransaction();
+			DAOProveedor daoProveedor = FactoriaDAO.getInstancia().creaDAOProveedor();
+			tx.start();
+
+			lista = daoProveedor.listar();
+
+			tx.commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (tx != null) {
+				try {
+					tx.rollback();
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
+			}
+		} finally {
+			TransactionManager.getInstance().deleteTransaction();
+		}
+		return lista;
 	}
 }

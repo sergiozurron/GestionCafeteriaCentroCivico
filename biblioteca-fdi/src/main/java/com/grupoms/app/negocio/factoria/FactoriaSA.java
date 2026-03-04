@@ -13,6 +13,7 @@ import com.grupoms.app.negocio.pedido.SALineaPedido;
 import com.grupoms.app.negocio.pedido.SAPedido;
 import com.grupoms.app.negocio.prestamoJPA.PrestamoSA;
 import com.grupoms.app.negocio.producto.SAProducto;
+import com.grupoms.app.negocio.producto.SAReceta;
 import com.grupoms.app.negocio.proveedor.SAProveedor;
 import com.grupoms.app.negocio.salaJPA.SalaSA;
 import com.grupoms.app.negocio.socioJPA.SocioSA;
@@ -63,4 +64,6 @@ public abstract class FactoriaSA {
 	public abstract SocioSA creaSASocio();
 
 	public abstract PrestamoSA creaSAPrestamo();
+	
+	public abstract SAReceta creaSAReceta();
 }

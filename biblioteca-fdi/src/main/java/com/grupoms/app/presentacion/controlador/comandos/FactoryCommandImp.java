@@ -80,6 +80,7 @@ import com.grupoms.app.presentacion.controlador.comandos.producto.ModificarProdu
 import com.grupoms.app.presentacion.controlador.comandos.producto.MostrarListaProductosCommand;
 import com.grupoms.app.presentacion.controlador.comandos.producto.MostrarProductoCommand;
 import com.grupoms.app.presentacion.controlador.comandos.producto.MostrarProductosPorProveedorCommand;
+import com.grupoms.app.presentacion.controlador.comandos.producto.VincularProductoIngredienteCommand;
 import com.grupoms.app.presentacion.controlador.comandos.proveedor.AltaProveedorCommand;
 import com.grupoms.app.presentacion.controlador.comandos.proveedor.BajaProveedorCommand;
 import com.grupoms.app.presentacion.controlador.comandos.proveedor.ModificarProveedorCommand;
@@ -121,6 +122,7 @@ public class FactoryCommandImp extends FactoryCommand {
 		commands.put(Evento.MOSTRAR_PRODUCTO, new MostrarProductoCommand());
 		commands.put(Evento.MOSTRAR_LISTA_PRODUCTO, new MostrarListaProductosCommand());
 		commands.put(Evento.MOSTRAR_PRODUCTOS_POR_PROVEEDOR, new MostrarProductosPorProveedorCommand());
+		commands.put(Evento.VINCULAR_PRODUCTO_INGREDIENTE,new VincularProductoIngredienteCommand());
 
 		commands.put(Evento.ALTA_PROVEEDOR, new AltaProveedorCommand());
 		commands.put(Evento.BAJA_PROVEEDOR, new BajaProveedorCommand());
@@ -234,6 +236,7 @@ public class FactoryCommandImp extends FactoryCommand {
 		views.put(Evento.MODIFICAR_PRODUCTO, FactoriaVistas.GUI_MODIFICAR_PRODUCTO);
 		views.put(Evento.MOSTRAR_PRODUCTO, FactoriaVistas.GUI_MOSTRAR_PRODUCTO);
 		views.put(Evento.MOSTRAR_LISTA_PRODUCTO, FactoriaVistas.GUI_LISTAR_PRODUCTOS);
+		views.put(Evento.VINCULAR_PRODUCTO_INGREDIENTE,FactoriaVistas.GUI_VINCULAR_PRODUCTO_INGREDIENTE);
 
 		views.put(Evento.ALTA_PROVEEDOR, FactoriaVistas.GUI_ALTA_PROVEEDOR);
 		views.put(Evento.BAJA_PROVEEDOR, FactoriaVistas.GUI_BAJA_PROVEEDOR);

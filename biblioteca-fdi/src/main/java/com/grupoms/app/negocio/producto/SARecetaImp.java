@@ -38,12 +38,6 @@ public class SARecetaImp implements SAReceta {
                 return -2; // ingrediente no válido
             }
 
-            // 3. Comprobar si ya existe
-            if (daoReceta.existeRelacion(idProducto, idIngrediente)) {
-                t.commit();
-                return -3; // ya vinculado
-            }
-
             // 4. Crear relación
             Integer id = daoReceta.vincular(idProducto, idIngrediente);
 
@@ -68,6 +62,7 @@ public class SARecetaImp implements SAReceta {
 
             DAOReceta daoReceta = FactoriaDAO.getInstancia().creaDAOReceta();
 
+            
             daoReceta.desvincular(idProducto, idIngrediente);
 
             t.commit();
@@ -82,7 +77,7 @@ public class SARecetaImp implements SAReceta {
 
 
     @Override
-    public List<TIngrediente> listarIngredientesDeProducto(Integer idProducto) {
+    public List<TIngrediente> listarIngredientesProducto(Integer idProducto) {
 
         Transaction t = TransactionManager.getInstance().newTransaction();
 
@@ -90,7 +85,7 @@ public class SARecetaImp implements SAReceta {
             t.start();
 
             DAOReceta daoReceta = FactoriaDAO.getInstancia().creaDAOReceta();
-            List<TIngrediente> lista = daoReceta.listarIngredientes(idProducto);
+            List<TIngrediente> lista = daoReceta.listarIngredientesProducto(idProducto);
 
             t.commit();
             return lista;

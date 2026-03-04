@@ -10,6 +10,6 @@ public interface SAReceta {
 	
 	Integer desvincularIngredienteDeProducto(Integer idProducto, Integer idIngrediente);
 	
-	List<TIngrediente> listarIngredientesDeProducto(Integer idProducto);
+	List<TIngrediente> listarIngredientesProducto(Integer idProducto);
 
 }

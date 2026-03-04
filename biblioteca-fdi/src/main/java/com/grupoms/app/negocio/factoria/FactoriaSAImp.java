@@ -22,6 +22,8 @@ import com.grupoms.app.negocio.prestamoJPA.PrestamoSA;
 import com.grupoms.app.negocio.prestamoJPA.PrestamoSAImp;
 import com.grupoms.app.negocio.producto.SAProducto;
 import com.grupoms.app.negocio.producto.SAProductoImp;
+import com.grupoms.app.negocio.producto.SAReceta;
+import com.grupoms.app.negocio.producto.SARecetaImp;
 import com.grupoms.app.negocio.proveedor.SAProveedor;
 import com.grupoms.app.negocio.proveedor.SAProveedorImpl;
 import com.grupoms.app.negocio.salaJPA.SalaSA;
@@ -96,6 +98,11 @@ public class FactoriaSAImp extends FactoriaSA {
 	@Override
 	public SALineaPedido creaSALineaPedido() {
 		return new SALineaPedidoImp();
+	}
+
+	@Override
+	public SAReceta creaSAReceta() {
+		return new SARecetaImp();
 	}
 
 }

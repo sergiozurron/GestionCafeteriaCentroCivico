@@ -12,7 +12,6 @@ import com.grupoms.app.negocio.mesa.TMesaTerraza;
 
 public class DAOMesaImp implements DAOMesa {
 
-	// ¡Míralo! Adiós a los JOIN y a las tablas extra.
 	private static final String INSERT_MESA = "INSERT INTO mesas (numero, ubicacion, capacidad, activo, tipo, reservada, privacidad, cubierta, suplemento) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 	private static final String READ_BY_ID = "SELECT * FROM mesas WHERE id = ? FOR UPDATE";
 	private static final String ALL = "SELECT * FROM mesas";
@@ -20,7 +19,6 @@ public class DAOMesaImp implements DAOMesa {
 	private static final String DESACTIVAR_MESA = "UPDATE mesas SET activo = ? WHERE id = ?";
 	private static final String READ_BY_NUMERO = "SELECT * FROM mesas WHERE numero = ? FOR UPDATE";
 	
-	// Un solo UPDATE que machaca la fila entera y cambia el tipo sin problemas
 	private static final String UPDATE_MESA = "UPDATE mesas SET numero = ?, ubicacion = ?, capacidad = ?, activo = ?, tipo = ?, reservada = ?, privacidad = ?, cubierta = ?, suplemento = ? WHERE id = ?";
 
 	@Override
@@ -31,7 +29,7 @@ public class DAOMesaImp implements DAOMesa {
 			Connection c = (Connection) t.getResource();
 
 			try (PreparedStatement ps = c.prepareStatement(INSERT_MESA, Statement.RETURN_GENERATED_KEYS)) {
-				prepararStatementMesa(ps, mesa); // Usamos un método auxiliar para no repetir código
+				prepararStatementMesa(ps, mesa); 
 				ps.executeUpdate();
 
 				ResultSet rs = ps.getGeneratedKeys();
@@ -114,9 +112,9 @@ public class DAOMesaImp implements DAOMesa {
 
 			try (PreparedStatement ps = c.prepareStatement(UPDATE_MESA)) {
 				prepararStatementMesa(ps, mesa);
-				ps.setInt(10, mesa.getId()); // El parámetro 10 es el WHERE id = ?
+				ps.setInt(10, mesa.getId()); 
 				ps.executeUpdate();
-				ok = true; // Si no hay SQLException, el UPDATE fue bien
+				ok = true; 
 			}
 		} catch (SQLException e) {
 			throw new RuntimeException("Error en Integración actualizando mesa " + mesa.getId() + ": " + e.getMessage());
@@ -145,7 +143,6 @@ public class DAOMesaImp implements DAOMesa {
 		return mesaResult;
 	}
 
-	// --- MÉTODOS AUXILIARES PARA NO REPETIR CÓDIGO ---
 
 	private void prepararStatementMesa(PreparedStatement ps, TMesa mesa) throws SQLException {
 		ps.setInt(1, mesa.getNumero());
@@ -158,13 +155,13 @@ public class DAOMesaImp implements DAOMesa {
 			ps.setString(5, "Sala");
 			ps.setBoolean(6, sala.getReservada() != null ? sala.getReservada() : false);
 			ps.setString(7, sala.getPrivacidad());
-			ps.setNull(8, Types.BOOLEAN); // La sala no tiene cubierta
-			ps.setNull(9, Types.DECIMAL); // La sala no tiene suplemento
+			ps.setNull(8, Types.BOOLEAN); 
+			ps.setNull(9, Types.DECIMAL); 
 		} else if (mesa instanceof TMesaTerraza) {
 			TMesaTerraza terraza = (TMesaTerraza) mesa;
 			ps.setString(5, "Terraza");
-			ps.setNull(6, Types.BOOLEAN); // La terraza no se reserva igual
-			ps.setNull(7, Types.VARCHAR); // La terraza no tiene privacidad
+			ps.setNull(6, Types.BOOLEAN); 
+			ps.setNull(7, Types.VARCHAR); 
 			ps.setBoolean(8, terraza.getCubierta() != null ? terraza.getCubierta() : false);
 			ps.setDouble(9, terraza.getSuplemento() != null ? terraza.getSuplemento() : 0.0);
 		}
@@ -201,7 +198,7 @@ public class DAOMesaImp implements DAOMesa {
 	    List<TMesa> lista = new ArrayList<>();
 	    try {
 	        Transaction t = TransactionManager.getInstance().getTransaction();
-	        Connection c = (Connection) t.getResource(); // Correcto uso del recurso [cite: 295]
+	        Connection c = (Connection) t.getResource(); 
 
 	        try (PreparedStatement ps = c.prepareStatement(ALL_ACTIVAS)) {
 	            try (ResultSet rs = ps.executeQuery()) {

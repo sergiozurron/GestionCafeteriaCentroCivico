@@ -13,10 +13,15 @@ DROP TABLE IF EXISTS terrazas;
 
 CREATE TABLE mesas (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    numero INT NOT NULL UNIQUE,
+    numero INT NOT NULL,
     ubicacion VARCHAR(100),
     capacidad INT,
-    activo BOOLEAN NOT NULL
+    activo BOOLEAN NOT NULL,
+    tipo VARCHAR(20) NOT NULL,    
+    reservada BOOLEAN,            
+    privacidad VARCHAR(50),       
+    cubierta BOOLEAN,             
+    suplemento DECIMAL(10,2)      
 ) ENGINE=InnoDB;
 
 CREATE TABLE salas (

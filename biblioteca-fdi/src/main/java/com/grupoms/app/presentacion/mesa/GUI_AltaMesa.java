@@ -21,7 +21,7 @@ public class GUI_AltaMesa extends JFrame implements IGUI {
 	private JLabel lblPrivacidad, lblSuplemento;
 	private JTextField salaPrivacidad, terrazaSuplemento;
 	private JButton crear;
-	private ButtonGroup grupoTipo; // Lo subimos aquí para poder desmarcarlo
+	private ButtonGroup grupoTipo; 
 
 	public GUI_AltaMesa() {
 		super("Alta Mesa");
@@ -34,7 +34,7 @@ public class GUI_AltaMesa extends JFrame implements IGUI {
 	@Override
 	public void actualizar(Context context) {
 		if (context == null) {
-			limpiarCampos(); // <-- ¡Aquí pasamos la fregona antes de mostrarla!
+			limpiarCampos(); 
 			setVisible(true);
 			return;
 		}
@@ -49,8 +49,7 @@ public class GUI_AltaMesa extends JFrame implements IGUI {
 			}
 		});
 	}
-
-	// Método auxiliar para resetear todo a su estado original
+	
 	private void limpiarCampos() {
 		numero.setText("");
 		ubicacion.setText("");
@@ -66,7 +65,7 @@ public class GUI_AltaMesa extends JFrame implements IGUI {
 		
 		panelSala.setVisible(false);
 		panelTerraza.setVisible(false);
-		pack(); // Reajustamos el tamaño de la ventana
+		pack(); 
 	}
 
 	private void initGUI() {
@@ -85,7 +84,7 @@ public class GUI_AltaMesa extends JFrame implements IGUI {
 
 		rbtnSala = new JRadioButton("Sala");
 		rbtnTerraza = new JRadioButton("Terraza");
-		grupoTipo = new ButtonGroup(); // Ya no creamos una variable local, usamos el atributo
+		grupoTipo = new ButtonGroup(); 
 		grupoTipo.add(rbtnSala);
 		grupoTipo.add(rbtnTerraza);
 

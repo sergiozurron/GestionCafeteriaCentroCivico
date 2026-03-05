@@ -52,15 +52,15 @@ public class GUI_ListarMesa extends JFrame implements IGUI {
 				listaMesas = (List<TMesa>) context.getDatos();
 				actualizarTabla();
 			} else if (context.getEvento() == Evento.MOSTRAR_LISTA_MESA_KO) {
-				// 1. Vaciamos la tabla para que no sea confuso si había datos antes
+				
 				if (modeloTabla != null) {
 					modeloTabla.setRowCount(0);
 				}
 				
-				// 2. Extraemos el mensaje que mandó el SA ("No hay mesas activas en la base de datos")
+				
 				String mensaje = context.getDatos() != null ? context.getDatos().toString() : "No hay mesas activas.";
 				
-				// 3. Mostramos un mensaje informativo (y no un error crítico)
+				
 				JOptionPane.showMessageDialog(this, mensaje, "Información", JOptionPane.INFORMATION_MESSAGE);
 			}
 		});
@@ -74,7 +74,7 @@ public class GUI_ListarMesa extends JFrame implements IGUI {
 		gbc.insets = new Insets(5, 5, 5, 5);
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 
-		// --- BOTÓN: Cargar Mesas ---
+		
 		btnCargar = new JButton("Cargar Mesas");
 		btnCargar.addActionListener(e -> {
 			Controlador.getInstance().handle(new Context(Evento.MOSTRAR_LISTA_MESA, null));
@@ -83,7 +83,7 @@ public class GUI_ListarMesa extends JFrame implements IGUI {
 		gbc.gridy = 0;
 		panelSuperior.add(btnCargar, gbc);
 
-		// --- BOTÓN: Cerrar ---
+		
 		btnCerrar = new JButton("Cerrar");
 		btnCerrar.addActionListener(e -> dispose());
 		gbc.gridx = 1;
@@ -111,11 +111,11 @@ public class GUI_ListarMesa extends JFrame implements IGUI {
 		modeloTabla.setRowCount(0);
 
 		if (listaMesas == null || listaMesas.isEmpty()) {
-			return; // La tabla ya está vacía, no hacemos nada más
+			return; 
 		}
 
 		for (TMesa mesa : listaMesas) {
-			// Determinamos el tipo de forma robusta
+			
 			String tipo = "Desconocido";
 			if (mesa instanceof TMesaSala) {
 				tipo = "Sala";

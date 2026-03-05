@@ -43,7 +43,7 @@ public class GUI_BajaMesa extends JFrame implements IGUI {
 		SwingUtilities.invokeLater(() -> {
 			if (context.getEvento() == Evento.BAJA_MESA_OK) {
 				JOptionPane.showMessageDialog(this, "Mesa dada de baja con éxito", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-				// Cerramos la ventana al terminar con éxito
+				
 				dispose();
 			} else if (context.getEvento() == Evento.BAJA_MESA_KO) {
 				String mensaje = context.getDatos() != null ? context.getDatos().toString() : "Error al dar de baja la mesa";
@@ -71,12 +71,7 @@ public class GUI_BajaMesa extends JFrame implements IGUI {
 					JOptionPane.showMessageDialog(this, "El ID debe ser mayor que 0");
 					return;
 				}
-
-				/* * Usamos TMesaSala (o TMesa si tu clase no es abstracta) únicamente
-				 * como DTO (Data Transfer Object) para transportar el ID hacia el SA.
-				 * El tipo real no importa porque el DAO solo necesita el ID para hacer
-				 * el UPDATE en la tabla principal.
-				 */
+				
 				TMesa mesaTransporte = new TMesaSala();
 				mesaTransporte.setId(id);
 

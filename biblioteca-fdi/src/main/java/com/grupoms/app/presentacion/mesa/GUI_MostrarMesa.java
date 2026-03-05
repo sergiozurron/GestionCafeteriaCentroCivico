@@ -52,12 +52,17 @@ public class GUI_MostrarMesa extends JFrame implements IGUI {
 				if (mesa != null) {
 					actualizarTabla(mesa);
 				} else {
-					JOptionPane.showMessageDialog(this, "Mesa no encontrada en la base de datos.", "Aviso", JOptionPane.WARNING_MESSAGE);
 					modeloTabla.setRowCount(0);
+					JOptionPane.showMessageDialog(this, "No hay mesas activas con ese ID.", "Aviso", JOptionPane.WARNING_MESSAGE);
 				}
 			} else if (context.getEvento() == Evento.MOSTRAR_MESA_KO) {
-				JOptionPane.showMessageDialog(this, "Error al mostrar la mesa", "Error", JOptionPane.ERROR_MESSAGE);
 				modeloTabla.setRowCount(0);
+
+				String mensajeError = (context.getDatos() instanceof String) 
+										? (String) context.getDatos() 
+										: "No hay mesas activas con ese ID.";
+				
+				JOptionPane.showMessageDialog(this, mensajeError, "Aviso", JOptionPane.WARNING_MESSAGE);
 			}
 		});
 	}
@@ -83,7 +88,6 @@ public class GUI_MostrarMesa extends JFrame implements IGUI {
 					return;
 				}
 
-				// Ya no pasamos un objeto vacío, pasamos directamente el ID Integer
 				Context contexto = new Context(Evento.MOSTRAR_MESA, id);
 				Controlador.getInstance().handle(contexto);
 
@@ -126,7 +130,7 @@ public class GUI_MostrarMesa extends JFrame implements IGUI {
 		modeloTabla.setRowCount(0);
 
 		if (mesa != null) {
-			// Determinamos el tipo usando instanceof en lugar de depender de un String
+			
 			String tipo = "Desconocido";
 			if (mesa instanceof TMesaSala) {
 				tipo = "Sala";

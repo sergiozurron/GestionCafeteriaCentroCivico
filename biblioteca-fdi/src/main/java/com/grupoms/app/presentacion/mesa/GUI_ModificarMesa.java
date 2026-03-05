@@ -40,10 +40,10 @@ public class GUI_ModificarMesa extends JFrame implements IGUI {
 		SwingUtilities.invokeLater(() -> {
 			if (context.getEvento() == Evento.MODIFICAR_MESA_OK) {
 				JOptionPane.showMessageDialog(this, "Mesa modificada con éxito", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-				// Cerramos la ventana al terminar con éxito
+				
 				dispose();
 			} else if (context.getEvento() == Evento.MODIFICAR_MESA_KO) {
-				// Mostramos el mensaje de error de negocio
+				
 				String mensaje = context.getDatos() != null ? context.getDatos().toString() : "Error al modificar la mesa";
 				JOptionPane.showMessageDialog(this, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
 			}
@@ -146,11 +146,11 @@ public class GUI_ModificarMesa extends JFrame implements IGUI {
 				}
 
 				try {
-					// Lanzamos la orden al controlador
+					
 					Controlador.getInstance().handle(contexto);
 				} catch (Exception ex) {
-					// RED DE SEGURIDAD: Si el SA lanza una excepción (como la del número repetido)
-					// y el Comando no la atrapa, la atrapamos aquí en la vista.
+					
+					
 					actualizar(new Context(Evento.MODIFICAR_MESA_KO, ex.getMessage()));
 				}
 

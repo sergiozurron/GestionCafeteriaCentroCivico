@@ -16,12 +16,7 @@ CREATE TABLE mesas (
     numero INT NOT NULL,
     ubicacion VARCHAR(100),
     capacidad INT,
-    activo BOOLEAN NOT NULL,
-    tipo VARCHAR(20) NOT NULL,    
-    reservada BOOLEAN,            
-    privacidad VARCHAR(50),       
-    cubierta BOOLEAN,             
-    suplemento DECIMAL(10,2)      
+    activo BOOLEAN NOT NULL   
 ) ENGINE=InnoDB;
 
 CREATE TABLE salas (

@@ -85,12 +85,11 @@ public class GUI_MostrarPedidosEmpleado extends JFrame implements IGUI {
 			modeloTabla.setRowCount(0);
 			List<TPedido> pedidos = (List<TPedido>) context.getDatos();
 
-			if (pedidos == null || pedidos.isEmpty()) {
-				JOptionPane.showMessageDialog(this, "No hay pedidos para este empleado.", "Información",
+			if (pedidos.isEmpty() || pedidos == null) {
+				JOptionPane.showMessageDialog(this, "No hay pedidos para este empleado. Compruebe el id del empleado.", "Información",
 						JOptionPane.INFORMATION_MESSAGE);
 				return;
 			}
-
 			for (TPedido pedido : pedidos) {
 				Object[] fila = {
 						pedido.getId() != null ? pedido.getId() : "N/A",

@@ -135,11 +135,11 @@ public class GUI_VincularProductoPedido extends JFrame implements IGUI {
 				break;
 			case -3:
 				JOptionPane.showMessageDialog(this,
-						"El pedido está cerrado");
+						"El pedido ya está cerrado");
 				break;
 			case -4:
 				JOptionPane.showMessageDialog(this,
-						"Cantidad inválida");
+						"No hay stock suficiente");
 				break;
 			default:
 				JOptionPane.showMessageDialog(this,

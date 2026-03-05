@@ -12,18 +12,18 @@ import com.grupoms.app.presentacion.controlador.Evento;
 
 public class GUI_ProductosPorProveedor extends JFrame implements IGUI {
 
-    /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	private JTextField campoIdProveedor;
-    private JButton buscar;
+    private static final long serialVersionUID = 1L;
+
+    private JTextField campoIdProveedor;
+    private JButton botonBuscar;
+    private JTable tabla;
+    private JScrollPane scrollTabla;
 
     public GUI_ProductosPorProveedor() {
-        super("Mostrar Productos por Proveedor");
+        super("Productos por Proveedor");
         initGUI();
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        pack();
+        setSize(900, 500);
         setLocationRelativeTo(null);
     }
 
@@ -31,34 +31,28 @@ public class GUI_ProductosPorProveedor extends JFrame implements IGUI {
 
         setLayout(new BorderLayout());
 
-        JPanel panel = new JPanel(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(5,5,5,5);
-        gbc.fill = GridBagConstraints.HORIZONTAL;
+        // Panel superior con el campo y el botón
+        JPanel panelSuperior = new JPanel(new FlowLayout());
 
         JLabel labelId = new JLabel("ID Proveedor:");
         campoIdProveedor = new JTextField(10);
 
-        buscar = new JButton("Buscar");
-        buscar.addActionListener(e -> buscarProductos());
+        botonBuscar = new JButton("Buscar");
+        botonBuscar.addActionListener(e -> buscarProductos());
 
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        panel.add(labelId, gbc);
+        panelSuperior.add(labelId);
+        panelSuperior.add(campoIdProveedor);
+        panelSuperior.add(botonBuscar);
 
-        gbc.gridx = 1;
-        panel.add(campoIdProveedor, gbc);
+        add(panelSuperior, BorderLayout.NORTH);
 
-        gbc.gridx = 0;
-        gbc.gridy = 1;
-        gbc.gridwidth = 2;
-        panel.add(buscar, gbc);
-
-        add(panel, BorderLayout.CENTER);
+        // Tabla vacía inicial
+        tabla = new JTable();
+        scrollTabla = new JScrollPane(tabla);
+        add(scrollTabla, BorderLayout.CENTER);
     }
 
     private void buscarProductos() {
-
         try {
             Integer idProveedor = Integer.parseInt(campoIdProveedor.getText());
 
@@ -80,10 +74,12 @@ public class GUI_ProductosPorProveedor extends JFrame implements IGUI {
     @Override
     public void actualizar(Context context) {
 
-        if (context == null)
+        if (context == null) {
             setVisible(true);
+            return;
+        }
 
-        else if (context.getEvento() == Evento.MOSTRAR_PRODUCTOS_POR_PROVEEDOR_OK) {
+        if (context.getEvento() == Evento.MOSTRAR_PRODUCTOS_POR_PROVEEDOR_OK) {
 
             @SuppressWarnings("unchecked")
             List<TProducto> productos = (List<TProducto>) context.getDatos();
@@ -93,35 +89,43 @@ public class GUI_ProductosPorProveedor extends JFrame implements IGUI {
                         "No hay productos para ese proveedor",
                         "Información",
                         JOptionPane.INFORMATION_MESSAGE);
-            } else {
+                return;
+            }
 
-                for (TProducto producto : productos) {
+            // Columnas de la tabla
+            String[] columnas = {
+                    "ID", "Nombre", "Precio", "Stock", "Tipo",
+                    "Activo", "Tamaño", "Tiempo Prep.", "Calorías"
+            };
 
-                    String info = "ID: " + producto.getId() + "\n"
-                            + "Nombre: " + producto.getNombre() + "\n"
-                            + "Precio: " + producto.getPrecio() + "\n"
-                            + "Stock: " + producto.getStock() + "\n"
-                            + "Tipo: " + producto.getTipo() + "\n"
-                            + "Activo: " + (producto.getActivo() ? "Sí" : "No");
+            // Datos de la tabla
+            Object[][] datos = new Object[productos.size()][columnas.length];
 
-                    if (producto.getTipo().equals("Bebida")) {
-                        info += "\nTamaño: " + producto.getTamanho();
-                    } 
-                    else if (producto.getTipo().equals("Comida")) {
-                        info += "\nTiempo de Preparación: "
-                                + producto.getTiempoPreparacion()
-                                + "\nCalorías: " + producto.getCalorias();
-                    }
+            for (int i = 0; i < productos.size(); i++) {
+                TProducto p = productos.get(i);
 
-                    JOptionPane.showMessageDialog(this,
-                            info,
-                            "Información del Producto",
-                            JOptionPane.INFORMATION_MESSAGE);
+                datos[i][0] = p.getId();
+                datos[i][1] = p.getNombre();
+                datos[i][2] = p.getPrecio();
+                datos[i][3] = p.getStock();
+                datos[i][4] = p.getTipo();
+                datos[i][5] = p.getActivo() ? "Sí" : "No";
+
+                if (p.getTipo().equals("Bebida")) {
+                    datos[i][6] = p.getTamanho();
+                    datos[i][7] = "-";
+                    datos[i][8] = "-";
+                } else {
+                    datos[i][6] = "-";
+                    datos[i][7] = p.getTiempoPreparacion();
+                    datos[i][8] = p.getCalorias();
                 }
             }
-        }
 
-        else if (context.getEvento() == Evento.MOSTRAR_PRODUCTOS_POR_PROVEEDOR_KO) {
+            // Actualizar tabla
+            tabla.setModel(new javax.swing.table.DefaultTableModel(datos, columnas));
+
+        } else if (context.getEvento() == Evento.MOSTRAR_PRODUCTOS_POR_PROVEEDOR_KO) {
 
             JOptionPane.showMessageDialog(this,
                     "No se pudieron obtener los productos",

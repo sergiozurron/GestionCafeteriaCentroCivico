@@ -172,6 +172,7 @@ public class GUI_MostrarPedido extends JFrame implements IGUI {
                 limpiarLabels();
             }
         });
+        limpiarLabels();
     }
 
     private void limpiarLabels() {

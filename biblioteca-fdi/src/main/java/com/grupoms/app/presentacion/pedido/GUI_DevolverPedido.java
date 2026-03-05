@@ -28,7 +28,7 @@ public class GUI_DevolverPedido extends JFrame implements IGUI {
 	    } 
 	    else if (context.getEvento() == Evento.DEVOLVER_PEDIDO_KO) {
 	        JOptionPane.showMessageDialog(this,
-	            "No se ha podido devolver el pedido",
+	            "El pedido no existe o ya esta devuelto",
 	            "Error",
 	            JOptionPane.ERROR_MESSAGE);
 	    }

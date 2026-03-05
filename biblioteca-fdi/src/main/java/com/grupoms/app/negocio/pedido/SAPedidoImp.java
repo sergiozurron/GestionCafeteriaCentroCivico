@@ -16,35 +16,73 @@ import com.grupoms.app.negocio.mesa.TMesa;
 import com.grupoms.app.negocio.producto.TProducto;
 
 public class SAPedidoImp implements SAPedido {
-
 	@Override
 	public Boolean modificarPedido(TPedido pedido) {
-		Transaction t = TransactionManager.getInstance().newTransaction();
-		try { 
-			t.start(); 
-			DAOPedido dao = FactoriaDAO.getInstancia().creaDAOPedido(); 
-			// 1. Leer el pedido actual desde BD con FOR UPDATE 
-			TPedido pedidoBD = dao.mostrarPedido(pedido.getId()); 
-			if (pedidoBD == null || !pedidoBD.getActivo()) { 
-				t.commit(); 
-				return false; // no existe o está dado de baja 
-			} // 2. Actualizar los campos permitidos 
-			pedidoBD.setFecha(pedido.getFecha()); 
-			pedidoBD.setEstado(pedido.getEstado()); 
-			pedidoBD.setIdEmpleado(pedido.getIdEmpleado()); 
-			pedidoBD.setIdMesa(pedido.getIdMesa()); 
-			pedidoBD.setTotal(pedido.getTotal()); // si lo permitís modificar 
-			// 3. Guardar cambios 
-			dao.modificarPedido(pedidoBD); 
-			t.commit(); 
-			return true; 
-			} catch (Exception e) { 
-				if (t != null) 
-					t.rollback(); 
-				e.printStackTrace(); 
-				return false;
-			}
+	    Transaction t = TransactionManager.getInstance().newTransaction();
+	    try { 
+	        t.start(); 
+	        DAOPedido dao = FactoriaDAO.getInstancia().creaDAOPedido(); 
+	        DAOEmpleado daoEmpleado = FactoriaDAO.getInstancia().creaDAOEmpleado();
+	        DAOMesa daoMesa = FactoriaDAO.getInstancia().creaDAOMesa();
+
+	        // 1. Leer el pedido original
+	        TPedido pedidoBD = dao.mostrarPedido(pedido.getId()); 
+	        if (pedidoBD == null || !pedidoBD.getActivo()) { 
+	            t.rollback(); 
+	            return false;
+	        }
+
+	        // 2. Validar empleado SOLO si el usuario quiere cambiarlo
+	        if (pedido.getIdEmpleado() != null) {
+	            TEmpleado empleado = daoEmpleado.mostrarEmpleado(pedido.getIdEmpleado());
+	            if (empleado == null || !empleado.getActivo()) {
+	                t.rollback();
+	                return false;
+	            }
+	        }
+
+	        // 3. Validar mesa SOLO si el usuario quiere cambiarla
+	        if (pedido.getIdMesa() != null) {
+	            TMesa mesa = daoMesa.mostrarMesa(pedido.getIdMesa());
+	            if (mesa == null || !mesa.getActivo()) {
+	                t.rollback();
+	                return false;
+	            }
+	        }
+
+	        // 4. Actualizar solo los campos rellenados
+	        if (pedido.getFecha() != null)
+	            pedidoBD.setFecha(pedido.getFecha());
+
+	        if (pedido.getEstado() != null)
+	            pedidoBD.setEstado(pedido.getEstado());
+
+	        if (pedido.getIdEmpleado() != null)
+	            pedidoBD.setIdEmpleado(pedido.getIdEmpleado());
+
+	        if (pedido.getIdMesa() != null)
+	            pedidoBD.setIdMesa(pedido.getIdMesa());
+
+	        if (pedido.getTotal() != null)
+	            pedidoBD.setTotal(pedido.getTotal());
+
+	        if (pedido.getActivo() != null)
+	            pedidoBD.setActivo(pedido.getActivo());
+
+	        // 5. Guardar cambios
+	        dao.modificarPedido(pedidoBD);
+	        t.commit(); 
+	        return true; 
+
+	    } catch (Exception e) { 
+	        if (t != null) t.rollback(); 
+	        e.printStackTrace(); 
+	        return false;
+	    }
 	}
+
+
+
 
 	@Override
 	public Integer altaPedido(TPedido pedido) {
@@ -62,13 +100,13 @@ public class SAPedidoImp implements SAPedido {
 	        TEmpleado empleado = daoEmpleado.mostrarEmpleado(pedido.getIdEmpleado());
 	        TMesa mesa = daoMesa.mostrarMesa(pedido.getIdMesa());
 
-	        // 1️ Comprobar empleado
 	        if (empleado == null || !empleado.getActivo()) {
+	            t.rollback();
 	            return -1;
 	        }
 
-	        // 2️ Comprobar mesa
 	        if (mesa == null || !mesa.getActivo()) {
+	            t.rollback();
 	            return -2;
 	        }
 
@@ -101,7 +139,7 @@ public class SAPedidoImp implements SAPedido {
 			
 			TPedido pedido = daoPedido.mostrarPedido(idPedido);
 			
-			if(pedido == null || !pedido.getActivo()) {
+			if(pedido == null) {
 				t.commit();
 				return null;
 			}
@@ -178,32 +216,37 @@ public class SAPedidoImp implements SAPedido {
 			return null;
 		}
 	}
-
 	@Override
 	public Boolean devolverPedido(Integer idPedido) {
-		Transaction t = TransactionManager.getInstance().newTransaction(); 
-		try { 
-			t.start(); 
-			DAOPedido daoPedido = FactoriaDAO.getInstancia().creaDAOPedido(); 
-			DAOLineaPedido daoLinea = FactoriaDAO.getInstancia().creaDAOLineaPedido(); // 1. Leer el pedido con FOR UPDATE 
-			TPedido pedido = daoPedido.mostrarPedido(idPedido); // este método debe llevar FOR UPDATE 
-			if (pedido == null || !pedido.getActivo()) { 
-				t.commit(); 
-				return false; // no existe o ya está dado de baja 
-			} 
-			// 2. Dar de baja lógica al pedido 
-			daoPedido.devolverPedido(pedido.getId()); 
-			
-			t.commit();
-			return true;
-		} catch (Exception e) { 
-			if (t != null) 
-				t.rollback(); 
-			e.printStackTrace(); 
-			return false; 
-		}
-		
+	    Transaction t = TransactionManager.getInstance().newTransaction();
+	    try {
+	        t.start();
+
+	        DAOPedido daoPedido = FactoriaDAO.getInstancia().creaDAOPedido();
+
+	        // 1. BUSCAR
+	        TPedido pedido = daoPedido.mostrarPedido(idPedido);
+	        if (pedido == null || !pedido.getActivo()) {
+	            t.rollback();
+	            return false;
+	        }
+
+	        // 2.ESTADO Y BAJA
+	        pedido.setEstado("DEVUELTO");
+	        pedido.setActivo(false);
+
+	        daoPedido.devolverPedido(pedido.getId());
+
+	        t.commit();
+	        return true;
+
+	    } catch (Exception e) {
+	        if (t != null) t.rollback();
+	        e.printStackTrace();
+	        return false;
+	    }
 	}
+
 
 	@Override
 	public TPedido cerrarPedido(Integer idPedido) {

@@ -23,7 +23,7 @@ public class AltaPedidoCommand implements Command {
 				pedido.setId(idGenerado);
 				return new Context(Evento.ALTA_PEDIDO_OK, idGenerado);
 			} else {
-				return new Context(Evento.ALTA_PEDIDO_KO, null);
+				return new Context(Evento.ALTA_PEDIDO_KO, idGenerado);
 			}
 
 		} catch (IllegalArgumentException e) {

@@ -33,7 +33,7 @@ public class DAOPedidoImp implements DAOPedido {
 			} catch (Exception e) { 
 				e.printStackTrace(); 
 				return false; 
-				}
+			}
 	}
 
 	@Override
@@ -98,34 +98,39 @@ public class DAOPedidoImp implements DAOPedido {
 
 	@Override
 	public Boolean devolverPedido(Integer idPedido) {
-		try { 
-			Transaction t = TransactionManager.getInstance().getTransaction(); 
-			if (t == null) 
-				throw new IllegalStateException("No hay transacción activa"); 
-			Connection c = (Connection) t.getResource(); 
-			// 1. Bloquear el pedido para modificarlo 
-			String sqlSelect = "SELECT id FROM pedidos WHERE id = ? AND activo = TRUE FOR UPDATE"; 
-			try (PreparedStatement ps = c.prepareStatement(sqlSelect)) { 
-				ps.setInt(1, idPedido); 
-				try (ResultSet rs = ps.executeQuery()) { 
-					if (!rs.next()) { 
-						return false; // no existe o ya está dado de baja 
-						} 
-					} 
-				} 
-			// 2. Dar de baja lógica al pedido 
-			String sqlUpdate = "UPDATE pedidos SET activo = FALSE WHERE id = ?"; 
-			try (PreparedStatement ps = c.prepareStatement(sqlUpdate)) { 
-				ps.setInt(1, idPedido); 
-				ps.executeUpdate(); 
-				} 
-			return true; 
-			
-			} catch (Exception e) { 
-				e.printStackTrace(); 
-				return false; 
-			}
+	    try { 
+	        Transaction t = TransactionManager.getInstance().getTransaction(); 
+	        if (t == null) 
+	            throw new IllegalStateException("No hay transacción activa"); 
+
+	        Connection c = (Connection) t.getResource(); 
+
+	        // 1. Bloquear el pedido para modificarlo
+	        String sqlSelect = "SELECT id FROM pedidos WHERE id = ? AND activo = TRUE FOR UPDATE"; 
+	        try (PreparedStatement ps = c.prepareStatement(sqlSelect)) { 
+	            ps.setInt(1, idPedido); 
+	            try (ResultSet rs = ps.executeQuery()) { 
+	                if (!rs.next()) { 
+	                    return false; // no existe o ya está dado de baja 
+	                } 
+	            } 
+	        }
+
+	        // 2. Cambiar estado y dar de baja lógica
+	        String sqlUpdate = "UPDATE pedidos SET estado = 'DEVUELTO', activo = FALSE WHERE id = ?"; 
+	        try (PreparedStatement ps = c.prepareStatement(sqlUpdate)) { 
+	            ps.setInt(1, idPedido); 
+	            ps.executeUpdate(); 
+	        } 
+
+	        return true; 
+
+	    } catch (Exception e) { 
+	        e.printStackTrace(); 
+	        return false; 
+	    }
 	}
+
 
 	@Override
 	public List<TPedido> mostrarPedidosPorEmpleado(Integer idEmpleado) {

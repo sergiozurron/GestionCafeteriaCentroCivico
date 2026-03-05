@@ -140,26 +140,13 @@ public class GUI_ModificarPedido extends JFrame implements IGUI {
 			break;
 
 		case Evento.MODIFICAR_PEDIDO_KO:
-			int error = (int) context.getDatos();
-
-			switch (error) {
-			case -1:
-				JOptionPane.showMessageDialog(this,
-						"El pedido no existe",
-						"Error", JOptionPane.ERROR_MESSAGE);
-				break;
-			case -2:
-				JOptionPane.showMessageDialog(this,
-						"No se puede modificar un pedido cerrado",
-						"Error", JOptionPane.ERROR_MESSAGE);
-				break;
-			default:
-				JOptionPane.showMessageDialog(this,
-						"Error desconocido",
-						"Error", JOptionPane.ERROR_MESSAGE);
-			}
-			break;
+		    JOptionPane.showMessageDialog(this,
+		        "Error modificando el pedido. Revise que los IDs existen y están activos.",
+		        "Error",
+		        JOptionPane.ERROR_MESSAGE);
+		    break;
 		}
+		limpiarCampos();
 	}
 
 	private void limpiarCampos() {

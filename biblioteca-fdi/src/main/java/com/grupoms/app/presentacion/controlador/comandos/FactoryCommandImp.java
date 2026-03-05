@@ -238,6 +238,7 @@ public class FactoryCommandImp extends FactoryCommand {
 		views.put(Evento.BAJA_PRODUCTO, FactoriaVistas.GUI_BAJA_PRODUCTO);
 		views.put(Evento.MODIFICAR_PRODUCTO, FactoriaVistas.GUI_MODIFICAR_PRODUCTO);
 		views.put(Evento.MOSTRAR_PRODUCTO, FactoriaVistas.GUI_MOSTRAR_PRODUCTO);
+		views.put(Evento.MOSTRAR_PRODUCTOS_POR_PROVEEDOR,FactoriaVistas.GUI_PRODUCTOS_POR_PROVEEDOR);
 		views.put(Evento.MOSTRAR_LISTA_PRODUCTO, FactoriaVistas.GUI_LISTAR_PRODUCTOS);
 		views.put(Evento.VINCULAR_PRODUCTO_INGREDIENTE,FactoriaVistas.GUI_VINCULAR_PRODUCTO_INGREDIENTE);
 		views.put(Evento.DESVINCULAR_PRODUCTO_INGREDIENTE,FactoriaVistas.GUI_DESVINCULAR_PRODUCTO_INGREDIENTE);

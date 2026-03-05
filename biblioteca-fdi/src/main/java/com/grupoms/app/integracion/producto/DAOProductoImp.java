@@ -31,8 +31,12 @@ public class DAOProductoImp implements DAOProducto {
     	"LEFT JOIN bebidas b ON p.id = b.id";
 	private static final String DELETE_PRODUCTO = "DELETE FROM productos";
 	private static final String PRODUCTOS_POR_PROVEEDOR =
-		    "SELECT DISTINCT p.* " +
+		    "SELECT DISTINCT p.*, " +
+		    "c.calorias, c.tiempo_preparacion, " +
+		    "b.tamaño " +
 		    "FROM productos p " +
+		    "LEFT JOIN comidas c ON p.id = c.id " +
+		    "LEFT JOIN bebidas b ON p.id = b.id " +
 		    "JOIN entradas_recetas er ON p.id = er.producto_id " +
 		    "JOIN ingredientes i ON er.ingrediente_id = i.id " +
 		    "WHERE i.proveedor_id = ?";
@@ -256,6 +260,56 @@ public Boolean modificarProducto(TProducto producto) {
 	}
 
 	@Override
+	public List<TProducto> mostrarListaProductos() {
+
+	    List<TProducto> listaProductos = new ArrayList<>();
+
+	    try {
+	        Transaction t = TransactionManager.getInstance().getTransaction();
+	        Connection c = (Connection) t.getResource();
+
+	        try (PreparedStatement ps = c.prepareStatement(ALL);
+	             ResultSet rs = ps.executeQuery()) {
+
+	            while (rs.next()) {
+
+	                TProducto producto = null;
+
+	                if (rs.getObject("calorias") != null) {
+
+	                    TComida comida = new TComida();
+	                    comida.setTiempoPreparacion(rs.getInt("tiempo_preparacion"));
+	                    comida.setCalorias(rs.getInt("calorias"));
+	                    producto = comida;
+
+	                } else if (rs.getObject("tamaño") != null) {
+
+	                    TBebida bebida = new TBebida();
+	                    bebida.setTamanho(rs.getInt("tamaño"));
+	                    producto = bebida;
+
+	                } else {
+	                    continue;
+	                }
+
+	                producto.setId(rs.getInt("id"));
+	                producto.setNombre(rs.getString("nombre"));
+	                producto.setPrecio(rs.getDouble("precio"));
+	                producto.setStock(rs.getInt("stock"));
+	                producto.setActivo(rs.getBoolean("activo"));
+
+	                listaProductos.add(producto);
+	            }
+	        }
+
+	    } catch (SQLException e) {
+	        System.err.println("Error mostrando lista de productos: " + e.getMessage());
+	    }
+
+	    return listaProductos;
+	}
+
+	@Override
 	public void eliminaTodas() {
 		try {
 			Transaction t = TransactionManager.getInstance().getTransaction();
@@ -269,56 +323,7 @@ public Boolean modificarProducto(TProducto producto) {
 			System.err.println("Error eliminando todos los productos: " + e.getMessage());
 		}
 	}
-	
-	@Override
-	public List<TProducto> mostrarProductosPorProveedor(Integer idProveedor) {
 
-	    List<TProducto> listaProductos = new ArrayList<>();
-
-	    try {
-	        Transaction t = TransactionManager.getInstance().getTransaction();
-	        Connection c = (Connection) t.getResource();
-
-	        try (PreparedStatement ps = c.prepareStatement(PRODUCTOS_POR_PROVEEDOR)) {
-
-	            ps.setInt(1, idProveedor);
-
-	            try (ResultSet rs = ps.executeQuery()) {
-
-	                while (rs.next()) {
-
-	                    TProducto producto;
-	                    String tipo = rs.getString("tipo");
-
-	                    if ("Bebida".equals(tipo)) {
-	                        TBebida bebida = new TBebida();
-	                        bebida.setTamanho(rs.getInt("tamanho"));
-	                        producto = bebida;
-	                    } 
-	                    else {
-	                        TComida comida = new TComida();
-	                        comida.setTiempoPreparacion(rs.getInt("tiempo_preparacion"));
-	                        comida.setCalorias(rs.getInt("calorias"));
-	                        producto = comida;
-	                    }
-
-	                    producto.setId(rs.getInt("id"));
-	                    producto.setNombre(rs.getString("nombre"));
-	                    producto.setPrecio(rs.getDouble("precio"));
-	                    producto.setStock(rs.getInt("stock"));
-	                    producto.setActivo(rs.getBoolean("activo"));
-
-	                    listaProductos.add(producto);
-	                }
-	            }
-	        }
-
-	    } catch (SQLException e) {
-	        System.err.println("Error mostrando productos por proveedor: " + e.getMessage());
-	    }
-
-	    return listaProductos;
-	}
 
 	private Connection getConnection() throws SQLException {
 		Transaction tx = getTransaction();

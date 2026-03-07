@@ -31,7 +31,6 @@ public class GUI_ProductosPorProveedor extends JFrame implements IGUI {
 
         setLayout(new BorderLayout());
 
-        // Panel superior con el campo y el botón
         JPanel panelSuperior = new JPanel(new FlowLayout());
 
         JLabel labelId = new JLabel("ID Proveedor:");
@@ -46,7 +45,6 @@ public class GUI_ProductosPorProveedor extends JFrame implements IGUI {
 
         add(panelSuperior, BorderLayout.NORTH);
 
-        // Tabla vacía inicial
         tabla = new JTable();
         scrollTabla = new JScrollPane(tabla);
         add(scrollTabla, BorderLayout.CENTER);
@@ -92,13 +90,11 @@ public class GUI_ProductosPorProveedor extends JFrame implements IGUI {
                 return;
             }
 
-            // Columnas de la tabla
             String[] columnas = {
                     "ID", "Nombre", "Precio", "Stock", "Tipo",
                     "Activo", "Tamaño", "Tiempo Prep.", "Calorías"
             };
 
-            // Datos de la tabla
             Object[][] datos = new Object[productos.size()][columnas.length];
 
             for (int i = 0; i < productos.size(); i++) {
@@ -122,7 +118,6 @@ public class GUI_ProductosPorProveedor extends JFrame implements IGUI {
                 }
             }
 
-            // Actualizar tabla
             tabla.setModel(new javax.swing.table.DefaultTableModel(datos, columnas));
 
         } else if (context.getEvento() == Evento.MOSTRAR_PRODUCTOS_POR_PROVEEDOR_KO) {

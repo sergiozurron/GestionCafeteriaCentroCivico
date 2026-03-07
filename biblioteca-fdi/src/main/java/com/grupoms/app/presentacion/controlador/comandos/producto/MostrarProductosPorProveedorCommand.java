@@ -14,7 +14,7 @@ public class MostrarProductosPorProveedorCommand implements Command {
     @Override
     public Context execute(Object data) {
         if (!(data instanceof Integer)) {
-            return new Context(Evento.MOSTRAR_LISTA_PRODUCTO_KO, null);
+            return new Context(Evento.MOSTRAR_PRODUCTOS_POR_PROVEEDOR_KO, null);
         }
 
         Integer idProveedor = (Integer) data;
@@ -23,13 +23,13 @@ public class MostrarProductosPorProveedorCommand implements Command {
         try {
             List<TProducto> productos = saProducto.mostrarProductosPorProveedor(idProveedor);
             if (productos != null && !productos.isEmpty()) {
-                return new Context(Evento.MOSTRAR_LISTA_PRODUCTO_OK, productos);
+                return new Context(Evento.MOSTRAR_PRODUCTOS_POR_PROVEEDOR_OK, productos);
             } else {
-                return new Context(Evento.MOSTRAR_LISTA_PRODUCTO_OK, productos);
+                return new Context(Evento.MOSTRAR_PRODUCTOS_POR_PROVEEDOR_OK, productos);
             }
         } catch (Exception e) {
             e.printStackTrace();
-            return new Context(Evento.MOSTRAR_LISTA_PRODUCTO_KO, null);
+            return new Context(Evento.MOSTRAR_PRODUCTOS_POR_PROVEEDOR_KO, null);
         }
     }
 }

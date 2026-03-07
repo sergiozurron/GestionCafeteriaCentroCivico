@@ -13,6 +13,7 @@ import com.grupoms.app.integracion.DBConfig;
 import com.grupoms.app.integracion.Transaction.Transaction;
 import com.grupoms.app.integracion.Transaction.TransactionManager;
 import com.grupoms.app.negocio.ingrediente.TIngrediente;
+import com.grupoms.app.negocio.producto.TEntradaReceta;
 
 public class DAOIngredienteImp implements DAOIngrediente {
 
@@ -186,35 +187,44 @@ public class DAOIngredienteImp implements DAOIngrediente {
 
 
 	@Override
-	public List<TIngrediente> listarIngredientesPorProducto(Integer idProducto){
-		 List<TIngrediente> lista = new ArrayList<>();
-	        try {
-	            Transaction t = TransactionManager.getInstance().getTransaction();
-	            Connection c = (Connection) t.getResource();
+	public List<TEntradaReceta> listarIngredientesPorProducto(Integer idProducto) {
 
-	            String sql = "SELECT i.id, i.nombre, i.precio, i.activo, i.proveedor_id " +
-	                         "FROM ingredientes i " +
-	                         "JOIN entradas_recetas pi ON i.id = pi.ingrediente_id " +
-	                         "WHERE pi.producto_id = ?";
-	            try (PreparedStatement ps = c.prepareStatement(sql)) {
-	                ps.setInt(1, idProducto);
-	                try (ResultSet rs = ps.executeQuery()) {
-	                    while (rs.next()) {
-	                        TIngrediente ing = new TIngrediente();
-	                        ing.setID(rs.getInt("id"));
-	                        ing.setNombre(rs.getString("nombre"));
-	                        ing.setPrecio(rs.getDouble("precio"));
-	                        ing.setActivo(rs.getBoolean("activo"));
-	                        ing.setIDProveedor(rs.getInt("proveedor_id"));
-	                        lista.add(ing);
-	                    }
+	    List<TEntradaReceta> lista = new ArrayList<>();
+
+	    try {
+	        Transaction t = TransactionManager.getInstance().getTransaction();
+	        Connection c = (Connection) t.getResource();
+
+	        String sql =
+	            "SELECT id, producto_id, ingrediente_id, activo " +
+	            "FROM entradas_recetas " +
+	            "WHERE producto_id = ?";
+
+	        try (PreparedStatement ps = c.prepareStatement(sql)) {
+
+	            ps.setInt(1, idProducto);
+
+	            try (ResultSet rs = ps.executeQuery()) {
+
+	                while (rs.next()) {
+
+	                    TEntradaReceta er = new TEntradaReceta();
+	                    er.setProductoID(rs.getInt("producto_id"));
+	                    er.setIngredienteID(rs.getInt("ingrediente_id"));
+	                    er.setActivo(rs.getBoolean("activo"));
+
+	                    lista.add(er);
 	                }
 	            }
-	        } catch (SQLException e) {
-	            e.printStackTrace();
-	            throw new RuntimeException("Error listando ingredientes por producto", e);
 	        }
-	        return lista;
+
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	        throw new RuntimeException("Error listando ingredientes por producto", e);
+	    }
+
+	    return lista;
 	}
+
 
 }

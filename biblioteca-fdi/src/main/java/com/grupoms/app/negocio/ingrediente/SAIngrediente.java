@@ -2,6 +2,8 @@ package com.grupoms.app.negocio.ingrediente;
 
 import java.util.List;
 
+import com.grupoms.app.negocio.producto.TEntradaReceta;
+
 public interface SAIngrediente {
 	public Integer crearIngrediente(TIngrediente ingrediente);
 
@@ -13,7 +15,7 @@ public interface SAIngrediente {
 
 	public List<TIngrediente> mostrarListaIngredientes();
 
-	public List<TIngrediente> mostrarIngredientesPorProducto(Integer IDProducto);
+	public List<TEntradaReceta> mostrarIngredientesPorProducto(Integer IDProducto);
 
 	public List<TIngrediente> mostrarIngredientesProveedor(Integer idProveedor);
 

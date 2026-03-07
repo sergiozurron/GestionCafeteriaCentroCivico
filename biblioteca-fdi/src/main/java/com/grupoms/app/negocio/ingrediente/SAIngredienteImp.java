@@ -1,9 +1,11 @@
 package com.grupoms.app.negocio.ingrediente;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.grupoms.app.integracion.ingrediente.DAOIngrediente;
 import com.grupoms.app.integracion.ingrediente.DAOIngredienteImp;
+import com.grupoms.app.negocio.producto.TEntradaReceta;
 import com.grupoms.app.integracion.Transaction.Transaction;
 import com.grupoms.app.integracion.Transaction.TransactionManager;
 
@@ -100,23 +102,24 @@ public class SAIngredienteImp implements SAIngrediente {
 
 
     @Override
-	public List<TIngrediente> mostrarIngredientesPorProducto(Integer IDProducto){
+	public List<TEntradaReceta> mostrarIngredientesPorProducto(Integer IDProducto){
 
         if (IDProducto == null || IDProducto <= 0)
             throw new IllegalArgumentException("ID de producto no válido");
 
         Transaction t = null;
-        List<TIngrediente> lista;
+        List<TEntradaReceta> listaV = new ArrayList<>();
 
         try {
             t = TransactionManager.getInstance().newTransaction();
             t.start();
 
-            lista = dao.listarIngredientesPorProducto(IDProducto);
-
-            // Solo activos
-            lista.removeIf(ing -> !ing.getActivo());
-
+            List<TEntradaReceta>lista = dao.listarIngredientesPorProducto(IDProducto);
+            for(TEntradaReceta er: lista) {
+            	if(er.getActivo()) {
+            		listaV.add(er);
+            	}
+            }
             t.commit();
         } 
         catch (Exception e) {
@@ -128,7 +131,7 @@ public class SAIngredienteImp implements SAIngrediente {
             throw new RuntimeException("Error en SA al listar ingredientes por producto", e);
         }
 
-        return lista;
+        return listaV;
     }
     @Override
     public List<TIngrediente> mostrarIngredientesProveedor(Integer idProveedor) {

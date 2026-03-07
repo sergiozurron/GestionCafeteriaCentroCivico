@@ -96,8 +96,8 @@ CREATE TABLE bebidas (
 CREATE TABLE entradas_recetas (
     id INT AUTO_INCREMENT PRIMARY KEY,
     producto_id INT,
-    activo BOOLEAN NOT NULL,
     ingrediente_id INT,
+    activo BOOLEAN NOT NULL,
     FOREIGN KEY (producto_id) REFERENCES productos(id),
     FOREIGN KEY (ingrediente_id) REFERENCES ingredientes(id)
 ) ENGINE=InnoDB;

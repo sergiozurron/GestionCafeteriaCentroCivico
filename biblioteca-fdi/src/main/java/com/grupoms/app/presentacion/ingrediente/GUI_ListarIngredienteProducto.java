@@ -4,9 +4,8 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.List;
-import java.util.Set;
 
-import com.grupoms.app.negocio.ingrediente.TIngrediente;
+import com.grupoms.app.negocio.producto.TEntradaReceta;
 import com.grupoms.app.presentacion.IGUI;
 import com.grupoms.app.presentacion.controlador.Context;
 import com.grupoms.app.presentacion.controlador.Controlador;
@@ -14,79 +13,88 @@ import com.grupoms.app.presentacion.controlador.Evento;
 
 public class GUI_ListarIngredienteProducto extends JFrame implements IGUI {
 
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JTable tabla;
-	private DefaultTableModel modeloTabla;
-	private JTextField campoIDProducto;
-	private JButton botonBuscar;
+    private DefaultTableModel modeloTabla;
+    private JTextField campoIDProducto;
+    private JButton botonBuscar;
 
-	public GUI_ListarIngredienteProducto() {
-		setTitle("Listar Ingredientes por Producto");
-		setSize(800, 500);
-		setLocationRelativeTo(null);
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		initGUI();
+    public GUI_ListarIngredienteProducto() {
+        setTitle("Listar Ingredientes por Producto");
+        setSize(800, 500);
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        initGUI();
+    }
 
-	}
+    private void initGUI() {
+        JPanel panelPrincipal = new JPanel(new BorderLayout(10, 10));
 
-	private void initGUI() {
-		JPanel panelPrincipal = new JPanel(new BorderLayout(10, 10));
+        JPanel panelBusqueda = new JPanel(new FlowLayout());
+        panelBusqueda.add(new JLabel("ID del Producto:"));
+        campoIDProducto = new JTextField(10);
+        panelBusqueda.add(campoIDProducto);
 
-		JPanel panelBusqueda = new JPanel(new FlowLayout());
-		panelBusqueda.add(new JLabel("ID del Producto:"));
-		campoIDProducto = new JTextField(10);
-		panelBusqueda.add(campoIDProducto);
+        botonBuscar = new JButton("Buscar Ingredientes");
+        botonBuscar.addActionListener(e -> {
+            try {
+                int idProducto = Integer.parseInt(campoIDProducto.getText());
+                Context contexto = new Context(Evento.LISTAR_INGREDIENTES_POR_PRODUCTO, idProducto);
+                Controlador.getInstance().handle(contexto);
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(this, "Introduce un ID de producto válido (número entero).");
+            }
+        });
+        panelBusqueda.add(botonBuscar);
 
-		botonBuscar = new JButton("Buscar Ingredientes");
-		botonBuscar.addActionListener(e -> {
-			try {
-				int idProducto = Integer.parseInt(campoIDProducto.getText());
-				Context contexto = new Context(Evento.LISTAR_INGREDIENTES_POR_PRODUCTO, idProducto);
-				Controlador.getInstance().handle(contexto);
-			} catch (NumberFormatException ex) {
-				JOptionPane.showMessageDialog(this, "Introduce un ID de producto válido (número entero).");
-			}
-		});
-		panelBusqueda.add(botonBuscar);
+        modeloTabla = new DefaultTableModel();
+        modeloTabla.addColumn("ID Producto");
+        modeloTabla.addColumn("ID Ingrediente");
+        modeloTabla.addColumn("Activo");
 
-		modeloTabla = new DefaultTableModel();
-		modeloTabla.addColumn("ID");
-		modeloTabla.addColumn("Nombre");
-		modeloTabla.addColumn("Precio");
-		modeloTabla.addColumn("Activo");
-		modeloTabla.addColumn("ID Proveedor");
+        tabla = new JTable(modeloTabla);
+        JScrollPane scrollPane = new JScrollPane(tabla);
 
-		tabla = new JTable(modeloTabla);
-		JScrollPane scrollPane = new JScrollPane(tabla);
+        panelPrincipal.add(panelBusqueda, BorderLayout.NORTH);
+        panelPrincipal.add(scrollPane, BorderLayout.CENTER);
 
-		panelPrincipal.add(panelBusqueda, BorderLayout.NORTH);
-		panelPrincipal.add(scrollPane, BorderLayout.CENTER);
+        add(panelPrincipal);
+    }
 
-		add(panelPrincipal);
-	}
+    @Override
+    @SuppressWarnings("unchecked")
+    public void actualizar(Context context) {
+        if (context == null) {
+            setVisible(true);
+            return;
+        }
+        else if (context.getEvento() == Evento.LISTAR_INGREDIENTES_POR_PRODUCTO_OK) {
 
-	@Override
-	@SuppressWarnings("unchecked")
-	public void actualizar(Context context) {
-		if (context == null) {
-			setVisible(true);
-			return;
-		}
-		else if (context.getEvento() == Evento.LISTAR_INGREDIENTES_POR_PRODUCTO_OK) {
-			modeloTabla.setRowCount(0);
-			List<TIngrediente> ingredientes = (List<TIngrediente>) context.getDatos();
-			if (ingredientes == null || ingredientes.isEmpty()) {
-				JOptionPane.showMessageDialog(this, "No hay ingredientes asociados a este producto.", "Sin resultados",
-						JOptionPane.INFORMATION_MESSAGE);
-				return;
-			}
-			for (TIngrediente ing : ingredientes) {
-				Object[] fila = { ing.getID(), ing.getNombre(), ing.getPrecio(), ing.getActivo() ? "Sí" : "No",
-						ing.getIDProveedor() };
-				modeloTabla.addRow(fila);
-			}
+            modeloTabla.setRowCount(0);
 
-		} else if (context.getEvento() == Evento.LISTAR_INGREDIENTES_POR_PRODUCTO_KO) {
-			JOptionPane.showMessageDialog(this, "Error: " + context.getDatos());
-		}
-	}
+            List<TEntradaReceta> lista = (List<TEntradaReceta>) context.getDatos();
+
+            if (lista == null || lista.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "No hay ingredientes asociados a este producto.", "Sin resultados",
+                        JOptionPane.INFORMATION_MESSAGE);
+                return;
+            }
+
+            for (TEntradaReceta er : lista) {
+                Object[] fila = {
+
+                    er.getProductoID(),
+                    er.getIngredienteID(),
+                    er.getActivo() ? "Sí" : "No"
+                };
+                modeloTabla.addRow(fila);
+            }
+
+        } else if (context.getEvento() == Evento.LISTAR_INGREDIENTES_POR_PRODUCTO_KO) {
+            JOptionPane.showMessageDialog(this, "Error: " + context.getDatos());
+        }
+    }
 }

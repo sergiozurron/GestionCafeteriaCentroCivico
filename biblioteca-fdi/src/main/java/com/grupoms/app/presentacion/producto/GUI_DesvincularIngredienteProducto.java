@@ -113,12 +113,14 @@ public class GUI_DesvincularIngredienteProducto extends JFrame implements IGUI {
             switch (error) {
             case -1:
                 JOptionPane.showMessageDialog(this,
-                        "La relación no existe");
+                        "El producto no es valido");
                 break;
             case -2:
                 JOptionPane.showMessageDialog(this,
-                        "El ingrediente o producto no existe");
+                        "El ingrediente no es valido");
                 break;
+            case -3:
+            	JOptionPane.showMessageDialog(this, "No estan vinculados");
             default:
                 JOptionPane.showMessageDialog(this,
                         "Error desconocido");

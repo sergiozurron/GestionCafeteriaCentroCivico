@@ -38,6 +38,12 @@ public class SARecetaImp implements SAReceta {
                 return -2; // ingrediente no válido
             }
 
+            //3. Comprobar si ya existe
+            TEntradaReceta receta = daoReceta.mostrarLineaReceta(idProducto, idIngrediente);
+            if(receta != null && receta.getActivo()) {
+            	t.commit();
+            	return -3; //receta ya existente
+            }
             // 4. Crear relación
             Integer id = daoReceta.vincular(idProducto, idIngrediente);
 
@@ -60,10 +66,32 @@ public class SARecetaImp implements SAReceta {
         try {
             t.start();
 
+            DAOProducto daoProducto = FactoriaDAO.getInstancia().creaDAOProducto();
+            DAOIngrediente daoIngrediente = FactoriaDAO.getInstancia().creaDAOIngrediente();
             DAOReceta daoReceta = FactoriaDAO.getInstancia().creaDAOReceta();
 
-            
-            daoReceta.desvincular(idProducto, idIngrediente);
+            // 1. Comprobar producto
+            TProducto producto = daoProducto.mostrarProducto(idProducto);
+            if (producto == null || !producto.getActivo()) {
+                t.commit();
+                return -1; // producto no válido
+            }
+
+            // 2. Comprobar ingrediente
+            TIngrediente ingrediente = daoIngrediente.mostrarIngrediente(idIngrediente);
+            if (ingrediente == null || !ingrediente.getActivo()) {
+                t.commit();
+                return -2; // ingrediente no válido
+            }
+
+            //3. Comprobar si ya existe
+            TEntradaReceta receta = daoReceta.mostrarLineaReceta(idProducto, idIngrediente);
+            if(receta == null) {
+            	t.commit();
+            	return -3; //receta ya existente
+            }
+
+            Integer desvincular = daoReceta.desvincular(idProducto, idIngrediente);
 
             t.commit();
             return 1;

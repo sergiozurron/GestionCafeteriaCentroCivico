@@ -95,7 +95,7 @@ public class GUI_VincularProductoIngrediente extends JFrame implements IGUI {
                 switch (error) {
                     case -1: JOptionPane.showMessageDialog(this, "El producto no existe"); break;
                     case -2: JOptionPane.showMessageDialog(this, "El ingrediente no existe"); break;
-                    case -3: JOptionPane.showMessageDialog(this, "La relación ya existe"); break;
+                    case -3: JOptionPane.showMessageDialog(this, "Ya están vinculados"); break;
                     default: JOptionPane.showMessageDialog(this, "Error desconocido"); break;
                 }
                 break;

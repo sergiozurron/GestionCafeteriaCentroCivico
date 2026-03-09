@@ -199,7 +199,7 @@ public Boolean modificarProducto(TProducto producto) {
 			}
 
 		} catch (SQLException e) {
-			System.err.println("Error mostrando producto: " + e.getMessage());
+			throw new RuntimeException("Error mostrando producto: ", e);
 		}
 		return producto;
 	}
@@ -253,7 +253,7 @@ public Boolean modificarProducto(TProducto producto) {
 	        }
 
 	    } catch (SQLException e) {
-	        System.err.println("Error mostrando productos por proveedor: " + e.getMessage());
+	        throw new RuntimeException("Error mostrando productos por proveedor: ", e);
 	    }
 
 	    return listaProductos;
@@ -303,7 +303,7 @@ public Boolean modificarProducto(TProducto producto) {
 	        }
 
 	    } catch (SQLException e) {
-	        System.err.println("Error mostrando lista de productos: " + e.getMessage());
+	        throw new RuntimeException("Error mostrando lista de productos: ", e);
 	    }
 
 	    return listaProductos;
@@ -320,7 +320,7 @@ public Boolean modificarProducto(TProducto producto) {
 			}
 
 		} catch (SQLException e) {
-			System.err.println("Error eliminando todos los productos: " + e.getMessage());
+			throw new RuntimeException("Error eliminando todos los productos: ", e);
 		}
 	}
 

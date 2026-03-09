@@ -109,7 +109,7 @@ public Integer altaProducto(TProducto producto) {
 			}
 
 		} catch (SQLException e) {
-			System.err.println("Error dando de baja producto: " + e.getMessage());
+			throw new RuntimeException("Error dando de baja producto: " + e.getMessage(), e);
 		}
 		return exito;
 	}

@@ -31,6 +31,7 @@ public class GUI_BajaIngrediente extends JFrame implements IGUI {
 		else if (context.getEvento() == Evento.BAJA_INGREDIENTE_OK) {
 			JOptionPane.showMessageDialog(this, "Ingrediente dado de baja con éxito");
 			idIngrediente.setText("");
+			dispose();
 		} else if (context.getEvento() == Evento.BAJA_INGREDIENTE_KO) {
 			JOptionPane.showMessageDialog(this, "Error al dar de baja el ingrediente");
 		}

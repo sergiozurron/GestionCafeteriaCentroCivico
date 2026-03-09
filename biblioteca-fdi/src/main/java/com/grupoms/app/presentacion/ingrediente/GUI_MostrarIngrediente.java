@@ -115,6 +115,7 @@ public class GUI_MostrarIngrediente extends JFrame implements IGUI {
 				precioLabel.setText("");
 				provLabel.setText("");
 			}
+			campoID.setText("");
 		} else if (context.getEvento() == Evento.MOSTRAR_INGREDIENTE_KO) {
 			JOptionPane.showMessageDialog(this, "Ingrediente no encontrado en la base de datos");
 			nombreLabel.setText("");

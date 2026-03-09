@@ -309,49 +309,6 @@ public Boolean modificarProducto(TProducto producto) {
 	    return listaProductos;
 	}
 
-	@Override
-	public void eliminaTodas() {
-		try {
-			Transaction t = TransactionManager.getInstance().getTransaction();
-			Connection c = (Connection) t.getResource();
-
-			try (PreparedStatement ps = c.prepareStatement(DELETE_PRODUCTO)) {
-				ps.executeUpdate();
-			}
-
-		} catch (SQLException e) {
-			throw new RuntimeException("Error eliminando todos los productos: ", e);
-		}
-	}
-
-
-	private Connection getConnection() throws SQLException {
-		Transaction tx = getTransaction();
-		if (tx == null) {
-			return DriverManager.getConnection(DBConfig.getUrl(), DBConfig.getUser(), DBConfig.getPassword());
-		}
-		return (Connection) tx.getResource();
-	}
-
-	private void closeConnection(Connection conn) {
-		if (conn == null) {
-			return;
-		}
-		try {
-			if (getTransaction() == null) {
-				conn.close();
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
-
-	private Transaction getTransaction() {
-		try {
-			return TransactionManager.getInstance().getTransaction();
-		} catch (IllegalStateException e) {
-			return null;
-		}
-	}
+	
 	
 }

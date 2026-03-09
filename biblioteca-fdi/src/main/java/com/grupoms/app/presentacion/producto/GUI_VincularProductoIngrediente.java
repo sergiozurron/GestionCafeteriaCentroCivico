@@ -88,6 +88,9 @@ public class GUI_VincularProductoIngrediente extends JFrame implements IGUI {
         switch (context.getEvento()) {
             case Evento.VINCULAR_PRODUCTO_INGREDIENTE_OK:
                 JOptionPane.showMessageDialog(this, "Ingrediente vinculado correctamente");
+                campoIdProducto.setText("");
+                campoIdIngrediente.setText("");
+                dispose();
                 break;
 
             case Evento.VINCULAR_PRODUCTO_INGREDIENTE_KO:

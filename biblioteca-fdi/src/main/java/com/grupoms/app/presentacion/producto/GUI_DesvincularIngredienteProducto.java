@@ -104,6 +104,7 @@ public class GUI_DesvincularIngredienteProducto extends JFrame implements IGUI {
                     "Ingrediente desvinculado correctamente");
             campoIdProducto.setText("");
             campoIdIngrediente.setText("");
+            dispose();
             break;
 
         case Evento.DESVINCULAR_PRODUCTO_INGREDIENTE_KO:

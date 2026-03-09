@@ -25,6 +25,7 @@ public class GUI_DevolverPedido extends JFrame implements IGUI {
 	    if (context.getEvento() == Evento.DEVOLVER_PEDIDO_OK) {
 	        JOptionPane.showMessageDialog(this, "Pedido devuelto con éxito");
 	        campoID.setText("");
+	        dispose();
 	    } 
 	    else if (context.getEvento() == Evento.DEVOLVER_PEDIDO_KO) {
 	        JOptionPane.showMessageDialog(this,
@@ -32,6 +33,7 @@ public class GUI_DevolverPedido extends JFrame implements IGUI {
 	            "Error",
 	            JOptionPane.ERROR_MESSAGE);
 	    }
+        campoID.setText("");
 	}
 
 

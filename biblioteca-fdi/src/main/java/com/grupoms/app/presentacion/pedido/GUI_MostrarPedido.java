@@ -166,6 +166,7 @@ public class GUI_MostrarPedido extends JFrame implements IGUI {
                 } else {
                     limpiarLabels();
                 }
+                campoPedido.setText("");
 
             } else if (context.getEvento() == Evento.MOSTRAR_PEDIDO_KO) {
                 JOptionPane.showMessageDialog(this, "Pedido no encontrado en la base de datos");

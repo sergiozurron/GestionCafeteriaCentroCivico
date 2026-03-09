@@ -87,8 +87,10 @@ public class GUI_CerrarPedido extends JFrame implements IGUI {
 				labelTotal.setText("Total: " + (pedido.getTotal()));
 			}
 			JOptionPane.showMessageDialog(this, "Pedido cerrado con éxito");
+			dispose();
 		} else if (context.getEvento() == Evento.CERRAR_PEDIDO_KO) {
 			JOptionPane.showMessageDialog(this, "Error al cerrar el pedido");
 		}
+		campoIdPedido.setText("");
 	}
 }

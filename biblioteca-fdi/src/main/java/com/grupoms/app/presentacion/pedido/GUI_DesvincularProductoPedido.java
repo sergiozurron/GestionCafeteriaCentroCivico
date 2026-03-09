@@ -101,6 +101,7 @@ public class GUI_DesvincularProductoPedido extends JFrame implements IGUI {
 					"Producto desvinculado correctamente");
 			campoIdProducto.setText("");
 			campoIdPedido.setText("");
+			dispose();
 			break;
 
 		case Evento.DESVINCULAR_PRODUCTO_PEDIDO_KO:
@@ -130,5 +131,7 @@ public class GUI_DesvincularProductoPedido extends JFrame implements IGUI {
 		default:
 			break;
 		}
+		campoIdProducto.setText("");
+		campoIdPedido.setText("");
 	}
 }

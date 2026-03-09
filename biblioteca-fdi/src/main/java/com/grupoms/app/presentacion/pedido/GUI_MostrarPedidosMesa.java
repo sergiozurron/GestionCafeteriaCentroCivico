@@ -99,6 +99,7 @@ public class GUI_MostrarPedidosMesa extends JFrame implements IGUI {
 				};
 				modeloTabla.addRow(fila);
 			}
+			campoIdMesa.setText("");
 
 		} else if (context.getEvento() == Evento.MOSTRAR_PEDIDOS_MESA_KO) {
 			JOptionPane.showMessageDialog(this, "Error al cargar los pedidos de la mesa.", "Error",

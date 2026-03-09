@@ -111,6 +111,7 @@ public class GUI_VincularProductoPedido extends JFrame implements IGUI {
 			JOptionPane.showMessageDialog(this,
 					"Producto vinculado correctamente");
 			limpiarCampos();
+			dispose();
 			break;
 
 		case Evento.VINCULAR_PRODUCTO_PEDIDO_KO:

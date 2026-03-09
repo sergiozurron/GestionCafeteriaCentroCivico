@@ -137,6 +137,7 @@ public class GUI_ModificarPedido extends JFrame implements IGUI {
 			JOptionPane.showMessageDialog(this,
 					"Pedido modificado con éxito");
 			limpiarCampos();
+			dispose();
 			break;
 
 		case Evento.MODIFICAR_PEDIDO_KO:

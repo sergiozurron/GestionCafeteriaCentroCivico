@@ -100,6 +100,7 @@ public class GUI_MostrarPedidosEmpleado extends JFrame implements IGUI {
 				};
 				modeloTabla.addRow(fila);
 			}
+			campoIdEmpleado.setText("");
 
 		} else if (context.getEvento() == Evento.MOSTRAR_PEDIDOS_EMPLEADO_KO) {
 			JOptionPane.showMessageDialog(this, "Error al cargar los pedidos del empleado.", "Error",

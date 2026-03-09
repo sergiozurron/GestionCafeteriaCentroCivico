@@ -98,6 +98,9 @@ public class GUI_AltaPedido extends JFrame implements IGUI {
 
 	        JOptionPane.showMessageDialog(this,
 	                "Pedido creado correctamente con ID: " + resultado);
+	        campoMesa.setText("");
+	        campoEmpleado.setText("");
+	        dispose();
 
 	    } else if (context.getEvento() == Evento.ALTA_PEDIDO_KO) {
 
@@ -123,6 +126,8 @@ public class GUI_AltaPedido extends JFrame implements IGUI {
 	                        "Error desconocido");
 	                break;
 	        }
+	        campoMesa.setText("");
+	        campoEmpleado.setText("");
 	    }
 	}
 }

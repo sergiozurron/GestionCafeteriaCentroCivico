@@ -40,7 +40,6 @@ public class DAOIngredienteImp implements DAOIngrediente {
 	                }
 	            }
 	        } catch (SQLException e) {
-	            e.printStackTrace();
 	            throw new RuntimeException("Error creando ingrediente", e);
 	        }
 	        return idGenerado;
@@ -68,8 +67,7 @@ public class DAOIngredienteImp implements DAOIngrediente {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Error mostrando ingrediente", e);
+            throw new RuntimeException("Error mostrando ingrediente "+id, e);
         }
         return ing;
 	}
@@ -125,7 +123,7 @@ public class DAOIngredienteImp implements DAOIngrediente {
 				}
 			}
 		} catch (SQLException e) {
-			throw new RuntimeException("Error mostrando la lista de proveedores por ingrediente",e);
+			throw new RuntimeException("Error mostrando la lista ingredientes del proveedor "+idProveedor,e);
 		}
 		return listaIngredientes;
 	}
@@ -154,7 +152,7 @@ public class DAOIngredienteImp implements DAOIngrediente {
 	        }
 
 	    } catch (SQLException e) {
-	        throw new RuntimeException("Error modificando ingrediente", e);
+	        throw new RuntimeException("Error modificando el ingrediente "+ing.getID(), e);
 	    }
 	}
 
@@ -181,7 +179,7 @@ public class DAOIngredienteImp implements DAOIngrediente {
 	        }
 
 	    } catch (SQLException e) {
-	        throw new RuntimeException("Error dando de baja ingrediente", e);
+	        throw new RuntimeException("Error dando de baja el ingrediente "+ing.getID(), e);
 	    }
 	}
 
@@ -220,7 +218,7 @@ public class DAOIngredienteImp implements DAOIngrediente {
 
 	    } catch (SQLException e) {
 	        e.printStackTrace();
-	        throw new RuntimeException("Error listando ingredientes por producto", e);
+	        throw new RuntimeException("Error listando ingredientes del producto "+idProducto, e);
 	    }
 
 	    return lista;

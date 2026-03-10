@@ -42,7 +42,7 @@ public class DAOLineaPedidoImp implements DAOLineaPedido {
 	        }
 
 	    } catch (Exception e) {
-	        e.printStackTrace();
+	    	throw new RuntimeException("Error añadiendo el producto "+lp.getProductoId()+" al pedido "+lp.getProductoId(),e);
 	    }
 
 	    return -1;
@@ -90,8 +90,7 @@ public class DAOLineaPedidoImp implements DAOLineaPedido {
 	        return idLinea;
 
 	    } catch (Exception e) {
-	        e.printStackTrace();
-	        return -99;
+	    	throw new RuntimeException("Error quitando el producto "+idProducto+" del pedido "+idPedido,e);
 	    }
 	}
 
@@ -118,7 +117,7 @@ public class DAOLineaPedidoImp implements DAOLineaPedido {
 					} 
 				} 
 			} catch (Exception e) { 
-				e.printStackTrace(); 
+		    	throw new RuntimeException("Error mostrando el pedido "+idPedido,e);
 			} 
 		return lista;
 	}

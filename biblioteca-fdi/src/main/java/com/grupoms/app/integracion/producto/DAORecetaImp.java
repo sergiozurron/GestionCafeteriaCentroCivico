@@ -39,7 +39,7 @@ public class DAORecetaImp implements DAOReceta {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+        	throw new RuntimeException("Error vinculando el ingrediente "+idIngrediente+" con el producto "+idProducto,e);
         }
 
         return -1;
@@ -88,8 +88,7 @@ public class DAORecetaImp implements DAOReceta {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
-            return -99;
+        	throw new RuntimeException("Error desvinculando el ingrediente "+idIngrediente+" con el producto "+idProducto,e);
         }
     }
 
@@ -133,7 +132,7 @@ public class DAORecetaImp implements DAOReceta {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+        	throw new RuntimeException("Error mostrando la lista de ingredientes del producto "+idProducto,e);
         }
 
         return lista;
@@ -172,7 +171,7 @@ public class DAORecetaImp implements DAOReceta {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+        	throw new RuntimeException("Error mostrando la linea de receta",e);
         }
 
         return null; 

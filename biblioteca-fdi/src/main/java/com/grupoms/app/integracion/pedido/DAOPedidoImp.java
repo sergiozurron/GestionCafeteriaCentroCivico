@@ -31,8 +31,7 @@ public class DAOPedidoImp implements DAOPedido {
 				} 
 			return true; 
 			} catch (Exception e) { 
-				e.printStackTrace(); 
-				return false; 
+				throw new RuntimeException("Error modificando el pedido "+pedido.getId(),e);
 			}
 	}
 
@@ -63,7 +62,7 @@ public class DAOPedidoImp implements DAOPedido {
 				}
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			throw new RuntimeException("Error mostrando el pedido "+idPedido,e);
 		}
 		return pedido;
 	}
@@ -91,7 +90,7 @@ public class DAOPedidoImp implements DAOPedido {
 					} 
 				} 
 			} catch (Exception e) { 
-				e.printStackTrace(); 
+				throw new RuntimeException("Error mostrando la lista de pedidos",e);
 			} 
 		return lista;
 	}
@@ -126,8 +125,7 @@ public class DAOPedidoImp implements DAOPedido {
 	        return true; 
 
 	    } catch (Exception e) { 
-	        e.printStackTrace(); 
-	        return false; 
+			throw new RuntimeException("Error devolviendo el pedido "+idPedido,e);
 	    }
 	}
 
@@ -156,7 +154,7 @@ public class DAOPedidoImp implements DAOPedido {
 					} 
 				}
 		} catch (Exception e) { 
-			e.printStackTrace(); 
+			throw new RuntimeException("Error mostrando los pedidos del empleado "+idEmpleado,e);
 			} 
 		return lista;
 		
@@ -187,7 +185,7 @@ public class DAOPedidoImp implements DAOPedido {
 					} 
 				}
 		} catch (Exception e) { 
-			e.printStackTrace(); 
+			throw new RuntimeException("Error mostrando los pedidos de la mesa "+idMesa,e);
 			} 
 		return lista;
 	}
@@ -210,8 +208,7 @@ public class DAOPedidoImp implements DAOPedido {
 				id = rs.getInt(1); 
 				} 
 			} catch (SQLException e) { 
-				e.printStackTrace(); 
-				return null; 
+				throw new RuntimeException("Error dando de alta el pedido ",e);
 				} 
 		return id;
 	}

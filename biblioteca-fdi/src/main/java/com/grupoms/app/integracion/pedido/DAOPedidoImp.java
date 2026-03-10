@@ -170,7 +170,7 @@ public class DAOPedidoImp implements DAOPedido {
 			if (t == null) 
 				throw new IllegalStateException("No hay transacción activa"); 
 			Connection c = (Connection) t.getResource(); 
-			String sql = "SELECT id, empleado_id, fecha, estado, total_factura, activo " + "FROM pedidos " + "WHERE mesa_id = ? " + "FOR UPDATE"; 
+			String sql = "SELECT id, empleado_id, fecha, estado, total_factura, activo " + "FROM pedidos " + "WHERE mesa_id = ? AND activo = TRUE " + "FOR UPDATE"; 
 			try (PreparedStatement ps = c.prepareStatement(sql)) { 
 				ps.setInt(1, idMesa); 
 				try (ResultSet rs = ps.executeQuery()) { 

@@ -163,15 +163,24 @@ public class SAPedidoImp implements SAPedido {
 	@Override
 	public List<TPedido> mostrarListaPedidos() {
 		Transaction t = TransactionManager.getInstance().newTransaction();
-		List<TPedido> lista = null;
+		List<TPedido> listaV = new ArrayList<>();
 		
 		try {
 			t.start();
 			DAOPedido dao = FactoriaDAO.getInstancia().creaDAOPedido();
+			DAOMesa daoM = FactoriaDAO.getInstancia().creaDAOMesa();
+			DAOEmpleado daoE = FactoriaDAO.getInstancia().creaDAOEmpleado();
+			List<TPedido>lista = dao.mostrarListaPedidos();
 			
-			lista = dao.mostrarListaPedidos();
+			for(TPedido p : lista) {
+				TMesa m = daoM.mostrarMesa(p.getIdMesa());
+				TEmpleado e = daoE.mostrarEmpleado(p.getIdEmpleado());
+				if(m.getActivo() && e.getActivo()) {
+					listaV.add(p);
+				}
+			}
 			t.commit();
-			return lista;
+			return listaV;
 		}catch(Exception e) {
 			if(t!=null)t.rollback();
 			e.printStackTrace();
@@ -187,8 +196,11 @@ public class SAPedidoImp implements SAPedido {
 		try {
 			t.start();
 			DAOPedido dao = FactoriaDAO.getInstancia().creaDAOPedido();
-			
-			lista = dao.mostrarPedidosPorMesa(idMesa);
+			DAOMesa daoMesa = FactoriaDAO.getInstancia().creaDAOMesa();
+			TMesa mesa = daoMesa.mostrarMesa(idMesa);
+			if(mesa.getActivo() && mesa !=null) {
+				lista = dao.mostrarPedidosPorMesa(idMesa);
+			}
 			t.commit();
 			return lista;
 		}catch(Exception e) {
@@ -226,11 +238,11 @@ public class SAPedidoImp implements SAPedido {
 
 	        // 1. BUSCAR
 	        TPedido pedido = daoPedido.mostrarPedido(idPedido);
-	        if (pedido == null || !pedido.getActivo()) {
+	        if (pedido == null || !pedido.getActivo() || "ABIERTO".equals(pedido.getEstado())) {
 	            t.rollback();
 	            return false;
 	        }
-
+	        
 	        // 2.ESTADO Y BAJA
 	        pedido.setEstado("DEVUELTO");
 	        pedido.setActivo(false);
@@ -262,7 +274,7 @@ public class SAPedidoImp implements SAPedido {
 
 	        // 1. Obtener pedido
 	        TPedido pedido = daoPedido.mostrarPedido(idPedido);
-	        if (pedido == null || !pedido.getActivo()) {
+	        if (pedido == null || !pedido.getActivo() || "DEVUELTO".equals(pedido.getEstado()) || "CERRADO".equals(pedido.getEstado())) {
 	            t.commit();
 	            return null; // pedido no válido
 	        }

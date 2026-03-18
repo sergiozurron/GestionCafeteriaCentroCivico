@@ -19,6 +19,7 @@ public class GUI_AltaMaterial extends JFrame implements IGUI {
 	private JRadioButton libroButton, pinturaButton;
 	private JButton aceptar;
 	private JPanel panelLibro, panelPintura;
+	private ButtonGroup grupoTipo;
 
 	public GUI_AltaMaterial() {
 		super("Alta Material");
@@ -53,7 +54,7 @@ public class GUI_AltaMaterial extends JFrame implements IGUI {
 
 		libroButton = new JRadioButton("Libro");
 		pinturaButton = new JRadioButton("Pintura");
-		ButtonGroup grupoTipo = new ButtonGroup();
+		grupoTipo = new ButtonGroup();
 		grupoTipo.add(libroButton);
 		grupoTipo.add(pinturaButton);
 		gbc.gridx = 0;
@@ -162,6 +163,7 @@ public class GUI_AltaMaterial extends JFrame implements IGUI {
 			setVisible(true);
 			return;
 		}
+		int resultado = (int) context.getDatos();
 		switch (context.getEvento()) {
 		case Evento.ALTA_MATERIAL_OK:
 			JOptionPane.showMessageDialog(this, "Material creado con éxito");
@@ -175,10 +177,28 @@ public class GUI_AltaMaterial extends JFrame implements IGUI {
 			pinturaButton.setSelected(false);
 			panelLibro.setVisible(false);
 			panelPintura.setVisible(false);
+			grupoTipo.clearSelection();
 			dispose();
 			break;
 		case Evento.ALTA_MATERIAL_KO:
-			JOptionPane.showMessageDialog(this, "Error al añadir el material", "Error", JOptionPane.ERROR_MESSAGE);
+			switch(resultado) {
+			case -1: 
+				JOptionPane.showMessageDialog(this,
+                        "No puede haber nombres duplicados");
+				break;
+			case -2:
+				JOptionPane.showMessageDialog(this,
+                        "El ISBN no puede estar duplicado");
+				break;
+			case -3:
+				JOptionPane.showMessageDialog(this,
+                        "El numero no puede estar duplicado");
+				break;
+			default:
+				JOptionPane.showMessageDialog(this,
+                        "Error desconocido");
+                break;
+			}
 			break;
 		}
 		campoNombre.setText("");
@@ -189,5 +209,8 @@ public class GUI_AltaMaterial extends JFrame implements IGUI {
 		campoFecha.setText("");
 		libroButton.setSelected(false);
 		pinturaButton.setSelected(false);
+		panelLibro.setVisible(false);
+		panelPintura.setVisible(false);
+		grupoTipo.clearSelection();
 	}
 }

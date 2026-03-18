@@ -4,10 +4,11 @@ import java.io.Serializable;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.NamedQueries;
+import jakarta.persistence.NamedQuery;
 import jakarta.persistence.PrimaryKeyJoinColumn;
 
 @Entity
-@NamedQueries({})
+@NamedQueries({@NamedQuery(name = "com.grupoms.app.negocio.materialJPA.BOPintura.findByNumero", query = "SELECT p FROM BOPintura p WHERE p.numero = :numero")})
 @PrimaryKeyJoinColumn(referencedColumnName = "id")
 public class BOPintura extends BOMaterial implements Serializable {
 

@@ -21,7 +21,7 @@ import jakarta.persistence.Version;
 @NamedQueries({
 		@NamedQuery(name = "com.grupoms.app.negocio.materialJPA.BOMaterial.findByType", query = "SELECT m FROM BOMaterial m WHERE m.tipoMaterial = :tipo"),
 		@NamedQuery(name = "com.grupoms.app.negocio.materialJPA.BOMaterial.findAll", query = "SELECT m FROM BOMaterial m WHERE m.activo = true"),
-		@NamedQuery(name = "com.grupoms.app.negocio.materialJPA.BOMaterial.findByName", query = "SELECT m FROM BOMaterial m WHERE m.nombre = :nombre") })
+		@NamedQuery(name = "com.grupoms.app.negocio.materialJPA.BOMaterial.findByName", query = "SELECT m FROM BOMaterial m WHERE m.nombre = :nombre")})
 public class BOMaterial implements Serializable {
 	private static final long serialVersionUID = 0;
 

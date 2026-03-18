@@ -12,8 +12,8 @@ public class BajaMaterialCommand implements Command {
 		try {
 			Integer exito = FactoriaSA.getInstance().creaSAMaterial().bajaMaterial(idMaterial);
 			if (exito < 0)
-				return new Context(Evento.BAJA_MATERIAL_KO, null);
-			return new Context(Evento.BAJA_MATERIAL_OK, null);
+				return new Context(Evento.BAJA_MATERIAL_KO, exito);
+			return new Context(Evento.BAJA_MATERIAL_OK, exito);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new Context(Evento.BAJA_MATERIAL_KO, null);

@@ -77,6 +77,7 @@ public class GUI_BajaMaterial extends JFrame implements IGUI {
 			setVisible(true);
 			return;
 		}
+		int res = (int) context.getDatos();
 		switch (context.getEvento()) {
 		case Evento.BAJA_MATERIAL_OK:
 			JOptionPane.showMessageDialog(this, "Material dado de baja");
@@ -84,8 +85,14 @@ public class GUI_BajaMaterial extends JFrame implements IGUI {
 			dispose();
 			break;
 		case Evento.BAJA_MATERIAL_KO:
-			JOptionPane.showMessageDialog(this, "Error al dar de baja el material", "Error", JOptionPane.ERROR_MESSAGE);
-			break;
+			switch(res) {
+			case -1:
+				JOptionPane.showMessageDialog(this,"El material no existe o ya se ha dado de baja");
+				break;
+			case -2:
+				JOptionPane.showMessageDialog(this,"El material tiene ejemplares asociados, eliminelos primero");
+				break;
+			}
 		default:
 			break;
 		}

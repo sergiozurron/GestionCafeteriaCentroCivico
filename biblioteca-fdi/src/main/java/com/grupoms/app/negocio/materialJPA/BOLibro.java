@@ -4,10 +4,11 @@ import java.io.Serializable;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.NamedQueries;
+import jakarta.persistence.NamedQuery;
 import jakarta.persistence.PrimaryKeyJoinColumn;
 
 @Entity
-@NamedQueries({})
+@NamedQueries({	@NamedQuery(name = "com.grupoms.app.negocio.materialJPA.BOLibro.findByISBN", query = "SELECT l FROM BOLibro l WHERE l.isbn = :isbn")})
 @PrimaryKeyJoinColumn(referencedColumnName = "id")
 public class BOLibro extends BOMaterial implements Serializable {
 

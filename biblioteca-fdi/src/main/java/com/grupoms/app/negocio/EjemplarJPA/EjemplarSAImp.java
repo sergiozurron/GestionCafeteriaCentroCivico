@@ -32,6 +32,7 @@ public class EjemplarSAImp implements EjemplarSA {
 			boEjemplar.setMaterial(boMaterial);
 			boMaterial.getEjemplares().add(boEjemplar);
 			em.persist(boEjemplar);
+			em.persist(boMaterial);
 			em.getTransaction().commit();
 			return boEjemplar.getId();
 		} catch (Exception e) {

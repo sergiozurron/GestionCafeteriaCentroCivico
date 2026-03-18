@@ -94,6 +94,7 @@ public class PrestamoSAImp implements PrestamoSA {
 
 	            // Asignamos la fecha de devolución como la fecha actual del sistema
 	            bo.setFechaDevuelto(new java.util.Date());  // java.util.Date para JPA
+	            bo.setActivo(false); // Marcamos el préstamo como inactivo
 
 	            // Si tu campo es LocalDateTime, usa:
 	            // bo.setFechaDevuelto(LocalDateTime.now());

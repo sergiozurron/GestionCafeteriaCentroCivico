@@ -4,8 +4,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.grupoms.app.integracion.factoria.EntityManagerSingleton;
+import com.grupoms.app.negocio.ClaseJPA.BOClase;
 import com.grupoms.app.negocio.assembler.EjemplarAssembler;
 import com.grupoms.app.negocio.materialJPA.BOMaterial;
+import com.grupoms.app.negocio.prestamoJPA.BOPrestamo;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.LockModeType;
@@ -53,6 +55,22 @@ public class EjemplarSAImp implements EjemplarSA {
 			BOEjemplar boEjemplar = em.find(BOEjemplar.class, idEjemplar, LockModeType.OPTIMISTIC_FORCE_INCREMENT);
 
 			if (boEjemplar == null || !boEjemplar.getActivo()) {
+				em.getTransaction().rollback();
+				return false;
+			}
+			
+			List<BOClase> clasesAsociadas = em.createNamedQuery("com.grupoms.app.negocio.claseJPA.BOClase.findByEjemplar", BOClase.class)
+					.setParameter("idEjemplar", idEjemplar).getResultList();
+			
+			if (!clasesAsociadas.isEmpty()) {
+				em.getTransaction().rollback();
+				return false;
+			}
+			
+			List<BOPrestamo> prestamosAsociados = em.createNamedQuery("BOPrestamo.findByEjemplar", BOPrestamo.class)
+					.setParameter("idEjemplar", idEjemplar).getResultList();
+			
+			if (!prestamosAsociados.isEmpty()) {
 				em.getTransaction().rollback();
 				return false;
 			}

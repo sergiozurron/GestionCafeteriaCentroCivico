@@ -25,7 +25,8 @@ import jakarta.persistence.Version;
 		@NamedQuery(name = "com.grupoms.app.negocio.claseJPA.BOClase.findByTipo", query = "SELECT c FROM BOClase c WHERE c.tipo = :tipo"),
 		@NamedQuery(name = "com.grupoms.app.negocio.claseJPA.BOClase.findByTipoAndFecha", query = "SELECT c FROM BOClase c WHERE c.tipo = :tipo AND c.fechaInicio = :fechaInicio"),
 		@NamedQuery(name = "com.grupoms.app.negocio.claseJPA.BOClase.findAll", query = "SELECT c FROM BOClase c"),
-		@NamedQuery(name = "com.grupoms.app.negocio.claseJPA.BOClase.findBySala", query = "SELECT c FROM BOClase c WHERE c.sala.id = :idSala AND c.activo = true") })
+		@NamedQuery(name = "com.grupoms.app.negocio.claseJPA.BOClase.findBySala", query = "SELECT c FROM BOClase c WHERE c.sala.id = :idSala AND c.activo = true"),
+		@NamedQuery(name = "com.grupoms.app.negocio.claseJPA.BOClase.findByEjemplar", query = "SELECT c FROM BOClase c JOIN c.ejemplares e WHERE e.id = :idEjemplar AND c.activo = true") })
 public class BOClase implements Serializable {
 
 	private static final long serialVersionUID = 0L;

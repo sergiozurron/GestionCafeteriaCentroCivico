@@ -1,6 +1,7 @@
 package com.grupoms.app.integracion.proveedor;
 
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -181,6 +182,37 @@ public class DAOProveedorImpl implements DAOProveedor {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
+		}
+	}
+	
+	private Connection getConnection() {
+		Transaction tx = getTransaction();
+		if (tx == null) {
+			try {
+				return DriverManager.getConnection(System.getenv("MS_DB_URL"), System.getenv("MS_DB_USER"),
+						System.getenv("MS_DB_PASSWORD"));
+			} catch (SQLException e) {
+				return null;
+			}
+		}
+		return (Connection) tx.getResource();
+	}
+	
+	private void closeConnection(Connection conn) {
+		try {
+			if (getTransaction() == null) {
+				conn.close();
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private Transaction getTransaction() {
+		try {
+			return TransactionManager.getInstance().getTransaction();
+		} catch (IllegalStateException e) {
+			return null;
 		}
 	}
 

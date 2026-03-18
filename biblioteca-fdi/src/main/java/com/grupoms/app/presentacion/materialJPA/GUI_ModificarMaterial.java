@@ -50,9 +50,17 @@ public class GUI_ModificarMaterial extends JFrame implements IGUI {
 			editorial.setText("");
 			fecha.setText("");
 			numero.setText("");
+			dispose();
 		} else if (context.getEvento() == Evento.MODIFICAR_MATERIAL_KO) {
 			JOptionPane.showMessageDialog(this, "No se ha podido modificar el material");
 		}
+		id.setText("");
+		nombre.setText("");
+		autor.setText("");
+		isbn.setText("");
+		editorial.setText("");
+		fecha.setText("");
+		numero.setText("");
 	}
 
 	public void initGUI() {

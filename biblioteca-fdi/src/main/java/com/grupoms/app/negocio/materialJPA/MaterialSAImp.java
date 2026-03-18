@@ -79,8 +79,8 @@ public class MaterialSAImp implements MaterialSA {
 				t.rollback();
 				throw new Exception("El material no existe o ya está inactivo.");
 			}
-
-			if (!material.getEjemplares().isEmpty()) {
+			int size = material.getEjemplares().size();
+			if (size>0) { //esto funciona?
 				t.rollback();
 				throw new Exception("Elimine primero los ejemplares asociados a este material.");
 			}
@@ -129,12 +129,16 @@ public class MaterialSAImp implements MaterialSA {
 		t.begin();
 		try {
 			BOMaterial m = em.find(BOMaterial.class, material.getID());
-
+			
 			if (m == null) {
 				em.close();
 				throw new IllegalArgumentException("El ID del material no existe o no está activo.");
 			} else {
-
+				m = em.find(BOMaterial.class,material.getNombre());
+				if(m!=null) {
+					em.close();
+					throw new IllegalArgumentException("El nombre del material es conflictivo");
+				}
 				m.setNombre(material.getNombre());
 				m.setAutor(material.getAutor());
 				m.setTipoMaterial(material.getTipoMaterial());

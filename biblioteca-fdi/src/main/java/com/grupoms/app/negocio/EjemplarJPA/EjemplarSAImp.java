@@ -30,7 +30,7 @@ public class EjemplarSAImp implements EjemplarSA {
 			boEjemplar.setEstado("DISPONIBLE");
 			boEjemplar.setActivo(true);
 			boEjemplar.setMaterial(boMaterial);
-
+			boMaterial.getEjemplares().add(boEjemplar);
 			em.persist(boEjemplar);
 			em.getTransaction().commit();
 			return boEjemplar.getId();
@@ -134,7 +134,7 @@ public class EjemplarSAImp implements EjemplarSA {
 	public List<TEjemplar> listarEjemplaresPorMaterial(Integer idMaterial) {
 		EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
 
-		return em.createNamedQuery("BOEjemplar.findByMa  terialId", BOEjemplar.class)
+		return em.createNamedQuery("com.grupoms.app.negocio.EjemplarJPA.BOEjemplar.findByMaterialId", BOEjemplar.class)
 				.setParameter("materialId", idMaterial).getResultList().stream()
 				.map(EjemplarAssembler::toTransferObject).toList();
 	}

@@ -170,15 +170,24 @@ public class GUI_AltaMaterial extends JFrame implements IGUI {
 			campoIsbn.setText("");
 			campoNumero.setText("");
 			campoFecha.setText("");
+			campoNombre.setText("");
 			libroButton.setSelected(false);
 			pinturaButton.setSelected(false);
 			panelLibro.setVisible(false);
 			panelPintura.setVisible(false);
+			dispose();
 			break;
 		case Evento.ALTA_MATERIAL_KO:
 			JOptionPane.showMessageDialog(this, "Error al añadir el material", "Error", JOptionPane.ERROR_MESSAGE);
 			break;
 		}
-
+		campoNombre.setText("");
+		campoAutor.setText("");
+		campoEditorial.setText("");
+		campoIsbn.setText("");
+		campoNumero.setText("");
+		campoFecha.setText("");
+		libroButton.setSelected(false);
+		pinturaButton.setSelected(false);
 	}
 }

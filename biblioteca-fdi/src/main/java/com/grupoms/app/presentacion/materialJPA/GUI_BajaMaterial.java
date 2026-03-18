@@ -81,6 +81,7 @@ public class GUI_BajaMaterial extends JFrame implements IGUI {
 		case Evento.BAJA_MATERIAL_OK:
 			JOptionPane.showMessageDialog(this, "Material dado de baja");
 			campoId.setText("");
+			dispose();
 			break;
 		case Evento.BAJA_MATERIAL_KO:
 			JOptionPane.showMessageDialog(this, "Error al dar de baja el material", "Error", JOptionPane.ERROR_MESSAGE);
@@ -88,5 +89,6 @@ public class GUI_BajaMaterial extends JFrame implements IGUI {
 		default:
 			break;
 		}
+		campoId.setText("");
 	}
 }

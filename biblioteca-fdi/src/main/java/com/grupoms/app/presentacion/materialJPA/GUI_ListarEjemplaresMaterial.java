@@ -106,5 +106,6 @@ public class GUI_ListarEjemplaresMaterial extends JFrame implements IGUI {
 					JOptionPane.INFORMATION_MESSAGE);
 			break;
 		}
+		campoID.setText("");
 	}
 }

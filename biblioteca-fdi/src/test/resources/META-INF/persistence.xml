@@ -1,32 +1,53 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <persistence xmlns="https://jakarta.ee/xml/ns/persistence"
-	version="3.0">
-	<persistence-unit name="CentroCivicoJPA" transaction-type="RESOURCE_LOCAL">
+	version="3.1">
+
+	<persistence-unit name="CentroCivicoJPA"
+		transaction-type="RESOURCE_LOCAL">
 		<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
 
+		<!-- Entities -->
 		<class>com.grupoms.app.negocio.socioJPA.BOSocio</class>
 		<class>com.grupoms.app.negocio.socioJPA.BOAdulto</class>
 		<class>com.grupoms.app.negocio.socioJPA.BOInfantil</class>
 
 		<class>com.grupoms.app.negocio.PromocionJPA.BOPromocion</class>
+
 		<class>com.grupoms.app.negocio.prestamoJPA.BOPrestamo</class>
+
 		<class>com.grupoms.app.negocio.materialJPA.BOMaterial</class>
 		<class>com.grupoms.app.negocio.materialJPA.BOLibro</class>
 		<class>com.grupoms.app.negocio.materialJPA.BOPintura</class>
+
 		<class>com.grupoms.app.negocio.EjemplarJPA.BOEjemplar</class>
+
 		<class>com.grupoms.app.negocio.salaJPA.BOSala</class>
 		<class>com.grupoms.app.negocio.ClaseJPA.BOClase</class>
 
 		<properties>
-			<property name="jakarta.persistence.jdbc.driver" value="org.h2.Driver" />
-			<property name="jakarta.persistence.jdbc.url" value="jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;DATABASE_TO_UPPER=TRUE" />
+			<!-- H2 in-memory database -->
+			<property name="jakarta.persistence.jdbc.driver"
+				value="org.h2.Driver" />
+			<property name="jakarta.persistence.jdbc.url"
+				value="jdbc:h2:mem:testdb;MODE=LEGACY;DB_CLOSE_DELAY=-1" />
 			<property name="jakarta.persistence.jdbc.user" value="sa" />
 			<property name="jakarta.persistence.jdbc.password" value="" />
 
-			<property name="eclipselink.logging.level" value="FINE" />
-			<property name="eclipselink.ddl-generation" value="drop-and-create-tables" />
-			<property name="eclipselink.ddl-generation.output-mode" value="database" />
-			<property name="eclipselink.target-database" value="org.eclipse.persistence.platform.database.H2Platform" />
+			<!-- EclipseLink settings -->
+			<property name="eclipselink.target-database"
+				value="org.eclipse.persistence.platform.database.H2Platform" />
+			<property name="eclipselink.ddl-generation"
+				value="drop-and-create-tables" />
+			<property name="eclipselink.ddl-generation.output-mode"
+				value="database" />
+
+			<!-- Useful for debugging tests -->
+			<property name="eclipselink.logging.level" value="WARNING" />
+			<property name="eclipselink.logging.level.sql" value="FINE" />
+
+			<!-- Optional: format SQL -->
+			<property name="eclipselink.logging.parameters" value="true" />
 		</properties>
+
 	</persistence-unit>
 </persistence>

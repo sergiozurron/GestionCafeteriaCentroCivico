@@ -1,4 +1,4 @@
-package com.grupoms.app.negocio;
+package com.grupoms.app.negocio.ejemplarJPA;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -14,6 +14,7 @@ import com.grupoms.app.negocio.EjemplarJPA.BOEjemplar;
 import com.grupoms.app.negocio.EjemplarJPA.EjemplarSAImp;
 import com.grupoms.app.negocio.EjemplarJPA.TEjemplar;
 import com.grupoms.app.negocio.materialJPA.BOLibro;
+import com.grupoms.app.negocio.prestamoJPA.BOPrestamo;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
@@ -22,18 +23,24 @@ import jakarta.persistence.Persistence;
 public class EjemplarSAImpTest {
 
 	EjemplarSAImp ejemplarSA = new EjemplarSAImp();
-	EntityManagerFactory emf = Persistence.createEntityManagerFactory("CentroCivicoJPA-test");
-	EntityManager em;
-	
+	EntityManagerFactory emf = Persistence.createEntityManagerFactory("CentroCivicoJPA");
+
 	@BeforeEach
 	void setUp() {
 		EntityManagerSingleton.setEMF(emf);
-		em = emf.createEntityManager();
+		EntityManager em = emf.createEntityManager();
+		em.getTransaction().begin();
+		em.createQuery("DELETE FROM BOPrestamo").executeUpdate();
+		em.createQuery("DELETE FROM BOClase").executeUpdate();
+		em.createQuery("DELETE FROM BOEjemplar").executeUpdate();
+		em.createQuery("DELETE FROM BOMaterial").executeUpdate();
+		em.getTransaction().commit();
+		em.close();
 	}
-	
+
 	@Test
 	void altaEjemplar_DeberiaCrearEjemplarYDevolverId() {
-		
+
 		BOLibro libro = new BOLibro();
 		libro.setISBN(123456);
 		libro.setNombre("Titulo de Prueba");
@@ -41,41 +48,37 @@ public class EjemplarSAImpTest {
 		libro.setEditorial("Editorial de Prueba");
 		libro.setTipoMaterial(1);
 		libro.setActivo(true);
-		
+
 		persist(libro);
-		
+
 		TEjemplar ejemplar = new TEjemplar();
 		ejemplar.setIdMaterial(libro.getID());
 		ejemplar.setEstado("Nuevo");
-		
-		
+
 		int idEjemplar = ejemplarSA.altaEjemplar(ejemplar);
-		
-		
+
 		assertTrue(idEjemplar > 0);
-		
-		BOEjemplar boEjemplar = buscarEjemplarPorId(idEjemplar);
-		
+
+		BOEjemplar boEjemplar = buscarEjemplar(idEjemplar);
+
 		assertNotNull(boEjemplar);
 	}
-	
+
 	@Test
 	void altaEjemplar_DeberiaDevolverMenosUno_CuandoMaterialNoExiste() {
-		
+
 		TEjemplar ejemplar = new TEjemplar();
-		ejemplar.setIdMaterial(-1); 
+		ejemplar.setIdMaterial(-1);
 		ejemplar.setEstado("Nuevo");
-		
-		
+
 		int idEjemplar = ejemplarSA.altaEjemplar(ejemplar);
-		
-		
+
 		assertTrue(idEjemplar == -1);
 	}
-	
+
 	@Test
 	void altaEjemplar_DeberiaDevolverMenosUno_CuandoMaterialNoActivo() {
-		
+
 		BOLibro libro = new BOLibro();
 		libro.setISBN(111111);
 		libro.setNombre("Titulo Inactivo");
@@ -83,23 +86,21 @@ public class EjemplarSAImpTest {
 		libro.setEditorial("Editorial Inactivo");
 		libro.setTipoMaterial(1);
 		libro.setActivo(false);
-		
+
 		persist(libro);
-		
+
 		TEjemplar ejemplar = new TEjemplar();
 		ejemplar.setIdMaterial(libro.getID());
 		ejemplar.setEstado("Nuevo");
-		
-		
+
 		int idEjemplar = ejemplarSA.altaEjemplar(ejemplar);
-		
-		
+
 		assertTrue(idEjemplar == -1);
 	}
-	
+
 	@Test
 	void bajaEjemplar_DeberiaEliminarEjemplarYDevolverTrue() {
-		
+
 		BOLibro libro = new BOLibro();
 		libro.setISBN(654321);
 		libro.setNombre("Titulo de Prueba Baja");
@@ -107,38 +108,36 @@ public class EjemplarSAImpTest {
 		libro.setEditorial("Editorial de Prueba Baja");
 		libro.setTipoMaterial(1);
 		libro.setActivo(true);
-		
+
 		BOEjemplar ejemplar = new BOEjemplar();
 		ejemplar.setEstado("Usado");
 		ejemplar.setActivo(true);
 		ejemplar.setMaterial(libro);
-		
+
 		persist(libro);
 		persist(ejemplar);
-		
+
 		boolean resultado = ejemplarSA.bajaEjemplar(ejemplar.getId());
-		
-		
+
 		assertTrue(resultado);
-		
-		BOEjemplar ejemplarDesactivado = buscarEjemplarPorId(ejemplar.getId());
-		
+
+		BOEjemplar ejemplarDesactivado = buscarEjemplar(ejemplar.getId());
+
 		assertNotNull(ejemplarDesactivado);
 		assertTrue(!ejemplarDesactivado.getActivo());
 	}
-	
+
 	@Test
 	void bajaEjemplar_DeberiaDevolverFalse_CuandoEjemplarNoExiste() {
-		
-		boolean resultado = ejemplarSA.bajaEjemplar(-1); 
-		
-		
+
+		boolean resultado = ejemplarSA.bajaEjemplar(-1);
+
 		assertTrue(!resultado);
 	}
-	
+
 	@Test
 	void bajaEjemplar_DeberiaDevolverFalse_CuandoEjemplarNoActivo() {
-		
+
 		BOLibro libro = new BOLibro();
 		libro.setISBN(222222);
 		libro.setNombre("Titulo Inactivo Baja");
@@ -146,46 +145,72 @@ public class EjemplarSAImpTest {
 		libro.setEditorial("Editorial Inactivo Baja");
 		libro.setTipoMaterial(1);
 		libro.setActivo(true);
-		
+
 		BOEjemplar ejemplar = new BOEjemplar();
 		ejemplar.setEstado("Dañado");
 		ejemplar.setActivo(false);
 		ejemplar.setMaterial(libro);
-		
+
 		persist(libro);
 		persist(ejemplar);
-		
-		
+
 		boolean resultado = ejemplarSA.bajaEjemplar(ejemplar.getId());
-		
-		
+
 		assertTrue(!resultado);
 	}
-	
+
 	@Test
 	void bajaEjemplar_DeberiaDevolverFalse_CuandoEjemplarTieneClasesAsociadas() {
-		
+
 		BOEjemplar ejemplar = new BOEjemplar();
 		ejemplar.setEstado("Bueno");
 		ejemplar.setActivo(true);
-		
+
+		persist(ejemplar);
+
 		BOClase clase = new BOClase();
 		clase.setTipo("Clase de Prueba");
 		clase.setFechaInicio(new Date());
 		clase.setDuracion(2);
 		clase.setActivo(true);
 		clase.anyadirEjemplar(ejemplar);
-		
+
 		persist(clase);
-		
+
 		boolean resultado = ejemplarSA.bajaEjemplar(ejemplar.getId());
-		
+
 		assertTrue(!resultado);
+		
+		BOEjemplar ejemplarNoEliminado = buscarEjemplar(ejemplar.getId());
+		assertTrue(ejemplarNoEliminado.getActivo());
 	}
-	
+
+	@Test
+	void bajaEjemplar_DeberiaDevolverFalse_CuandoEjemplarTienePrestamosAsociados() {
+
+		BOEjemplar ejemplar = new BOEjemplar();
+		ejemplar.setEstado("Bueno");
+		ejemplar.setActivo(true);
+
+		persist(ejemplar);
+
+		BOPrestamo prestamo = new BOPrestamo();
+		prestamo.setActivo(true);
+		prestamo.setEjemplar(ejemplar);
+
+		persist(prestamo);
+
+		boolean resultado = ejemplarSA.bajaEjemplar(ejemplar.getId());
+
+		assertTrue(!resultado);
+		
+		BOEjemplar ejemplarNoEliminado = buscarEjemplar(ejemplar.getId());
+		assertTrue(ejemplarNoEliminado.getActivo());
+	}
+
 	@Test
 	void modificarEjemplar_DeberiaModificarEjemplarYDevolverTrue() {
-		
+
 		BOLibro libro = new BOLibro();
 		libro.setISBN(333333);
 		libro.setNombre("Titulo Modificar");
@@ -193,50 +218,46 @@ public class EjemplarSAImpTest {
 		libro.setEditorial("Editorial Modificar");
 		libro.setTipoMaterial(1);
 		libro.setActivo(true);
-		
+
 		BOEjemplar ejemplar = new BOEjemplar();
 		ejemplar.setEstado("Bueno");
 		ejemplar.setActivo(true);
 		ejemplar.setMaterial(libro);
-		
+
 		persist(libro);
 		persist(ejemplar);
-		
+
 		TEjemplar tEjemplar = new TEjemplar();
 		tEjemplar.setId(ejemplar.getId());
 		tEjemplar.setIdMaterial(libro.getID());
 		tEjemplar.setEstado("Excelente");
-		
-		
+
 		boolean resultado = ejemplarSA.modificarEjemplar(tEjemplar);
-		
-		
+
 		assertTrue(resultado);
-		
-		BOEjemplar ejemplarModificado = buscarEjemplarPorId(ejemplar.getId());
-		
+
+		BOEjemplar ejemplarModificado = buscarEjemplar(ejemplar.getId());
+
 		assertNotNull(ejemplarModificado);
 		assertTrue(ejemplarModificado.getEstado().equals("Excelente"));
 	}
-	
+
 	@Test
 	void modificarEjemplar_DeberiaDevolverFalse_CuandoEjemplarNoExiste() {
-		
+
 		TEjemplar tEjemplar = new TEjemplar();
-		tEjemplar.setId(-1); 
+		tEjemplar.setId(-1);
 		tEjemplar.setIdMaterial(1);
 		tEjemplar.setEstado("Regular");
-		
-		
+
 		boolean resultado = ejemplarSA.modificarEjemplar(tEjemplar);
-		
-		
+
 		assertTrue(!resultado);
 	}
-	
+
 	@Test
 	void modificarEjemplar_DeberiaDevolverFalse_CuandoEjemplarNoActivo() {
-		
+
 		BOLibro libro = new BOLibro();
 		libro.setISBN(444444);
 		libro.setNombre("Titulo Inactivo Modificar");
@@ -244,30 +265,28 @@ public class EjemplarSAImpTest {
 		libro.setEditorial("Editorial Inactivo Modificar");
 		libro.setTipoMaterial(1);
 		libro.setActivo(true);
-		
+
 		BOEjemplar ejemplar = new BOEjemplar();
 		ejemplar.setEstado("Malo");
 		ejemplar.setActivo(false);
 		ejemplar.setMaterial(libro);
-		
+
 		persist(libro);
 		persist(ejemplar);
-		
+
 		TEjemplar tEjemplar = new TEjemplar();
 		tEjemplar.setId(ejemplar.getId());
 		tEjemplar.setIdMaterial(libro.getID());
 		tEjemplar.setEstado("Regular");
-		
-		
+
 		boolean resultado = ejemplarSA.modificarEjemplar(tEjemplar);
-		
-		
+
 		assertTrue(!resultado);
 	}
-	
+
 	@Test
 	void modificarEjemplar_DeberiaDevolverFalse_CuandoMaterialNoExiste() {
-		
+
 		BOLibro libro = new BOLibro();
 		libro.setISBN(555555);
 		libro.setNombre("Titulo Material No Existe");
@@ -275,30 +294,28 @@ public class EjemplarSAImpTest {
 		libro.setEditorial("Editorial Material No Existe");
 		libro.setTipoMaterial(1);
 		libro.setActivo(true);
-		
+
 		BOEjemplar ejemplar = new BOEjemplar();
 		ejemplar.setEstado("Aceptable");
 		ejemplar.setActivo(true);
 		ejemplar.setMaterial(libro);
-		
+
 		persist(libro);
 		persist(ejemplar);
-		
+
 		TEjemplar tEjemplar = new TEjemplar();
 		tEjemplar.setId(ejemplar.getId());
-		tEjemplar.setIdMaterial(-1); 
+		tEjemplar.setIdMaterial(-1);
 		tEjemplar.setEstado("Bueno");
-		
-		
+
 		boolean resultado = ejemplarSA.modificarEjemplar(tEjemplar);
-		
-		
+
 		assertTrue(!resultado);
 	}
-	
+
 	@Test
 	void modificarEjemplar_DeberiaDevolverFalse_CuandoMaterialNoActivo() {
-		
+
 		BOLibro libroActivo = new BOLibro();
 		libroActivo.setISBN(666666);
 		libroActivo.setNombre("Titulo Material Inactivo");
@@ -306,7 +323,7 @@ public class EjemplarSAImpTest {
 		libroActivo.setEditorial("Editorial Material Inactivo");
 		libroActivo.setTipoMaterial(1);
 		libroActivo.setActivo(true);
-		
+
 		BOLibro libroInactivo = new BOLibro();
 		libroInactivo.setISBN(777777);
 		libroInactivo.setNombre("Titulo Material Inactivo 2");
@@ -314,42 +331,39 @@ public class EjemplarSAImpTest {
 		libroInactivo.setEditorial("Editorial Material Inactivo 2");
 		libroInactivo.setTipoMaterial(1);
 		libroInactivo.setActivo(false);
-		
+
 		BOEjemplar ejemplar = new BOEjemplar();
 		ejemplar.setEstado("Regular");
 		ejemplar.setActivo(true);
 		ejemplar.setMaterial(libroActivo);
-		
+
 		persist(libroActivo);
 		persist(libroInactivo);
 		persist(ejemplar);
-		
+
 		TEjemplar tEjemplar = new TEjemplar();
 		tEjemplar.setId(ejemplar.getId());
-		tEjemplar.setIdMaterial(libroInactivo.getID()); 
+		tEjemplar.setIdMaterial(libroInactivo.getID());
 		tEjemplar.setEstado("Bueno");
-		
-		
+
 		boolean resultado = ejemplarSA.modificarEjemplar(tEjemplar);
-		
-		
+
 		assertTrue(!resultado);
 	}
-	
+
 	void persist(Object entity) {
+		EntityManager em = emf.createEntityManager();
 		em.getTransaction().begin();
 		em.persist(entity);
 		em.getTransaction().commit();
 		em.close();
 	}
-	
-	BOEjemplar buscarEjemplarPorId(int id) {
-		BOEjemplar ejemplar = null;
-		em.getTransaction().begin();
-		ejemplar = em.find(BOEjemplar.class, id);
-		em.getTransaction().commit();
+
+	BOEjemplar buscarEjemplar(int id) {
+		EntityManager em = emf.createEntityManager();
+		BOEjemplar boEjemplar = em.find(BOEjemplar.class, id);
 		em.close();
-		return ejemplar;
+		return boEjemplar;
 	}
 
 }

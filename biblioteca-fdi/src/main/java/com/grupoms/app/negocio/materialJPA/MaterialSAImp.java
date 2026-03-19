@@ -1,9 +1,11 @@
 package com.grupoms.app.negocio.materialJPA;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import com.grupoms.app.integracion.factoria.EntityManagerSingleton;
+import com.grupoms.app.negocio.EjemplarJPA.BOEjemplar;
 import com.grupoms.app.negocio.assembler.*;
 
 import jakarta.persistence.EntityManager;
@@ -36,10 +38,7 @@ public class MaterialSAImp implements MaterialSA {
 
 	        // Si existe por nombre
 	        if (materialExistente != null) {
-	            if (!materialExistente.getActivo()) {
-	                materialExistente.setActivo(true);
-	                id = materialExistente.getID();
-	            } else {
+	            if (materialExistente.getActivo()) {
 	                return -1; //nombre ya existe
 	            }
 	        } else {
@@ -59,10 +58,7 @@ public class MaterialSAImp implements MaterialSA {
 	                } catch (Exception ignored) {}
 
 	                if (libroExistente != null) {
-	                    if (!libroExistente.getActivo()) {
-	                        libroExistente.setActivo(true);
-	                        id = libroExistente.getID();
-	                    } else {
+	                    if (libroExistente.getActivo()) {
 	                       return -2; //ya existe el isbn
 	                    }
 	                } else {
@@ -87,11 +83,8 @@ public class MaterialSAImp implements MaterialSA {
 	                } catch (Exception ignored) {}
 
 	                if (pinturaExistente != null) {
-	                    if (!pinturaExistente.getActivo()) {
-	                        pinturaExistente.setActivo(true);
-	                        id = pinturaExistente.getID();
-	                    } else {
-	                        return -3; //ya existe el numero de pintura
+	                    if (pinturaExistente.getActivo()) {
+	                    	return -3; //ya existe el numero de pintura
 	                    }
 	                } else {
 	                    BOPintura pintura = new BOPintura(pinturaDTO);
@@ -128,12 +121,18 @@ public class MaterialSAImp implements MaterialSA {
 				t.rollback();
 				return -1;
 			}
-			int size = material.getEjemplares().size();
-			if (size>0) { //esto funciona?
+			List<BOEjemplar>listaV = new ArrayList<>();
+
+			List<BOEjemplar>lista = material.getEjemplares();
+			for(BOEjemplar e: lista) {
+				if(e.getActivo()) {
+					listaV.add(e);
+				}
+			}
+			if(listaV.size()>0) {
 				t.rollback();
 				return -2;
 			}
-
 			material.setActivo(false);
 			t.commit();
 			return 1;
@@ -172,47 +171,107 @@ public class MaterialSAImp implements MaterialSA {
 
 	@Override
 	public Integer modificarMaterial(TMaterial material) {
-		Integer id = -1;
-		EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
-		EntityTransaction t = em.getTransaction();
-		t.begin();
-		try {
-			BOMaterial m = em.find(BOMaterial.class, material.getID());
-			
-			if (m == null) {
-				em.close();
-				throw new IllegalArgumentException("El ID del material no existe o no está activo.");
-			} else {
-				m = em.find(BOMaterial.class,material.getNombre());
-				if(m!=null) {
-					em.close();
-					throw new IllegalArgumentException("El nombre del material es conflictivo");
-				}
-				m.setNombre(material.getNombre());
-				m.setAutor(material.getAutor());
-				m.setTipoMaterial(material.getTipoMaterial());
+	    Integer id = -1;
 
-				if (material.getTipoMaterial() == 0) {
-					TPintura pintura = (TPintura) material;
-					BOPintura boPintura = (BOPintura) m;
-					boPintura.setFecha(pintura.getFecha());
-					boPintura.setNumero(pintura.getNumero());
+	    EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
+	    EntityTransaction t = em.getTransaction();
 
-				} else if (material.getTipoMaterial() == 1) {
-					TLibro libro = (TLibro) material;
-					BOLibro boLibro = (BOLibro) m;
-					boLibro.setISBN(libro.getISBN());
-					boLibro.setEditorial(libro.getEditorial());
-				}
-			}
-			t.commit();
-			id = material.getID();
+	    try {
+	        t.begin();
 
-		} finally {
-			em.close();
-		}
+	        // 1. Buscar el material original
+	        BOMaterial original = em.find(BOMaterial.class, material.getID());
 
-		return id;
+	        if (original == null || !original.getActivo()) {
+	            return -1; // No existe o está inactivo
+	        }
+
+	        // 2. Comprobación de nombre duplicado
+	        TypedQuery<BOMaterial> qNombre = em.createNamedQuery(
+	                "com.grupoms.app.negocio.materialJPA.BOMaterial.findByName",
+	                BOMaterial.class
+	        );
+	        qNombre.setParameter("nombre", material.getNombre());
+
+	        BOMaterial conflictoNombre = null;
+	        try {
+	            conflictoNombre = qNombre.getSingleResult();
+	        } catch (Exception ignored) {}
+
+	        if (conflictoNombre != null && !conflictoNombre.getID().equals(material.getID())) {
+	            if (conflictoNombre.getActivo()) {
+	                return -2; // Nombre ya existe en otro material activo
+	            }
+	        }
+
+	        // 3. Validaciones específicas según tipo
+	        if (material instanceof TLibro libroDTO) {
+
+	            // Comprobar ISBN duplicado
+	            TypedQuery<BOLibro> qISBN = em.createNamedQuery(
+	                    "com.grupoms.app.negocio.materialJPA.BOLibro.findByISBN",
+	                    BOLibro.class
+	            );
+	            qISBN.setParameter("isbn", libroDTO.getISBN());
+
+	            BOLibro conflictoISBN = null;
+	            try {
+	                conflictoISBN = qISBN.getSingleResult();
+	            } catch (Exception ignored) {}
+
+	            if (conflictoISBN != null && !conflictoISBN.getID().equals(material.getID())) {
+	                if (conflictoISBN.getActivo()) {
+	                    return -3; // ISBN ya existe
+	                }
+	            }
+
+	            // Actualizar datos del libro
+	            BOLibro boLibro = (BOLibro) original;
+	            boLibro.setISBN(libroDTO.getISBN());
+	            boLibro.setEditorial(libroDTO.getEditorial());
+
+	        } else if (material instanceof TPintura pinturaDTO) {
+
+	            // Comprobar número duplicado
+	            TypedQuery<BOPintura> qNumero = em.createNamedQuery(
+	                    "com.grupoms.app.negocio.materialJPA.BOPintura.findByNumero",
+	                    BOPintura.class
+	            );
+	            qNumero.setParameter("numero", pinturaDTO.getNumero());
+
+	            BOPintura conflictoNumero = null;
+	            try {
+	                conflictoNumero = qNumero.getSingleResult();
+	            } catch (Exception ignored) {}
+
+	            if (conflictoNumero != null && !conflictoNumero.getID().equals(material.getID())) {
+	                if (conflictoNumero.getActivo()) {
+	                    return -4; // Número de pintura ya existe
+	                }
+	            }
+
+	            // Actualizar datos de pintura
+	            BOPintura boPintura = (BOPintura) original;
+	            boPintura.setFecha(pinturaDTO.getFecha());
+	            boPintura.setNumero(pinturaDTO.getNumero());
+	        }
+
+	        // 4. Actualizar datos comunes
+	        original.setNombre(material.getNombre());
+	        original.setAutor(material.getAutor());
+	        original.setTipoMaterial(material.getTipoMaterial());
+
+	        t.commit();
+	        id = material.getID();
+
+	    } catch (Exception e) {
+	        if (t.isActive()) t.rollback();
+	        throw e;
+	    } finally {
+	        em.close();
+	    }
+
+	    return id;
 	}
 
 	@Override

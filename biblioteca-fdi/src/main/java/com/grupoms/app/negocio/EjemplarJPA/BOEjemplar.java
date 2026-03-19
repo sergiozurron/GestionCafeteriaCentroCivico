@@ -9,7 +9,7 @@ import jakarta.persistence.*;
 
 @Entity
 @NamedQuery(name = "com.grupoms.app.negocio.EjemplarJPA.BOEjemplar.findAll", query = "SELECT e FROM BOEjemplar e")
-@NamedQuery(name = "com.grupoms.app.negocio.EjemplarJPA.BOEjemplar.findByMaterialId", query = "SELECT e FROM BOEjemplar e WHERE e.material.id = :materialId AND e.material.activo = true")
+@NamedQuery(name = "com.grupoms.app.negocio.EjemplarJPA.BOEjemplar.findByMaterialId", query = "SELECT e FROM BOEjemplar e WHERE e.material.id = :materialId AND e.material.activo = true AND e.activo = true")
 @NamedQuery(name = "com.grupoms.app.negocio.EjemplarJPA.BOEjemplar.findBySocio", query = "SELECT e FROM BOEjemplar e JOIN e.prestamos p WHERE p.socio.id = :idSocio AND p.activo = true AND p.fechaDevuelto IS NULL")
 public class BOEjemplar {
 

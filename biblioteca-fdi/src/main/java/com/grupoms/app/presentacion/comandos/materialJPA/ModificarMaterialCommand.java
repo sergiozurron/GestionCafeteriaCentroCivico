@@ -21,7 +21,7 @@ public class ModificarMaterialCommand implements Command {
 		if (ok > -1) {
 			return new Context(Evento.MODIFICAR_MATERIAL_OK, ok);
 		} else {
-			return new Context(Evento.MODIFICAR_MATERIAL_KO, null);
+			return new Context(Evento.MODIFICAR_MATERIAL_KO, ok);
 		}
 	}
 

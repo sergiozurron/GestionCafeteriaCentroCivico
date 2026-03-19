@@ -52,15 +52,21 @@ public class GUI_ModificarMaterial extends JFrame implements IGUI {
 			numero.setText("");
 			dispose();
 		} else if (context.getEvento() == Evento.MODIFICAR_MATERIAL_KO) {
-			JOptionPane.showMessageDialog(this, "No se ha podido modificar el material");
+			int res = (int) context.getDatos();
+			switch(res) {
+			case -1:
+				JOptionPane.showMessageDialog(this,"No existe o está inactivo");
+				break;
+			case -2:
+				JOptionPane.showMessageDialog(this, "El nombre no puede estar duplicado");
+				break;
+			case -3:
+				JOptionPane.showMessageDialog(this,"El ISBN ya existe");
+				break;
+			case -4:
+				JOptionPane.showMessageDialog(this, "El numero ya existe");
+			}
 		}
-		id.setText("");
-		nombre.setText("");
-		autor.setText("");
-		isbn.setText("");
-		editorial.setText("");
-		fecha.setText("");
-		numero.setText("");
 	}
 
 	public void initGUI() {

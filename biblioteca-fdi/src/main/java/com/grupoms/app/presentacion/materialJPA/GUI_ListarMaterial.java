@@ -65,6 +65,7 @@ public class GUI_ListarMaterial extends JFrame implements IGUI {
 	@Override
 	public void actualizar(Context context) {
 		if (context == null) {
+			modeloTabla.setRowCount(0);
 			setVisible(true);
 			return;
 		}

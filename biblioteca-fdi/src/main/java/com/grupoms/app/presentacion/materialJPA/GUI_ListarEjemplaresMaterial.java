@@ -83,6 +83,7 @@ public class GUI_ListarEjemplaresMaterial extends JFrame implements IGUI {
 	@Override
 	public void actualizar(Context context) {
 		if (context == null) {
+			modeloTabla.setRowCount(0);
 			setVisible(true);
 			return;
 		}
@@ -107,5 +108,6 @@ public class GUI_ListarEjemplaresMaterial extends JFrame implements IGUI {
 			break;
 		}
 		campoID.setText("");
+
 	}
 }

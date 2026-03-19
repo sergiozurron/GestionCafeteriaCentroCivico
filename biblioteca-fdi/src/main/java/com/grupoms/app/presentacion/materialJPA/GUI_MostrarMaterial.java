@@ -112,6 +112,11 @@ public class GUI_MostrarMaterial extends JFrame implements IGUI {
 	public void actualizar(Context context) {
 		if (context == null) {
 			setVisible(true);
+			ISBNLabel.setText("");
+			nombreLabel.setText("");
+			editorialLabel.setText("");
+			autorLabel.setText("");
+			campoID.setText("");
 			return;
 		}
 
@@ -142,11 +147,7 @@ public class GUI_MostrarMaterial extends JFrame implements IGUI {
 			autorLabel.setText("");
 			break;
 		}
-		ISBNLabel.setText("");
-		nombreLabel.setText("");
-		editorialLabel.setText("");
-		autorLabel.setText("");
-		campoID.setText("");
+		
 
 	}
 

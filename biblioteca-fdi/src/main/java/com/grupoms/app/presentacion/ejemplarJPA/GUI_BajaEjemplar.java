@@ -79,6 +79,8 @@ public class GUI_BajaEjemplar extends JFrame implements IGUI {
 		}
 		switch (context.getEvento()) {
 		case Evento.BAJA_EJEMPLAR_OK:
+			limpiarCampos();
+			dispose();
 			JOptionPane.showMessageDialog(this, "Ejemplar dado de baja");
 			campoId.setText("");
 			break;
@@ -88,5 +90,9 @@ public class GUI_BajaEjemplar extends JFrame implements IGUI {
 		default:
 			break;
 		}
+	}
+
+	private void limpiarCampos() {
+		campoId.setText("");		
 	}
 }

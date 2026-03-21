@@ -81,6 +81,8 @@ public class GUI_AltaEjemplar extends JFrame implements IGUI {
 		}
 		switch (context.getEvento()) {
 		case Evento.ALTA_EJEMPLAR_OK:
+			limpiarCampos();
+			dispose();
 			int idEjemplar = (int) context.getDatos();
 			JOptionPane.showMessageDialog(this, "Ejemplar creado con ID: " + idEjemplar);
 			break;
@@ -90,6 +92,10 @@ public class GUI_AltaEjemplar extends JFrame implements IGUI {
 		default:
 			break;
 		}
+	}
+
+	private void limpiarCampos() {
+		campoIdMaterial.setText("");		
 	}
 
 }

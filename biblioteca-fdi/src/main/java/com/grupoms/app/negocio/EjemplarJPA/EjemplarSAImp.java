@@ -141,7 +141,7 @@ public class EjemplarSAImp implements EjemplarSA {
 	public List<TEjemplar> listarEjemplares() {
 		EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
 
-		List<TEjemplar> ejemplares = em.createNamedQuery("BOEjemplar.findAll", BOEjemplar.class).getResultList()
+		List<TEjemplar> ejemplares = em.createNamedQuery("com.grupoms.app.negocio.EjemplarJPA.BOEjemplar.findAll", BOEjemplar.class).getResultList()
 				.stream().map(EjemplarAssembler::toTransferObject).collect(Collectors.toList());
 
 		em.close();

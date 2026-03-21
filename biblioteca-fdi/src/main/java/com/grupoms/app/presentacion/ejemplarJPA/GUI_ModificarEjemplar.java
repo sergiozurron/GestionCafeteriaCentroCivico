@@ -118,8 +118,9 @@ public class GUI_ModificarEjemplar extends JFrame implements IGUI {
 		}
 		switch (context.getEvento()) {
 		case Evento.MODIFICAR_EJEMPLAR_OK:
+			limpiarCampos();
+			dispose();
 			JOptionPane.showMessageDialog(this, "Ejemplar modificado con éxito");
-			setVisible(false);
 			break;
 		case Evento.MODIFICAR_EJEMPLAR_KO:
 			JOptionPane.showMessageDialog(this, "Error al modificar el ejemplar", "Error", JOptionPane.ERROR_MESSAGE);
@@ -127,5 +128,11 @@ public class GUI_ModificarEjemplar extends JFrame implements IGUI {
 		default:
 			break;
 		}
+	}
+
+	private void limpiarCampos() {
+		campoId.setText("");
+		campoEstado.setText("");
+		campoIdMaterial.setText("");		
 	}
 }

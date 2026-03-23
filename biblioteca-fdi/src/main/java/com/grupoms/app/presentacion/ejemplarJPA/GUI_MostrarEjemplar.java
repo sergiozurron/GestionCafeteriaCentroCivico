@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -27,7 +29,6 @@ public class GUI_MostrarEjemplar extends JFrame implements IGUI {
 
 	private JTextField campoValorId;
 	private JTextField campoValorEstado;
-	private JTextField campoValorActivo;
 	private JTextField campoValorIdMaterial;
 
 	public GUI_MostrarEjemplar() {
@@ -72,11 +73,6 @@ public class GUI_MostrarEjemplar extends JFrame implements IGUI {
 		JLabel labelEstadoValor = new JLabel("Estado:");
 		labelEstadoValor.setPreferredSize(campoValorEstado.getPreferredSize());
 
-		campoValorActivo = new JTextField(15);
-		campoValorActivo.setEditable(false);
-		JLabel labelActivoValor = new JLabel("Activo:");
-		labelActivoValor.setPreferredSize(campoValorActivo.getPreferredSize());
-
 		campoValorIdMaterial = new JTextField(15);
 		campoValorIdMaterial.setEditable(false);
 		JLabel labelIdMaterialValor = new JLabel("ID Material:");
@@ -114,18 +110,22 @@ public class GUI_MostrarEjemplar extends JFrame implements IGUI {
 		y++;
 		gbc.gridx = 0;
 		gbc.gridy = y;
-		panel.add(labelActivoValor, gbc);
-		gbc.gridx = 1;
-		panel.add(campoValorActivo, gbc);
-
-		y++;
-		gbc.gridx = 0;
-		gbc.gridy = y;
 		panel.add(labelIdMaterialValor, gbc);
 		gbc.gridx = 1;
 		panel.add(campoValorIdMaterial, gbc);
 
 		add(panel, BorderLayout.CENTER);
+		
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosed(WindowEvent e) {
+				campoId.setText("");
+				campoValorId.setText("");
+				campoValorEstado.setText("");
+				campoValorIdMaterial.setText("");
+			}
+		});
+		
 	}
 
 	@Override
@@ -138,12 +138,10 @@ public class GUI_MostrarEjemplar extends JFrame implements IGUI {
 
 			campoValorId.setText(ejemplar.getId() != null ? ejemplar.getId().toString() : "N/A");
 			campoValorEstado.setText(ejemplar.getEstado() != null ? ejemplar.getEstado() : "N/A");
-			Boolean activo = ejemplar.getActivo();
-			campoValorActivo.setText(activo != null && activo ? "Sí" : "No");
 			campoValorIdMaterial
 					.setText(ejemplar.getIdMaterial() != null ? ejemplar.getIdMaterial().toString() : "N/A");
 		} else if (context.getEvento() == Evento.MOSTRAR_EJEMPLAR_KO) {
-			JOptionPane.showMessageDialog(this, "Proveedor no encontrado en la base de datos");
+			JOptionPane.showMessageDialog(this, "Ejemplar no encontrado en la base de datos");
 		}
 	}
 

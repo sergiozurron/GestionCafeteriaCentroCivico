@@ -37,7 +37,6 @@ public class GUI_ListarEjemplar extends JFrame implements IGUI {
 		modeloTabla.addColumn("ID");
 		modeloTabla.addColumn("Estado");
 		modeloTabla.addColumn("Id Material");
-		modeloTabla.addColumn("Activo");
 
 		tabla = new JTable(modeloTabla);
 		JScrollPane scrollPane = new JScrollPane(tabla);
@@ -58,6 +57,13 @@ public class GUI_ListarEjemplar extends JFrame implements IGUI {
 		panelPrincipal.add(btnCargar, BorderLayout.SOUTH);
 
 		add(panelPrincipal);
+		
+		addWindowListener(new java.awt.event.WindowAdapter() {
+			@Override
+			public void windowClosed(java.awt.event.WindowEvent e) {
+				modeloTabla.setRowCount(0);
+			}
+		});
 	}
 
 	@Override
@@ -72,8 +78,7 @@ public class GUI_ListarEjemplar extends JFrame implements IGUI {
 			List<TEjemplar> ejemplares = (List<TEjemplar>) context.getDatos();
 
 			for (TEjemplar ejemplar : ejemplares) {
-				Object[] fila = { ejemplar.getId(), ejemplar.getEstado(), ejemplar.getIdMaterial(),
-						(ejemplar.getActivo() != null && ejemplar.getActivo()) ? "Sí" : "No" };
+				Object[] fila = { ejemplar.getId(), ejemplar.getEstado(), ejemplar.getIdMaterial() };
 				modeloTabla.addRow(fila);
 			}
 		}

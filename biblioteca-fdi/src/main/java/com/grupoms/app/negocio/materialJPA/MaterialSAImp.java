@@ -10,6 +10,7 @@ import com.grupoms.app.negocio.assembler.*;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.LockModeType;
 import jakarta.persistence.TypedQuery;
 
 public class MaterialSAImp implements MaterialSA {
@@ -155,6 +156,7 @@ public class MaterialSAImp implements MaterialSA {
 		final TypedQuery<BOMaterial> query = em
 				.createNamedQuery("com.grupoms.app.negocio.materialJPA.BOMaterial.findAll", BOMaterial.class);
 		List<TMaterial> lista = query.getResultList().stream().map(bo -> {
+			em.lock(bo, LockModeType.OPTIMISTIC);
 			if (bo instanceof BOLibro libro)
 				return LibroAssembler.toDTO(libro);
 			else if (bo instanceof BOPintura pintura)
@@ -285,6 +287,7 @@ public class MaterialSAImp implements MaterialSA {
 			em.close();
 			return null;
 		}
+		em.lock(material, LockModeType.OPTIMISTIC);
 		TMaterial dto;
 		if (material instanceof BOLibro libro) {
 			dto = LibroAssembler.toDTO(libro);

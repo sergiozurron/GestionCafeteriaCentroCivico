@@ -3,6 +3,8 @@ package com.grupoms.app.presentacion.mesa;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ItemEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import com.grupoms.app.negocio.mesa.TMesa;
 import com.grupoms.app.negocio.mesa.TMesaSala;
@@ -27,6 +29,17 @@ public class GUI_AltaMesa extends JFrame implements IGUI {
 		super("Alta Mesa");
 		initGUI();
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				limpiarCampos();
+			}
+
+			@Override
+			public void windowClosed(WindowEvent e) {
+				limpiarCampos();
+			}
+		});
 		pack();
 		setLocationRelativeTo(null);
 	}

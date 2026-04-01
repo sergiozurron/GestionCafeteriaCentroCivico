@@ -13,6 +13,7 @@ import com.grupoms.app.negocio.assembler.SalaAssembler;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.LockModeType;
 import jakarta.persistence.TypedQuery;
 
 public class SalaSAImp implements SalaSA {
@@ -21,6 +22,10 @@ public class SalaSAImp implements SalaSA {
 	public Integer altaSala(TSala sala) {
 		BOSala salaExistente = null;
 		Integer id = -1;
+
+		if (sala == null || sala.getNombre() == null || sala.getNombre().trim().isEmpty() || sala.getCapacidad() == null
+				|| sala.getCapacidad() <= 0)
+			return -1;
 
 		EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
 		EntityTransaction t = em.getTransaction();
@@ -38,7 +43,9 @@ public class SalaSAImp implements SalaSA {
 
 			if (salaExistente != null) {
 				if (!salaExistente.getActivo()) {
+					em.lock(salaExistente, LockModeType.OPTIMISTIC);
 					salaExistente.setActivo(true);
+					salaExistente.setNombre(sala.getNombre());
 					salaExistente.setCapacidad(sala.getCapacidad());
 					id = salaExistente.getId();
 				} else {
@@ -71,7 +78,10 @@ public class SalaSAImp implements SalaSA {
 	}
 
 	@Override
-	public Integer bajaSala(Integer id) throws Exception {
+	public Integer bajaSala(Integer id) {
+		if (id == null || id <= 0)
+			return -1;
+
 		EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
 		EntityTransaction t = em.getTransaction();
 
@@ -79,18 +89,28 @@ public class SalaSAImp implements SalaSA {
 			t.begin();
 
 			BOSala sala = em.find(BOSala.class, id);
+			if (sala != null)
+				em.lock(sala, LockModeType.OPTIMISTIC);
 
 			if (sala == null || !sala.getActivo()) {
 				t.rollback();
-				throw new Exception("La sala no existe o ya está inactiva.");
+				return -1;
 			}
 
-			String jpql = "SELECT COUNT(c) FROM BOClase c WHERE c.sala.id = :idSala AND c.activo = true";
-			Long numClases = em.createQuery(jpql, Long.class).setParameter("idSala", id).getSingleResult();
+			boolean tieneClasesActivas = false;
+			List<BOClase> clases = sala.getClases();
+			if (clases != null) {
+				for (BOClase clase : clases) {
+					if (clase.getActivo()) {
+						tieneClasesActivas = true;
+						break;
+					}
+				}
+			}
 
-			if (numClases > 0) {
+			if (tieneClasesActivas) {
 				t.rollback();
-				throw new Exception("Elimine primero las clases asociadas a esta sala.");
+				return -2;
 			}
 
 			sala.setActivo(false);
@@ -109,17 +129,37 @@ public class SalaSAImp implements SalaSA {
 
 	@Override
 	public Integer modificarSala(TSala sala) {
+		if (sala == null || sala.getId() == null || sala.getId() <= 0 || sala.getNombre() == null
+				|| sala.getNombre().trim().isEmpty() || sala.getCapacidad() == null || sala.getCapacidad() <= 0)
+			return -1;
+
 		Integer id = -1;
 		EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
 		EntityTransaction t = em.getTransaction();
 		t.begin();
 		try {
 			BOSala s = em.find(BOSala.class, sala.getId());
+			if (s != null)
+				em.lock(s, LockModeType.OPTIMISTIC);
 
-			if (s == null) {
-				em.close();
-				throw new IllegalArgumentException("El ID del material no existe.");
+			if (s == null || !s.getActivo()) {
+				t.rollback();
+				return -1;
 			} else {
+				TypedQuery<BOSala> query = em.createNamedQuery("com.grupoms.app.negocio.salaJPA.BOSala.findByName",
+						BOSala.class);
+				query.setParameter("nombre", sala.getNombre());
+				BOSala salaMismoNombre = null;
+				try {
+					salaMismoNombre = query.getSingleResult();
+				} catch (Exception e) {
+				}
+
+				if (salaMismoNombre != null && !salaMismoNombre.getId().equals(s.getId()) && salaMismoNombre.getActivo()) {
+					t.rollback();
+					return -1;
+				}
+
 				s.setNombre(sala.getNombre());
 				s.setCapacidad(sala.getCapacidad());
 				t.commit();
@@ -139,7 +179,7 @@ public class SalaSAImp implements SalaSA {
 
 	@Override
 	public TSala mostrarSala(Integer id) {
-		if (id == null || id < 0)
+		if (id == null || id <= 0)
 			return null;
 
 		EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
@@ -186,29 +226,37 @@ public class SalaSAImp implements SalaSA {
 
 	@Override
 	public List<TClase> mostrarClasesPorSala(Integer idSala) {
-	    EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
-	    
-	    List<TClase> lista = new ArrayList<>(); 
+		if (idSala == null || idSala <= 0)
+			return null;
 
-	    try {
-	        final TypedQuery<BOClase> query = em.createNamedQuery("com.grupoms.app.negocio.claseJPA.BOClase.findBySala", BOClase.class);
-	        query.setParameter("idSala", idSala);
+		EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
 
-	        lista = query.getResultList().stream()
-	                     .map(ClaseAssembler::entityToTransfer)
-	                     .collect(Collectors.toList());
+		List<TClase> lista = new ArrayList<>();
 
-	    } catch (Exception e) {
-	        System.err.println("Error al obtener clases por sala: " + e.getMessage());
-	        e.printStackTrace(); 
+		try {
+			BOSala sala = em.find(BOSala.class, idSala);
+			if (sala == null || !sala.getActivo()) {
+				return null;
+			}
 
-	        
-	    } finally {
-	        if (em != null && em.isOpen()) {
-	            em.close();
-	        }
-	    }
-	    
-	    return lista;
+			em.lock(sala, LockModeType.OPTIMISTIC);
+
+			final TypedQuery<BOClase> query = em.createNamedQuery("com.grupoms.app.negocio.claseJPA.BOClase.findBySala",
+					BOClase.class);
+			query.setParameter("idSala", idSala);
+
+			lista = query.getResultList().stream().map(ClaseAssembler::entityToTransfer).collect(Collectors.toList());
+
+		} catch (Exception e) {
+			System.err.println("Error al obtener clases por sala: " + e.getMessage());
+			e.printStackTrace();
+			return null;
+		} finally {
+			if (em != null && em.isOpen()) {
+				em.close();
+			}
+		}
+
+		return lista;
 	}
 }

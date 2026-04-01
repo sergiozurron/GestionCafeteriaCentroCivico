@@ -18,8 +18,8 @@ public class SalaAssembler {
 		BOSala bo = new BOSala();
 		bo.setId(dto.getId());
 		bo.setNombre(dto.getNombre());
-		bo.setCapacidad(bo.getCapacidad());
-		bo.setActivo(bo.getActivo());
+		bo.setCapacidad(dto.getCapacidad());
+		bo.setActivo(dto.getActivo());
 
 		return bo;
 	}

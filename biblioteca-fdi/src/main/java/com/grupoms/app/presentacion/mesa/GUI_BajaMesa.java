@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -29,6 +31,17 @@ public class GUI_BajaMesa extends JFrame implements IGUI {
 		super("Baja Mesa");
 		initGUI();
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				limpiarCampos();
+			}
+
+			@Override
+			public void windowClosed(WindowEvent e) {
+				limpiarCampos();
+			}
+		});
 		pack();
 		setLocationRelativeTo(null);
 	}
@@ -36,6 +49,7 @@ public class GUI_BajaMesa extends JFrame implements IGUI {
 	@Override
 	public void actualizar(Context context) {
 		if (context == null) {
+			limpiarCampos();
 			setVisible(true);
 			return;
 		}
@@ -97,5 +111,9 @@ public class GUI_BajaMesa extends JFrame implements IGUI {
 		panel.add(baja, gbc);
 
 		add(panel, BorderLayout.CENTER);
+	}
+
+	private void limpiarCampos() {
+		idMesa.setText("");
 	}
 }

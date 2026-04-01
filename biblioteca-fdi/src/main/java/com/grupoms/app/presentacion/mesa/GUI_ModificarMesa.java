@@ -3,6 +3,8 @@ package com.grupoms.app.presentacion.mesa;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ItemEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import com.grupoms.app.negocio.mesa.TMesa;
 import com.grupoms.app.negocio.mesa.TMesaSala;
@@ -21,11 +23,23 @@ public class GUI_ModificarMesa extends JFrame implements IGUI {
 	private JLabel lblPrivacidad, lblSuplemento;
 	private JTextField salaPrivacidad, terrazaSuplemento;
 	private JButton modificar;
+	private ButtonGroup grupoTipo;
 
 	public GUI_ModificarMesa() {
 		super("Modificar Mesa");
 		initGUI();
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				limpiarCampos();
+			}
+
+			@Override
+			public void windowClosed(WindowEvent e) {
+				limpiarCampos();
+			}
+		});
 		pack();
 		setLocationRelativeTo(null);
 	}
@@ -33,6 +47,7 @@ public class GUI_ModificarMesa extends JFrame implements IGUI {
 	@Override
 	public void actualizar(Context context) {
 		if (context == null) {
+			limpiarCampos();
 			setVisible(true);
 			return;
 		}
@@ -69,7 +84,7 @@ public class GUI_ModificarMesa extends JFrame implements IGUI {
 
 		rbtnSala = new JRadioButton("Sala");
 		rbtnTerraza = new JRadioButton("Terraza");
-		ButtonGroup grupoTipo = new ButtonGroup();
+		grupoTipo = new ButtonGroup();
 		grupoTipo.add(rbtnSala);
 		grupoTipo.add(rbtnTerraza);
 
@@ -214,5 +229,24 @@ public class GUI_ModificarMesa extends JFrame implements IGUI {
 		panel.add(modificar, gbc);
 
 		add(panel, BorderLayout.CENTER);
+	}
+
+	private void limpiarCampos() {
+		id.setText("");
+		numero.setText("");
+		ubicacion.setText("");
+		capacidad.setText("");
+		salaReservada.setSelected(false);
+		salaPrivacidad.setText("");
+		terrazaCubierta.setSelected(false);
+		terrazaSuplemento.setText("");
+
+		if (grupoTipo != null) {
+			grupoTipo.clearSelection();
+		}
+
+		panelSala.setVisible(false);
+		panelTerraza.setVisible(false);
+		pack();
 	}
 }

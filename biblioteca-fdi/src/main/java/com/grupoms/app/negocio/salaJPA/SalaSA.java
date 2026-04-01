@@ -7,7 +7,7 @@ import com.grupoms.app.negocio.ClaseJPA.TClase;
 public interface SalaSA {
 	public Integer altaSala(TSala sala);
 
-	public Integer bajaSala(Integer id) throws Exception;
+	public Integer bajaSala(Integer id);
 
 	public Integer modificarSala(TSala sala);
 

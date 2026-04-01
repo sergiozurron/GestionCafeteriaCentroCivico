@@ -1,6 +1,10 @@
 package com.grupoms.app.negocio.salaJPA;
 
 import java.io.Serializable;
+import java.util.List;
+
+import com.grupoms.app.negocio.ClaseJPA.BOClase;
+
 import jakarta.persistence.*;
 
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -17,6 +21,9 @@ public class BOSala implements Serializable {
 	protected String nombre;
 	protected Integer capacidad;
 	protected Boolean activo;
+
+	@OneToMany(mappedBy = "sala", fetch = FetchType.LAZY)
+	private List<BOClase> clases;
 
 	@Version
 	private int version;
@@ -54,5 +61,13 @@ public class BOSala implements Serializable {
 
 	public void setActivo(Boolean activo) {
 		this.activo = activo;
+	}
+
+	public List<BOClase> getClases() {
+		return clases;
+	}
+
+	public void setClases(List<BOClase> clases) {
+		this.clases = clases;
 	}
 }

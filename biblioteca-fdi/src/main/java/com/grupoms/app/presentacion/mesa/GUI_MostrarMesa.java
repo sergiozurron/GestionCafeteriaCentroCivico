@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -35,6 +37,17 @@ public class GUI_MostrarMesa extends JFrame implements IGUI {
 		super("Mostrar Mesa");
 		initGUI();
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				limpiarVista();
+			}
+
+			@Override
+			public void windowClosed(WindowEvent e) {
+				limpiarVista();
+			}
+		});
 		pack();
 		setLocationRelativeTo(null);
 	}
@@ -42,6 +55,7 @@ public class GUI_MostrarMesa extends JFrame implements IGUI {
 	@Override
 	public void actualizar(Context context) {
 		if (context == null) {
+			limpiarVista();
 			setVisible(true);
 			return;
 		}
@@ -161,6 +175,15 @@ public class GUI_MostrarMesa extends JFrame implements IGUI {
 			Object[] fila = { tipo, id, ubicacion, numero, capacidad, reservada, privacidad, cubierta, suplemento };
 
 			modeloTabla.addRow(fila);
+		}
+	}
+
+	private void limpiarVista() {
+		if (idMesa != null) {
+			idMesa.setText("");
+		}
+		if (modeloTabla != null) {
+			modeloTabla.setRowCount(0);
 		}
 	}
 }

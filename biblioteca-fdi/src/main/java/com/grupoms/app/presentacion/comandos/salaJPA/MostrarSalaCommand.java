@@ -16,6 +16,10 @@ public class MostrarSalaCommand implements Command {
 			id = (Integer) data;
 		}
 
+		if (id <= 0) {
+			return new Context(Evento.MOSTRAR_SALA_KO, "ID de sala inválido.");
+		}
+
 		SalaSA sa = FactoriaSA.getInstance().creaSASala();
 		try {
 			TSala res = sa.mostrarSala(id);

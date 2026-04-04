@@ -18,4 +18,6 @@ public interface EjemplarSA {
 	List<TEjemplar> listarEjemplares();
 	
 	List<TEjemplar> listarEjemplaresPrestadosPorAdultosPlenos(Date fechaInicio,Date fechaFin);
+
+	List<TEjemplar> listarEjemplaresPorClase(Integer data);
 }

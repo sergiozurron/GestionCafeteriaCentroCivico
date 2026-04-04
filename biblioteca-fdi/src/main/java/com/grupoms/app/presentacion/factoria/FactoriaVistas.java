@@ -84,6 +84,7 @@ public class FactoriaVistas {
 	public static final String GUI_ALTA_EJEMPLAR = "GUI_AltaEjemplar";
 	public static final String GUI_BAJA_EJEMPLAR = "GUI_BajaEjemplar";
 	public static final String GUI_LISTAR_EJEMPLAR = "GUI_ListarEjemplar";
+	public static final String GUI_LISTAR_EJEMPLARES_POR_CLASE = "GUI_ListarEjemplarPorClase";
 	public static final String GUI_MOSTRAR_EJEMPLAR = "GUI_MostrarEjemplar";
 	public static final String GUI_MODIFICAR_EJEMPLAR = "GUI_ModificarEjemplar";
 	public static final String GUI_LISTAR_EJEMPLAR_PREST_SOCIO = "GUI_ListarEjemplarPrestSocio";
@@ -151,6 +152,7 @@ public class FactoriaVistas {
 		vistas.put(GUI_MODIFICAR_EJEMPLAR, new GUI_ModificarEjemplar());
 		vistas.put(GUI_MOSTRAR_EJEMPLAR, new GUI_MostrarEjemplar());
 		vistas.put(GUI_LISTAR_EJEMPLAR, new GUI_ListarEjemplar());
+		vistas.put(GUI_LISTAR_EJEMPLARES_POR_CLASE, new GUI_ListarEjemplaresClase());
 		vistas.put(GUI_LISTAR_EJEMPLAR_PREST_SOCIO, new GUI_ListarEjemplarPrestSocio());
 
 		vistas.put(GUI_ALTA_CLASE, new GUI_AltaClase());

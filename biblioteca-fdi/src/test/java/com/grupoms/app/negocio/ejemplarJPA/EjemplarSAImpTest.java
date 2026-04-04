@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Date;
+import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -349,6 +350,48 @@ public class EjemplarSAImpTest {
 		boolean resultado = ejemplarSA.modificarEjemplar(tEjemplar);
 
 		assertTrue(!resultado);
+	}
+	
+	@Test
+	void listarPorClase_DeberiaListarEjemplaresAsociadosAClase() {
+		BOLibro libro = new BOLibro();
+		libro.setISBN(888888);
+		libro.setNombre("Titulo Listar Por Clase");
+		libro.setAutor("Autor Listar Por Clase");
+		libro.setEditorial("Editorial Listar Por Clase");
+		libro.setTipoMaterial(1);
+		libro.setActivo(true);
+		
+		persist(libro);
+		
+		BOEjemplar ejemplar1 = new BOEjemplar();
+		ejemplar1.setEstado("DISPONIBLE");
+		ejemplar1.setActivo(true);
+		ejemplar1.setMaterial(libro);
+		
+		BOEjemplar ejemplar2 = new BOEjemplar();
+		ejemplar2.setEstado("DISPONIBLE");
+		ejemplar2.setActivo(true);
+		ejemplar2.setMaterial(libro);
+		
+		persist(ejemplar1);
+		persist(ejemplar2);
+		
+		BOClase clase = new BOClase();
+		clase.setTipo("Clase de Prueba Listar Por Clase");
+		clase.setFechaInicio(new Date());
+		clase.setDuracion(3);
+		clase.setActivo(true);
+		
+		clase.anyadirEjemplar(ejemplar1);
+		
+		persist(clase);
+		
+		List<TEjemplar> ejemplaresClase = ejemplarSA.listarEjemplaresPorClase(clase.getId());
+		
+		assertNotNull(ejemplaresClase);
+		assertTrue(ejemplaresClase.size() == 1);
+		assertTrue(ejemplaresClase.get(0).getId() == ejemplar1.getId());
 	}
 
 	void persist(Object entity) {

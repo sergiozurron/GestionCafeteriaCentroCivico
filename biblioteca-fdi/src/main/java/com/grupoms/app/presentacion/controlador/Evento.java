@@ -220,6 +220,10 @@ public class Evento {
 	public static final int LISTAR_EJEMPLARES_PREST_SOCIO = 415;
 	public static final int LISTAR_EJEMPLARES_PREST_SOCIO_OK = 416;
 	public static final int LISTAR_EJEMPLARES_PREST_SOCIO_KO = 417;
+	
+	public static final int LISTAR_EJEMPLARES_CLASE = 418;
+	public static final int LISTAR_EJEMPLARES_CLASE_OK = 419;
+	public static final int LISTAR_EJEMPLARES_CLASE_KO = 420;
 
 	public static final int ALTA_CLASE = 500;
 	public static final int ALTA_CLASE_OK = 501;

@@ -146,6 +146,7 @@ public class FactoryCommandImp extends FactoryCommand {
 		commands.put(Evento.MODIFICAR_EJEMPLAR, new ModificarEjemplarCommand());
 		commands.put(Evento.MOSTRAR_EJEMPLAR, new MostrarEjemplarCommand());
 		commands.put(Evento.LISTAR_EJEMPLARES, new ListarEjemplarCommand());
+		commands.put(Evento.LISTAR_EJEMPLARES_CLASE, new ListarEjemplaresPorClaseCommand());
 		commands.put(Evento.LISTAR_EJEMPLARES_PREST_SOCIO, new ListarEjemplarPrestSocioCommand());
 
 		commands.put(Evento.ALTA_CLASE, new AltaClaseCommand());
@@ -271,6 +272,7 @@ public class FactoryCommandImp extends FactoryCommand {
 		views.put(Evento.MODIFICAR_EJEMPLAR, FactoriaVistas.GUI_MODIFICAR_EJEMPLAR);
 		views.put(Evento.MOSTRAR_EJEMPLAR, FactoriaVistas.GUI_MOSTRAR_EJEMPLAR);
 		views.put(Evento.LISTAR_EJEMPLARES, FactoriaVistas.GUI_LISTAR_EJEMPLAR);
+		views.put(Evento.LISTAR_EJEMPLARES_CLASE, FactoriaVistas.GUI_LISTAR_EJEMPLARES_POR_CLASE);
 		views.put(Evento.VINCULAR_EJEMPLAR_CLASE, FactoriaVistas.GUI_VINCULAR_EJEMPLAR_CLASE);
 		views.put(Evento.DESVINCULAR_EJEMPLAR_CLASE, FactoriaVistas.GUI_DESVINCULAR_EJEMPLAR_CLASE);
 		views.put(Evento.LISTAR_EJEMPLARES_PREST_SOCIO, FactoriaVistas.GUI_LISTAR_EJEMPLAR_PREST_SOCIO);

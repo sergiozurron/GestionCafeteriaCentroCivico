@@ -177,4 +177,13 @@ public class EjemplarSAImp implements EjemplarSA {
 	    return res;
 	}
 
+	@Override
+	public List<TEjemplar> listarEjemplaresPorClase(Integer idClase) {
+		EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
+
+		return em.createNamedQuery("com.grupoms.app.negocio.EjemplarJPA.BOEjemplar.findByClaseId", BOEjemplar.class)
+				.setParameter("claseId", idClase).getResultList().stream()
+				.map(EjemplarAssembler::toTransferObject).toList();
+	}
+
 }

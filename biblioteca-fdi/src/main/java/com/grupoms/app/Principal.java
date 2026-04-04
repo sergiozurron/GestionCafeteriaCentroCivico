@@ -93,6 +93,7 @@ public class Principal extends JFrame {
 		            { "Baja Ejemplar", FactoriaVistas.GUI_BAJA_EJEMPLAR },
 		            { "Listar Ejemplar", FactoriaVistas.GUI_LISTAR_EJEMPLAR },
 		            { "Listar por Material", FactoriaVistas.GUI_LISTAR_EJEMPLARESMATERIAL },
+		            { "Listar por Clase", FactoriaVistas.GUI_LISTAR_EJEMPLARES_POR_CLASE },
 		            { "Listar Ejemplares Prestados Por Socios", FactoriaVistas.GUI_LISTAR_EJEMPLAR_PREST_SOCIO },
 		            { "Mostrar Ejemplar", FactoriaVistas.GUI_MOSTRAR_EJEMPLAR },
 		            { "Modificar Ejemplar", FactoriaVistas.GUI_MODIFICAR_EJEMPLAR }

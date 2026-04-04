@@ -1,5 +1,6 @@
 package com.grupoms.app.negocio.EjemplarJPA;
 
+import java.util.Date;
 import java.util.List;
 
 public interface EjemplarSA {
@@ -15,4 +16,6 @@ public interface EjemplarSA {
 	List<TEjemplar> listarEjemplaresPorMaterial(Integer idMaterial);
 
 	List<TEjemplar> listarEjemplares();
+	
+	List<TEjemplar> listarEjemplaresPrestadosPorAdultosPlenos(Date fechaInicio,Date fechaFin);
 }

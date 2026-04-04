@@ -1,5 +1,6 @@
 package com.grupoms.app.negocio.EjemplarJPA;
 
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -156,6 +157,24 @@ public class EjemplarSAImp implements EjemplarSA {
 		return em.createNamedQuery("com.grupoms.app.negocio.EjemplarJPA.BOEjemplar.findByMaterialId", BOEjemplar.class)
 				.setParameter("materialId", idMaterial).getResultList().stream()
 				.map(EjemplarAssembler::toTransferObject).toList();
+	}
+	
+	@Override
+	public List<TEjemplar> listarEjemplaresPrestadosPorAdultosPlenos(Date fechaInicio,Date fechaFin) {
+
+	    EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
+
+	    List<TEjemplar> res = em.createNamedQuery(
+	            "BOEjemplar.findPrestadosPorAdultosPlenosEnFechas", BOEjemplar.class)
+	            .setParameter("fechaInicio", fechaInicio)
+	            .setParameter("fechaFin", fechaFin)
+	            .getResultList()
+	            .stream()
+	            .map(EjemplarAssembler::toTransferObject)
+	            .toList();
+
+	    em.close();
+	    return res;
 	}
 
 }

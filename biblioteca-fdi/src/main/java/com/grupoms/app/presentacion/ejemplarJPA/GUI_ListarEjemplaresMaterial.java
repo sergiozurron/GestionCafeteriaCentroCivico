@@ -1,4 +1,4 @@
-package com.grupoms.app.presentacion.materialJPA;
+package com.grupoms.app.presentacion.ejemplarJPA;
 
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;

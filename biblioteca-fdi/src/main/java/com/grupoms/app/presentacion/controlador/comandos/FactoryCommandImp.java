@@ -23,7 +23,7 @@ import com.grupoms.app.presentacion.comandos.materialJPA.ListarMaterialCommand;
 import com.grupoms.app.presentacion.comandos.materialJPA.ModificarMaterialCommand;
 import com.grupoms.app.presentacion.comandos.materialJPA.MostrarMaterialCommand;
 import com.grupoms.app.presentacion.comandos.prestamoJPA.AltaPrestamoCommand;
-import com.grupoms.app.presentacion.comandos.prestamoJPA.BajaPrestamoCommand;
+import com.grupoms.app.presentacion.comandos.prestamoJPA.DevolverPrestamoCommand;
 import com.grupoms.app.presentacion.comandos.prestamoJPA.ListarPrestamosCommand;
 import com.grupoms.app.presentacion.comandos.prestamoJPA.ModificarPrestamoCommand;
 import com.grupoms.app.presentacion.comandos.prestamoJPA.MostrarPrestamoCommand;
@@ -165,7 +165,7 @@ public class FactoryCommandImp extends FactoryCommand {
 		commands.put(Evento.MOSTRAR_CLASES_POR_SALA, new MostrarClasesPorSalaCommand());
 
 		commands.put(Evento.ALTA_PRESTAMO, new AltaPrestamoCommand());
-		commands.put(Evento.BAJA_PRESTAMO, new BajaPrestamoCommand());
+		commands.put(Evento.DEVOLUCION_PRESTAMO, new DevolverPrestamoCommand());
 		commands.put(Evento.LISTAR_PRESTAMOS, new ListarPrestamosCommand());
 		commands.put(Evento.MOSTRAR_PRESTAMO, new MostrarPrestamoCommand());
 		commands.put(Evento.MODIFICAR_PRESTAMO, new ModificarPrestamoCommand());
@@ -278,7 +278,7 @@ public class FactoryCommandImp extends FactoryCommand {
 		views.put(Evento.LISTAR_EJEMPLARES_PREST_SOCIO, FactoriaVistas.GUI_LISTAR_EJEMPLAR_PREST_SOCIO);
 
 		views.put(Evento.ALTA_PRESTAMO, FactoriaVistas.GUI_ALTA_PRESTAMO);
-		views.put(Evento.BAJA_PRESTAMO, FactoriaVistas.GUI_BAJA_PRESTAMO);
+		views.put(Evento.DEVOLUCION_PRESTAMO, FactoriaVistas.GUI_BAJA_PRESTAMO);
 		views.put(Evento.LISTAR_PRESTAMOS, FactoriaVistas.GUI_LISTAR_PRESTAMO);
 		views.put(Evento.MOSTRAR_PRESTAMO, FactoriaVistas.GUI_MOSTRAR_PRESTAMO);
 		views.put(Evento.MODIFICAR_PRESTAMO, FactoriaVistas.GUI_MODIFICAR_PRESTAMO);

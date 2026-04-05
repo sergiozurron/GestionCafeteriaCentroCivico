@@ -17,15 +17,15 @@ import com.grupoms.app.presentacion.controlador.Context;
 import com.grupoms.app.presentacion.controlador.Controlador;
 import com.grupoms.app.presentacion.controlador.Evento;
 
-public class GUI_BajaPrestamo extends JFrame implements IGUI {
+public class GUI_DevolucionPrestamo extends JFrame implements IGUI {
 
 	private static final long serialVersionUID = 1L;
 
 	private JTextField campoId;
-	private JButton btnBaja;
+	private JButton btnDevolucion;
 
-	public GUI_BajaPrestamo() {
-		super("Baja Prestamo");
+	public GUI_DevolucionPrestamo() {
+		super("Devolución Prestamo");
 		setSize(400, 200);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setLocationRelativeTo(null);
@@ -39,8 +39,8 @@ public class GUI_BajaPrestamo extends JFrame implements IGUI {
 		JLabel labelId = new JLabel("ID Préstamo:");
 		campoId = new JTextField(15);
 
-		btnBaja = new JButton("Dar de Baja");
-		btnBaja.addActionListener(e -> {
+		btnDevolucion = new JButton("Devolver");
+		btnDevolucion.addActionListener(e -> {
 			try {
 				Integer id = Integer.parseInt(campoId.getText().trim());
 
@@ -49,7 +49,7 @@ public class GUI_BajaPrestamo extends JFrame implements IGUI {
 					return;
 				}
 
-				Context contexto = new Context(Evento.BAJA_PRESTAMO, id);
+				Context contexto = new Context(Evento.DEVOLUCION_PRESTAMO, id);
 				Controlador.getInstance().handle(contexto);
 
 			} catch (NumberFormatException ex) {
@@ -66,7 +66,7 @@ public class GUI_BajaPrestamo extends JFrame implements IGUI {
 		gbc.gridx = 0;
 		gbc.gridy = 1;
 		gbc.gridwidth = 2;
-		panel.add(btnBaja, gbc);
+		panel.add(btnDevolucion, gbc);
 
 		add(panel, BorderLayout.CENTER);
 	}
@@ -78,12 +78,12 @@ public class GUI_BajaPrestamo extends JFrame implements IGUI {
 			return;
 		}
 		switch (context.getEvento()) {
-		case Evento.BAJA_PRESTAMO_OK:
-			JOptionPane.showMessageDialog(this, "Préstamo dado de baja");
+		case Evento.DEVOLUCION_PRESTAMO_OK:
+			JOptionPane.showMessageDialog(this, "Préstamo devuelto");
 			campoId.setText("");
 			break;
-		case Evento.BAJA_PRESTAMO_KO:
-			JOptionPane.showMessageDialog(this, "Error al dar de baja el préstamo", "Error", JOptionPane.ERROR_MESSAGE);
+		case Evento.DEVOLUCION_PRESTAMO_KO:
+			JOptionPane.showMessageDialog(this, "Error al devolver el préstamo", "Error", JOptionPane.ERROR_MESSAGE);
 			break;
 		default:
 			break;

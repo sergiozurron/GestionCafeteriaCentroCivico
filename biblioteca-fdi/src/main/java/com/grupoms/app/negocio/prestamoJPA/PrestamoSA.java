@@ -6,7 +6,7 @@ public interface PrestamoSA {
 
 	public Integer altaPrestamo(TPrestamo prestamo);
 
-	public Integer bajaPrestamo(Integer idPrestamo);
+	public Integer devolverPrestamo(Integer idPrestamo);
 
 	public Integer modificarPrestamo(TPrestamo prestamo);
 

@@ -69,36 +69,37 @@ public class PrestamoSAImp implements PrestamoSA {
 	}
 
 	@Override
-	public Integer bajaPrestamo(Integer idPrestamo) {
+	public Integer devolverPrestamo(Integer idPrestamo) {
 	    EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
 	    EntityTransaction t = em.getTransaction();
 
 	    try {
 	        t.begin();
 
-	        // Buscamos el préstamo
-	        BOPrestamo bo = em.find(BOPrestamo.class, idPrestamo);
+	        BOPrestamo boprestamo = em.find(BOPrestamo.class, idPrestamo);
 
-	        if (bo == null || !bo.getActivo()) {
+	        if (boprestamo == null || !boprestamo.getActivo()) {
 	            t.rollback();
 	            return -1;
 	        }
- 
-	        // Si no ha sido devuelto y el ejemplar existe
-	        if (bo.getFechaDevuelto() == null && bo.getEjemplar() != null) {
-	            // Cambiamos el estado del ejemplar
-	            bo.getEjemplar().setEstado("DISPONIBLE");
-
-	            // Asignamos la fecha de devolución como la fecha actual del sistema
-	            bo.setFechaDevuelto(new java.util.Date());  // java.util.Date para JPA
-	            bo.setActivo(false); // Marcamos el préstamo como inactivo
-
-	            // Si tu campo es LocalDateTime, usa:
-	            // bo.setFechaDevuelto(LocalDateTime.now());
+	        
+	        if (boprestamo.getFechaDevuelto() != null) {
+	            t.rollback();
+	            return -1; // El préstamo ya ha sido devuelto
 	        }
+ 
+        	Date fechaActual = new Date();
+            if (fechaActual.after(boprestamo.getFechaMaxima())) {
+                long diasAtraso = (fechaActual.getTime() - boprestamo.getFechaMaxima().getTime()) / (1000 * 60 * 60 * 24);
+                double multa = diasAtraso * 1.0; // Suponiendo una multa de 1.0 por día de atraso
+                boprestamo.setPrecioMulta(multa);
+            }
+
+            boprestamo.getEjemplar().setEstado("DISPONIBLE");
+        	boprestamo.setFechaDevuelto(new java.util.Date());
 
 	        t.commit();
-	        return bo.getId();
+	        return boprestamo.getId();
 
 	    } catch (Exception e) {
 	        if (t.isActive())
@@ -127,12 +128,6 @@ public class PrestamoSAImp implements PrestamoSA {
 
 			bo.setFechaMaxima(prestamo.getFechaMaxima());
 			bo.setPrecioMulta(prestamo.getPrecioMulta());
-
-			if (bo.getEjemplar() != null) {
-				if ("PRESTADO".equalsIgnoreCase(bo.getEjemplar().getEstado())) {
-					bo.getEjemplar().setEstado("DISPONIBLE");
-				}
-			}
 
 			t.commit();
 			return bo.getId();

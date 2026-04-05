@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.swing.JButton;
@@ -24,8 +23,7 @@ public class GUI_AltaPrestamo extends JFrame implements IGUI {
 
 	private static final long serialVersionUID = 1L;
 
-	private JTextField campoPrecioMulta;
-	private JTextField campoFechaDevolucion;
+	private JTextField campoPlazo;
 	private JTextField campoIdEjemplar;
 	private JTextField campoIdSocio;
 	private JButton btnCrear;
@@ -42,11 +40,8 @@ public class GUI_AltaPrestamo extends JFrame implements IGUI {
 		gbc.insets = new Insets(8, 8, 8, 8);
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 
-		JLabel labelPrecioMulta = new JLabel("Precio Multa:");
-		campoPrecioMulta = new JTextField(15);
-
-		JLabel labelFechaDevolucion = new JLabel("Fecha Devolución (yyyy-MM-dd):");
-		campoFechaDevolucion = new JTextField(15);
+		JLabel labelPlazo = new JLabel("Plazo (días):");
+		campoPlazo = new JTextField(15);
 
 		JLabel labelIdSocio = new JLabel("Id Socio:");
 		campoIdSocio = new JTextField(15);
@@ -57,17 +52,11 @@ public class GUI_AltaPrestamo extends JFrame implements IGUI {
 		btnCrear = new JButton("Crear Préstamo");
 
 		btnCrear.addActionListener(e -> {
-			String precioMultaString = campoPrecioMulta.getText().trim();
-			String fechaDevolucionString = campoFechaDevolucion.getText().trim();
+			String plazoString = campoPlazo.getText().trim();
 			String idSocioString = campoIdSocio.getText().trim();
 			String idEjemplarString = campoIdEjemplar.getText().trim();
 
-			if (precioMultaString.isEmpty()) {
-				JOptionPane.showMessageDialog(this, "Precio multa es obligatorio");
-				return;
-			}
-
-			if (fechaDevolucionString.isEmpty()) {
+			if (plazoString.isEmpty()) {
 				JOptionPane.showMessageDialog(this, "Fecha de devolución es obligatoria");
 				return;
 			}
@@ -81,23 +70,20 @@ public class GUI_AltaPrestamo extends JFrame implements IGUI {
 				JOptionPane.showMessageDialog(this, "ID del Ejemplar es obligatorio");
 				return;
 			}
-
-			Double precioMulta;
-			try {
-				precioMulta = Double.parseDouble(precioMultaString);
-			} catch (NumberFormatException ex) {
-				JOptionPane.showMessageDialog(this, "El precio de la multa debe ser un número válido");
-				return;
-			}
-
+			
 			Date fechaDevolucion;
 			try {
-				fechaDevolucion = new SimpleDateFormat("yyyy-MM-dd").parse(fechaDevolucionString);
-			} catch (Exception ex) {
-				JOptionPane.showMessageDialog(this, "Formato de fecha de devolución inválido. Use yyyy-MM-dd");
+				int plazo = Integer.parseInt(plazoString);
+				if (plazo <= 0) {
+					JOptionPane.showMessageDialog(this, "El plazo debe ser un número positivo");
+					return;
+				}
+				fechaDevolucion = new Date(System.currentTimeMillis() + (long) plazo * 24 * 60 * 60 * 1000);
+			} catch (NumberFormatException ex) {
+				JOptionPane.showMessageDialog(this, "El plazo debe ser un número válido");
 				return;
 			}
-
+			
 			Integer idSocio;
 			try {
 				idSocio = Integer.parseInt(campoIdSocio.getText().trim());
@@ -115,7 +101,6 @@ public class GUI_AltaPrestamo extends JFrame implements IGUI {
 			}
 
 			TPrestamo prestamo = new TPrestamo();
-			prestamo.setPrecioMulta(precioMulta);
 			prestamo.setFechaMaxima(fechaDevolucion);
 			prestamo.setIdSocio(idSocio);
 			prestamo.setIdEjemplar(idEjemplar);
@@ -124,32 +109,31 @@ public class GUI_AltaPrestamo extends JFrame implements IGUI {
 			Controlador.getInstance().handle(contexto);
 		});
 
+		int y = 0;
+		
 		gbc.gridx = 0;
-		gbc.gridy = 0;
-		panel.add(labelPrecioMulta, gbc);
+		gbc.gridy = y;
+		panel.add(labelPlazo, gbc);
 		gbc.gridx = 1;
-		panel.add(campoPrecioMulta, gbc);
+		panel.add(campoPlazo, gbc);
 
+		y++;
 		gbc.gridx = 0;
-		gbc.gridy = 1;
-		panel.add(labelFechaDevolucion, gbc);
-		gbc.gridx = 1;
-		panel.add(campoFechaDevolucion, gbc);
-
-		gbc.gridx = 0;
-		gbc.gridy = 2;
+		gbc.gridy = y;
 		panel.add(labelIdSocio, gbc);
 		gbc.gridx = 1;
 		panel.add(campoIdSocio, gbc);
 
+		y++;
 		gbc.gridx = 0;
-		gbc.gridy = 3;
+		gbc.gridy = y;
 		panel.add(labelIdEjemplar, gbc);
 		gbc.gridx = 1;
 		panel.add(campoIdEjemplar, gbc);
 
+		y++;
 		gbc.gridx = 0;
-		gbc.gridy = 4;
+		gbc.gridy = y;
 		gbc.gridwidth = 2;
 		panel.add(btnCrear, gbc);
 

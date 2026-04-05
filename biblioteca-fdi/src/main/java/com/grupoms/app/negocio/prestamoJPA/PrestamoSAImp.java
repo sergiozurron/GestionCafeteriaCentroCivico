@@ -54,9 +54,6 @@ public class PrestamoSAImp implements PrestamoSA {
 
 			em.persist(boPrestamo);
 
-			socio.getPrestamos().add(boPrestamo);
-			ejemplar.getPrestamos().add(boPrestamo);
-
 			t.commit();
 			id = boPrestamo.getId();
 

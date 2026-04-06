@@ -65,6 +65,11 @@ public class GUI_ModificarEjemplar extends JFrame implements IGUI {
 				JOptionPane.showMessageDialog(this, "El estado es obligatorio");
 				return;
 			}
+			
+			if (!estado.equalsIgnoreCase("DISPONIBLE") && !estado.equalsIgnoreCase("PRESTADO")) {
+				JOptionPane.showMessageDialog(this, "El estado debe ser 'DISPONIBLE' o 'PRESTADO'");
+				return;
+			}
 
 			Integer idMaterial;
 			try {

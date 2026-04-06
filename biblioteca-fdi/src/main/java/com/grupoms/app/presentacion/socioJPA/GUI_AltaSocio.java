@@ -19,7 +19,9 @@ public class GUI_AltaSocio extends JFrame implements IGUI {
 	private JLabel campoReduccion;
 	private JRadioButton adultoButton, infantilButton, si, no;
 	private JButton aceptar;
-	private JPanel panelAdulto, panelInfantil;
+	private JPanel panelAdulto, panelInfantil, panelMiembroPleno;
+	private ButtonGroup grupoTipo;
+	private ButtonGroup grupoMiembroPleno;
 
 	public GUI_AltaSocio() {
 		super("Alta socio");
@@ -62,7 +64,7 @@ public class GUI_AltaSocio extends JFrame implements IGUI {
 
 		adultoButton = new JRadioButton("Adulto");
 		infantilButton = new JRadioButton("Infantil");
-		ButtonGroup grupoTipo = new ButtonGroup();
+		grupoTipo = new ButtonGroup();
 		grupoTipo.add(adultoButton);
 		grupoTipo.add(infantilButton);
 		gbc.gridx = 0;
@@ -72,22 +74,23 @@ public class GUI_AltaSocio extends JFrame implements IGUI {
 		panel.add(infantilButton, gbc);
 
 		panelAdulto = new JPanel(new GridBagLayout());
+		panelMiembroPleno = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
 		JLabel labelMiembroPleno = new JLabel("Miembro Pleno");
 		si = new JRadioButton("Sí");
 		no = new JRadioButton("No");
-		ButtonGroup miembroPleno = new ButtonGroup();
-		miembroPleno.add(si);
-		miembroPleno.add(no);
+		grupoMiembroPleno = new ButtonGroup();
+		grupoMiembroPleno.add(si);
+		grupoMiembroPleno.add(no);
 		GridBagConstraints gbcAdulto = new GridBagConstraints();
 		gbcAdulto.insets = new Insets(5, 5, 5, 5);
 		gbcAdulto.gridx = 0;
 		gbcAdulto.gridy = 0;
 		panelAdulto.add(labelMiembroPleno, gbcAdulto);
+		panelMiembroPleno.add(si);
+		panelMiembroPleno.add(no);
 		gbcAdulto.gridx = 0;
 		gbcAdulto.gridy = 1;
-		panelAdulto.add(si, gbcAdulto);
-		gbcAdulto.gridx = 1;
-		panelAdulto.add(no, gbcAdulto);
+		panelAdulto.add(panelMiembroPleno, gbcAdulto);
 		gbcAdulto.gridx = 0;
 		gbcAdulto.gridy = 2;
 		panelAdulto.setVisible(false);
@@ -171,6 +174,9 @@ public class GUI_AltaSocio extends JFrame implements IGUI {
 				Double re = r * 100;
 				campoReduccion.setText(re.toString() + "%");
 				socio = new TInfantil(n, d, 1, c, r, e);
+			} else {
+				JOptionPane.showMessageDialog(this, "Debe seleccionar si el socio es adulto o infantil.");
+				return;
 			}
 
 			Context contexto = new Context(Evento.ALTA_SOCIO, socio);
@@ -186,21 +192,14 @@ public class GUI_AltaSocio extends JFrame implements IGUI {
 	@Override
 	public void actualizar(Context context) {
 		if (context == null) {
+			limpiarFormulario();
 			setVisible(true);
 			return;
 		}
 		switch (context.getEvento()) {
 		case Evento.ALTA_SOCIO_OK:
 			JOptionPane.showMessageDialog(this, "Socio creado con éxito");
-			campoNombreYApellido.setText("");
-			campoDni.setText("");
-			campoCuota.setText("");
-			campoEdad.setText("");
-			campoReduccion.setText("0%");
-			adultoButton.setSelected(false);
-			infantilButton.setSelected(false);
-			panelAdulto.setVisible(false);
-			panelInfantil.setVisible(false);
+			limpiarFormulario();
 			break;
 		case Evento.ALTA_SOCIO_KO:
 			JOptionPane.showMessageDialog(this, "Error al añadir el socio", "Error", JOptionPane.ERROR_MESSAGE);
@@ -208,5 +207,20 @@ public class GUI_AltaSocio extends JFrame implements IGUI {
 		default:
 			break;
 		}
+	}
+
+	private void limpiarFormulario() {
+		campoNombreYApellido.setText("");
+		campoDni.setText("");
+		campoCuota.setText("");
+		campoEdad.setText("");
+		campoReduccion.setText("0");
+		adultoButton.setSelected(false);
+		infantilButton.setSelected(false);
+		grupoTipo.clearSelection();
+		grupoMiembroPleno.clearSelection();
+		panelAdulto.setVisible(false);
+		panelInfantil.setVisible(false);
+		pack();
 	}
 }

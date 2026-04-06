@@ -16,4 +16,6 @@ public interface PrestamoSA {
 
 	public Double calcularPrecioPromocion(TCalculoPrecioPromocion data);
 
+	public boolean bajaPrestamo(Integer idPrestamo);
+
 }

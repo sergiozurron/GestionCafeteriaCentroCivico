@@ -91,6 +91,16 @@ public class SocioSAImp implements SocioSA {
 				t.rollback();
 				throw new Exception("El socio tiene préstamos pendientes de devolver.");
 			}
+			
+			// Dar de baja los préstamos que tuviese asociados independientemente de si están devueltos o no
+			List<BOPrestamo> prestamosTodos = em.createNamedQuery("BOPrestamo.findBySocio", BOPrestamo.class)
+					.setParameter("idSocio", socio.getId()).getResultList();
+			
+			if (!prestamosTodos.isEmpty()) {
+				for(BOPrestamo p : prestamosTodos) {
+					p.setActivo(false);
+				}
+			}
 
 			// Limpiar promociones al dar de baja
 			socio.getPromociones().clear();

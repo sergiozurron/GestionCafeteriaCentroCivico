@@ -113,6 +113,36 @@ public class PrestamoSAImp implements PrestamoSA {
 	        em.close();
 	    }
 	}
+	
+	@Override
+	public boolean bajaPrestamo(Integer idPrestamo) {
+	    EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
+	    EntityTransaction t = em.getTransaction();
+
+	    try {
+	        t.begin();
+
+	        BOPrestamo boprestamo = em.find(BOPrestamo.class, idPrestamo);
+
+	        if (boprestamo == null || !boprestamo.getActivo()) {
+	            t.rollback();
+	            return false;
+	        }
+
+            boprestamo.setActivo(false);;
+
+	        t.commit();
+	        return true;
+
+	    } catch (Exception e) {
+	        if (t.isActive())
+	            t.rollback();
+	        e.printStackTrace();
+	        return false;
+	    } finally {
+	        em.close();
+	    }
+	}
 
 
 	@Override

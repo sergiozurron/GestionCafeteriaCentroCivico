@@ -75,6 +75,15 @@ public class EjemplarSAImp implements EjemplarSA {
 				em.getTransaction().rollback();
 				return false;
 			}
+			
+			List<BOPrestamo> prestamosTodos = em.createNamedQuery("BOPrestamo.findByEjemplarTodos", BOPrestamo.class)
+					.setParameter("idEjemplar", idEjemplar).getResultList();
+			
+			if (!prestamosTodos.isEmpty()) {
+				for(BOPrestamo p : prestamosTodos) {
+					p.setActivo(false);
+				}
+			}
 
 			boEjemplar.setActivo(false);
 			em.getTransaction().commit();

@@ -1,6 +1,7 @@
 package com.grupoms.app.negocio.prestamoJPA;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -8,6 +9,9 @@ import org.junit.jupiter.api.Test;
 
 import com.grupoms.app.integracion.factoria.EntityManagerSingleton;
 import com.grupoms.app.negocio.EjemplarJPA.BOEjemplar;
+import com.grupoms.app.negocio.PromocionJPA.BOPromocion;
+import com.grupoms.app.negocio.socioJPA.BOAdulto;
+import com.grupoms.app.negocio.socioJPA.BOInfantil;
 import com.grupoms.app.negocio.socioJPA.BOSocio;
 
 import jakarta.persistence.EntityManager;
@@ -16,7 +20,7 @@ import jakarta.persistence.Persistence;
 
 public class PrestamoSAImpTest {
 
-	PrestamoSAImp ejemplarSA = new PrestamoSAImp();
+	PrestamoSAImp prestamoSA = new PrestamoSAImp();
 	EntityManagerFactory emf = Persistence.createEntityManagerFactory("CentroCivicoJPA");
 	
 	@BeforeEach
@@ -49,7 +53,7 @@ public class PrestamoSAImpTest {
 		prestamo.setIdEjemplar(ejemplar.getId());
 		
 		// When
-		int resultado = ejemplarSA.altaPrestamo(prestamo);
+		int resultado = prestamoSA.altaPrestamo(prestamo);
 		
 		// Then
 		assertTrue(resultado > 0);
@@ -71,7 +75,7 @@ public class PrestamoSAImpTest {
 		prestamo.setIdEjemplar(ejemplar.getId());
 		
 		// When
-		int resultado = ejemplarSA.altaPrestamo(prestamo);
+		int resultado = prestamoSA.altaPrestamo(prestamo);
 		
 		// Then
 		assertTrue(resultado < 0);
@@ -94,7 +98,7 @@ public class PrestamoSAImpTest {
 		prestamo.setIdEjemplar(ejemplar.getId());
 		
 		// When
-		int resultado = ejemplarSA.altaPrestamo(prestamo);
+		int resultado = prestamoSA.altaPrestamo(prestamo);
 		
 		// Then
 		assertTrue(resultado < 0);
@@ -112,7 +116,7 @@ public class PrestamoSAImpTest {
 		prestamo.setIdEjemplar(-1); // Ejemplar no existente
 		
 		// When
-		int resultado = ejemplarSA.altaPrestamo(prestamo);
+		int resultado = prestamoSA.altaPrestamo(prestamo);
 		
 		// Then
 		assertTrue(resultado < 0);
@@ -135,7 +139,7 @@ public class PrestamoSAImpTest {
 		prestamo.setIdEjemplar(ejemplar.getId());
 		
 		// When
-		int resultado = ejemplarSA.altaPrestamo(prestamo);
+		int resultado = prestamoSA.altaPrestamo(prestamo);
 		
 		// Then
 		assertTrue(resultado < 0);
@@ -158,7 +162,7 @@ public class PrestamoSAImpTest {
 		prestamo.setIdEjemplar(ejemplar.getId());
 		
 		// When
-		int resultado = ejemplarSA.altaPrestamo(prestamo);
+		int resultado = prestamoSA.altaPrestamo(prestamo);
 		
 		// Then
 		assertTrue(resultado < 0);
@@ -185,7 +189,7 @@ public class PrestamoSAImpTest {
 		persist(prestamo);
 		
 		// When
-		int resultado = ejemplarSA.devolverPrestamo(prestamo.getId());
+		int resultado = prestamoSA.devolverPrestamo(prestamo.getId());
 		
 		// Then
 		assertTrue(resultado > 0);
@@ -198,7 +202,7 @@ public class PrestamoSAImpTest {
 	@Test
 	void devolverPrestamo_DeberiaDevolverMenosUno_CuandoElPrestamoNoExiste() {
 		// When
-		int resultado = ejemplarSA.devolverPrestamo(-1); // ID no existente
+		int resultado = prestamoSA.devolverPrestamo(-1); // ID no existente
 		
 		// Then
 		assertTrue(resultado < 0);
@@ -223,7 +227,7 @@ public class PrestamoSAImpTest {
 		persist(prestamo);
 		
 		// When
-		int resultado = ejemplarSA.devolverPrestamo(prestamo.getId());
+		int resultado = prestamoSA.devolverPrestamo(prestamo.getId());
 		
 		// Then
 		assertTrue(resultado < 0);
@@ -245,12 +249,12 @@ public class PrestamoSAImpTest {
 		prestamo.setIdSocio(socio.getId());
 		prestamo.setIdEjemplar(ejemplar.getId());
 		
-		int idPrestamo = ejemplarSA.altaPrestamo(prestamo);
+		int idPrestamo = prestamoSA.altaPrestamo(prestamo);
 		
-		ejemplarSA.devolverPrestamo(idPrestamo); // Dar de baja el préstamo
+		prestamoSA.devolverPrestamo(idPrestamo); // Dar de baja el préstamo
 		
 		// When
-		int resultado = ejemplarSA.devolverPrestamo(idPrestamo); // Intentar dar de baja nuevamente
+		int resultado = prestamoSA.devolverPrestamo(idPrestamo); // Intentar dar de baja nuevamente
 		
 		// Then
 		assertTrue(resultado < 0);
@@ -277,7 +281,7 @@ public class PrestamoSAImpTest {
 		persist(prestamo);
 		
 		// When
-		int resultado = ejemplarSA.devolverPrestamo(prestamo.getId());
+		int resultado = prestamoSA.devolverPrestamo(prestamo.getId());
 		
 		// Then
 		assertTrue(resultado > 0);
@@ -312,7 +316,7 @@ public class PrestamoSAImpTest {
 		prestamoModificado.setActivo(true);
 		
 		// When
-		int resultado = ejemplarSA.modificarPrestamo(prestamoModificado);
+		int resultado = prestamoSA.modificarPrestamo(prestamoModificado);
 		
 		// Then
 		assertTrue(resultado > 0);
@@ -332,7 +336,7 @@ public class PrestamoSAImpTest {
 		prestamoModificado.setActivo(true);
 		
 		// When
-		int resultado = ejemplarSA.modificarPrestamo(prestamoModificado);
+		int resultado = prestamoSA.modificarPrestamo(prestamoModificado);
 		
 		// Then
 		assertTrue(resultado < 0);
@@ -363,7 +367,7 @@ public class PrestamoSAImpTest {
 		prestamoModificado.setActivo(true);
 		
 		// When
-		int resultado = ejemplarSA.modificarPrestamo(prestamoModificado);
+		int resultado = prestamoSA.modificarPrestamo(prestamoModificado);
 		
 		// Then
 		assertTrue(resultado < 0);
@@ -388,7 +392,7 @@ public class PrestamoSAImpTest {
 		persist(prestamo);
 		
 		// When
-		TPrestamo resultado = ejemplarSA.mostrarPrestamo(prestamo.getId());
+		TPrestamo resultado = prestamoSA.mostrarPrestamo(prestamo.getId());
 		
 		// Then
 		assertNotNull(resultado);
@@ -421,11 +425,139 @@ public class PrestamoSAImpTest {
 		persist(prestamo2);
 		
 		// When
-		java.util.List<TPrestamo> resultado = ejemplarSA.listarPrestamo();
+		java.util.List<TPrestamo> resultado = prestamoSA.listarPrestamo();
 		
 		// Then
 		assertNotNull(resultado);
 		assertTrue(resultado.size() >= 2); // Al menos los dos préstamos creados
+	}
+	
+	@Test
+	void calcularPrecioPromocion_DeberiaAplicarDescuentoAdulto_CuandoSocioAdulto() {
+		// Given
+		BOPromocion promocion = new BOPromocion();
+		promocion.setDescuento(20.0); // 20% de descuento
+		promocion.setActivo(true);
+		persist(promocion);
+		
+		BOAdulto socio = new BOAdulto();
+		socio.setCuota(50);
+		socio.setActivo(true);
+		socio.anyadirPromocion(promocion);
+		persist(socio);
+		
+		// When
+		Double resultado = prestamoSA.calcularPrecioPromocion(new TCalculoPrecioPromocion(promocion.getID(), socio.getId()));
+		
+		// Then
+		assertTrue(resultado == 40.0); // 20% de descuento sobre 50
+	}
+	
+	@Test
+	void calcularPrecioPromocion_DeberiaAplicarDescuentoInfantil_CuandoSocioInfantil() {
+		// Given
+		BOPromocion promocion = new BOPromocion();
+		promocion.setDescuento(30.0); // 30% de descuento
+		promocion.setActivo(true);
+		persist(promocion);
+		
+		BOInfantil socio = new BOInfantil();
+		socio.setCuota(40);
+		socio.setReduccion(50.0);
+		socio.setActivo(true);
+		socio.anyadirPromocion(promocion);
+		persist(socio);
+		
+		// When
+		Double resultado = prestamoSA.calcularPrecioPromocion(new TCalculoPrecioPromocion(promocion.getID(), socio.getId()));
+		
+		// Then
+		assertTrue(resultado == 14.0); // Descuento del 30% sobre 40, luego reducción del 50% sobre el resultado
+	}
+	
+	@Test
+	void calcularPrecioPromocion_DeberiaDevolverNulo_CuandoElSocioNoExiste() {
+		// Given
+		BOPromocion promocion = new BOPromocion();
+		promocion.setDescuento(20.0); // 20% de descuento
+		promocion.setActivo(true);
+		persist(promocion);
+		
+		TCalculoPrecioPromocion calculo = new TCalculoPrecioPromocion(-1, promocion.getID()); // Socio no existente
+		
+		// When
+		Double resultado = prestamoSA.calcularPrecioPromocion(calculo);
+		
+		// Then
+		assertNull(resultado);
+	}
+	
+	@Test
+	void calcularPrecioPromocion_DeberiaDevolverNulo_CuandoElSocioNoEstaActivo() {
+		// Given
+		BOPromocion promocion = new BOPromocion();
+		promocion.setDescuento(20.0); // 20% de descuento
+		promocion.setActivo(true);
+		persist(promocion);
+		
+		BOSocio socio = new BOSocio();
+		socio.setActivo(false); // No activo
+		persist(socio);
+		
+		BOEjemplar ejemplar = new BOEjemplar();
+		ejemplar.setEstado("DISPONIBLE");
+		ejemplar.setActivo(true);
+		persist(ejemplar);
+		
+		BOPrestamo prestamo = new BOPrestamo();	
+		prestamo.setSocio(socio);
+		prestamo.setEjemplar(ejemplar);
+		prestamo.setFechaInicial(new java.util.Date(System.currentTimeMillis() - 10 * 24 * 60 * 60 * 1000)); // Hace 10 días
+		prestamo.setFechaMaxima(new java.util.Date(System.currentTimeMillis() - 5 * 24 * 60 * 60 * 1000)); // Hace 5 días
+		prestamo.setActivo(true);
+		persist(prestamo);
+		
+		TCalculoPrecioPromocion calculo = new TCalculoPrecioPromocion(prestamo.getId(), promocion.getID());
+		
+		// When
+		Double resultado = prestamoSA.calcularPrecioPromocion(calculo);
+		
+		// Then
+		assertNull(resultado);
+	}
+	
+	@Test
+	void calcularPrecioPromocion_DeberiaDevolverNulo_CuandoElSocioNoTieneLaPromocion() {
+		// Given
+		BOPromocion promocion = new BOPromocion();
+		promocion.setDescuento(20.0); // 20% de descuento
+		promocion.setActivo(true);
+		persist(promocion);
+		
+		BOSocio socio = new BOSocio();
+		socio.setActivo(true);
+		persist(socio);
+		
+		BOEjemplar ejemplar = new BOEjemplar();
+		ejemplar.setEstado("DISPONIBLE");
+		ejemplar.setActivo(true);
+		persist(ejemplar);
+		
+		BOPrestamo prestamo = new BOPrestamo();	
+		prestamo.setSocio(socio);
+		prestamo.setEjemplar(ejemplar);
+		prestamo.setFechaInicial(new java.util.Date(System.currentTimeMillis() - 10 * 24 * 60 * 60 * 1000)); // Hace 10 días
+		prestamo.setFechaMaxima(new java.util.Date(System.currentTimeMillis() - 5 * 24 * 60 * 60 * 1000)); // Hace 5 días
+		prestamo.setActivo(true);
+		persist(prestamo);
+		
+		TCalculoPrecioPromocion calculo = new TCalculoPrecioPromocion(prestamo.getId(), promocion.getID());
+		
+		// When
+		Double resultado = prestamoSA.calcularPrecioPromocion(calculo);
+		
+		// Then
+		assertNull(resultado);
 	}
 	
 	void persist(Object entity) {

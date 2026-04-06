@@ -3,11 +3,14 @@ package com.grupoms.app.negocio.prestamoJPA;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.grupoms.app.integracion.factoria.EntityManagerSingleton;
 import com.grupoms.app.negocio.EjemplarJPA.BOEjemplar;
+import com.grupoms.app.negocio.PromocionJPA.BOPromocion;
 import com.grupoms.app.negocio.assembler.PrestamoAssembler;
+import com.grupoms.app.negocio.socioJPA.BOInfantil;
 import com.grupoms.app.negocio.socioJPA.BOSocio;
 
 import jakarta.persistence.EntityManager;
@@ -171,4 +174,34 @@ public class PrestamoSAImp implements PrestamoSA {
 			em.close();
 		}
 	}
+
+	@Override
+	public Double calcularPrecioPromocion(TCalculoPrecioPromocion calculo) {
+		EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
+		
+		BOSocio socio = em.find(BOSocio.class, calculo.getIdSocio());
+		if (socio == null || !socio.getActivo()) {
+			return null;
+		}
+		
+		Optional<BOPromocion> promocionOpt = socio.getPromociones().stream()
+				.filter(p -> p.getID().equals(calculo.getIdPromocion()) && p.getActivo())
+				.findFirst();
+		
+		if (promocionOpt.isEmpty()) {
+			return null;
+		}
+		
+		BOPromocion promocion = promocionOpt.get();
+		
+		Double precioFinal = (1 - promocion.getDescuento() / 100) * socio.getCuota();
+		
+		if (socio instanceof BOInfantil) {
+			BOInfantil infantil = (BOInfantil) socio;
+			precioFinal *= (1 - infantil.getReduccion() / 100);
+		}
+		
+		return precioFinal;
+	}
+	
 }

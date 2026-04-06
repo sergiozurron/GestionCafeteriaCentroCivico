@@ -14,4 +14,6 @@ public interface PrestamoSA {
 
 	public List<TPrestamo> listarPrestamo();
 
+	public Double calcularPrecioPromocion(TCalculoPrecioPromocion data);
+
 }

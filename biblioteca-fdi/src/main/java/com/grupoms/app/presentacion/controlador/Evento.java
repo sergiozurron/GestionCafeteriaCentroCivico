@@ -360,6 +360,10 @@ public class Evento {
 	public static final int MOSTRAR_PRODUCTOS_POR_PROVEEDOR = 727;
 	public static final int MOSTRAR_PRODUCTOS_POR_PROVEEDOR_OK = 728;
 	public static final int MOSTRAR_PRODUCTOS_POR_PROVEEDOR_KO = 729;
+	
+	public static final int CALCULO_PRECIO_PROMOCION = 730;
+	public static final int CALCULO_PRECIO_PROMOCION_OK = 731;
+	public static final int CALCULO_PRECIO_PROMOCION_KO = 732;
 
 
 

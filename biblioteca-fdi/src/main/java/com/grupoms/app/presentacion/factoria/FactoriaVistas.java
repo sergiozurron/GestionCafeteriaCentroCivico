@@ -126,6 +126,7 @@ public class FactoriaVistas {
 	public static final String GUI_LISTAR_PRESTAMO = "GUI_ListarPrestamo";
 	public static final String GUI_MOSTRAR_PRESTAMO = "GUI_MostrarPrestamo";
 	public static final String GUI_MODIFICAR_PRESTAMO = "GUI_ModificarPrestamo";
+	public static final String GUI_CALCULAR_PRECIO_PROMOCION = "GUI_CalcularPrecioPromocion";
 
 	private static FactoriaVistas instance;
 	private final Map<String, IGUI> vistas;
@@ -184,6 +185,7 @@ public class FactoriaVistas {
 		vistas.put(GUI_LISTAR_PRESTAMO, new GUI_ListarPrestamo());
 		vistas.put(GUI_MOSTRAR_PRESTAMO, new GUI_MostrarPrestamo());
 		vistas.put(GUI_MODIFICAR_PRESTAMO, new GUI_ModificarPrestamo());
+		vistas.put(GUI_CALCULAR_PRECIO_PROMOCION, new GUI_CalcularPrecioPromocion());
 
 		vistas.put(GUI_ALTA_PEDIDO, new GUI_AltaPedido());
 		vistas.put(GUI_CERRAR_PEDIDO, new GUI_CerrarPedido());

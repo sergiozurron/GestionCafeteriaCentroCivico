@@ -137,7 +137,8 @@ public class Principal extends JFrame {
 						{ "Devolución Préstamo", FactoriaVistas.GUI_BAJA_PRESTAMO },
 						{ "Listar Préstamo", FactoriaVistas.GUI_LISTAR_PRESTAMO },
 						{ "Mostrar Préstamo", FactoriaVistas.GUI_MOSTRAR_PRESTAMO },
-						{ "Modificar Préstamo", FactoriaVistas.GUI_MODIFICAR_PRESTAMO } }));
+						{ "Modificar Préstamo", FactoriaVistas.GUI_MODIFICAR_PRESTAMO },
+						{ "Calcular Precio con Promoción", FactoriaVistas.GUI_CALCULAR_PRECIO_PROMOCION } }));
 
 		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, panelCentroCivico, null);
 

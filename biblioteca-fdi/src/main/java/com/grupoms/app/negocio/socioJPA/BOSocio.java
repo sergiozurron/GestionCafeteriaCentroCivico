@@ -33,7 +33,7 @@ public class BOSocio implements Serializable {
 	@OneToMany(mappedBy = "socio")
 	private List<BOPrestamo> prestamos;
 
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.EAGER)
 	private List<BOPromocion> promociones;
 
 	public BOSocio() {

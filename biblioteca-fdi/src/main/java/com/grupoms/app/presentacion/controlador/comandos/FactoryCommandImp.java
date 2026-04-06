@@ -14,6 +14,7 @@ import com.grupoms.app.presentacion.comandos.ejemplarJPA.AltaEjemplarCommand;
 import com.grupoms.app.presentacion.comandos.ejemplarJPA.BajaEjemplarCommand;
 import com.grupoms.app.presentacion.comandos.ejemplarJPA.ListarEjemplarCommand;
 import com.grupoms.app.presentacion.comandos.ejemplarJPA.ListarEjemplarPrestSocioCommand;
+import com.grupoms.app.presentacion.comandos.ejemplarJPA.ListarEjemplaresPorClaseCommand;
 import com.grupoms.app.presentacion.comandos.ejemplarJPA.ModificarEjemplarCommand;
 import com.grupoms.app.presentacion.comandos.ejemplarJPA.MostrarEjemplarCommand;
 import com.grupoms.app.presentacion.comandos.ejemplarJPA.MostrarEjemplaresPorMaterialCommand;
@@ -23,6 +24,7 @@ import com.grupoms.app.presentacion.comandos.materialJPA.ListarMaterialCommand;
 import com.grupoms.app.presentacion.comandos.materialJPA.ModificarMaterialCommand;
 import com.grupoms.app.presentacion.comandos.materialJPA.MostrarMaterialCommand;
 import com.grupoms.app.presentacion.comandos.prestamoJPA.AltaPrestamoCommand;
+import com.grupoms.app.presentacion.comandos.prestamoJPA.CalculoPrecioPromocionCommand;
 import com.grupoms.app.presentacion.comandos.prestamoJPA.DevolverPrestamoCommand;
 import com.grupoms.app.presentacion.comandos.prestamoJPA.ListarPrestamosCommand;
 import com.grupoms.app.presentacion.comandos.prestamoJPA.ModificarPrestamoCommand;
@@ -169,6 +171,7 @@ public class FactoryCommandImp extends FactoryCommand {
 		commands.put(Evento.LISTAR_PRESTAMOS, new ListarPrestamosCommand());
 		commands.put(Evento.MOSTRAR_PRESTAMO, new MostrarPrestamoCommand());
 		commands.put(Evento.MODIFICAR_PRESTAMO, new ModificarPrestamoCommand());
+		commands.put(Evento.CALCULO_PRECIO_PROMOCION, new CalculoPrecioPromocionCommand());
 
 		commands.put(Evento.ALTA_PROMOCION, new AltaPromocionCommand());
 		commands.put(Evento.BAJA_PROMOCION, new BajaPromocionCommand());
@@ -282,6 +285,7 @@ public class FactoryCommandImp extends FactoryCommand {
 		views.put(Evento.LISTAR_PRESTAMOS, FactoriaVistas.GUI_LISTAR_PRESTAMO);
 		views.put(Evento.MOSTRAR_PRESTAMO, FactoriaVistas.GUI_MOSTRAR_PRESTAMO);
 		views.put(Evento.MODIFICAR_PRESTAMO, FactoriaVistas.GUI_MODIFICAR_PRESTAMO);
+		views.put(Evento.CALCULO_PRECIO_PROMOCION, FactoriaVistas.GUI_CALCULAR_PRECIO_PROMOCION);
 
 		views.put(Evento.ALTA_SALA, FactoriaVistas.GUI_ALTA_SALA);
 		views.put(Evento.BAJA_SALA, FactoriaVistas.GUI_BAJA_SALA);

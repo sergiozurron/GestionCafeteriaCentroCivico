@@ -1,4 +1,4 @@
-package com.grupoms.app.presentacion.controlador.comandos;
+package com.grupoms.app.presentacion.comandos.ejemplarJPA;
 
 import java.util.List;
 
@@ -6,6 +6,7 @@ import com.grupoms.app.negocio.EjemplarJPA.TEjemplar;
 import com.grupoms.app.negocio.factoria.FactoriaSA;
 import com.grupoms.app.presentacion.controlador.Context;
 import com.grupoms.app.presentacion.controlador.Evento;
+import com.grupoms.app.presentacion.controlador.comandos.Command;
 
 public class ListarEjemplaresPorClaseCommand implements Command {
 

@@ -245,16 +245,23 @@ public class PrestamoSAImpTest {
 		ejemplar.setActivo(true);
 		persist(ejemplar);
 		
-		TPrestamo prestamo = new TPrestamo();
-		prestamo.setIdSocio(socio.getId());
-		prestamo.setIdEjemplar(ejemplar.getId());
+		BOPrestamo prestamo = new BOPrestamo();
+		prestamo.setSocio(socio);
+		prestamo.setEjemplar(ejemplar);
+		prestamo.setFechaInicial(new java.util.Date());
+		prestamo.setFechaMaxima(new java.util.Date(System.currentTimeMillis() + 5 * 24 * 60 * 60 * 1000)); // Fecha máxima en el futuro
+		prestamo.setFechaDevuelto(new java.util.Date()); // Ya devuelto
+		prestamo.setActivo(true);
+		persist(prestamo);
 		
-		int idPrestamo = prestamoSA.altaPrestamo(prestamo);
+		TPrestamo tprestamo = new TPrestamo();
+		tprestamo.setIdSocio(socio.getId());
+		tprestamo.setIdEjemplar(ejemplar.getId());
 		
-		prestamoSA.devolverPrestamo(idPrestamo); // Dar de baja el préstamo
+		int idPrestamo = prestamoSA.altaPrestamo(tprestamo);
 		
 		// When
-		int resultado = prestamoSA.devolverPrestamo(idPrestamo); // Intentar dar de baja nuevamente
+		int resultado = prestamoSA.devolverPrestamo(idPrestamo);
 		
 		// Then
 		assertTrue(resultado < 0);
@@ -558,6 +565,73 @@ public class PrestamoSAImpTest {
 		
 		// Then
 		assertNull(resultado);
+	}
+	
+	@Test
+	void bajaPrestamo_DeberiaDarDeBajaUnPrestamo() {
+		// Given
+		BOSocio socio = new BOSocio();
+		socio.setActivo(true);
+		persist(socio);
+		
+		BOEjemplar ejemplar = new BOEjemplar();
+		ejemplar.setEstado("DISPONIBLE");
+		ejemplar.setActivo(true);
+		persist(ejemplar);
+		
+		BOPrestamo prestamo = new BOPrestamo();	
+		prestamo.setSocio(socio);
+		prestamo.setEjemplar(ejemplar);
+		prestamo.setActivo(true);
+		persist(prestamo);
+		
+		// When
+		boolean resultado = prestamoSA.bajaPrestamo(prestamo.getId());
+		
+		// Then
+		assertTrue(resultado);
+		
+		BOPrestamo prestamoPersistido = findPrestamoById(prestamo.getId());
+		assertNotNull(prestamoPersistido);
+		assertTrue(!prestamoPersistido.getActivo());
+	}
+	
+	@Test
+	void bajaPrestamo_DeberiaDevolverFalso_CuandoElPrestamoNoExiste() {
+		// When
+		boolean resultado = prestamoSA.bajaPrestamo(-1); // ID no existente
+		
+		// Then
+		assertTrue(!resultado);
+	}
+	
+	@Test
+	void bajaPrestamo_DeberiaDevolverFalso_CuandoElPrestamoYaEstaInactivo() {
+		// Given
+		BOSocio socio = new BOSocio();
+		socio.setActivo(true);
+		persist(socio);
+		
+		BOEjemplar ejemplar = new BOEjemplar();
+		ejemplar.setEstado("DISPONIBLE");
+		ejemplar.setActivo(true);
+		persist(ejemplar);
+		
+		BOPrestamo prestamo = new BOPrestamo();	
+		prestamo.setSocio(socio);
+		prestamo.setEjemplar(ejemplar);
+		prestamo.setActivo(false); // Ya inactivo
+		persist(prestamo);
+		
+		// When
+		boolean resultado = prestamoSA.bajaPrestamo(prestamo.getId());
+		
+		// Then
+		assertTrue(!resultado);
+		
+		BOPrestamo prestamoPersistido = findPrestamoById(prestamo.getId());
+		assertNotNull(prestamoPersistido);
+		assertTrue(!prestamoPersistido.getActivo());
 	}
 	
 	void persist(Object entity) {

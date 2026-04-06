@@ -41,7 +41,6 @@ public class GUI_ListarPrestamo extends JFrame implements IGUI {
 		modeloTabla.addColumn("Fecha Máxima");
 		modeloTabla.addColumn("Fecha Devuelto");
 		modeloTabla.addColumn("Precio Multa");
-		modeloTabla.addColumn("Activo");
 
 		tabla = new JTable(modeloTabla);
 		JScrollPane scrollPane = new JScrollPane(tabla);
@@ -78,8 +77,7 @@ public class GUI_ListarPrestamo extends JFrame implements IGUI {
 			for (TPrestamo prestamo : prestamos) {
 				Object[] fila = { prestamo.getId(), prestamo.getIdEjemplar(), prestamo.getIdSocio(),
 						prestamo.getFechaInicial(), prestamo.getFechaMaxima(), prestamo.getFechaDevuelto(),
-						prestamo.getPrecioMulta(),
-						(prestamo.getActivo() != null && prestamo.getActivo()) ? "Sí" : "No" };
+						prestamo.getPrecioMulta() };
 				modeloTabla.addRow(fila);
 			}
 		}

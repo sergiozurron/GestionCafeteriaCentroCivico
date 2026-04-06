@@ -324,6 +324,10 @@ public class Evento {
 	public static final int ALTA_PRESTAMO = 700;
 	public static final int ALTA_PRESTAMO_OK = 701;
 	public static final int ALTA_PRESTAMO_KO = 702;
+	
+	public static final int BAJA_PRESTAMO = 740;
+	public static final int BAJA_PRESTAMO_OK = 741;
+	public static final int BAJA_PRESTAMO_KO = 742;
 
 	public static final int DEVOLUCION_PRESTAMO = 703;
 	public static final int DEVOLUCION_PRESTAMO_OK = 704;
@@ -364,6 +368,7 @@ public class Evento {
 	public static final int CALCULO_PRECIO_PROMOCION = 730;
 	public static final int CALCULO_PRECIO_PROMOCION_OK = 731;
 	public static final int CALCULO_PRECIO_PROMOCION_KO = 732;
+	
 
 
 

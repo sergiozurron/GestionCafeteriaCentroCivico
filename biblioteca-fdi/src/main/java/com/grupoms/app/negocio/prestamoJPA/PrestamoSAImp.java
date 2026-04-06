@@ -129,7 +129,7 @@ public class PrestamoSAImp implements PrestamoSA {
 	            return false;
 	        }
 
-            boprestamo.setActivo(false);;
+            boprestamo.setActivo(false);
 
 	        t.commit();
 	        return true;

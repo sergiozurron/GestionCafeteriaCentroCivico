@@ -134,7 +134,8 @@ public class Principal extends JFrame {
 
 		panelCentroCivico.add(crearPanelCategoria("Prestamo",
 				new String[][] { { "Alta Préstamo", FactoriaVistas.GUI_ALTA_PRESTAMO },
-						{ "Devolución Préstamo", FactoriaVistas.GUI_BAJA_PRESTAMO },
+						{ "Baja Préstamo", FactoriaVistas.GUI_BAJA_PRESTAMO },
+						{ "Devolución Préstamo", FactoriaVistas.GUI_DEVOLUCION_PRESTAMO },
 						{ "Listar Préstamo", FactoriaVistas.GUI_LISTAR_PRESTAMO },
 						{ "Mostrar Préstamo", FactoriaVistas.GUI_MOSTRAR_PRESTAMO },
 						{ "Modificar Préstamo", FactoriaVistas.GUI_MODIFICAR_PRESTAMO },

@@ -18,6 +18,7 @@ import jakarta.persistence.*;
 	            "JOIN e.prestamos p " +
 	            "JOIN BOAdulto a ON a.id = p.socio.id " +
 	            "WHERE a.miembroPleno = true " +
+	            "AND a.activo = true " +
 	            "AND p.fechaInicial BETWEEN :fechaInicio AND :fechaFin " + 
 	            "AND e.activo = true"
 )

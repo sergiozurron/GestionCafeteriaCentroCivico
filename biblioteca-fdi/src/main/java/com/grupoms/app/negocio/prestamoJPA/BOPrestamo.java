@@ -11,7 +11,7 @@ import jakarta.persistence.*;
 		@NamedQuery(name = "BOPrestamo.findActivoBySocioYEjemplar", query = "SELECT p FROM BOPrestamo p WHERE p.socio.id = :idSocio AND p.ejemplar.id = :idEjemplar AND p.activo = true AND p.fechaDevuelto IS NULL"),
 		@NamedQuery(name = "BOPrestamo.findBySocio", query = "SELECT p FROM BOPrestamo p WHERE p.socio.id = :idSocio AND p.activo = true"),
 		@NamedQuery(name = "BOPrestamo.findPendientesBySocio", query = "SELECT p FROM BOPrestamo p WHERE p.socio.id = :idSocio AND p.activo = true AND p.fechaDevuelto IS NULL"),
-		@NamedQuery(name = "BOPrestamo.findByEjemplar", query = "SELECT p FROM BOPrestamo p WHERE p.ejemplar.id = :idEjemplar AND p.activo = true"),})
+		@NamedQuery(name = "BOPrestamo.findByEjemplar", query = "SELECT p FROM BOPrestamo p WHERE p.ejemplar.id = :idEjemplar AND p.fechaDevuelto IS NULL"),})
 public class BOPrestamo implements Serializable {
 
 	private static final long serialVersionUID = 1L;

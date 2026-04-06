@@ -14,6 +14,8 @@ public interface ClaseSA {
 
 	List<TClase> listarClase();
 
+	List<TClase> listarClasesPorSala(Integer idSala);
+
 	Integer vincularEjemplarAClase(Integer idClase, Integer idEjemplar);
 
 	Integer desvincularEjemplarDeClase(Integer idClase, Integer idEjemplar);

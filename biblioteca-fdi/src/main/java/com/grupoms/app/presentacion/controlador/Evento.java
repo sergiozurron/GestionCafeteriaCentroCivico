@@ -253,6 +253,10 @@ public class Evento {
 	public static final int DESVINCULAR_EJEMPLAR_CLASE_OK = 519;
 	public static final int DESVINCULAR_EJEMPLAR_CLASE_KO = 520;
 
+	public static final int LISTAR_CLASES_POR_SALA= 521;
+	public static final int LISTAR_CLASES_POR_SALA_OK = 522;	
+	public static final int LISTAR_CLASES_POR_SALA_KO = 523;
+
 	public static final int ALTA_SALA = 600;
 	public static final int ALTA_SALA_OK = 601;
 	public static final int ALTA_SALA_KO = 602;

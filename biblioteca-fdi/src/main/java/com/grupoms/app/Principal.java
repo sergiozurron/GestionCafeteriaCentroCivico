@@ -106,7 +106,8 @@ public class Principal extends JFrame {
 						{ "Mostrar Clase", FactoriaVistas.GUI_MOSTRAR_CLASE },
 						{ "Modificar Clase", FactoriaVistas.GUI_MODIFICAR_CLASE },
 						{ "Vincular Ejemplar", FactoriaVistas.GUI_VINCULAR_EJEMPLAR_CLASE },
-						{ "Desvincular Ejemplar", FactoriaVistas.GUI_DESVINCULAR_EJEMPLAR_CLASE } }));
+						{ "Desvincular Ejemplar", FactoriaVistas.GUI_DESVINCULAR_EJEMPLAR_CLASE },
+						{ "Listar Clases por Sala", FactoriaVistas.GUI_LISTAR_CLASES_POR_SALA } }));
 
 		panelCentroCivico.add(crearPanelCategoria("Promoción",
 				new String[][] { { "Alta Promoción", FactoriaVistas.GUI_ALTA_PROMOCION },

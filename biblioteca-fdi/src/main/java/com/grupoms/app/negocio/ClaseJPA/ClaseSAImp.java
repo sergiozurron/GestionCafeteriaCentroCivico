@@ -1,5 +1,6 @@
 package com.grupoms.app.negocio.ClaseJPA;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -187,6 +188,34 @@ public class ClaseSAImp implements ClaseSA {
 
 		t.commit();
 		em.close();
+
+		return lista;
+	}
+
+	@Override
+	public List<TClase> listarClasesPorSala(Integer idSala) {
+
+		EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
+		List<TClase> lista = null;
+
+		try {
+			TypedQuery<BOClase> query = em.createNamedQuery(
+					"com.grupoms.app.negocio.claseJPA.BOClase.findBySala",
+					BOClase.class
+			);
+			query.setParameter("idSala", idSala);
+
+			lista = query.getResultList()
+					.stream()
+					.map(ClaseAssembler::entityToTransfer)
+					.collect(Collectors.toList());
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			lista = Collections.emptyList();
+		} finally {
+			em.close();
+		}
 
 		return lista;
 	}

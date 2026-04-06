@@ -10,6 +10,7 @@ import com.grupoms.app.presentacion.comandos.claseJPA.ListarClasesCommand;
 import com.grupoms.app.presentacion.comandos.claseJPA.ModificarClaseCommand;
 import com.grupoms.app.presentacion.comandos.claseJPA.MostrarClaseCommand;
 import com.grupoms.app.presentacion.comandos.claseJPA.VincularEjemplarAClaseCommand;
+import com.grupoms.app.presentacion.comandos.claseJPA.ListarClasesPorSalaCommand;
 import com.grupoms.app.presentacion.comandos.ejemplarJPA.AltaEjemplarCommand;
 import com.grupoms.app.presentacion.comandos.ejemplarJPA.BajaEjemplarCommand;
 import com.grupoms.app.presentacion.comandos.ejemplarJPA.ListarEjemplarCommand;
@@ -158,6 +159,7 @@ public class FactoryCommandImp extends FactoryCommand {
 		commands.put(Evento.LISTAR_CLASES, new ListarClasesCommand());
 		commands.put(Evento.VINCULAR_EJEMPLAR_CLASE, new VincularEjemplarAClaseCommand());
 		commands.put(Evento.DESVINCULAR_EJEMPLAR_CLASE, new DesvincularEjemplarDeClaseCommand());
+		commands.put(Evento.LISTAR_CLASES_POR_SALA, new ListarClasesPorSalaCommand());
 
 		commands.put(Evento.ALTA_SALA, new AltaSalaCommand());
 		commands.put(Evento.BAJA_SALA, new BajaSalaCommand());
@@ -303,6 +305,7 @@ public class FactoryCommandImp extends FactoryCommand {
 		views.put(Evento.MODIFICAR_CLASE, FactoriaVistas.GUI_MODIFICAR_CLASE);
 		views.put(Evento.VINCULAR_EJEMPLAR_CLASE, FactoriaVistas.GUI_VINCULAR_EJEMPLAR_CLASE);
 		views.put(Evento.DESVINCULAR_EJEMPLAR_CLASE, FactoriaVistas.GUI_DESVINCULAR_EJEMPLAR_CLASE);
+		views.put(Evento.LISTAR_CLASES_POR_SALA, FactoriaVistas.GUI_LISTAR_CLASES_POR_SALA);
 
 		views.put(Evento.ALTA_SOCIO, FactoriaVistas.GUI_ALTA_SOCIO);
 		views.put(Evento.BAJA_SOCIO, FactoriaVistas.GUI_BAJA_SOCIO);

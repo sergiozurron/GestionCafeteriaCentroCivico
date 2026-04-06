@@ -95,6 +95,7 @@ public class FactoriaVistas {
 	public static final String GUI_LISTAR_CLASE = "GUI_ListarClase";
 	public static final String GUI_MOSTRAR_CLASE = "GUI_MostrarClase";
 	public static final String GUI_MODIFICAR_CLASE = "GUI_ModificarClase";
+	public static final String GUI_LISTAR_CLASES_POR_SALA = "GUI_ListarClasesPorSala";
 
 	public static final String GUI_VINCULAR_EJEMPLAR_CLASE = "GUI_VincularEjemplarClase";
 	public static final String GUI_DESVINCULAR_EJEMPLAR_CLASE = "GUI_DesvincularEjemplarClase";
@@ -164,6 +165,7 @@ public class FactoriaVistas {
 		vistas.put(GUI_MOSTRAR_CLASE, new GUI_MostrarClase());
 		vistas.put(GUI_VINCULAR_EJEMPLAR_CLASE, new GUI_VincularEjemplarClase());
 		vistas.put(GUI_DESVINCULAR_EJEMPLAR_CLASE, new GUI_DesvincularEjemplarClase());
+		vistas.put(GUI_LISTAR_CLASES_POR_SALA, new GUI_ListarClasesPorSala());
 
 		vistas.put(GUI_ALTA_SALA, new GUI_AltaSala());
 		vistas.put(GUI_BAJA_SALA, new GUI_BajaSala());

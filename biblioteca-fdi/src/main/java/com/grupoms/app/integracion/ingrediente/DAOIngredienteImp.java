@@ -52,7 +52,7 @@ public class DAOIngredienteImp implements DAOIngrediente {
             Transaction t = TransactionManager.getInstance().getTransaction();
             Connection c = (Connection) t.getResource();
 
-            String sql = "SELECT id, nombre, precio, activo, proveedor_id FROM ingredientes WHERE id = ?";
+            String sql = "SELECT id, nombre, precio, activo, proveedor_id FROM ingredientes WHERE id = ? FOR UPDATE";
             try (PreparedStatement ps = c.prepareStatement(sql)) {
                 ps.setInt(1, id);
                 try (ResultSet rs = ps.executeQuery()) {
@@ -106,7 +106,7 @@ public class DAOIngredienteImp implements DAOIngrediente {
 			Transaction t = TransactionManager.getInstance().getTransaction();
 			Connection c = (Connection) t.getResource();
 
-			String sql = "SELECT id, nombre, precio, activo, proveedor_id FROM ingredientes WHERE proveedor_id = ?";
+			String sql = "SELECT id, nombre, precio, activo, proveedor_id FROM ingredientes WHERE proveedor_id = ? FOR UPDATE";
 			try (PreparedStatement ps = c.prepareStatement(sql)) {
 				ps.setInt(1, idProveedor);
 
@@ -196,7 +196,7 @@ public class DAOIngredienteImp implements DAOIngrediente {
 	        String sql =
 	            "SELECT id, producto_id, ingrediente_id, activo " +
 	            "FROM entradas_recetas " +
-	            "WHERE producto_id = ?";
+	            "WHERE producto_id = ? FOR UPDATE";
 
 	        try (PreparedStatement ps = c.prepareStatement(sql)) {
 

@@ -16,8 +16,8 @@ import com.grupoms.app.negocio.proveedor.TProveedor;
 public class DAOProveedorImpl implements DAOProveedor {
 
 	private static final String INSERT = "INSERT INTO proveedores(nombre, tarifa, tiempo_entrega, activo) VALUES (?, ?, ?, ?)";
-	private static final String READ_BY_ID = "SELECT * FROM proveedores WHERE id = ?";
-	private static final String READ_BY_NAME = "SELECT * FROM proveedores WHERE nombre = ?";
+	private static final String READ_BY_ID = "SELECT * FROM proveedores WHERE id = ? FOR UPDATE";
+	private static final String READ_BY_NAME = "SELECT * FROM proveedores WHERE nombre = ? FOR UPDATE";
 	private static final String READ_ALL = "SELECT * FROM proveedores";
 	private static final String UPDATE = "UPDATE proveedores SET nombre = ?, tarifa = ?, tiempo_entrega = ?, activo = ? WHERE id = ?";
 	private static final String UPDATE_ACTIVO = "UPDATE proveedores SET activo = ? WHERE id = ?";

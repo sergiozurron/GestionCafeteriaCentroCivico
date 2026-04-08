@@ -16,7 +16,7 @@ public class DAOProductoImp implements DAOProducto {
 	private static final String INSERT_PRODUCTO = "INSERT INTO productos(nombre, precio, stock, activo) VALUES (?, ?, ?, ?)";
 	private static final String INSERT_COMIDA = "INSERT INTO comidas(id, tipo, calorias, tiempo_preparacion) VALUES (?, ?, ?, ?)";
 	private static final String INSERT_BEBIDA = "INSERT INTO bebidas(id, tipo, tamaño) VALUES (?, ?, ?)";
-	private static final String READ_BY_ID = "SELECT p.*, " + " c.tipo AS tipo_comida, c.calorias, c.tiempo_preparacion, " + " b.tipo AS tipo_bebida, b.tamaño " + "FROM productos p " + "LEFT JOIN comidas c ON p.id = c.id " + "LEFT JOIN bebidas b ON p.id = b.id " + "WHERE p.id = ?";
+	private static final String READ_BY_ID = "SELECT p.*, " + " c.tipo AS tipo_comida, c.calorias, c.tiempo_preparacion, " + " b.tipo AS tipo_bebida, b.tamaño " + "FROM productos p " + "LEFT JOIN comidas c ON p.id = c.id " + "LEFT JOIN bebidas b ON p.id = b.id " + "WHERE p.id = ? FOR UPDATE";
 	private static final String UPDATE_PRODUCTO =
     "UPDATE productos SET nombre = ?, precio = ?, stock = ?, activo = ? WHERE id = ?";
 	private static final String UPDATE_COMIDA = "UPDATE comidas SET calorias = ?, tiempo_preparacion = ? WHERE id = ?";

@@ -79,7 +79,7 @@ public class DAOIngredienteImp implements DAOIngrediente {
 			Transaction t = TransactionManager.getInstance().getTransaction();
 			Connection c = (Connection) t.getResource();
 
-			String sql = "SELECT id, nombre, precio, activo, proveedor_id FROM ingredientes";
+			String sql = "SELECT id, nombre, precio, activo, proveedor_id FROM ingredientes FOR UPDATE";
 			try (PreparedStatement ps = c.prepareStatement(sql)) {
 				ResultSet rs = ps.executeQuery();
 

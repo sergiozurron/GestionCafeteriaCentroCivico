@@ -11,6 +11,7 @@ import com.grupoms.app.negocio.materialJPA.BOMaterial;
 import com.grupoms.app.negocio.prestamoJPA.BOPrestamo;
 
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.LockModeType;
 
 public class EjemplarSAImp implements EjemplarSA {
@@ -134,8 +135,11 @@ public class EjemplarSAImp implements EjemplarSA {
 
 	@Override
 	public TEjemplar mostrarEjemplar(Integer idEjemplar) {
+		if(idEjemplar == null || idEjemplar <0)return null;
 		EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
-
+		EntityTransaction t = em.getTransaction();
+		
+		
 		BOEjemplar boEjemplar = em.find(BOEjemplar.class, idEjemplar);
 
 		if (boEjemplar == null || !boEjemplar.getActivo()) {

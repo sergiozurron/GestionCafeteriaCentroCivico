@@ -151,11 +151,13 @@ public class MaterialSAImp implements MaterialSA {
 
 		EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
 		EntityTransaction t = em.getTransaction();
+		List<TMaterial> lista=null;
+		try {
 		t.begin();
 
 		final TypedQuery<BOMaterial> query = em
 				.createNamedQuery("com.grupoms.app.negocio.materialJPA.BOMaterial.findAll", BOMaterial.class);
-		List<TMaterial> lista = query.getResultList().stream().map(bo -> {
+		lista = query.getResultList().stream().map(bo -> {
 			em.lock(bo, LockModeType.OPTIMISTIC);
 			if (bo instanceof BOLibro libro)
 				return LibroAssembler.toDTO(libro);
@@ -166,8 +168,13 @@ public class MaterialSAImp implements MaterialSA {
 		}).collect(Collectors.toList());
 
 		t.commit();
+		}catch(Exception e) {
+			if(t.isActive())t.rollback();
+			e.printStackTrace();
+		}finally {
+			em.close();
 
-		em.close();
+		}
 		return lista;
 	}
 
@@ -278,26 +285,45 @@ public class MaterialSAImp implements MaterialSA {
 
 	@Override
 	public TMaterial mostrarMaterial(Integer id) {
-		if (id == null || id < 0)
-			return null;
+	    if (id == null || id < 0) {
+	        return null;
+	    }
 
-		EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
-		BOMaterial material = em.find(BOMaterial.class, id);
-		if (material == null || !material.getActivo()) {
-			em.close();
-			return null;
-		}
-		em.lock(material, LockModeType.OPTIMISTIC);
-		TMaterial dto;
-		if (material instanceof BOLibro libro) {
-			dto = LibroAssembler.toDTO(libro);
-		} else if (material instanceof BOPintura pintura) {
-			dto = PinturaAssembler.toDTO(pintura);
-		} else {
-			dto = MaterialAssembler.entityToTransfer(material);
-		}
-		return dto;
+	    EntityManager em = null;
+	    try {
+	        // Inicializamos el EntityManager dentro del try por seguridad
+	        em = EntityManagerSingleton.getEMF().createEntityManager();
+	        
+	        BOMaterial material = em.find(BOMaterial.class, id);
+	        
+	        if (material == null || !material.getActivo()) {
+	            return null; // El finally se encargará de cerrar el 'em'
+	        }
+	        
+	        // Bloqueo optimista
+	        em.lock(material, LockModeType.OPTIMISTIC);
+	        
+	        TMaterial dto;
+	        if (material instanceof BOLibro libro) {
+	            dto = LibroAssembler.toDTO(libro);
+	        } else if (material instanceof BOPintura pintura) {
+	            dto = PinturaAssembler.toDTO(pintura);
+	        } else {
+	            dto = MaterialAssembler.entityToTransfer(material);
+	        }
+	        
+	        return dto;
 
+	    } catch (Exception e) {
+	        // Capturamos cualquier error (PersistenceException, OptimisticLockException, etc.)
+	        throw new RuntimeException("Error al mostrar el material con ID: " + id, e);
+	        
+	    } finally {
+	        // El bloque finally SIEMPRE se ejecuta, haya error o return previo
+	        if (em != null && em.isOpen()) {
+	            em.close();
+	        }
+	    }
 	}
 
 }

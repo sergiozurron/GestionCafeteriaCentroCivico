@@ -83,8 +83,8 @@ public class PromocionSAImp implements PromocionSA {
 		Integer id = -1;
 		EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
 		EntityTransaction t = em.getTransaction();
-		t.begin();
 		try {
+			t.begin();
 			BOPromocion promocionExistente = em.find(BOPromocion.class, promocion.getId());
 			if (promocionExistente != null) {
 				promocionExistente.setTipo(promocion.getTipo());
@@ -109,26 +109,46 @@ public class PromocionSAImp implements PromocionSA {
 		if (id == null || id < 0)
 			return null;
 
-		EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
-		BOPromocion promocion = em.find(BOPromocion.class, id);
-		if (promocion == null) {
-			em.close();
-			return null;
+		EntityManager em = null;
+		try {
+			em = EntityManagerSingleton.getEMF().createEntityManager();
+			BOPromocion promocion = em.find(BOPromocion.class, id);
+			if (promocion == null) {
+				em.close();
+				return null;
+			}
+			TPromocion dto = PromocionAssembler.toDTO(promocion);
+			return dto;
+		} catch (Exception e) {
+			throw new RuntimeException("Error al mostrar la promoción con ID: " + id, e);
+		} finally {
+			if (em != null && em.isOpen()) {
+				em.close();
+			}
 		}
-		TPromocion dto = PromocionAssembler.toDTO(promocion);
-		return dto;
 	}
 
 	public List<TPromocion> listarPromociones() {
 		EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
 		EntityTransaction t = em.getTransaction();
-		t.begin();
-		final TypedQuery<BOPromocion> query = em
-				.createNamedQuery("com.grupoms.app.negocio.PromocionJPA.BOPromocion.findAll", BOPromocion.class);
-		List<TPromocion> lista = query.getResultList().stream().map(PromocionAssembler::toDTO)
-				.collect(Collectors.toList());
-		t.commit();
-		em.close();
+		
+		List<TPromocion> lista = null;
+		try {
+			t.begin();
+			final TypedQuery<BOPromocion> query = em
+					.createNamedQuery("com.grupoms.app.negocio.PromocionJPA.BOPromocion.findAll", BOPromocion.class);
+			lista = query.getResultList().stream().map(PromocionAssembler::toDTO)
+					.collect(Collectors.toList());
+			t.commit();
+		} catch (Exception e) {
+			if (t.isActive())
+				t.rollback();
+			throw new RuntimeException("Error al listar promociones", e);
+		} finally {
+			if (em != null && em.isOpen()) {
+				em.close();
+			}
+		}
 		return lista;
 	}
 

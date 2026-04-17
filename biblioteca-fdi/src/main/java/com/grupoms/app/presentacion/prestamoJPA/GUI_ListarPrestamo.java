@@ -26,7 +26,7 @@ public class GUI_ListarPrestamo extends JFrame implements IGUI {
 	private JButton btnCargar;
 
 	public GUI_ListarPrestamo() {
-		setTitle("Listar Ejemplares");
+		setTitle("Listar Préstamos");
 		setSize(700, 500);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setLocationRelativeTo(null);
@@ -75,7 +75,7 @@ public class GUI_ListarPrestamo extends JFrame implements IGUI {
 			List<TPrestamo> prestamos = (List<TPrestamo>) context.getDatos();
 
 			for (TPrestamo prestamo : prestamos) {
-				Object[] fila = { prestamo.getId(), prestamo.getIdEjemplar(), prestamo.getIdSocio(),
+				Object[] fila = { prestamo.getIdEjemplar(), prestamo.getIdSocio(),
 						prestamo.getFechaInicial(), prestamo.getFechaMaxima(), prestamo.getFechaDevuelto(),
 						prestamo.getPrecioMulta() };
 				modeloTabla.addRow(fila);

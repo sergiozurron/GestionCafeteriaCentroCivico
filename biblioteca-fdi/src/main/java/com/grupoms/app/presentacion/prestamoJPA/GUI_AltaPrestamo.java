@@ -148,8 +148,7 @@ public class GUI_AltaPrestamo extends JFrame implements IGUI {
 		}
 		switch (context.getEvento()) {
 		case Evento.ALTA_PRESTAMO_OK:
-			Integer idPrestamo = (Integer) context.getDatos();
-			JOptionPane.showMessageDialog(this, "Préstamo creado con id " + idPrestamo);
+			JOptionPane.showMessageDialog(this, "Préstamo creado");
 			setVisible(false);
 			dispose();
 			break;

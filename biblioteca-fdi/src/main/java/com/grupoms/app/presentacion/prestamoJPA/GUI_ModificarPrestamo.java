@@ -84,7 +84,6 @@ public class GUI_ModificarPrestamo extends JFrame implements IGUI {
 				}
 
 				TPrestamo prestamo = new TPrestamo();
-				prestamo.setId(id);
 				prestamo.setIdEjemplar(idEjemplar);
 				prestamo.setIdSocio(idSocio);
 				prestamo.setFechaInicial(fechaInicial);

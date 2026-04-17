@@ -9,7 +9,6 @@ public class PrestamoAssembler {
 		if (bo == null)
 			return null;
 		TPrestamo dto = new TPrestamo();
-		dto.setId(bo.getId());
 
 		if (bo.getSocio() != null) {
 			dto.setIdSocio(bo.getSocio().getId());

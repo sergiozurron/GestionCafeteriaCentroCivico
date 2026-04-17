@@ -7,13 +7,11 @@ import com.grupoms.app.negocio.socioJPA.BOSocio;
 import jakarta.persistence.*;
 
 @Entity
+@IdClass(PrestamoId.class)
 @NamedQueries({
-		@NamedQuery(name = "BOPrestamo.findActivoBySocioYEjemplar", query = "SELECT p FROM BOPrestamo p WHERE p.socio.id = :idSocio AND p.ejemplar.id = :idEjemplar AND p.activo = true AND p.fechaDevuelto IS NULL"),
-		@NamedQuery(name = "BOPrestamo.findBySocio", query = "SELECT p FROM BOPrestamo p WHERE p.socio.id = :idSocio AND p.activo = true"),
 		@NamedQuery(name = "BOPrestamo.findPendientesBySocio", query = "SELECT p FROM BOPrestamo p WHERE p.socio.id = :idSocio AND p.fechaDevuelto IS NULL"),
 		@NamedQuery(name = "BOPrestamo.findPendientesByEjemplar", query = "SELECT p FROM BOPrestamo p WHERE p.ejemplar.id = :idEjemplar AND p.fechaDevuelto IS NULL"),
 		@NamedQuery(name = "BOPrestamo.findByEjemplar", query = "SELECT p FROM BOPrestamo p WHERE p.ejemplar.id = :idEjemplar AND p.fechaDevuelto IS NULL"),
-		@NamedQuery(name = "BOPrestamo.findByEjemplarTodos", query = "SELECT p FROM BOPrestamo p WHERE p.ejemplar.id = :idEjemplar AND p.activo = true"),
 		@NamedQuery(name = "BOPrestamo.deleteAllByIdSocio", query = "DELETE FROM BOPrestamo p WHERE p.socio.id = :idSocio"),
 		@NamedQuery(name = "BOPrestamo.deleteAllByIdEjemplar", query = "DELETE FROM BOPrestamo p WHERE p.ejemplar.id = :idEjemplar") })
 public class BOPrestamo implements Serializable {
@@ -21,9 +19,6 @@ public class BOPrestamo implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
-
 	@Temporal(TemporalType.DATE)
 	private Date fechaInicial;
 
@@ -38,10 +33,12 @@ public class BOPrestamo implements Serializable {
 	@Version
 	private int version;
 
+	@Id
 	@ManyToOne
 	@JoinColumn(name = "socio_id")
 	private BOSocio socio;
 
+	@Id
 	@ManyToOne
 	@JoinColumn(name = "ejemplar_id")
 	private BOEjemplar ejemplar;
@@ -55,14 +52,6 @@ public class BOPrestamo implements Serializable {
 		this.fechaMaxima = fechaMaxima;
 		this.fechaInicial = new Date();
 		this.precioMulta = 0.0;
-	}
-
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
 	}
 
 	public Date getFechaInicial() {

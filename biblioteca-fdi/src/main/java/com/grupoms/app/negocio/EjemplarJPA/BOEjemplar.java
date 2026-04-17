@@ -11,7 +11,6 @@ import jakarta.persistence.*;
 @NamedQuery(name = "com.grupoms.app.negocio.EjemplarJPA.BOEjemplar.findAllActivos", query = "SELECT e FROM BOEjemplar e WHERE e.activo = true")
 @NamedQuery(name = "com.grupoms.app.negocio.EjemplarJPA.BOEjemplar.findByMaterialId", query = "SELECT e FROM BOEjemplar e WHERE e.material.id = :materialId AND e.activo = true")
 @NamedQuery(name = "com.grupoms.app.negocio.EjemplarJPA.BOEjemplar.findByClaseId", query = "SELECT e FROM BOEjemplar e JOIN e.clases c WHERE c.id = :claseId AND e.activo = true")
-@NamedQuery(name = "com.grupoms.app.negocio.EjemplarJPA.BOEjemplar.findBySocio", query = "SELECT e FROM BOEjemplar e JOIN e.prestamos p WHERE p.socio.id = :idSocio AND p.activo = true AND p.fechaDevuelto IS NULL")
 @NamedQuery(
 	    name = "BOEjemplar.findPrestadosPorAdultosPlenosEnFechas",
 	    query = "SELECT DISTINCT e FROM BOEjemplar e " +

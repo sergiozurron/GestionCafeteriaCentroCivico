@@ -11,8 +11,8 @@ public class AltaPrestamoCommand implements Command {
 	@Override
 	public Context execute(Object data) {
 		TPrestamo prestamo = (TPrestamo) data;
-		int idPrestamo = FactoriaSA.getInstance().creaSAPrestamo().altaPrestamo(prestamo);
-		if (idPrestamo == -1)
+		Boolean idPrestamo = FactoriaSA.getInstance().creaSAPrestamo().altaPrestamo(prestamo);
+		if (!idPrestamo)
 			return new Context(Evento.ALTA_PRESTAMO_KO, null);
 		return new Context(Evento.ALTA_PRESTAMO_OK, idPrestamo);
 	}

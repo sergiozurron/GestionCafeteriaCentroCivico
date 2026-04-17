@@ -4,13 +4,13 @@ import java.util.List;
 
 public interface PrestamoSA {
 
-	public Integer altaPrestamo(TPrestamo prestamo);
+	public Boolean altaPrestamo(TPrestamo prestamo);
 
-	public Integer devolverPrestamo(Integer idPrestamo);
+	public Boolean devolverPrestamo(PrestamoId idPrestamo);
 
-	public Integer modificarPrestamo(TPrestamo prestamo);
+	public Boolean modificarPrestamo(TPrestamo prestamo);
 
-	public TPrestamo mostrarPrestamo(Integer idPrestamo);
+	public TPrestamo mostrarPrestamo(PrestamoId idPrestamo);
 
 	public List<TPrestamo> listarPrestamo();
 

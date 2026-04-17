@@ -15,34 +15,35 @@ import com.grupoms.app.negocio.socioJPA.BOSocio;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.LockModeType;
 import jakarta.persistence.TypedQuery;
 
 public class PrestamoSAImp implements PrestamoSA {
 
 	@Override
-	public Integer altaPrestamo(TPrestamo prestamo) {
-		Integer id = -1;
+	public Boolean altaPrestamo(TPrestamo prestamo) {
 		EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
 		EntityTransaction t = em.getTransaction();
 
 		try {
 			t.begin();
 
-			BOSocio socio = em.find(BOSocio.class, prestamo.getIdSocio());
+			BOSocio socio = em.find(BOSocio.class, prestamo.getIdSocio(), LockModeType.OPTIMISTIC_FORCE_INCREMENT);
 			if (socio == null || !socio.getActivo()) {
 				t.rollback();
-				return -1;
+				return false;
 			}
 
-			BOEjemplar ejemplar = em.find(BOEjemplar.class, prestamo.getIdEjemplar());
-			if (ejemplar == null || !ejemplar.getActivo()) {
+			BOEjemplar ejemplar = em.find(BOEjemplar.class, prestamo.getIdEjemplar(), LockModeType.OPTIMISTIC_FORCE_INCREMENT);
+			if (ejemplar == null || !ejemplar.getActivo() || !"DISPONIBLE".equalsIgnoreCase(ejemplar.getEstado())) {
 				t.rollback();
-				return -1;
+				return false;
 			}
-
-			if (!"DISPONIBLE".equalsIgnoreCase(ejemplar.getEstado())) {
+			
+			BOPrestamo prestamoExistente = em.find(BOPrestamo.class, new PrestamoId(prestamo.getIdSocio(), prestamo.getIdEjemplar(), new Date()));
+			if (prestamoExistente != null) {
 				t.rollback();
-				return -1;
+				return false;
 			}
 
 			BOPrestamo boPrestamo = new BOPrestamo();
@@ -57,32 +58,30 @@ public class PrestamoSAImp implements PrestamoSA {
 			em.persist(boPrestamo);
 
 			t.commit();
-			id = boPrestamo.getId();
-
 		} catch (Exception e) {
 			if (t.isActive())
 				t.rollback();
 			e.printStackTrace();
-			return -1;
+			return false;
 		} finally {
 			em.close();
 		}
-		return id;
+		return true;
 	}
 
 	@Override
-	public Integer devolverPrestamo(Integer idPrestamo) {
+	public Boolean devolverPrestamo(PrestamoId idPrestamo) {
 	    EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
 	    EntityTransaction t = em.getTransaction();
 
 	    try {
 	        t.begin();
 
-	        BOPrestamo boprestamo = em.find(BOPrestamo.class, idPrestamo);
+	        BOPrestamo boprestamo = em.find(BOPrestamo.class, idPrestamo, LockModeType.OPTIMISTIC);
 
 	        if (boprestamo == null || boprestamo.getFechaDevuelto() != null) {
 	            t.rollback();
-	            return -1;
+	            return false;
 	        }
  
         	Date fechaActual = new Date();
@@ -96,13 +95,13 @@ public class PrestamoSAImp implements PrestamoSA {
         	boprestamo.setFechaDevuelto(new java.util.Date());
 
 	        t.commit();
-	        return boprestamo.getId();
+	        return true;
 
 	    } catch (Exception e) {
 	        if (t.isActive())
 	            t.rollback();
 	        e.printStackTrace();
-	        return -1;
+	        return false;
 	    } finally {
 	        em.close();
 	    }
@@ -111,43 +110,40 @@ public class PrestamoSAImp implements PrestamoSA {
 
 
 	@Override
-	public Integer modificarPrestamo(TPrestamo prestamo) {
+	public Boolean modificarPrestamo(TPrestamo prestamo) {
 		EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
 		EntityTransaction t = em.getTransaction();
 		try {
 			t.begin();
 
-			BOPrestamo bo = em.find(BOPrestamo.class, prestamo.getId());
+			BOPrestamo bo = em.find(BOPrestamo.class, new PrestamoId(prestamo.getIdSocio(), prestamo.getIdEjemplar(), prestamo.getFechaInicial()));
 
 			if (bo == null) {
 				t.rollback();
-				return -1;
+				return false;
 			}
 
 			bo.setFechaMaxima(prestamo.getFechaMaxima());
 			bo.setPrecioMulta(prestamo.getPrecioMulta());
 
 			t.commit();
-			return bo.getId();
+			return true;
 
 		} catch (Exception e) {
 			if (t.isActive())
 				t.rollback();
 			e.printStackTrace();
-			return -1;
+			return false;
 		} finally {
 			em.close();
 		}
 	}
 
 	@Override
-	public TPrestamo mostrarPrestamo(Integer idPrestamo) {
+	public TPrestamo mostrarPrestamo(PrestamoId idPrestamo) {
 		EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
 		try {
 			BOPrestamo bo = em.find(BOPrestamo.class, idPrestamo);
-			if (bo == null) {
-				return null;
-			}
 			return PrestamoAssembler.toDTO(bo);
 		} finally {
 			em.close();
@@ -158,7 +154,7 @@ public class PrestamoSAImp implements PrestamoSA {
 	public List<TPrestamo> listarPrestamo() {
 		EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
 		try {
-			TypedQuery<BOPrestamo> query = em.createQuery("SELECT p FROM BOPrestamo p WHERE p.activo = true",
+			TypedQuery<BOPrestamo> query = em.createQuery("SELECT p FROM BOPrestamo p",
 					BOPrestamo.class);
 
 			return query.getResultList().stream().map(PrestamoAssembler::toDTO).collect(Collectors.toList());

@@ -4,6 +4,9 @@ import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -12,6 +15,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import com.grupoms.app.negocio.prestamoJPA.PrestamoId;
 import com.grupoms.app.negocio.prestamoJPA.TPrestamo;
 import com.grupoms.app.presentacion.IGUI;
 import com.grupoms.app.presentacion.controlador.Context;
@@ -22,7 +26,9 @@ public class GUI_MostrarPrestamo extends JFrame implements IGUI {
 
     private static final long serialVersionUID = 1L;
 
-    private JTextField campoId;
+    private JTextField campoIdSocio;
+    private JTextField campoIdEjemplar;
+    private JTextField campoFechaInicio;
     private JButton btnMostrar;
 
     private JTextField campoValorId;
@@ -44,70 +50,99 @@ public class GUI_MostrarPrestamo extends JFrame implements IGUI {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 5, 5, 5);
         gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.weightx = 1.0; // Allow horizontal expansion
 
-        JLabel labelId = new JLabel("ID:");
-        campoId = new JTextField(10);
+        JLabel labelIdSocio = new JLabel("ID Socio:");
+        campoIdSocio = new JTextField(20);
+        
+        JLabel labelIdEjemplar = new JLabel("ID Ejemplar:");
+        campoIdEjemplar = new JTextField(20);
+        
+        JLabel labelFechaInicio = new JLabel("Fecha Inicio (YYYY-MM-DD):");
+        campoFechaInicio = new JTextField(20);
 
         btnMostrar = new JButton("Mostrar Préstamo");
         btnMostrar.addActionListener(e -> {
-            try {
-                int id = Integer.parseInt(campoId.getText().trim());
+        	int idSocio;
+			try {
+				idSocio = Integer.parseInt(campoIdSocio.getText());
+			} catch (NumberFormatException ex) {
+				JOptionPane.showMessageDialog(this, "ID Socio debe ser un número", "Error", JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+			
+			int idEjemplar;
+			try {
+				idEjemplar = Integer.parseInt(campoIdEjemplar.getText());
+			} catch (NumberFormatException ex) {
+				JOptionPane.showMessageDialog(this, "ID Ejemplar debe ser un número", "Error", JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+			
+			Date fechaInicio;
+			try {
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+				fechaInicio = sdf.parse(campoFechaInicio.getText());
+			} catch (ParseException e1) {
+				JOptionPane.showMessageDialog(this, "Fecha Inicio debe tener formato YYYY-MM-DD", "Error", JOptionPane.ERROR_MESSAGE);
+				return;
+			}
 
-                if (id <= 0) {
-                    JOptionPane.showMessageDialog(this, "El ID debe ser mayor que 0");
-                    campoId.requestFocusInWindow();
-                    return;
-                }
+            Context contexto = new Context(Evento.MOSTRAR_PRESTAMO, new PrestamoId(idSocio, idEjemplar, fechaInicio));
+            Controlador.getInstance().handle(contexto);
 
-                Context contexto = new Context(Evento.MOSTRAR_PRESTAMO, id);
-                Controlador.getInstance().handle(contexto);
-
-            } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(this, "Error: El ID debe ser un número válido");
-                campoId.requestFocusInWindow();
-            }
         });
 
         // Campos de visualización
-        campoValorId = new JTextField(15);
+        campoValorId = new JTextField(20);
         campoValorId.setEditable(false);
         JLabel labelIdValor = new JLabel("ID:");
 
-        campoValorIdEjemplar = new JTextField(15);
+        campoValorIdEjemplar = new JTextField(20);
         campoValorIdEjemplar.setEditable(false);
         JLabel labelIdEjemplarValor = new JLabel("ID Ejemplar:");
 
-        campoValorIdSocio = new JTextField(15);
+        campoValorIdSocio = new JTextField(20);
         campoValorIdSocio.setEditable(false);
         JLabel labelIdSocioValor = new JLabel("ID Socio:");
 
-        campoValorFechaInicial = new JTextField(15);
+        campoValorFechaInicial = new JTextField(20);
         campoValorFechaInicial.setEditable(false);
         JLabel labelFechaInicialValor = new JLabel("Fecha Inicial:");
 
-        campoValorFechaMaxima = new JTextField(15);
+        campoValorFechaMaxima = new JTextField(20);
         campoValorFechaMaxima.setEditable(false);
         JLabel labelFechaMaximaValor = new JLabel("Fecha Máxima:");
 
-        campoValorFechaDevuelto = new JTextField(15);
+        campoValorFechaDevuelto = new JTextField(20);
         campoValorFechaDevuelto.setEditable(false);
         JLabel labelFechaDevueltoValor = new JLabel("Fecha Devuelto:");
 
-        campoValorPrecioMulta = new JTextField(15);
+        campoValorPrecioMulta = new JTextField(20);
         campoValorPrecioMulta.setEditable(false);
         JLabel labelPrecioMultaValor = new JLabel("Precio Multa:");
-
-        campoValorActivo = new JTextField(15);
-        campoValorActivo.setEditable(false);
-        JLabel labelActivoValor = new JLabel("Activo:");
 
         int y = 0;
 
         gbc.gridx = 0;
         gbc.gridy = y;
-        panel.add(labelId, gbc);
+        panel.add(labelIdSocio, gbc);
         gbc.gridx = 1;
-        panel.add(campoId, gbc);
+        panel.add(campoIdSocio, gbc);
+        
+        y++;
+        gbc.gridx = 0;
+        gbc.gridy = y;
+        panel.add(labelIdEjemplar, gbc);
+        gbc.gridx = 1;
+        panel.add(campoIdEjemplar, gbc);
+        
+        y++;
+        gbc.gridx = 0;
+        gbc.gridy = y;
+        panel.add(labelFechaInicio, gbc);
+        gbc.gridx = 1;
+        panel.add(campoFechaInicio, gbc);
 
         y++;
         gbc.gridx = 0;
@@ -165,13 +200,6 @@ public class GUI_MostrarPrestamo extends JFrame implements IGUI {
         gbc.gridx = 1;
         panel.add(campoValorPrecioMulta, gbc);
 
-        y++;
-        gbc.gridx = 0;
-        gbc.gridy = y;
-        panel.add(labelActivoValor, gbc);
-        gbc.gridx = 1;
-        panel.add(campoValorActivo, gbc);
-
         add(panel, BorderLayout.CENTER);
     }
 
@@ -186,11 +214,9 @@ public class GUI_MostrarPrestamo extends JFrame implements IGUI {
                 // proteccion adicional: si por algun motivo llega null
                 JOptionPane.showMessageDialog(this, "No se ha encontrado el préstamo.");
                 clearFields();
-                campoId.requestFocusInWindow();
                 return;
             }
 
-            campoValorId.setText(String.valueOf(prestamo.getId()));
             campoValorIdEjemplar.setText(String.valueOf(prestamo.getIdEjemplar()));
             campoValorIdSocio.setText(String.valueOf(prestamo.getIdSocio()));
             campoValorFechaInicial.setText(String.valueOf(prestamo.getFechaInicial()));
@@ -201,7 +227,6 @@ public class GUI_MostrarPrestamo extends JFrame implements IGUI {
         } else if (context.getEvento() == Evento.MOSTRAR_PRESTAMO_KO) {
             JOptionPane.showMessageDialog(this, "Error al mostrar el préstamo. Puede que no exista o haya sido eliminado.");
             clearFields();
-            campoId.requestFocusInWindow();
         }
     }
 

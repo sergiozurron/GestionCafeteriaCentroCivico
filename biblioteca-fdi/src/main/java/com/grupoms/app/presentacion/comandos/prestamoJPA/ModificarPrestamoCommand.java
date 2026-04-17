@@ -11,8 +11,8 @@ public class ModificarPrestamoCommand implements Command {
 	@Override
 	public Context execute(Object data) {
 		TPrestamo prestamo = (TPrestamo) data;
-		int exito = FactoriaSA.getInstance().creaSAPrestamo().modificarPrestamo(prestamo);
-		if (exito == -1)
+		Boolean exito = FactoriaSA.getInstance().creaSAPrestamo().modificarPrestamo(prestamo);
+		if (!exito)
 			return new Context(Evento.MODIFICAR_PRESTAMO_KO, null);
 		return new Context(Evento.MODIFICAR_PRESTAMO_OK, null);
 	}

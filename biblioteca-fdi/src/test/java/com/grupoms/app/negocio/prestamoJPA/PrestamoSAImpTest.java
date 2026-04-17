@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.Date;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -53,17 +55,17 @@ public class PrestamoSAImpTest {
 		prestamo.setIdEjemplar(ejemplar.getId());
 		
 		// When
-		int resultado = prestamoSA.altaPrestamo(prestamo);
+		Boolean resultado = prestamoSA.altaPrestamo(prestamo);
 		
 		// Then
-		assertTrue(resultado > 0);
+		assertTrue(resultado);
 		
-		BOPrestamo prestamoPersistido = findPrestamoById(resultado);
+		BOPrestamo prestamoPersistido = findPrestamoById(new PrestamoId(socio.getId(), ejemplar.getId(), new Date()));
 		assertNotNull(prestamoPersistido);
 	}
 	
 	@Test
-	void altaPrestamo_DeberiaDevolverMenosUno_CuandoElSocioNoExiste() {
+	void altaPrestamo_DeberiaDevolverFalse_CuandoElSocioNoExiste() {
 		// Given
 		BOEjemplar ejemplar = new BOEjemplar();
 		ejemplar.setEstado("DISPONIBLE");
@@ -75,14 +77,14 @@ public class PrestamoSAImpTest {
 		prestamo.setIdEjemplar(ejemplar.getId());
 		
 		// When
-		int resultado = prestamoSA.altaPrestamo(prestamo);
+		Boolean resultado = prestamoSA.altaPrestamo(prestamo);
 		
 		// Then
-		assertTrue(resultado < 0);
+		assertTrue(!resultado);
 	}
 	
 	@Test
-	void altaPrestamo_DeberiaDevolverMenosUno_CuandoElSocioNoEstaActivo() {
+	void altaPrestamo_DeberiaDevolverFalse_CuandoElSocioNoEstaActivo() {
 		// Given
 		BOSocio socio = new BOSocio();
 		socio.setActivo(false); // No activo
@@ -98,14 +100,14 @@ public class PrestamoSAImpTest {
 		prestamo.setIdEjemplar(ejemplar.getId());
 		
 		// When
-		int resultado = prestamoSA.altaPrestamo(prestamo);
+		Boolean resultado = prestamoSA.altaPrestamo(prestamo);
 		
 		// Then
-		assertTrue(resultado < 0);
+		assertTrue(!resultado);
 	}
 	
 	@Test
-	void altaPrestamo_DeberiaDevolverMenosUno_CuandoElEjemplarNoExiste() {
+	void altaPrestamo_DeberiaDevolverFalse_CuandoElEjemplarNoExiste() {
 		// Given
 		BOSocio socio = new BOSocio();
 		socio.setActivo(true);
@@ -116,14 +118,14 @@ public class PrestamoSAImpTest {
 		prestamo.setIdEjemplar(-1); // Ejemplar no existente
 		
 		// When
-		int resultado = prestamoSA.altaPrestamo(prestamo);
+		Boolean resultado = prestamoSA.altaPrestamo(prestamo);
 		
 		// Then
-		assertTrue(resultado < 0);
+		assertTrue(!resultado);
 	}
 	
 	@Test
-	void altaEjemplar_DeberiaDevolverMenosUno_CuandoElEjemplarNoEstaActivo() {
+	void altaEjemplar_DeberiaDevolverFalse_CuandoElEjemplarNoEstaActivo() {
 		// Given
 		BOSocio socio = new BOSocio();
 		socio.setActivo(true);
@@ -139,14 +141,14 @@ public class PrestamoSAImpTest {
 		prestamo.setIdEjemplar(ejemplar.getId());
 		
 		// When
-		int resultado = prestamoSA.altaPrestamo(prestamo);
+		Boolean resultado = prestamoSA.altaPrestamo(prestamo);
 		
 		// Then
-		assertTrue(resultado < 0);
+		assertTrue(!resultado);
 	}
 	
 	@Test
-	void altaPrestamo_DeberiaDevolverMenosUno_CuandoElEjemplarNoEstaDisponible() {
+	void altaPrestamo_DeberiaDevolverFalse_CuandoElEjemplarNoEstaDisponible() {
 		// Given
 		BOSocio socio = new BOSocio();
 		socio.setActivo(true);
@@ -162,10 +164,10 @@ public class PrestamoSAImpTest {
 		prestamo.setIdEjemplar(ejemplar.getId());
 		
 		// When
-		int resultado = prestamoSA.altaPrestamo(prestamo);
+		Boolean resultado = prestamoSA.altaPrestamo(prestamo);
 		
 		// Then
-		assertTrue(resultado < 0);
+		assertTrue(!resultado);
 	}
 	
 	@Test
@@ -188,27 +190,27 @@ public class PrestamoSAImpTest {
 		persist(prestamo);
 		
 		// When
-		int resultado = prestamoSA.devolverPrestamo(prestamo.getId());
+		Boolean resultado = prestamoSA.devolverPrestamo(new PrestamoId(socio.getId(), ejemplar.getId(), prestamo.getFechaInicial()));
 		
 		// Then
-		assertTrue(resultado > 0);
+		assertTrue(resultado);
 		
-		BOPrestamo prestamoPersistido = findPrestamoById(resultado);
+		BOPrestamo prestamoPersistido = findPrestamoById(new PrestamoId(socio.getId(), ejemplar.getId(), prestamo.getFechaInicial()));
 		assertNotNull(prestamoPersistido);
 		assertTrue(prestamoPersistido.getFechaDevuelto() != null);
 	}
 	
 	@Test
-	void devolverPrestamo_DeberiaDevolverMenosUno_CuandoElPrestamoNoExiste() {
+	void devolverPrestamo_DeberiaDevolverFalse_CuandoElPrestamoNoExiste() {
 		// When
-		int resultado = prestamoSA.devolverPrestamo(-1); // ID no existente
+		Boolean resultado = prestamoSA.devolverPrestamo(new PrestamoId()); // ID no existente
 		
 		// Then
-		assertTrue(resultado < 0);
+		assertTrue(!resultado);
 	}
 	
 	@Test
-	void devolverPrestamo_DeberiaDevolverMenosUno_CuandoElPrestamoYaEstaDevuelto() {
+	void devolverPrestamo_DeberiaDevolverFalse_CuandoElPrestamoYaEstaDevuelto() {
 		// Given
 		BOSocio socio = new BOSocio();
 		socio.setActivo(true);
@@ -227,17 +229,11 @@ public class PrestamoSAImpTest {
 		prestamo.setFechaDevuelto(new java.util.Date()); // Ya devuelto
 		persist(prestamo);
 		
-		TPrestamo tprestamo = new TPrestamo();
-		tprestamo.setIdSocio(socio.getId());
-		tprestamo.setIdEjemplar(ejemplar.getId());
-		
-		int idPrestamo = prestamoSA.altaPrestamo(tprestamo);
-		
 		// When
-		int resultado = prestamoSA.devolverPrestamo(idPrestamo);
+		Boolean resultado = prestamoSA.devolverPrestamo(new PrestamoId(socio.getId(), ejemplar.getId(), prestamo.getFechaInicial()));
 		
 		// Then
-		assertTrue(resultado < 0);
+		assertTrue(!resultado);
 	}
 	
 	@Test
@@ -260,11 +256,11 @@ public class PrestamoSAImpTest {
 		persist(prestamo);
 		
 		// When
-		int resultado = prestamoSA.devolverPrestamo(prestamo.getId());
+		Boolean resultado = prestamoSA.devolverPrestamo(new PrestamoId(socio.getId(), ejemplar.getId(), prestamo.getFechaInicial()));
 		
 		// Then
-		assertTrue(resultado > 0);
-		BOPrestamo prestamoPersistido = findPrestamoById(prestamo.getId());
+		assertTrue(resultado);
+		BOPrestamo prestamoPersistido = findPrestamoById(new PrestamoId(socio.getId(), ejemplar.getId(), prestamo.getFechaInicial()));
 		assertNotNull(prestamoPersistido);
 		assertTrue(prestamoPersistido.getPrecioMulta() > 0);
 	}
@@ -287,24 +283,23 @@ public class PrestamoSAImpTest {
 		persist(prestamo);
 		
 		TPrestamo prestamoModificado = new TPrestamo();
-		prestamoModificado.setId(prestamo.getId());
 		prestamoModificado.setIdSocio(socio.getId());
 		prestamoModificado.setIdEjemplar(ejemplar.getId());
 		prestamoModificado.setFechaMaxima(new java.util.Date(System.currentTimeMillis() + 5 * 24 * 60 * 60 * 1000)); // Fecha máxima en el futuro
 		
 		// When
-		int resultado = prestamoSA.modificarPrestamo(prestamoModificado);
+		Boolean resultado = prestamoSA.modificarPrestamo(prestamoModificado);
 		
 		// Then
-		assertTrue(resultado > 0);
+		assertTrue(resultado);
 		
-		BOPrestamo prestamoPersistido = findPrestamoById(resultado);
+		BOPrestamo prestamoPersistido = findPrestamoById(new PrestamoId(socio.getId(), ejemplar.getId(), prestamo.getFechaInicial()));
 		assertNotNull(prestamoPersistido);
 		assertTrue(prestamoPersistido.getFechaMaxima().after(new java.util.Date()));
 	}
 	
 	@Test
-	void modificarPrestamo_DeberiaDevolverMenosUno_CuandoElPrestamoNoExiste() {
+	void modificarPrestamo_DeberiaDevolverFalse_CuandoElPrestamoNoExiste() {
 		// Given
 		TPrestamo prestamoModificado = new TPrestamo();
 		prestamoModificado.setIdSocio(-1); // Socio no existente
@@ -312,10 +307,10 @@ public class PrestamoSAImpTest {
 		prestamoModificado.setFechaMaxima(new java.util.Date(System.currentTimeMillis() + 5 * 24 * 60 * 60 * 1000)); // Fecha máxima en el futuro
 		
 		// When
-		int resultado = prestamoSA.modificarPrestamo(prestamoModificado);
+		Boolean resultado = prestamoSA.modificarPrestamo(prestamoModificado);
 		
 		// Then
-		assertTrue(resultado < 0);
+		assertTrue(!resultado);
 	}
 	
 	@Test
@@ -336,7 +331,7 @@ public class PrestamoSAImpTest {
 		persist(prestamo);
 		
 		// When
-		TPrestamo resultado = prestamoSA.mostrarPrestamo(prestamo.getId());
+		TPrestamo resultado = prestamoSA.mostrarPrestamo(new PrestamoId(socio.getId(), ejemplar.getId(), prestamo.getFechaInicial()));
 		
 		// Then
 		assertNotNull(resultado);
@@ -425,7 +420,7 @@ public class PrestamoSAImpTest {
 		promocion.setActivo(true);
 		persist(promocion);
 		
-		TCalculoPrecioPromocion calculo = new TCalculoPrecioPromocion(-1, promocion.getID()); // Socio no existente
+		TCalculoPrecioPromocion calculo = new TCalculoPrecioPromocion(promocion.getID(), -1); // Socio no existente
 		
 		// When
 		Double resultado = prestamoSA.calcularPrecioPromocion(calculo);
@@ -458,7 +453,7 @@ public class PrestamoSAImpTest {
 		prestamo.setFechaMaxima(new java.util.Date(System.currentTimeMillis() - 5 * 24 * 60 * 60 * 1000)); // Hace 5 días
 		persist(prestamo);
 		
-		TCalculoPrecioPromocion calculo = new TCalculoPrecioPromocion(prestamo.getId(), promocion.getID());
+		TCalculoPrecioPromocion calculo = new TCalculoPrecioPromocion(promocion.getID(), socio.getId());
 		
 		// When
 		Double resultado = prestamoSA.calcularPrecioPromocion(calculo);
@@ -491,7 +486,7 @@ public class PrestamoSAImpTest {
 		prestamo.setFechaMaxima(new java.util.Date(System.currentTimeMillis() - 5 * 24 * 60 * 60 * 1000)); // Hace 5 días
 		persist(prestamo);
 		
-		TCalculoPrecioPromocion calculo = new TCalculoPrecioPromocion(prestamo.getId(), promocion.getID());
+		TCalculoPrecioPromocion calculo = new TCalculoPrecioPromocion(promocion.getID(), socio.getId()); // El socio no tiene la promoción asociada
 		
 		// When
 		Double resultado = prestamoSA.calcularPrecioPromocion(calculo);
@@ -508,7 +503,7 @@ public class PrestamoSAImpTest {
 		em.close();
 	}
 	
-	BOPrestamo findPrestamoById(Integer id) {
+	BOPrestamo findPrestamoById(PrestamoId id) {
 		EntityManager em = emf.createEntityManager();
 		BOPrestamo prestamo = em.find(BOPrestamo.class, id);
 		em.close();

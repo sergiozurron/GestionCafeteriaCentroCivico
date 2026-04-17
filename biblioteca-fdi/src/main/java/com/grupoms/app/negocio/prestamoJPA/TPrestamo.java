@@ -10,7 +10,6 @@ public class TPrestamo {
 	private Date fechaMaxima;
 	private Date fechaDevuelto;
 	private Double precioMulta;
-	private Boolean activo;
 
 	public TPrestamo() {
 	}
@@ -80,11 +79,4 @@ public class TPrestamo {
 		this.fechaDevuelto = fechaDevuelto;
 	}
 
-	public Boolean getActivo() {
-		return activo;
-	}
-
-	public void setActivo(Boolean activo) {
-		this.activo = activo;
-	}
 }

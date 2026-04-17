@@ -196,7 +196,6 @@ public class EjemplarSAImpTest {
 		persist(ejemplar);
 
 		BOPrestamo prestamo = new BOPrestamo();
-		prestamo.setActivo(true);
 		prestamo.setEjemplar(ejemplar);
 
 		persist(prestamo);

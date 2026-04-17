@@ -185,7 +185,6 @@ public class PrestamoSAImpTest {
 		prestamo.setEjemplar(ejemplar);
 		prestamo.setFechaInicial(new java.util.Date());
 		prestamo.setFechaMaxima(new java.util.Date(System.currentTimeMillis() + 5 * 24 * 60 * 60 * 1000)); // Fecha máxima en el futuro
-		prestamo.setActivo(true);
 		persist(prestamo);
 		
 		// When
@@ -209,31 +208,6 @@ public class PrestamoSAImpTest {
 	}
 	
 	@Test
-	void devolverPrestamo_DeberiaDevolverMenosUno_CuandoElPrestamoNoEstaActivo() {
-		// Given
-		BOSocio socio = new BOSocio();
-		socio.setActivo(true);
-		persist(socio);
-		
-		BOEjemplar ejemplar = new BOEjemplar();
-		ejemplar.setEstado("DISPONIBLE");
-		ejemplar.setActivo(true);
-		persist(ejemplar);
-		
-		BOPrestamo prestamo = new BOPrestamo();
-		prestamo.setSocio(socio);
-		prestamo.setEjemplar(ejemplar);
-		prestamo.setActivo(false);
-		persist(prestamo);
-		
-		// When
-		int resultado = prestamoSA.devolverPrestamo(prestamo.getId());
-		
-		// Then
-		assertTrue(resultado < 0);
-	}
-	
-	@Test
 	void devolverPrestamo_DeberiaDevolverMenosUno_CuandoElPrestamoYaEstaDevuelto() {
 		// Given
 		BOSocio socio = new BOSocio();
@@ -251,7 +225,6 @@ public class PrestamoSAImpTest {
 		prestamo.setFechaInicial(new java.util.Date());
 		prestamo.setFechaMaxima(new java.util.Date(System.currentTimeMillis() + 5 * 24 * 60 * 60 * 1000)); // Fecha máxima en el futuro
 		prestamo.setFechaDevuelto(new java.util.Date()); // Ya devuelto
-		prestamo.setActivo(true);
 		persist(prestamo);
 		
 		TPrestamo tprestamo = new TPrestamo();
@@ -284,7 +257,6 @@ public class PrestamoSAImpTest {
 		prestamo.setEjemplar(ejemplar);
 		prestamo.setFechaInicial(new java.util.Date(System.currentTimeMillis() - 10 * 24 * 60 * 60 * 1000)); // Hace 10 días
 		prestamo.setFechaMaxima(new java.util.Date(System.currentTimeMillis() - 5 * 24 * 60 * 60 * 1000)); // Hace 5 días
-		prestamo.setActivo(true);
 		persist(prestamo);
 		
 		// When
@@ -312,7 +284,6 @@ public class PrestamoSAImpTest {
 		BOPrestamo prestamo = new BOPrestamo();	
 		prestamo.setSocio(socio);
 		prestamo.setEjemplar(ejemplar);
-		prestamo.setActivo(true);
 		persist(prestamo);
 		
 		TPrestamo prestamoModificado = new TPrestamo();
@@ -320,7 +291,6 @@ public class PrestamoSAImpTest {
 		prestamoModificado.setIdSocio(socio.getId());
 		prestamoModificado.setIdEjemplar(ejemplar.getId());
 		prestamoModificado.setFechaMaxima(new java.util.Date(System.currentTimeMillis() + 5 * 24 * 60 * 60 * 1000)); // Fecha máxima en el futuro
-		prestamoModificado.setActivo(true);
 		
 		// When
 		int resultado = prestamoSA.modificarPrestamo(prestamoModificado);
@@ -340,38 +310,6 @@ public class PrestamoSAImpTest {
 		prestamoModificado.setIdSocio(-1); // Socio no existente
 		prestamoModificado.setIdEjemplar(-1); // Ejemplar no existente
 		prestamoModificado.setFechaMaxima(new java.util.Date(System.currentTimeMillis() + 5 * 24 * 60 * 60 * 1000)); // Fecha máxima en el futuro
-		prestamoModificado.setActivo(true);
-		
-		// When
-		int resultado = prestamoSA.modificarPrestamo(prestamoModificado);
-		
-		// Then
-		assertTrue(resultado < 0);
-	}
-	
-	@Test
-	void modificarPrestamo_DeberiaDevolverMenosUno_CuandoElPrestamoNoEstaActivo() {
-		// Given
-		BOSocio socio = new BOSocio();
-		socio.setActivo(true);
-		persist(socio);
-		
-		BOEjemplar ejemplar = new BOEjemplar();
-		ejemplar.setEstado("DISPONIBLE");
-		ejemplar.setActivo(true);
-		persist(ejemplar);
-		
-		BOPrestamo prestamo = new BOPrestamo();	
-		prestamo.setSocio(socio);
-		prestamo.setEjemplar(ejemplar);
-		prestamo.setActivo(false); // No activo
-		persist(prestamo);
-		
-		TPrestamo prestamoModificado = new TPrestamo();
-		prestamoModificado.setIdSocio(socio.getId());
-		prestamoModificado.setIdEjemplar(ejemplar.getId());
-		prestamoModificado.setFechaMaxima(new java.util.Date(System.currentTimeMillis() + 5 * 24 * 60 * 60 * 1000)); // Fecha máxima en el futuro
-		prestamoModificado.setActivo(true);
 		
 		// When
 		int resultado = prestamoSA.modificarPrestamo(prestamoModificado);
@@ -395,7 +333,6 @@ public class PrestamoSAImpTest {
 		BOPrestamo prestamo = new BOPrestamo();	
 		prestamo.setSocio(socio);
 		prestamo.setEjemplar(ejemplar);
-		prestamo.setActivo(true);
 		persist(prestamo);
 		
 		// When
@@ -422,13 +359,11 @@ public class PrestamoSAImpTest {
 		BOPrestamo prestamo1 = new BOPrestamo();	
 		prestamo1.setSocio(socio);
 		prestamo1.setEjemplar(ejemplar);
-		prestamo1.setActivo(true);
 		persist(prestamo1);
 		
 		BOPrestamo prestamo2 = new BOPrestamo();	
 		prestamo2.setSocio(socio);
 		prestamo2.setEjemplar(ejemplar);
-		prestamo2.setActivo(true);
 		persist(prestamo2);
 		
 		// When
@@ -521,7 +456,6 @@ public class PrestamoSAImpTest {
 		prestamo.setEjemplar(ejemplar);
 		prestamo.setFechaInicial(new java.util.Date(System.currentTimeMillis() - 10 * 24 * 60 * 60 * 1000)); // Hace 10 días
 		prestamo.setFechaMaxima(new java.util.Date(System.currentTimeMillis() - 5 * 24 * 60 * 60 * 1000)); // Hace 5 días
-		prestamo.setActivo(true);
 		persist(prestamo);
 		
 		TCalculoPrecioPromocion calculo = new TCalculoPrecioPromocion(prestamo.getId(), promocion.getID());
@@ -555,7 +489,6 @@ public class PrestamoSAImpTest {
 		prestamo.setEjemplar(ejemplar);
 		prestamo.setFechaInicial(new java.util.Date(System.currentTimeMillis() - 10 * 24 * 60 * 60 * 1000)); // Hace 10 días
 		prestamo.setFechaMaxima(new java.util.Date(System.currentTimeMillis() - 5 * 24 * 60 * 60 * 1000)); // Hace 5 días
-		prestamo.setActivo(true);
 		persist(prestamo);
 		
 		TCalculoPrecioPromocion calculo = new TCalculoPrecioPromocion(prestamo.getId(), promocion.getID());
@@ -565,73 +498,6 @@ public class PrestamoSAImpTest {
 		
 		// Then
 		assertNull(resultado);
-	}
-	
-	@Test
-	void bajaPrestamo_DeberiaDarDeBajaUnPrestamo() {
-		// Given
-		BOSocio socio = new BOSocio();
-		socio.setActivo(true);
-		persist(socio);
-		
-		BOEjemplar ejemplar = new BOEjemplar();
-		ejemplar.setEstado("DISPONIBLE");
-		ejemplar.setActivo(true);
-		persist(ejemplar);
-		
-		BOPrestamo prestamo = new BOPrestamo();	
-		prestamo.setSocio(socio);
-		prestamo.setEjemplar(ejemplar);
-		prestamo.setActivo(true);
-		persist(prestamo);
-		
-		// When
-		boolean resultado = prestamoSA.bajaPrestamo(prestamo.getId());
-		
-		// Then
-		assertTrue(resultado);
-		
-		BOPrestamo prestamoPersistido = findPrestamoById(prestamo.getId());
-		assertNotNull(prestamoPersistido);
-		assertTrue(!prestamoPersistido.getActivo());
-	}
-	
-	@Test
-	void bajaPrestamo_DeberiaDevolverFalso_CuandoElPrestamoNoExiste() {
-		// When
-		boolean resultado = prestamoSA.bajaPrestamo(-1); // ID no existente
-		
-		// Then
-		assertTrue(!resultado);
-	}
-	
-	@Test
-	void bajaPrestamo_DeberiaDevolverFalso_CuandoElPrestamoYaEstaInactivo() {
-		// Given
-		BOSocio socio = new BOSocio();
-		socio.setActivo(true);
-		persist(socio);
-		
-		BOEjemplar ejemplar = new BOEjemplar();
-		ejemplar.setEstado("DISPONIBLE");
-		ejemplar.setActivo(true);
-		persist(ejemplar);
-		
-		BOPrestamo prestamo = new BOPrestamo();	
-		prestamo.setSocio(socio);
-		prestamo.setEjemplar(ejemplar);
-		prestamo.setActivo(false); // Ya inactivo
-		persist(prestamo);
-		
-		// When
-		boolean resultado = prestamoSA.bajaPrestamo(prestamo.getId());
-		
-		// Then
-		assertTrue(!resultado);
-		
-		BOPrestamo prestamoPersistido = findPrestamoById(prestamo.getId());
-		assertNotNull(prestamoPersistido);
-		assertTrue(!prestamoPersistido.getActivo());
 	}
 	
 	void persist(Object entity) {

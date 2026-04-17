@@ -11,7 +11,6 @@ import com.grupoms.app.negocio.materialJPA.BOMaterial;
 import com.grupoms.app.negocio.prestamoJPA.BOPrestamo;
 
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.LockModeType;
 
 public class EjemplarSAImp implements EjemplarSA {
@@ -69,22 +68,15 @@ public class EjemplarSAImp implements EjemplarSA {
 				return false;
 			}
 			
-			List<BOPrestamo> prestamosAsociados = em.createNamedQuery("BOPrestamo.findByEjemplar", BOPrestamo.class)
+			List<BOPrestamo> prestamosPendientes = em.createNamedQuery("BOPrestamo.findPendientesByEjemplar", BOPrestamo.class)
 					.setParameter("idEjemplar", idEjemplar).getResultList();
 			
-			if (!prestamosAsociados.isEmpty()) {
+			if (!prestamosPendientes.isEmpty()) {
 				em.getTransaction().rollback();
 				return false;
 			}
 			
-			List<BOPrestamo> prestamosTodos = em.createNamedQuery("BOPrestamo.findByEjemplarTodos", BOPrestamo.class)
-					.setParameter("idEjemplar", idEjemplar).getResultList();
-			
-			if (!prestamosTodos.isEmpty()) {
-				for(BOPrestamo p : prestamosTodos) {
-					p.setActivo(false);
-				}
-			}
+			em.createNamedQuery("BOEjemplar.deleteAllByIdEjemplar").setParameter("idEjemplar", idEjemplar).executeUpdate();
 
 			boEjemplar.setActivo(false);
 			em.getTransaction().commit();
@@ -137,7 +129,6 @@ public class EjemplarSAImp implements EjemplarSA {
 	public TEjemplar mostrarEjemplar(Integer idEjemplar) {
 		if(idEjemplar == null || idEjemplar <0)return null;
 		EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
-		EntityTransaction t = em.getTransaction();
 		
 		
 		BOEjemplar boEjemplar = em.find(BOEjemplar.class, idEjemplar);

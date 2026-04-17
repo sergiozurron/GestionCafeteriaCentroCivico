@@ -169,7 +169,6 @@ public class FactoryCommandImp extends FactoryCommand {
 		commands.put(Evento.MOSTRAR_CLASES_POR_SALA, new MostrarClasesPorSalaCommand());
 
 		commands.put(Evento.ALTA_PRESTAMO, new AltaPrestamoCommand());
-		commands.put(Evento.BAJA_PRESTAMO, new BajaPrestamoCommand());
 		commands.put(Evento.DEVOLUCION_PRESTAMO, new DevolverPrestamoCommand());
 		commands.put(Evento.LISTAR_PRESTAMOS, new ListarPrestamosCommand());
 		commands.put(Evento.MOSTRAR_PRESTAMO, new MostrarPrestamoCommand());

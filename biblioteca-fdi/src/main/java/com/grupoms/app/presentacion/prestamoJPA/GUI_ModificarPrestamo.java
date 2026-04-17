@@ -91,7 +91,6 @@ public class GUI_ModificarPrestamo extends JFrame implements IGUI {
 				prestamo.setFechaMaxima(fechaMax);
 				prestamo.setFechaDevuelto(fechaDevuelto);
 				prestamo.setPrecioMulta(precioMulta);
-				prestamo.setActivo(activo);
 
 				Context contexto = new Context(Evento.MODIFICAR_PRESTAMO, prestamo);
 				Controlador.getInstance().handle(contexto);

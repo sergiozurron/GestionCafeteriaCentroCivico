@@ -198,12 +198,6 @@ public class GUI_MostrarPrestamo extends JFrame implements IGUI {
             campoValorFechaDevuelto.setText(String.valueOf(prestamo.getFechaDevuelto()));
             campoValorPrecioMulta.setText(String.valueOf(prestamo.getPrecioMulta()));
 
-            if (prestamo.getActivo()) {
-                campoValorActivo.setText("Sí");
-            } else {
-                campoValorActivo.setText("No");
-            }
-
         } else if (context.getEvento() == Evento.MOSTRAR_PRESTAMO_KO) {
             JOptionPane.showMessageDialog(this, "Error al mostrar el préstamo. Puede que no exista o haya sido eliminado.");
             clearFields();

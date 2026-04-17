@@ -184,7 +184,6 @@ public class FactoriaVistas {
 		vistas.put(GUI_DESVINCULAR_PROMOCION, new GUI_DesvincularPromocionASocio());
 
 		vistas.put(GUI_ALTA_PRESTAMO, new GUI_AltaPrestamo());
-		vistas.put(GUI_BAJA_PRESTAMO, new GUI_BajaPrestamo());
 		vistas.put(GUI_DEVOLUCION_PRESTAMO, new GUI_DevolucionPrestamo());
 		vistas.put(GUI_LISTAR_PRESTAMO, new GUI_ListarPrestamo());
 		vistas.put(GUI_MOSTRAR_PRESTAMO, new GUI_MostrarPrestamo());

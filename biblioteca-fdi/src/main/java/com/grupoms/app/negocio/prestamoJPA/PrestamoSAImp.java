@@ -50,7 +50,6 @@ public class PrestamoSAImp implements PrestamoSA {
 			boPrestamo.setEjemplar(ejemplar);
 			boPrestamo.setFechaInicial(new Date());
 			boPrestamo.setFechaMaxima(prestamo.getFechaMaxima());
-			boPrestamo.setActivo(true);
 			boPrestamo.setPrecioMulta(0.0);
 
 			ejemplar.setEstado("PRESTADO");
@@ -81,14 +80,9 @@ public class PrestamoSAImp implements PrestamoSA {
 
 	        BOPrestamo boprestamo = em.find(BOPrestamo.class, idPrestamo);
 
-	        if (boprestamo == null || !boprestamo.getActivo()) {
+	        if (boprestamo == null || boprestamo.getFechaDevuelto() != null) {
 	            t.rollback();
 	            return -1;
-	        }
-	        
-	        if (boprestamo.getFechaDevuelto() != null) {
-	            t.rollback();
-	            return -1; // El préstamo ya ha sido devuelto
 	        }
  
         	Date fechaActual = new Date();
@@ -114,35 +108,6 @@ public class PrestamoSAImp implements PrestamoSA {
 	    }
 	}
 	
-	@Override
-	public boolean bajaPrestamo(Integer idPrestamo) {
-	    EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
-	    EntityTransaction t = em.getTransaction();
-
-	    try {
-	        t.begin();
-
-	        BOPrestamo boprestamo = em.find(BOPrestamo.class, idPrestamo);
-
-	        if (boprestamo == null || !boprestamo.getActivo()) {
-	            t.rollback();
-	            return false;
-	        }
-
-            boprestamo.setActivo(false);
-
-	        t.commit();
-	        return true;
-
-	    } catch (Exception e) {
-	        if (t.isActive())
-	            t.rollback();
-	        e.printStackTrace();
-	        return false;
-	    } finally {
-	        em.close();
-	    }
-	}
 
 
 	@Override
@@ -154,7 +119,7 @@ public class PrestamoSAImp implements PrestamoSA {
 
 			BOPrestamo bo = em.find(BOPrestamo.class, prestamo.getId());
 
-			if (bo == null || !bo.getActivo()) {
+			if (bo == null) {
 				t.rollback();
 				return -1;
 			}
@@ -180,7 +145,7 @@ public class PrestamoSAImp implements PrestamoSA {
 		EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
 		try {
 			BOPrestamo bo = em.find(BOPrestamo.class, idPrestamo);
-			if (bo == null || !bo.getActivo()) {
+			if (bo == null) {
 				return null;
 			}
 			return PrestamoAssembler.toDTO(bo);

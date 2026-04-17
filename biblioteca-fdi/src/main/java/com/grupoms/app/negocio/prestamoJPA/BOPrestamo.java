@@ -10,9 +10,12 @@ import jakarta.persistence.*;
 @NamedQueries({
 		@NamedQuery(name = "BOPrestamo.findActivoBySocioYEjemplar", query = "SELECT p FROM BOPrestamo p WHERE p.socio.id = :idSocio AND p.ejemplar.id = :idEjemplar AND p.activo = true AND p.fechaDevuelto IS NULL"),
 		@NamedQuery(name = "BOPrestamo.findBySocio", query = "SELECT p FROM BOPrestamo p WHERE p.socio.id = :idSocio AND p.activo = true"),
-		@NamedQuery(name = "BOPrestamo.findPendientesBySocio", query = "SELECT p FROM BOPrestamo p WHERE p.socio.id = :idSocio AND p.activo = true AND p.fechaDevuelto IS NULL"),
+		@NamedQuery(name = "BOPrestamo.findPendientesBySocio", query = "SELECT p FROM BOPrestamo p WHERE p.socio.id = :idSocio AND p.fechaDevuelto IS NULL"),
+		@NamedQuery(name = "BOPrestamo.findPendientesByEjemplar", query = "SELECT p FROM BOPrestamo p WHERE p.ejemplar.id = :idEjemplar AND p.fechaDevuelto IS NULL"),
 		@NamedQuery(name = "BOPrestamo.findByEjemplar", query = "SELECT p FROM BOPrestamo p WHERE p.ejemplar.id = :idEjemplar AND p.fechaDevuelto IS NULL"),
-		@NamedQuery(name = "BOPrestamo.findByEjemplarTodos", query = "SELECT p FROM BOPrestamo p WHERE p.ejemplar.id = :idEjemplar AND p.activo = true")})
+		@NamedQuery(name = "BOPrestamo.findByEjemplarTodos", query = "SELECT p FROM BOPrestamo p WHERE p.ejemplar.id = :idEjemplar AND p.activo = true"),
+		@NamedQuery(name = "BOPrestamo.deleteAllByIdSocio", query = "DELETE FROM BOPrestamo p WHERE p.socio.id = :idSocio"),
+		@NamedQuery(name = "BOPrestamo.deleteAllByIdEjemplar", query = "DELETE FROM BOPrestamo p WHERE p.ejemplar.id = :idEjemplar") })
 public class BOPrestamo implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -31,7 +34,6 @@ public class BOPrestamo implements Serializable {
 	private Date fechaDevuelto;
 
 	private Double precioMulta;
-	private Boolean activo;
 
 	@Version
 	private int version;
@@ -52,7 +54,6 @@ public class BOPrestamo implements Serializable {
 		this.ejemplar = ejemplar;
 		this.fechaMaxima = fechaMaxima;
 		this.fechaInicial = new Date();
-		this.activo = true;
 		this.precioMulta = 0.0;
 	}
 
@@ -94,14 +95,6 @@ public class BOPrestamo implements Serializable {
 
 	public void setPrecioMulta(Double precioMulta) {
 		this.precioMulta = precioMulta;
-	}
-
-	public Boolean getActivo() {
-		return activo;
-	}
-
-	public void setActivo(Boolean activo) {
-		this.activo = activo;
 	}
 
 	public BOSocio getSocio() {

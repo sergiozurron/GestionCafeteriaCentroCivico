@@ -22,7 +22,6 @@ public class PrestamoAssembler {
 		dto.setFechaMaxima(bo.getFechaMaxima());
 		dto.setFechaDevuelto(bo.getFechaDevuelto());
 		dto.setPrecioMulta(bo.getPrecioMulta());
-		dto.setActivo(bo.getActivo());
 		return dto;
 	}
 

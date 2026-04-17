@@ -1,7 +1,6 @@
 package com.grupoms.app.integracion.proveedor;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -18,7 +17,7 @@ public class DAOProveedorImpl implements DAOProveedor {
 	private static final String INSERT = "INSERT INTO proveedores(nombre, tarifa, tiempo_entrega, activo) VALUES (?, ?, ?, ?)";
 	private static final String READ_BY_ID = "SELECT * FROM proveedores WHERE id = ? FOR UPDATE";
 	private static final String READ_BY_NAME = "SELECT * FROM proveedores WHERE nombre = ? FOR UPDATE";
-	private static final String READ_ALL = "SELECT * FROM proveedores";
+	private static final String READ_ALL = "SELECT * FROM proveedores FOR UPDATE";
 	private static final String UPDATE = "UPDATE proveedores SET nombre = ?, tarifa = ?, tiempo_entrega = ?, activo = ? WHERE id = ?";
 	private static final String UPDATE_ACTIVO = "UPDATE proveedores SET activo = ? WHERE id = ?";
 	private static final String DELETE_ALL = "DELETE FROM proveedores";
@@ -185,36 +184,4 @@ public class DAOProveedorImpl implements DAOProveedor {
 		}
 	}
 	
-	private Connection getConnection() {
-		Transaction tx = getTransaction();
-		if (tx == null) {
-			try {
-				return DriverManager.getConnection(System.getenv("MS_DB_URL"), System.getenv("MS_DB_USER"),
-						System.getenv("MS_DB_PASSWORD"));
-			} catch (SQLException e) {
-				return null;
-			}
-		}
-		return (Connection) tx.getResource();
-	}
-	
-	private void closeConnection(Connection conn) {
-		try {
-			if (getTransaction() == null) {
-				conn.close();
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	private Transaction getTransaction() {
-		try {
-			return TransactionManager.getInstance().getTransaction();
-		} catch (IllegalStateException e) {
-			return null;
-		}
-	}
-
-
 }

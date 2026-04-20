@@ -20,7 +20,7 @@ public class Principal extends JFrame {
 		titulo.setFont(new Font("Segoe UI", Font.BOLD, 26));
 		titulo.setBorder(BorderFactory.createEmptyBorder(20, 0, 10, 0));
 		add(titulo, BorderLayout.NORTH);
-/*
+
 		JPanel panelCafeteria = new JPanel(new GridLayout(2, 3, 20, 20));
 		panelCafeteria.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
 
@@ -74,7 +74,7 @@ public class Principal extends JFrame {
 						{ "Productos por Proveedor", FactoriaVistas.GUI_PRODUCTOS_POR_PROVEEDOR },
 						{"Vincular Ingrediente", FactoriaVistas.GUI_VINCULAR_PRODUCTO_INGREDIENTE},
 						{"Desvincular Ingrediente", FactoriaVistas.GUI_DESVINCULAR_PRODUCTO_INGREDIENTE}}));
-*/
+
 		JPanel panelCentroCivico = new JPanel();
 		panelCentroCivico.setLayout(new GridLayout(2, 3, 20, 20));
 		panelCentroCivico.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
@@ -141,7 +141,7 @@ public class Principal extends JFrame {
 						{ "Modificar Préstamo", FactoriaVistas.GUI_MODIFICAR_PRESTAMO },
 						{ "Calcular Precio con Promoción", FactoriaVistas.GUI_CALCULAR_PRECIO_PROMOCION } }));
 
-		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, panelCentroCivico, null);
+		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, panelCentroCivico, panelCafeteria);
 
 		splitPane.setResizeWeight(0.5);
 		splitPane.setDividerSize(8);

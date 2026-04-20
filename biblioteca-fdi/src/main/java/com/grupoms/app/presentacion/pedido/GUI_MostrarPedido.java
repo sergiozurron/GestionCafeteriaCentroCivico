@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import javax.swing.table.DefaultTableModel;
 
+import com.grupoms.app.negocio.mesa.TMesa;
 import com.grupoms.app.negocio.pedido.TCarrito;
 import com.grupoms.app.negocio.pedido.TLineaPedido;
 import com.grupoms.app.negocio.pedido.TPedido;
@@ -27,6 +28,7 @@ public class GUI_MostrarPedido extends JFrame implements IGUI {
     private JLabel empleado_id;
     private JLabel mesa_id;
     private JLabel activo;
+    private JLabel info_mesa;
 
     private JTable tablaLineas;
     private DefaultTableModel modeloTabla;
@@ -65,7 +67,8 @@ public class GUI_MostrarPedido extends JFrame implements IGUI {
         empleado_id = new JLabel();
         mesa_id = new JLabel();
         activo = new JLabel();
-
+        info_mesa = new JLabel();
+        
         // TABLA DE LÍNEAS
         modeloTabla = new DefaultTableModel(new Object[]{"Producto", "Cantidad"}, 0);
         tablaLineas = new JTable(modeloTabla);
@@ -113,7 +116,13 @@ public class GUI_MostrarPedido extends JFrame implements IGUI {
         panel.add(new JLabel("ID Mesa:"), gbc);
         gbc.gridx = 1;
         panel.add(mesa_id, gbc);
-
+        
+        y++;
+        gbc.gridx = 0; gbc.gridy = y;
+        panel.add(new JLabel("Detalles Mesa:"), gbc);
+        gbc.gridx = 1;
+        panel.add(info_mesa, gbc);
+        
         y++;
         gbc.gridx = 0; gbc.gridy = y;
         panel.add(new JLabel("Activo:"), gbc);
@@ -144,14 +153,20 @@ public class GUI_MostrarPedido extends JFrame implements IGUI {
 
                 if (carrito != null) {
                     TPedido pedido = carrito.getPedido();
-
+                    
+                    TMesa mesa = carrito.getMesa();
+                    if (mesa != null) {
+                        info_mesa.setText("Capacidad: " + mesa.getCapacidad() /* + " - " + mesa.getOtroDato() */);
+                    } else {
+                        info_mesa.setText("Sin datos de mesa");
+                    }
                     fecha.setText(pedido.getFecha() != null ? pedido.getFecha().toString() : "N/A");
                     total_factura.setText(String.valueOf(pedido.getTotal()));
                     estado.setText(pedido.getEstado());
                     empleado_id.setText(String.valueOf(pedido.getIdEmpleado()));
                     mesa_id.setText(String.valueOf(pedido.getIdMesa()));
                     activo.setText(pedido.getActivo() ? "Sí" : "No");
-
+                   
                     // LIMPIAR TABLA
                     modeloTabla.setRowCount(0);
 
@@ -183,6 +198,7 @@ public class GUI_MostrarPedido extends JFrame implements IGUI {
         empleado_id.setText("");
         mesa_id.setText("");
         activo.setText("");
+        info_mesa.setText("");
         modeloTabla.setRowCount(0);
     }
 }

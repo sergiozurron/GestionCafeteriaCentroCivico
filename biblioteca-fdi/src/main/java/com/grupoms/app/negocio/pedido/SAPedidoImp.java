@@ -136,7 +136,7 @@ public class SAPedidoImp implements SAPedido {
 			t.start();
 			DAOPedido daoPedido = FactoriaDAO.getInstancia().creaDAOPedido();
 			DAOLineaPedido daoLinea = FactoriaDAO.getInstancia().creaDAOLineaPedido();
-			
+			DAOMesa daoMesa =FactoriaDAO.getInstancia().creaDAOMesa();
 			TPedido pedido = daoPedido.mostrarPedido(idPedido);
 			
 			if(pedido == null) {
@@ -145,10 +145,11 @@ public class SAPedidoImp implements SAPedido {
 			}
 			
 			List<TLineaPedido> lineas = daoLinea.mostrarLineasPorPedido(idPedido);
-			
+			TMesa mesa = daoMesa.mostrarMesa(pedido.getIdMesa());
 			carrito = new TCarrito();
 			carrito.setPedido(pedido);
 			carrito.setLineasPedido(lineas);
+			carrito.setMesa(mesa);
 
 			t.commit();
 			return carrito;

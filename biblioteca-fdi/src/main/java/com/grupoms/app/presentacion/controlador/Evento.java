@@ -308,6 +308,10 @@ public class Evento {
 	public static final int MOSTRAR_SOCIOS_POR_PROMOCION = 668;
 	public static final int MOSTRAR_SOCIOS_POR_PROMOCION_OK = 669;
 	public static final int MOSTRAR_SOCIOS_POR_PROMOCION_KO = 670;
+	
+	public static final int APLICAR_PROMOCION_KO = 733;
+	public static final int APLICAR_PROMOCION_OK = 734;
+	public static final int APLICAR_PROMOCION = 735;
 
 	public static final int SOLICITAR_EJEMPLAR = 671;
 	public static final int SOLICITAR_EJEMPLAR_OK = 672;

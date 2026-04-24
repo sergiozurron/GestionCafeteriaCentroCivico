@@ -1,6 +1,6 @@
 package com.grupoms.app.presentacion.controlador.comandos;
 
-import java.util.HashMap;
+import java.util.HashMap; 
 import java.util.Map;
 
 import com.grupoms.app.presentacion.comandos.claseJPA.AltaClaseCommand;
@@ -25,7 +25,6 @@ import com.grupoms.app.presentacion.comandos.materialJPA.ListarMaterialCommand;
 import com.grupoms.app.presentacion.comandos.materialJPA.ModificarMaterialCommand;
 import com.grupoms.app.presentacion.comandos.materialJPA.MostrarMaterialCommand;
 import com.grupoms.app.presentacion.comandos.prestamoJPA.AltaPrestamoCommand;
-import com.grupoms.app.presentacion.comandos.prestamoJPA.CalculoPrecioPromocionCommand;
 import com.grupoms.app.presentacion.comandos.prestamoJPA.DevolverPrestamoCommand;
 import com.grupoms.app.presentacion.comandos.prestamoJPA.ListarPrestamosCommand;
 import com.grupoms.app.presentacion.comandos.prestamoJPA.ModificarPrestamoCommand;
@@ -44,6 +43,7 @@ import com.grupoms.app.presentacion.comandos.salaJPA.MostrarClasesPorSalaCommand
 import com.grupoms.app.presentacion.comandos.salaJPA.MostrarSalaCommand;
 import com.grupoms.app.presentacion.comandos.socioJPA.AltaSocioCommand;
 import com.grupoms.app.presentacion.comandos.socioJPA.BajaSocioCommand;
+import com.grupoms.app.presentacion.comandos.socioJPA.CalcularCuotaPromocionCommand;
 import com.grupoms.app.presentacion.comandos.socioJPA.DesvincularPromocionASocioCommand;
 import com.grupoms.app.presentacion.comandos.socioJPA.ListarSociosCommand;
 import com.grupoms.app.presentacion.comandos.socioJPA.ModificarSocioCommand;
@@ -98,8 +98,6 @@ public class FactoryCommandImp extends FactoryCommand {
 	private Map<Integer, String> views = new HashMap<>();
 
 	protected FactoryCommandImp() {
-
-
 
 		commands.put(Evento.ALTA_MESA, new AltaMesaCommand());
 		commands.put(Evento.BAJA_MESA, new BajaMesaCommand());
@@ -173,7 +171,6 @@ public class FactoryCommandImp extends FactoryCommand {
 		commands.put(Evento.LISTAR_PRESTAMOS, new ListarPrestamosCommand());
 		commands.put(Evento.MOSTRAR_PRESTAMO, new MostrarPrestamoCommand());
 		commands.put(Evento.MODIFICAR_PRESTAMO, new ModificarPrestamoCommand());
-		commands.put(Evento.CALCULO_PRECIO_PROMOCION, new CalculoPrecioPromocionCommand());
 
 		commands.put(Evento.ALTA_PROMOCION, new AltaPromocionCommand());
 		commands.put(Evento.BAJA_PROMOCION, new BajaPromocionCommand());
@@ -190,6 +187,7 @@ public class FactoryCommandImp extends FactoryCommand {
 		commands.put(Evento.VINCULAR_PROMOCION, new VincularPromocionASocioCommand());
 		commands.put(Evento.DESVINCULAR_PROMOCION, new DesvincularPromocionASocioCommand());
 		commands.put(Evento.MOSTRAR_SOCIOS_POR_PROMOCION, new MostrarSociosPorPromocionCommand());
+		commands.put(Evento.APLICAR_PROMOCION, new CalcularCuotaPromocionCommand());
 
 		
 		commands.put(Evento.ALTA_PEDIDO,new AltaPedidoCommand());
@@ -314,6 +312,7 @@ public class FactoryCommandImp extends FactoryCommand {
 		views.put(Evento.VINCULAR_PROMOCION, FactoriaVistas.GUI_VINCULAR_PROMOCION);
 		views.put(Evento.DESVINCULAR_PROMOCION, FactoriaVistas.GUI_DESVINCULAR_PROMOCION);
 		views.put(Evento.MOSTRAR_SOCIOS_POR_PROMOCION, FactoriaVistas.GUI_MOSTRAR_SOCIOS_POR_PROMOCION);
+		views.put(Evento.APLICAR_PROMOCION, FactoriaVistas.GUI_CALCULAR_CUOTA_POR_PROMOCION);
 
 	}
 

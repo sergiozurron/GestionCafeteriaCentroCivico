@@ -131,15 +131,16 @@ public class Principal extends JFrame {
 						{ "Modificar Socio", FactoriaVistas.GUI_MODIFICAR_SOCIO },
 						{ "Ver Socios por Promoción", FactoriaVistas.GUI_MOSTRAR_SOCIOS_POR_PROMOCION },
 						{ "Vincular Promoción a Socio", FactoriaVistas.GUI_VINCULAR_PROMOCION },
-						{ "Desvincular Promoción a Socio", FactoriaVistas.GUI_DESVINCULAR_PROMOCION } }));
+						{ "Desvincular Promoción a Socio", FactoriaVistas.GUI_DESVINCULAR_PROMOCION },
+						{"Calcular nuevas cuotas por Promocion", FactoriaVistas.GUI_CALCULAR_CUOTA_POR_PROMOCION}
+						}));
 
 		panelCentroCivico.add(crearPanelCategoria("Prestamo",
 				new String[][] { { "Alta Préstamo", FactoriaVistas.GUI_ALTA_PRESTAMO },
 						{ "Devolución Préstamo", FactoriaVistas.GUI_DEVOLUCION_PRESTAMO },
 						{ "Listar Préstamo", FactoriaVistas.GUI_LISTAR_PRESTAMO },
 						{ "Mostrar Préstamo", FactoriaVistas.GUI_MOSTRAR_PRESTAMO },
-						{ "Modificar Préstamo", FactoriaVistas.GUI_MODIFICAR_PRESTAMO },
-						{ "Calcular Precio con Promoción", FactoriaVistas.GUI_CALCULAR_PRECIO_PROMOCION } }));
+						{ "Modificar Préstamo", FactoriaVistas.GUI_MODIFICAR_PRESTAMO }}));
 
 		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, panelCentroCivico, panelCafeteria);
 

@@ -80,6 +80,7 @@ public class FactoriaVistas {
 	public static final String GUI_LISTAR_PROMOCION = "GUI_ListarPromocion";
 	public static final String GUI_MOSTRAR_PROMOCION = "GUI_MostrarPromocion";
 	public static final String GUI_VER_PROMOCIONES_POR_SOCIO = "GUI_VerPromocionesPorSocio";
+	public static final String GUI_CALCULAR_CUOTA_POR_PROMOCION = "GUI_CalcularCuotaPorPromocion";
 
 	public static final String GUI_ALTA_EJEMPLAR = "GUI_AltaEjemplar";
 	public static final String GUI_BAJA_EJEMPLAR = "GUI_BajaEjemplar";
@@ -182,13 +183,13 @@ public class FactoriaVistas {
 		vistas.put(GUI_MOSTRAR_SOCIOS_POR_PROMOCION, new GUI_MostrarSociosPorPromocion());
 		vistas.put(GUI_VINCULAR_PROMOCION, new GUI_VincularPromocionASocio());
 		vistas.put(GUI_DESVINCULAR_PROMOCION, new GUI_DesvincularPromocionASocio());
+		vistas.put(GUI_CALCULAR_CUOTA_POR_PROMOCION, new GUI_CalcularCuotaPorPromocion());
 
 		vistas.put(GUI_ALTA_PRESTAMO, new GUI_AltaPrestamo());
 		vistas.put(GUI_DEVOLUCION_PRESTAMO, new GUI_DevolucionPrestamo());
 		vistas.put(GUI_LISTAR_PRESTAMO, new GUI_ListarPrestamo());
 		vistas.put(GUI_MOSTRAR_PRESTAMO, new GUI_MostrarPrestamo());
 		vistas.put(GUI_MODIFICAR_PRESTAMO, new GUI_ModificarPrestamo());
-		vistas.put(GUI_CALCULAR_PRECIO_PROMOCION, new GUI_CalcularPrecioPromocion());
 
 		vistas.put(GUI_ALTA_PEDIDO, new GUI_AltaPedido());
 		vistas.put(GUI_CERRAR_PEDIDO, new GUI_CerrarPedido());

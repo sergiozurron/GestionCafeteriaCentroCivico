@@ -78,7 +78,7 @@ public class GUI_ModificarSocio extends JFrame implements IGUI {
 				int idI = Integer.parseInt(id.getText());
 				String nombreI = nombre.getText();
 				String dniI = dni.getText();
-				int cuotaI = Integer.parseInt(cuota.getText());
+				Integer cuotaI = Integer.parseInt(cuota.getText());
 
 				TSocio s = null;
 

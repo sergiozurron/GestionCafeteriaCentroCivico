@@ -20,5 +20,7 @@ public interface SocioSA {
 	public Integer vincularPromocionASocio(Integer idSocio, Integer idPromocion);
 
 	public Integer desvincularPromocionASocio(Integer idSocio, Integer idPromocion);
+	
+	public List<TSocio> aplicarPromocion(Integer idPromocion);
 
 }

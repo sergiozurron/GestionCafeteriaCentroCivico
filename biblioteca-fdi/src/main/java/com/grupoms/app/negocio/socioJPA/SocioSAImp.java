@@ -266,4 +266,83 @@ public class SocioSAImp implements SocioSA {
 		}
 		return res;
 	}
+	
+	@Override
+	public List<TSocio> aplicarPromocion(Integer idPromocion) {
+	    EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
+	    EntityTransaction t = em.getTransaction();
+
+	    List<TSocio> resultado = new java.util.ArrayList<>();
+
+	    try {
+	        t.begin();
+
+	        // Obtener promoción
+	        BOPromocion promocion = em.find(BOPromocion.class, idPromocion, LockModeType.OPTIMISTIC);
+
+	        if (promocion == null || !promocion.getActivo()) {
+	            t.rollback();
+	            return resultado;
+	        }
+
+	        // Obtener socios con esa promoción
+	        TypedQuery<BOSocio> query = em.createNamedQuery(
+	            "com.grupoms.app.negocio.socioJPA.BOSocio.findByPromocion",
+	            BOSocio.class
+	        );
+	        query.setParameter("idPromocion", idPromocion);
+
+	        List<BOSocio> socios = query.getResultList();	        
+	        
+	        for (BOSocio socio : socios) {
+	        	
+	        	Integer nuevaCuota = calcularNuevaCuota(socio, promocion);
+	        	if(nuevaCuota < 0) nuevaCuota = 0;
+
+	            socio.setCuota(nuevaCuota);
+
+	            if (socio instanceof BOAdulto)
+	                resultado.add(AdultoAssembler.toDTO((BOAdulto) socio));
+	            else if (socio instanceof BOInfantil)
+	                resultado.add(InfantilAssembler.toDTO((BOInfantil) socio));
+	            else
+	                resultado.add(SocioAssembler.entityToTransfer(socio));
+	        }
+
+	        t.commit();
+
+	    } catch (Exception e) {
+	        if (t.isActive()) t.rollback();
+	        e.printStackTrace();
+	    } finally {
+	        em.close();
+	    }
+
+	    return resultado;
+	}
+	
+	private Integer calcularNuevaCuota(BOSocio socio, BOPromocion promocion) {
+
+	    double nuevaCuota;
+
+	    if (socio.getTipoSocio() == 0) {
+	        BOAdulto adulto = (BOAdulto) socio;
+
+	        if (adulto.getMiembroPleno()) {
+	            nuevaCuota = socio.getCuota() - (2 * promocion.getDescuento());
+	        } else {
+	            nuevaCuota = socio.getCuota() - promocion.getDescuento();
+	        }
+
+	    } else if (socio.getTipoSocio() == 1) {
+	        BOInfantil infantil = (BOInfantil) socio;
+
+	        nuevaCuota = socio.getCuota() -
+	                (promocion.getDescuento() * (infantil.getReduccion() / 100.0));
+	    } else {
+	        nuevaCuota = socio.getCuota();
+	    }
+
+	    return (int) Math.round(nuevaCuota);
+	}
 }

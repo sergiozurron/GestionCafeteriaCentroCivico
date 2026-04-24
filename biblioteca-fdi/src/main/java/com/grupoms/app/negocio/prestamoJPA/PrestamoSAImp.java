@@ -165,39 +165,4 @@ public class PrestamoSAImp implements PrestamoSA {
 			em.close();
 		}
 	}
-
-	@Override
-	public Double calcularPrecioPromocion(TCalculoPrecioPromocion calculo) {
-		EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
-		BOSocio socio = em.find(BOSocio.class, calculo.getIdSocio());
-		try {
-			if (socio == null || !socio.getActivo()) {
-				return null;
-			}
-			
-			Optional<BOPromocion> promocionOpt = socio.getPromociones().stream()
-					.filter(p -> p.getID().equals(calculo.getIdPromocion()) && p.getActivo())
-					.findFirst();
-			
-			if (promocionOpt.isEmpty()) {
-				return null;
-			}
-			
-			BOPromocion promocion = promocionOpt.get();
-			
-			Double precioFinal = (1 - promocion.getDescuento() / 100) * socio.getCuota();
-			
-			if (socio instanceof BOInfantil) {
-				BOInfantil infantil = (BOInfantil) socio;
-				precioFinal *= (1 - infantil.getReduccion() / 100);
-			}
-			
-			return precioFinal;
-		} catch (Exception e){
-			e.printStackTrace();
-			return socio.getCuota().doubleValue();
-		} finally {
-			em.close();
-		}
-	}
 }

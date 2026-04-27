@@ -15,7 +15,6 @@ public class GUI_ModificarEmpleado extends JFrame implements IGUI {
 	private JTextField nombre;
 	private JTextField dondeAtiende;
 	private JTextField sueldo;
-	private JCheckBox activo;
 
 	private JButton modificar;
 
@@ -38,9 +37,9 @@ public class GUI_ModificarEmpleado extends JFrame implements IGUI {
 			nombre.setText("");
 			dondeAtiende.setText("");
 			sueldo.setText("");
-			activo.setSelected(true);
 		} else if (context.getEvento() == Evento.MODIFICAR_EMPLEADO_KO) {
-			JOptionPane.showMessageDialog(this, "No se ha podido modificar el empleado");
+		    String mensaje = (String) context.getDatos();
+		    JOptionPane.showMessageDialog(this, mensaje);
 		}
 	}
 
@@ -63,10 +62,6 @@ public class GUI_ModificarEmpleado extends JFrame implements IGUI {
 		JLabel labelSueldo = new JLabel("Sueldo:");
 		sueldo = new JTextField(10);
 
-		JLabel labelActivo = new JLabel("Activo:");
-		activo = new JCheckBox();
-		activo.setSelected(true);
-
 		modificar = new JButton("Modificar Empleado");
 		modificar.addActionListener(e -> {
 			try {
@@ -74,16 +69,17 @@ public class GUI_ModificarEmpleado extends JFrame implements IGUI {
 				String nombreEmp = nombre.getText().trim();
 				String dondeEmp = dondeAtiende.getText().trim();
 				Double sueldoEmp = Double.parseDouble(sueldo.getText().trim());
-				Boolean activoEmp = activo.isSelected();
 
 				if (idEmp <= 0) {
 					JOptionPane.showMessageDialog(this, "El ID debe ser mayor que 0");
 					return;
 				}
+
 				if (nombreEmp.isEmpty()) {
 					JOptionPane.showMessageDialog(this, "El nombre no puede estar vacío");
 					return;
 				}
+
 				if (sueldoEmp < 0) {
 					JOptionPane.showMessageDialog(this, "El sueldo no puede ser negativo");
 					return;
@@ -94,7 +90,6 @@ public class GUI_ModificarEmpleado extends JFrame implements IGUI {
 				emp.setNombre(nombreEmp);
 				emp.setDondeAtiende(dondeEmp);
 				emp.setSueldo(sueldoEmp);
-				emp.setActivo(activoEmp);
 
 				Context contexto = new Context(Evento.MODIFICAR_EMPLEADO, emp);
 				Controlador.getInstance().handle(contexto);
@@ -131,13 +126,6 @@ public class GUI_ModificarEmpleado extends JFrame implements IGUI {
 		panel.add(labelSueldo, gbc);
 		gbc.gridx = 1;
 		panel.add(sueldo, gbc);
-
-		y++;
-		gbc.gridx = 0;
-		gbc.gridy = y;
-		panel.add(labelActivo, gbc);
-		gbc.gridx = 1;
-		panel.add(activo, gbc);
 
 		y++;
 		gbc.gridx = 0;

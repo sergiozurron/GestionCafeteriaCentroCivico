@@ -200,11 +200,6 @@ public class FactoryCommandImp extends FactoryCommand {
 		commands.put(Evento.MOSTRAR_PEDIDOS,new MostrarListaPedidosCommand());
 		commands.put(Evento.MOSTRAR_PEDIDOS_EMPLEADO,new MostrarPedidosEmpleadoCommand());
 		commands.put(Evento.MOSTRAR_PEDIDOS_MESA,new MostrarPedidosMesaCommand());
-
-		
-		
-		
-		
 		
 		views.put(Evento.ALTA_PEDIDO, FactoriaVistas.GUI_ALTA_PEDIDO);
 		views.put(Evento.CERRAR_PEDIDO,FactoriaVistas.GUI_CERRAR_PEDIDO);
@@ -217,8 +212,6 @@ public class FactoryCommandImp extends FactoryCommand {
 		views.put(Evento.MOSTRAR_PEDIDO, FactoriaVistas.GUI_MOSTRAR_PEDIDO);
 		views.put(Evento.VINCULAR_PRODUCTO_PEDIDO, FactoriaVistas.GUI_VINCULAR_PRODUCTO_PEDIDO);
 		views.put(Evento.DESVINCULAR_PRODUCTO_PEDIDO, FactoriaVistas.GUI_DESVINCULAR_PRODUCTO_PEDIDO);
-
-
 		
 		views.put(Evento.ALTA_INGREDIENTE, FactoriaVistas.GUI_ALTA_INGREDIENTE);
 		views.put(Evento.BAJA_INGREDIENTE,FactoriaVistas.GUI_BAJA_INGREDIENTE);

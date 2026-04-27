@@ -11,15 +11,17 @@ import com.grupoms.app.presentacion.controlador.comandos.Command;
 
 public class MostrarListaEmpleadosCommand implements Command {
 
-	@Override
-	public Context execute(Object data) {
-		SAEmpleado sa = FactoriaSA.getInstance().creaSAEmpleado();
+    @Override
+    public Context execute(Object data) {
+        SAEmpleado sa = FactoriaSA.getInstance().creaSAEmpleado();
 
-		try {
-			List<TEmpleado> lista = sa.mostrarListaEmpleados();
-			return new Context(Evento.MOSTRAR_EMPLEADOS_OK, lista);
-		} catch (Exception e) {
-			return new Context(Evento.MOSTRAR_EMPLEADOS_KO, null);
-		}
-	}
+        try {
+            List<TEmpleado> lista = sa.mostrarListaEmpleados();
+
+            return new Context(Evento.MOSTRAR_EMPLEADOS_OK, lista);
+
+        } catch (RuntimeException e) {
+            return new Context(Evento.MOSTRAR_EMPLEADOS_KO, e.getMessage());
+        }
+    }
 }

@@ -14,8 +14,27 @@ import com.grupoms.app.negocio.producto.TEntradaReceta;
 
 public class DAORecetaImp implements DAOReceta {
 
+    private static final String INSERT =
+        "INSERT INTO entradas_recetas (producto_id, ingrediente_id, activo) VALUES (?, ?, ?)";
+
+    private static final String SELECT_LINEA =
+        "SELECT id, producto_id, ingrediente_id, activo " +
+        "FROM entradas_recetas " +
+        "WHERE producto_id = ? AND ingrediente_id = ? FOR UPDATE";
+
+    private static final String UPDATE_DESVINCULAR =
+        "UPDATE entradas_recetas SET activo = FALSE WHERE id = ?";
+
+    private static final String SELECT_INGREDIENTES_PRODUCTO =
+        "SELECT i.id, i.nombre, i.precio, i.activo, i.proveedor_id " +
+        "FROM ingredientes i " +
+        "JOIN entradas_recetas er ON i.id = er.ingrediente_id " +
+        "WHERE er.producto_id = ? FOR UPDATE";
+
     @Override
     public Integer vincular(Integer idProducto, Integer idIngrediente) {
+
+        Integer idGenerado = null;
 
         try {
             Transaction t = TransactionManager.getInstance().getTransaction();
@@ -24,31 +43,34 @@ public class DAORecetaImp implements DAOReceta {
 
             Connection c = (Connection) t.getResource();
 
-            String sql = "INSERT INTO entradas_recetas (producto_id, ingrediente_id, activo) VALUES (?, ?, ?)";
-
-            try (PreparedStatement ps = c.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
+            try (PreparedStatement ps = c.prepareStatement(INSERT, PreparedStatement.RETURN_GENERATED_KEYS)) {
 
                 ps.setInt(1, idProducto);
                 ps.setInt(2, idIngrediente);
                 ps.setBoolean(3, true);
+
                 ps.executeUpdate();
 
                 try (ResultSet rs = ps.getGeneratedKeys()) {
-                    if (rs.next()) return rs.getInt(1);
+                    if (rs.next()) {
+                        idGenerado = rs.getInt(1);
+                    }
                 }
             }
 
         } catch (SQLException e) {
-        	throw new RuntimeException("Error vinculando el ingrediente "+idIngrediente+" con el producto "+idProducto,e);
+            throw new RuntimeException("Error en DAOReceta.vincular", e);
         }
 
-        return -1;
+        return idGenerado;
     }
 
 
     @Override
     public Integer desvincular(Integer idProducto, Integer idIngrediente) {
 
+        Integer filasActualizadas = 0;
+
         try {
             Transaction t = TransactionManager.getInstance().getTransaction();
             if (t == null)
@@ -56,42 +78,33 @@ public class DAORecetaImp implements DAOReceta {
 
             Connection c = (Connection) t.getResource();
 
-            // 1. Comprobar si existe la relación y bloquearla
-            String selectSQL =
-                "SELECT id FROM entradas_recetas " +
-                "WHERE producto_id = ? AND ingrediente_id = ? AND activo = TRUE FOR UPDATE";
+            Integer idEntrada = null;
 
-            try (PreparedStatement ps = c.prepareStatement(selectSQL)) {
+            try (PreparedStatement ps = c.prepareStatement(SELECT_LINEA)) {
 
                 ps.setInt(1, idProducto);
                 ps.setInt(2, idIngrediente);
 
                 try (ResultSet rs = ps.executeQuery()) {
-
-                    if (!rs.next()) {
-                        return -1; // No existe o ya estaba desactivado
-                    }
-
-                    int idEntrada = rs.getInt("id");
-
-                    // 2. Borrado lógico
-                    String updateSQL =
-                        "UPDATE entradas_recetas SET activo = FALSE WHERE id = ?";
-
-                    try (PreparedStatement ps2 = c.prepareStatement(updateSQL)) {
-                        ps2.setInt(1, idEntrada);
-
-                        int filas = ps2.executeUpdate();
-                        return filas > 0 ? 1 : -1;
+                    if (rs.next()) {
+                        idEntrada = rs.getInt("id");
                     }
                 }
             }
 
-        } catch (SQLException e) {
-        	throw new RuntimeException("Error desvinculando el ingrediente "+idIngrediente+" con el producto "+idProducto,e);
-        }
-    }
+            if (idEntrada != null) {
+                try (PreparedStatement ps = c.prepareStatement(UPDATE_DESVINCULAR)) {
+                    ps.setInt(1, idEntrada);
+                    filasActualizadas = ps.executeUpdate();
+                }
+            }
 
+        } catch (SQLException e) {
+            throw new RuntimeException("Error en DAOReceta.desvincular", e);
+        }
+
+        return filasActualizadas;
+    }
 
 
     @Override
@@ -106,13 +119,7 @@ public class DAORecetaImp implements DAOReceta {
 
             Connection c = (Connection) t.getResource();
 
-            String sql =
-                "SELECT i.id, i.nombre, i.precio, i.activo, i.proveedor_id " +
-                "FROM ingredientes i " +
-                "JOIN entradas_recetas er ON i.id = er.ingrediente_id " +
-                "WHERE er.producto_id = ?";
-
-            try (PreparedStatement ps = c.prepareStatement(sql)) {
+            try (PreparedStatement ps = c.prepareStatement(SELECT_INGREDIENTES_PRODUCTO)) {
 
                 ps.setInt(1, idProducto);
 
@@ -120,6 +127,7 @@ public class DAORecetaImp implements DAOReceta {
 
                     while (rs.next()) {
                         TIngrediente ing = new TIngrediente();
+
                         ing.setID(rs.getInt("id"));
                         ing.setNombre(rs.getString("nombre"));
                         ing.setPrecio(rs.getDouble("precio"));
@@ -132,7 +140,7 @@ public class DAORecetaImp implements DAOReceta {
             }
 
         } catch (SQLException e) {
-        	throw new RuntimeException("Error mostrando la lista de ingredientes del producto "+idProducto,e);
+            throw new RuntimeException("Error en DAOReceta.listarIngredientesProducto", e);
         }
 
         return lista;
@@ -142,6 +150,8 @@ public class DAORecetaImp implements DAOReceta {
     @Override
     public TEntradaReceta mostrarLineaReceta(Integer idProducto, Integer idIngrediente) {
 
+        TEntradaReceta er = null;
+
         try {
             Transaction t = TransactionManager.getInstance().getTransaction();
             if (t == null)
@@ -149,12 +159,7 @@ public class DAORecetaImp implements DAOReceta {
 
             Connection c = (Connection) t.getResource();
 
-            String sql =
-                "SELECT id, producto_id, ingrediente_id " +
-                "FROM entradas_recetas " +
-                "WHERE producto_id = ? AND ingrediente_id = ?";
-
-            try (PreparedStatement ps = c.prepareStatement(sql)) {
+            try (PreparedStatement ps = c.prepareStatement(SELECT_LINEA)) {
 
                 ps.setInt(1, idProducto);
                 ps.setInt(2, idIngrediente);
@@ -162,20 +167,18 @@ public class DAORecetaImp implements DAOReceta {
                 try (ResultSet rs = ps.executeQuery()) {
 
                     if (rs.next()) {
-                        TEntradaReceta er = new TEntradaReceta();
+                        er = new TEntradaReceta();
                         er.setProductoID(rs.getInt("producto_id"));
                         er.setIngredienteID(rs.getInt("ingrediente_id"));
-                        return er;
+                        er.setActivo(rs.getBoolean("activo"));
                     }
                 }
             }
 
         } catch (SQLException e) {
-        	throw new RuntimeException("Error mostrando la linea de receta",e);
+            throw new RuntimeException("Error en DAOReceta.mostrarLineaReceta", e);
         }
 
-        return null; 
+        return er;
     }
-
-
 }

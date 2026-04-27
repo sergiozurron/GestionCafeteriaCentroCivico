@@ -30,7 +30,8 @@ public class GUI_BajaEmpleado extends JFrame implements IGUI {
 			JOptionPane.showMessageDialog(this, "Empleado dado de baja con éxito");
 			idEmpleado.setText("");
 		} else if (context.getEvento() == Evento.BAJA_EMPLEADO_KO) {
-			JOptionPane.showMessageDialog(this, "Error al dar de baja al empleado");
+		    String mensaje = (String) context.getDatos();
+		    JOptionPane.showMessageDialog(this, mensaje);
 		}
 	}
 

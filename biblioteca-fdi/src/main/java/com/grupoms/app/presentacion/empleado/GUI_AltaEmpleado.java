@@ -36,8 +36,8 @@ public class GUI_AltaEmpleado extends JFrame implements IGUI {
 			dondeAtiende.setText("");
 			sueldo.setText("");
 		} else if (context.getEvento() == Evento.ALTA_EMPLEADO_KO) {
-			JOptionPane.showMessageDialog(this, "Error: No se pudo crear el empleado", "Error",
-					JOptionPane.ERROR_MESSAGE);
+		    String mensaje = (String) context.getDatos();
+		    JOptionPane.showMessageDialog(this, mensaje);
 		}
 	}
 

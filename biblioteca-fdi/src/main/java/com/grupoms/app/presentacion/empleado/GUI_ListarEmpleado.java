@@ -84,7 +84,8 @@ public class GUI_ListarEmpleado extends JFrame implements IGUI {
 					}
 				}
 			} else if (context.getEvento() == Evento.MOSTRAR_EMPLEADOS_KO) {
-				JOptionPane.showMessageDialog(this, "Error al cargar los empleados.");
+				String mensaje = (String) context.getDatos();
+			    JOptionPane.showMessageDialog(this, mensaje);
 				modeloTabla.setRowCount(0);
 			}
 		});

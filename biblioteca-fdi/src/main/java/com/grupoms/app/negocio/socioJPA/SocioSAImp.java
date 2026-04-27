@@ -277,7 +277,6 @@ public class SocioSAImp implements SocioSA {
 	    try {
 	        t.begin();
 
-	        // Obtener promoción
 	        BOPromocion promocion = em.find(BOPromocion.class, idPromocion, LockModeType.OPTIMISTIC);
 
 	        if (promocion == null || !promocion.getActivo()) {
@@ -285,7 +284,6 @@ public class SocioSAImp implements SocioSA {
 	            return resultado;
 	        }
 
-	        // Obtener socios con esa promoción
 	        TypedQuery<BOSocio> query = em.createNamedQuery(
 	            "com.grupoms.app.negocio.socioJPA.BOSocio.findByPromocion",
 	            BOSocio.class

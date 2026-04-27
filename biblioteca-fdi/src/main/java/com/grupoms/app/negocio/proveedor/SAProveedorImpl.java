@@ -19,7 +19,7 @@ public class SAProveedorImpl implements SAProveedor {
 			DAOProveedor daoProveedor = FactoriaDAO.getInstancia().creaDAOProveedor();
 			tx.start();
 
-			TProveedor proveedorExistente = daoProveedor.buscaPorNombre(tProveedor.getNombre());
+			TProveedor proveedorExistente = daoProveedor.buscaProveedorPorNombre(tProveedor.getNombre());
 			if (proveedorExistente != null) {
 				if (proveedorExistente.getActivo()) {
 					tx.commit();
@@ -29,13 +29,13 @@ public class SAProveedorImpl implements SAProveedor {
 				proveedorExistente.setActivo(true);
 				proveedorExistente.setTarifa(tProveedor.getTarifa());
 				proveedorExistente.setTiempoEntrega(tProveedor.getTiempoEntrega());
-				daoProveedor.actualiza(proveedorExistente);
+				daoProveedor.modificarProveedor(proveedorExistente);
 				tx.commit();
 				return proveedorExistente.getId();
 			}
 
 			tProveedor.setActivo(true);
-			idGenerado = daoProveedor.crea(tProveedor);
+			idGenerado = daoProveedor.creaProveedor(tProveedor);
 			tx.commit();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -61,14 +61,14 @@ public class SAProveedorImpl implements SAProveedor {
 			DAOProveedor daoProveedor = FactoriaDAO.getInstancia().creaDAOProveedor();
 			tx.start();
 
-			TProveedor proveedorExistente = daoProveedor.buscaPorId(tProveedor.getId());
+			TProveedor proveedorExistente = daoProveedor.mostrarProveedor(tProveedor.getId());
 			if (proveedorExistente == null || !proveedorExistente.getActivo()) {
 				tx.commit();
 				return false;
 			}
 
 			proveedorExistente.setActivo(false);
-			exito = daoProveedor.baja(proveedorExistente);
+			exito = daoProveedor.bajaProveedor(proveedorExistente);
 
 			tx.commit();
 		} catch (Exception e) {
@@ -95,21 +95,21 @@ public class SAProveedorImpl implements SAProveedor {
 			DAOProveedor daoProveedor = FactoriaDAO.getInstancia().creaDAOProveedor();
 			tx.start();
 
-			TProveedor proveedorExistente = daoProveedor.buscaPorId(tProveedor.getId());
+			TProveedor proveedorExistente = daoProveedor.mostrarProveedor(tProveedor.getId());
 			if (proveedorExistente == null) {
 				tx.commit();
 				return false;
 			}
 
 			if (!proveedorExistente.getNombre().equals(tProveedor.getNombre())) {
-				TProveedor otroPorNombre = daoProveedor.buscaPorNombre(tProveedor.getNombre());
+				TProveedor otroPorNombre = daoProveedor.buscaProveedorPorNombre(tProveedor.getNombre());
 				if (otroPorNombre != null) {
 					tx.commit();
 					return false;
 				}
 			}
 
-			exito = daoProveedor.actualiza(tProveedor);
+			exito = daoProveedor.modificarProveedor(tProveedor);
 
 			tx.commit();
 		} catch (Exception e) {
@@ -136,7 +136,7 @@ public class SAProveedorImpl implements SAProveedor {
 			DAOProveedor daoProveedor = FactoriaDAO.getInstancia().creaDAOProveedor();
 			tx.start();
 
-			proveedor = daoProveedor.buscaPorId(id);
+			proveedor = daoProveedor.mostrarProveedor(id);
 
 			tx.commit();
 		} catch (Exception e) {
@@ -163,7 +163,7 @@ public class SAProveedorImpl implements SAProveedor {
 			DAOProveedor daoProveedor = FactoriaDAO.getInstancia().creaDAOProveedor();
 			tx.start();
 
-			lista = daoProveedor.listar();
+			lista = daoProveedor.listarProveedores();
 
 			tx.commit();
 		} catch (Exception e) {

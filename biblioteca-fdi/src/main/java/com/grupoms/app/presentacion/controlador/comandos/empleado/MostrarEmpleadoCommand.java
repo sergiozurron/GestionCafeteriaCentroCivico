@@ -9,23 +9,26 @@ import com.grupoms.app.presentacion.controlador.comandos.Command;
 
 public class MostrarEmpleadoCommand implements Command {
 
-	@Override
-	public Context execute(Object data) {
-		Integer id = (Integer) data;
+    @Override
+    public Context execute(Object data) {
+        if (!(data instanceof Integer)) {
+            return new Context(Evento.MOSTRAR_EMPLEADO_KO, "ID inválido");
+        }
 
-		SAEmpleado sa = FactoriaSA.getInstance().creaSAEmpleado();
+        Integer id = (Integer) data;
+        SAEmpleado sa = FactoriaSA.getInstance().creaSAEmpleado();
 
-		try {
-			TEmpleado emp = sa.mostrarEmpleado(id);
+        try {
+            TEmpleado emp = sa.mostrarEmpleado(id);
 
-			if (emp != null) {
-				return new Context(Evento.MOSTRAR_EMPLEADO_OK, emp);
-			} else {
-				return new Context(Evento.MOSTRAR_EMPLEADO_KO, null);
-			}
+            if (emp == null) {
+                return new Context(Evento.MOSTRAR_EMPLEADO_KO, "Empleado no encontrado");
+            }
 
-		} catch (IllegalArgumentException e) {
-			return new Context(Evento.MOSTRAR_EMPLEADO_KO, null);
-		}
-	}
+            return new Context(Evento.MOSTRAR_EMPLEADO_OK, emp);
+
+        } catch (RuntimeException e) {
+            return new Context(Evento.MOSTRAR_EMPLEADO_KO, e.getMessage());
+        }
+    }
 }

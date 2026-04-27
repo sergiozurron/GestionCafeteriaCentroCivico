@@ -5,17 +5,15 @@ import com.grupoms.app.negocio.proveedor.TProveedor;
 
 public interface DAOProveedor {
 
-	Integer crea(TProveedor proveedor);
+	Integer creaProveedor(TProveedor proveedor);
 
-	TProveedor buscaPorNombre(String nombre);
+	TProveedor mostrarProveedor(int id);
 
-	TProveedor buscaPorId(int id);
+	List<TProveedor> listarProveedores();
 
-	List<TProveedor> listar();
+	Boolean modificarProveedor(TProveedor proveedor);
 
-	Boolean actualiza(TProveedor proveedor);
-
-	Boolean baja(TProveedor proveedor);
-
-	void eliminaTodos();
+	Boolean bajaProveedor(TProveedor proveedor);
+	
+	TProveedor buscaProveedorPorNombre(String nombre);
 }

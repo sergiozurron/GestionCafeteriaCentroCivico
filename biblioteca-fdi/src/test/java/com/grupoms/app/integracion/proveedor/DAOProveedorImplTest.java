@@ -95,7 +95,7 @@ public class DAOProveedorImplTest {
     void testCrea_exitoso() {
         TProveedor p = crearProveedor("Nuevo Proveedor", 100.0, 5);
 
-        Integer id = dao.crea(p);
+        Integer id = dao.creaProveedor(p);
 
         assertNotNull(id);
         assertTrue(id > 0);
@@ -107,8 +107,8 @@ public class DAOProveedorImplTest {
         TProveedor p1 = crearProveedor("Proveedor 1", 50.0, 3);
         TProveedor p2 = crearProveedor("Proveedor 2", 60.0, 4);
 
-        Integer id1 = dao.crea(p1);
-        Integer id2 = dao.crea(p2);
+        Integer id1 = dao.creaProveedor(p1);
+        Integer id2 = dao.creaProveedor(p2);
 
         assertNotNull(id1);
         assertNotNull(id2);
@@ -118,9 +118,9 @@ public class DAOProveedorImplTest {
     @Test
     void testBuscaPorId_encontrado() {
         TProveedor p = crearProveedor("Buscable", 75.0, 3);
-        Integer id = dao.crea(p);
+        Integer id = dao.creaProveedor(p);
 
-        TProveedor resultado = dao.buscaPorId(id);
+        TProveedor resultado = dao.mostrarProveedor(id);
 
         assertNotNull(resultado);
         assertEquals(id, resultado.getId());
@@ -132,7 +132,7 @@ public class DAOProveedorImplTest {
 
     @Test
     void testBuscaPorId_noEncontrado() {
-        TProveedor resultado = dao.buscaPorId(99999);
+        TProveedor resultado = dao.mostrarProveedor(99999);
         assertNull(resultado);
     }
 
@@ -140,9 +140,9 @@ public class DAOProveedorImplTest {
     void testBuscaPorId_verificaCamposCompletos() {
         TProveedor p = crearProveedor("Completo", 99.99, 7);
         p.setActivo(false);
-        Integer id = dao.crea(p);
+        Integer id = dao.creaProveedor(p);
 
-        TProveedor resultado = dao.buscaPorId(id);
+        TProveedor resultado = dao.mostrarProveedor(id);
 
         assertNotNull(resultado);
         assertEquals("Completo", resultado.getNombre());
@@ -154,9 +154,9 @@ public class DAOProveedorImplTest {
     @Test
     void testBuscaPorNombre_encontrado() {
         TProveedor p = crearProveedor("ProvNombre", 80.0, 4);
-        dao.crea(p);
+        dao.creaProveedor(p);
 
-        TProveedor resultado = dao.buscaPorNombre("ProvNombre");
+        TProveedor resultado = dao.buscaProveedorPorNombre("ProvNombre");
 
         assertNotNull(resultado);
         assertEquals("ProvNombre", resultado.getNombre());
@@ -165,28 +165,28 @@ public class DAOProveedorImplTest {
 
     @Test
     void testBuscaPorNombre_noEncontrado() {
-        TProveedor resultado = dao.buscaPorNombre("Inexistente");
+        TProveedor resultado = dao.buscaProveedorPorNombre("Inexistente");
         assertNull(resultado);
     }
 
     @Test
     void testBuscaPorNombre_caseSensitive() {
         TProveedor p = crearProveedor("CaseSensitive", 50.0, 2);
-        dao.crea(p);
+        dao.creaProveedor(p);
 
         // H2 es case-insensitive por defecto para VARCHAR,
         // pero verificamos que devuelve resultado con el nombre exacto
-        TProveedor resultado = dao.buscaPorNombre("CaseSensitive");
+        TProveedor resultado = dao.buscaProveedorPorNombre("CaseSensitive");
         assertNotNull(resultado);
         assertEquals("CaseSensitive", resultado.getNombre());
     }
 
     @Test
     void testListar_conResultados() {
-        dao.crea(crearProveedor("Proveedor 1", 50.0, 3));
-        dao.crea(crearProveedor("Proveedor 2", 60.0, 5));
+        dao.creaProveedor(crearProveedor("Proveedor 1", 50.0, 3));
+        dao.creaProveedor(crearProveedor("Proveedor 2", 60.0, 5));
 
-        List<TProveedor> lista = dao.listar();
+        List<TProveedor> lista = dao.listarProveedores();
 
         assertNotNull(lista);
         assertEquals(2, lista.size());
@@ -194,7 +194,7 @@ public class DAOProveedorImplTest {
 
     @Test
     void testListar_sinResultados() {
-        List<TProveedor> lista = dao.listar();
+        List<TProveedor> lista = dao.listarProveedores();
 
         assertNotNull(lista);
         assertTrue(lista.isEmpty());
@@ -202,9 +202,9 @@ public class DAOProveedorImplTest {
 
     @Test
     void testListar_verificaTodosLosCampos() {
-        dao.crea(crearProveedor("Único", 33.33, 2));
+        dao.creaProveedor(crearProveedor("Único", 33.33, 2));
 
-        List<TProveedor> lista = dao.listar();
+        List<TProveedor> lista = dao.listarProveedores();
         assertEquals(1, lista.size());
 
         TProveedor p = lista.get(0);
@@ -219,26 +219,26 @@ public class DAOProveedorImplTest {
         TProveedor activo = crearProveedor("Activo", 10.0, 1);
         TProveedor inactivo = crearProveedor("Inactivo", 20.0, 2);
         inactivo.setActivo(false);
-        dao.crea(activo);
-        dao.crea(inactivo);
+        dao.creaProveedor(activo);
+        dao.creaProveedor(inactivo);
 
-        List<TProveedor> lista = dao.listar();
+        List<TProveedor> lista = dao.listarProveedores();
         assertEquals(2, lista.size());
     }
 
     @Test
     void testActualiza_exitoso() {
         TProveedor p = crearProveedor("Original", 100.0, 5);
-        Integer id = dao.crea(p);
+        Integer id = dao.creaProveedor(p);
 
         p.setNombre("Actualizado");
         p.setTarifa(120.0);
         p.setTiempoEntrega(6);
 
-        Boolean resultado = dao.actualiza(p);
+        Boolean resultado = dao.modificarProveedor(p);
         assertTrue(resultado);
 
-        TProveedor verificar = dao.buscaPorId(id);
+        TProveedor verificar = dao.mostrarProveedor(id);
         assertEquals("Actualizado", verificar.getNombre());
         assertEquals(120.0, verificar.getTarifa());
         assertEquals(6, verificar.getTiempoEntrega());
@@ -253,33 +253,33 @@ public class DAOProveedorImplTest {
         p.setTiempoEntrega(0);
         p.setActivo(true);
 
-        Boolean resultado = dao.actualiza(p);
+        Boolean resultado = dao.modificarProveedor(p);
         assertFalse(resultado);
     }
 
     @Test
     void testActualiza_cambiaActivo() {
         TProveedor p = crearProveedor("CambiaActivo", 50.0, 3);
-        Integer id = dao.crea(p);
-        assertTrue(dao.buscaPorId(id).getActivo());
+        Integer id = dao.creaProveedor(p);
+        assertTrue(dao.mostrarProveedor(id).getActivo());
 
         p.setActivo(false);
-        dao.actualiza(p);
+        dao.modificarProveedor(p);
 
-        TProveedor verificar = dao.buscaPorId(id);
+        TProveedor verificar = dao.mostrarProveedor(id);
         assertFalse(verificar.getActivo());
     }
 
     @Test
     void testBaja_exitoso() {
         TProveedor p = crearProveedor("ParaBaja", 50.0, 2);
-        Integer id = dao.crea(p);
+        Integer id = dao.creaProveedor(p);
 
         p.setActivo(false);
-        Boolean resultado = dao.baja(p);
+        Boolean resultado = dao.bajaProveedor(p);
 
         assertTrue(resultado);
-        TProveedor verificar = dao.buscaPorId(id);
+        TProveedor verificar = dao.mostrarProveedor(id);
         assertFalse(verificar.getActivo());
     }
 
@@ -289,89 +289,67 @@ public class DAOProveedorImplTest {
         p.setId(99999);
         p.setActivo(false);
 
-        Boolean resultado = dao.baja(p);
+        Boolean resultado = dao.bajaProveedor(p);
         assertFalse(resultado);
     }
 
     @Test
     void testBaja_yReactivar() {
         TProveedor p = crearProveedor("BajaReactivar", 40.0, 3);
-        Integer id = dao.crea(p);
+        Integer id = dao.creaProveedor(p);
 
         // Baja
         p.setActivo(false);
-        dao.baja(p);
-        assertFalse(dao.buscaPorId(id).getActivo());
+        dao.bajaProveedor(p);
+        assertFalse(dao.mostrarProveedor(id).getActivo());
 
         // Reactivar
         p.setActivo(true);
-        dao.baja(p); // usa UPDATE_ACTIVO
-        assertTrue(dao.buscaPorId(id).getActivo());
-    }
-
-    @Test
-    void testEliminaTodos() {
-        dao.crea(crearProveedor("Prov1", 10.0, 1));
-        dao.crea(crearProveedor("Prov2", 20.0, 2));
-        dao.crea(crearProveedor("Prov3", 30.0, 3));
-        assertEquals(3, dao.listar().size());
-
-        dao.eliminaTodos();
-
-        assertEquals(0, dao.listar().size());
-    }
-
-    @Test
-    void testEliminaTodos_tablaVacia_noFalla() {
-        assertDoesNotThrow(() -> dao.eliminaTodos());
-        assertTrue(dao.listar().isEmpty());
+        dao.bajaProveedor(p); // usa UPDATE_ACTIVO
+        assertTrue(dao.mostrarProveedor(id).getActivo());
     }
 
     @Test
     void testFlujoCompleto_CRUD() {
         // Create
         TProveedor p = crearProveedor("CRUD Test", 100.0, 5);
-        Integer id = dao.crea(p);
+        Integer id = dao.creaProveedor(p);
         assertNotNull(id);
         assertTrue(id > 0);
 
         // Read by id
-        TProveedor leido = dao.buscaPorId(id);
+        TProveedor leido = dao.mostrarProveedor(id);
         assertNotNull(leido);
         assertEquals("CRUD Test", leido.getNombre());
 
         // Read by name
-        TProveedor porNombre = dao.buscaPorNombre("CRUD Test");
+        TProveedor porNombre = dao.buscaProveedorPorNombre("CRUD Test");
         assertNotNull(porNombre);
         assertEquals(id, porNombre.getId());
 
         // Update
         p.setNombre("CRUD Actualizado");
         p.setTarifa(200.0);
-        assertTrue(dao.actualiza(p));
-        assertEquals("CRUD Actualizado", dao.buscaPorId(id).getNombre());
+        assertTrue(dao.modificarProveedor(p));
+        assertEquals("CRUD Actualizado", dao.mostrarProveedor(id).getNombre());
 
         // List
-        List<TProveedor> lista = dao.listar();
+        List<TProveedor> lista = dao.listarProveedores();
         assertFalse(lista.isEmpty());
 
         // Baja (soft delete)
         p.setActivo(false);
-        assertTrue(dao.baja(p));
-        assertFalse(dao.buscaPorId(id).getActivo());
-
-        // Delete all
-        dao.eliminaTodos();
-        assertTrue(dao.listar().isEmpty());
+        assertTrue(dao.bajaProveedor(p));
+        assertFalse(dao.mostrarProveedor(id).getActivo());
     }
 
     @Test
     void testCrearMultiples_yListar() {
         for (int i = 1; i <= 5; i++) {
-            dao.crea(crearProveedor("Prov " + i, 10.0 * i, i));
+            dao.creaProveedor(crearProveedor("Prov " + i, 10.0 * i, i));
         }
 
-        List<TProveedor> lista = dao.listar();
+        List<TProveedor> lista = dao.listarProveedores();
         assertEquals(5, lista.size());
     }
 

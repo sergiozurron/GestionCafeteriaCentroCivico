@@ -1,5 +1,6 @@
 package com.grupoms.app.negocio.producto;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.grupoms.app.integracion.Transaction.Transaction;
@@ -11,117 +12,130 @@ import com.grupoms.app.integracion.producto.DAOReceta;
 import com.grupoms.app.negocio.ingrediente.TIngrediente;
 
 public class SARecetaImp implements SAReceta {
+	
+	// Significado de los códigos de error:
+	// -1: producto inválido
+	// -2: ingrediente inválido
+	// -3: relación inexistente o duplicada
+	// -4: error inesperado
+	// -99: excepción
 
-    @Override
-    public Integer vincularIngredienteAProducto(Integer idProducto, Integer idIngrediente) {
+	@Override
+	public Integer vincularIngredienteAProducto(Integer idProducto, Integer idIngrediente) {
 
-        Transaction t = TransactionManager.getInstance().newTransaction();
+		Transaction t = TransactionManager.getInstance().newTransaction();
 
-        try {
-            t.start();
+		try {
+			t.start();
 
-            DAOProducto daoProducto = FactoriaDAO.getInstancia().creaDAOProducto();
-            DAOIngrediente daoIngrediente = FactoriaDAO.getInstancia().creaDAOIngrediente();
-            DAOReceta daoReceta = FactoriaDAO.getInstancia().creaDAOReceta();
+			DAOProducto daoProducto = FactoriaDAO.getInstancia().creaDAOProducto();
+			DAOIngrediente daoIngrediente = FactoriaDAO.getInstancia().creaDAOIngrediente();
+			DAOReceta daoReceta = FactoriaDAO.getInstancia().creaDAOReceta();
 
-            // 1. Comprobar producto
-            TProducto producto = daoProducto.mostrarProducto(idProducto);
-            if (producto == null || !producto.getActivo()) {
-                t.commit();
-                return -1; // producto no válido
-            }
+			// 1. Producto
+			TProducto producto = daoProducto.mostrarProducto(idProducto);
+			if (producto == null || !producto.getActivo()) {
+				t.commit();
+				return -1;
+			}
 
-            // 2. Comprobar ingrediente
-            TIngrediente ingrediente = daoIngrediente.mostrarIngrediente(idIngrediente);
-            if (ingrediente == null || !ingrediente.getActivo()) {
-                t.commit();
-                return -2; // ingrediente no válido
-            }
+			// 2. Ingrediente
+			TIngrediente ingrediente = daoIngrediente.mostrarIngrediente(idIngrediente);
+			if (ingrediente == null || !ingrediente.getActivo()) {
+				t.commit();
+				return -2;
+			}
 
-            //3. Comprobar si ya existe
-            TEntradaReceta receta = daoReceta.mostrarLineaReceta(idProducto, idIngrediente);
-            if(receta != null && receta.getActivo()) {
-            	t.commit();
-            	return -3; //receta ya existente
-            }
-            // 4. Crear relación
-            Integer id = daoReceta.vincular(idProducto, idIngrediente);
+			// 3. Ya existe
+			TEntradaReceta receta = daoReceta.mostrarLineaReceta(idProducto, idIngrediente);
+			if (receta != null && receta.getActivo()) {
+				t.commit();
+				return -3;
+			}
 
-            t.commit();
-            return id;
+			// 4. Insertar
+			Integer id = daoReceta.vincular(idProducto, idIngrediente);
 
-        } catch (Exception e) {
-            if (t != null) t.rollback();
-            e.printStackTrace();
-            return -99;
-        }
-    }
+			t.commit();
 
+			return (id != null) ? id : -4;
 
-    @Override
-    public Integer desvincularIngredienteDeProducto(Integer idProducto, Integer idIngrediente) {
+		} catch (Exception e) {
+			if (t != null)
+				t.rollback();
+			e.printStackTrace();
+			return -99;
+		}
+	}
 
-        Transaction t = TransactionManager.getInstance().newTransaction();
+	@Override
+	public Integer desvincularIngredienteDeProducto(Integer idProducto, Integer idIngrediente) {
 
-        try {
-            t.start();
+		Transaction t = TransactionManager.getInstance().newTransaction();
 
-            DAOProducto daoProducto = FactoriaDAO.getInstancia().creaDAOProducto();
-            DAOIngrediente daoIngrediente = FactoriaDAO.getInstancia().creaDAOIngrediente();
-            DAOReceta daoReceta = FactoriaDAO.getInstancia().creaDAOReceta();
+		try {
+			t.start();
 
-            // 1. Comprobar producto
-            TProducto producto = daoProducto.mostrarProducto(idProducto);
-            if (producto == null || !producto.getActivo()) {
-                t.commit();
-                return -1; // producto no válido
-            }
+			DAOProducto daoProducto = FactoriaDAO.getInstancia().creaDAOProducto();
+			DAOIngrediente daoIngrediente = FactoriaDAO.getInstancia().creaDAOIngrediente();
+			DAOReceta daoReceta = FactoriaDAO.getInstancia().creaDAOReceta();
 
-            // 2. Comprobar ingrediente
-            TIngrediente ingrediente = daoIngrediente.mostrarIngrediente(idIngrediente);
-            if (ingrediente == null || !ingrediente.getActivo()) {
-                t.commit();
-                return -2; // ingrediente no válido
-            }
+			// 1. Comprobar producto
+			TProducto producto = daoProducto.mostrarProducto(idProducto);
+			if (producto == null || !producto.getActivo()) {
+				t.commit();
+				return -1;
+			}
 
-            //3. Comprobar si ya existe
-            TEntradaReceta receta = daoReceta.mostrarLineaReceta(idProducto, idIngrediente);
-            if(receta == null) {
-            	t.commit();
-            	return -3; //receta ya existente
-            }
+			// 2. Comprobar ingrediente
+			TIngrediente ingrediente = daoIngrediente.mostrarIngrediente(idIngrediente);
+			if (ingrediente == null || !ingrediente.getActivo()) {
+				t.commit();
+				return -2;
+			}
 
-            Integer desvincular = daoReceta.desvincular(idProducto, idIngrediente);
+			// 3. Comprobar relación
+			TEntradaReceta receta = daoReceta.mostrarLineaReceta(idProducto, idIngrediente);
+			if (receta == null || !receta.getActivo()) {
+				t.commit();
+				return -3;
+			}
 
-            t.commit();
-            return 1;
+			// 4. Desvincular
+			Integer filas = daoReceta.desvincular(idProducto, idIngrediente);
 
-        } catch (Exception e) {
-            if (t != null) t.rollback();
-            e.printStackTrace();
-            return -99;
-        }
-    }
+			t.commit();
 
+			return (filas != null && filas > 0) ? 1 : -4;
 
-    @Override
-    public List<TIngrediente> listarIngredientesProducto(Integer idProducto) {
+		} catch (Exception e) {
+			if (t != null)
+				t.rollback();
+			e.printStackTrace();
+			return -99;
+		}
+	}
 
-        Transaction t = TransactionManager.getInstance().newTransaction();
+	@Override
+	public List<TIngrediente> listarIngredientesProducto(Integer idProducto) {
 
-        try {
-            t.start();
+		Transaction t = TransactionManager.getInstance().newTransaction();
 
-            DAOReceta daoReceta = FactoriaDAO.getInstancia().creaDAOReceta();
-            List<TIngrediente> lista = daoReceta.listarIngredientesProducto(idProducto);
+		try {
+			t.start();
 
-            t.commit();
-            return lista;
+			DAOReceta daoReceta = FactoriaDAO.getInstancia().creaDAOReceta();
+			List<TIngrediente> lista = daoReceta.listarIngredientesProducto(idProducto);
 
-        } catch (Exception e) {
-            if (t != null) t.rollback();
-            e.printStackTrace();
-            return null;
-        }
-    }
+			t.commit();
+
+			return lista != null ? lista : new ArrayList<>();
+
+		} catch (Exception e) {
+			if (t != null)
+				t.rollback();
+			e.printStackTrace();
+			return new ArrayList<>();
+		}
+	}
 }

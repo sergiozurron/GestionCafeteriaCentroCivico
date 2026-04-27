@@ -122,7 +122,8 @@ public class GUI_MostrarEmpleado extends JFrame implements IGUI {
 					limpiarLabels();
 				}
 			} else if (context.getEvento() == Evento.MOSTRAR_EMPLEADO_KO) {
-				JOptionPane.showMessageDialog(this, "Empleado no encontrado en la base de datos");
+				String mensaje = (String) context.getDatos();
+			    JOptionPane.showMessageDialog(this, mensaje);
 				limpiarLabels();
 			}
 		});

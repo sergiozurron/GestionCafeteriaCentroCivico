@@ -20,10 +20,9 @@ public class DAOProveedorImpl implements DAOProveedor {
 	private static final String READ_ALL = "SELECT * FROM proveedores FOR UPDATE";
 	private static final String UPDATE = "UPDATE proveedores SET nombre = ?, tarifa = ?, tiempo_entrega = ?, activo = ? WHERE id = ?";
 	private static final String UPDATE_ACTIVO = "UPDATE proveedores SET activo = ? WHERE id = ?";
-	private static final String DELETE_ALL = "DELETE FROM proveedores";
 
 	@Override
-	public Integer crea(TProveedor proveedor) {
+	public Integer creaProveedor(TProveedor proveedor) {
 		Integer idGenerado = null;
 		try {
 			Transaction t = TransactionManager.getInstance().getTransaction();
@@ -51,7 +50,7 @@ public class DAOProveedorImpl implements DAOProveedor {
 	}
 
 	@Override
-	public TProveedor buscaPorId(int id) {
+	public TProveedor mostrarProveedor(int id) {
 		TProveedor proveedor = null;
 		try {
 			Transaction t = TransactionManager.getInstance().getTransaction();
@@ -77,7 +76,7 @@ public class DAOProveedorImpl implements DAOProveedor {
 	}
 
 	@Override
-	public TProveedor buscaPorNombre(String nombre) {
+	public TProveedor buscaProveedorPorNombre(String nombre) {
 		TProveedor proveedor = null;
 		try {
 			Transaction t = TransactionManager.getInstance().getTransaction();
@@ -104,7 +103,7 @@ public class DAOProveedorImpl implements DAOProveedor {
 	}
 
 	@Override
-	public List<TProveedor> listar() {
+	public List<TProveedor> listarProveedores() {
 		List<TProveedor> listaProveedores = new ArrayList<>();
 		try {
 			Transaction t = TransactionManager.getInstance().getTransaction();
@@ -128,7 +127,7 @@ public class DAOProveedorImpl implements DAOProveedor {
 	}
 
 	@Override
-	public Boolean actualiza(TProveedor proveedor) {
+	public Boolean modificarProveedor(TProveedor proveedor) {
 		Boolean exito = false;
 		try {
 			Transaction t = TransactionManager.getInstance().getTransaction();
@@ -151,7 +150,7 @@ public class DAOProveedorImpl implements DAOProveedor {
 	}
 
 	@Override
-	public Boolean baja(TProveedor proveedor) {
+	public Boolean bajaProveedor(TProveedor proveedor) {
 		Boolean exito = false;
 		try {
 			Transaction t = TransactionManager.getInstance().getTransaction();
@@ -168,20 +167,6 @@ public class DAOProveedorImpl implements DAOProveedor {
 			e.printStackTrace();
 		}
 		return exito;
-	}
-
-	@Override
-	public void eliminaTodos() {
-		try {
-			Transaction t = TransactionManager.getInstance().getTransaction();
-			Connection c = (Connection) t.getResource();
-
-			try (Statement stmt = c.createStatement()) {
-				stmt.executeUpdate(DELETE_ALL);
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
 	}
 	
 }

@@ -10,223 +10,203 @@ import com.grupoms.app.integracion.producto.DAOProducto;
 
 public class SAProductoImp implements SAProducto {
 
-	private DAOProducto daoProducto = FactoriaDAO.getInstancia().creaDAOProducto();
-
 	@Override
 	public Integer altaProducto(TProducto producto) {
+
 		Transaction t = null;
 		Integer idGenerado = null;
 
 		try {
 			t = TransactionManager.getInstance().newTransaction();
+			DAOProducto daoProducto = FactoriaDAO.getInstancia().creaDAOProducto();
 			t.start();
 
 			if (producto == null) {
-				throw new IllegalArgumentException("El producto no puede ser nulo.");
+				t.commit();
+				return -1;
 			}
+
 			producto.setActivo(true);
 
 			idGenerado = daoProducto.altaProducto(producto);
-			if (idGenerado == null || idGenerado <= 0) {
-				throw new RuntimeException("No se pudo dar de alta el producto");
-			}
-			t.commit();
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (t != null) {
-				try {
-					t.rollback();
-				} catch (Exception ex) {
-					ex.printStackTrace();
-				}
-			}
-		}
 
-		return idGenerado;
+			t.commit();
+
+			return (idGenerado != null) ? idGenerado : -2;
+
+		} catch (Exception e) {
+			if (t != null)
+				t.rollback();
+			e.printStackTrace();
+			return -99;
+		}
 	}
 
 	@Override
 	public Boolean bajaProducto(TProducto producto) {
+
 		Transaction t = null;
-		Boolean exito = false;
 
 		try {
 			t = TransactionManager.getInstance().newTransaction();
+			DAOProducto daoProducto = FactoriaDAO.getInstancia().creaDAOProducto();
 			t.start();
 
-			if (producto == null || producto.getId() == null || producto.getId() <= 0) {
-				throw new IllegalArgumentException("El producto no es válido.");
+			if (producto == null || producto.getId() == null) {
+				t.commit();
+				return false;
 			}
 
-			daoProducto.bajaProducto(producto);
+			TProducto existente = daoProducto.mostrarProducto(producto.getId());
+
+			if (existente == null || !existente.getActivo()) {
+				t.commit();
+				return false;
+			}
+
+			existente.setActivo(false);
+
+			Boolean exito = daoProducto.bajaProducto(existente);
 
 			t.commit();
-			exito = true;
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (t != null) {
-				try {
-					t.rollback();
-				} catch (Exception ex) {
-					ex.printStackTrace();
-				}
-			}
-		}
 
-		return exito;
+			return exito;
+
+		} catch (Exception e) {
+			if (t != null)
+				t.rollback();
+			e.printStackTrace();
+			return false;
+		}
 	}
 
 	@Override
 	public Boolean modificarProducto(TProducto producto) {
-		
 
 		Transaction t = null;
-		Boolean exito = false;
-		TProducto prod = null;
 
 		try {
 			t = TransactionManager.getInstance().newTransaction();
+			DAOProducto daoProducto = FactoriaDAO.getInstancia().creaDAOProducto();
 			t.start();
 
-			if (producto == null || producto.getId() == null || producto.getId() <= 0) {
-				throw new IllegalArgumentException("El producto no es válido.");
+			if (producto == null || producto.getId() == null) {
+				t.commit();
+				return false;
 			}
 
-			prod = daoProducto.mostrarProducto(producto.getId());
-			if (prod == null || !prod.getActivo()) {
-				throw new IllegalArgumentException("No existe un producto activo con ID " + producto.getId());
+			TProducto existente = daoProducto.mostrarProducto(producto.getId());
+
+			if (existente == null || !existente.getActivo()) {
+				t.commit();
+				return false;
 			}
 
-			exito = daoProducto.modificarProducto(producto);
+			Boolean exito = daoProducto.modificarProducto(producto);
 
 			t.commit();
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (t != null) {
-				try {
-					t.rollback();
-				} catch (Exception ex) {
-					ex.printStackTrace();
-				}
-			}
-		}
 
-		return exito;
+			return exito;
+
+		} catch (Exception e) {
+			if (t != null)
+				t.rollback();
+			e.printStackTrace();
+			return false;
+		}
 	}
 
 	@Override
 	public TProducto mostrarProducto(Integer id) {
-		if (id == null || id <= 0) {
-			throw new IllegalArgumentException("El ID del producto no es válido.");
-		}
 
 		Transaction t = null;
-		TProducto producto = null;
 
 		try {
 			t = TransactionManager.getInstance().newTransaction();
+			DAOProducto daoProducto = FactoriaDAO.getInstancia().creaDAOProducto();
 			t.start();
 
-			producto = daoProducto.mostrarProducto(id);
-			if (producto == null) {
-				throw new IllegalArgumentException("El producto con ID " + id + " no existe.");
-			}
+			TProducto producto = daoProducto.mostrarProducto(id);
 
 			t.commit();
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (t != null) {
-				try {
-					t.rollback();
-				} catch (Exception ex) {
-					ex.printStackTrace();
-				}
-			}
-			throw new RuntimeException(e.getMessage(), e);
-		}
 
-		return producto;
+			return producto;
+
+		} catch (Exception e) {
+			if (t != null)
+				t.rollback();
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 	@Override
 	public List<TProducto> mostrarListaProductos() {
-		List<TProducto> listaProductos = new ArrayList<>();
+
 		Transaction t = null;
+		List<TProducto> lista = new ArrayList<>();
 
 		try {
 			t = TransactionManager.getInstance().newTransaction();
+			DAOProducto daoProducto = FactoriaDAO.getInstancia().creaDAOProducto();
 			t.start();
 
 			List<TProducto> todos = daoProducto.mostrarListaProductos();
-			for (TProducto producto : todos) {
-				if (producto.getActivo()) {
-					listaProductos.add(producto);
-				}
-			}
 
-			if (listaProductos.isEmpty()) {
-				throw new IllegalArgumentException("No hay productos activos en la base de datos.");
+			for (TProducto p : todos) {
+				if (p.getActivo()) {
+					lista.add(p);
+				}
 			}
 
 			t.commit();
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (t != null) {
-				try {
-					t.rollback();
-				} catch (Exception ex) {
-					ex.printStackTrace();
-				}
-			}
-			throw new IllegalArgumentException("Error al mostrar la lista de productos.", e);
-		}
 
-		return listaProductos;
+			return lista;
+
+		} catch (Exception e) {
+			if (t != null)
+				t.rollback();
+			e.printStackTrace();
+			return new ArrayList<>();
+		}
 	}
-	
+
 	@Override
 	public List<TProducto> mostrarProductosPorProveedor(Integer idProveedor) {
 
-	    if (idProveedor == null || idProveedor <= 0) {
-	        throw new IllegalArgumentException("El ID del proveedor no es válido.");
-	    }
+		Transaction t = null;
+		List<TProducto> listaProductos = new ArrayList<>();
 
-	    List<TProducto> listaProductos = new ArrayList<>();
-	    Transaction t = null;
+		try {
+			t = TransactionManager.getInstance().newTransaction();
+			DAOProducto daoProducto = FactoriaDAO.getInstancia().creaDAOProducto();
+			t.start();
 
-	    try {
-	        t = TransactionManager.getInstance().newTransaction();
-	        t.start();
+			// Validación básica
+			if (idProveedor == null || idProveedor <= 0) {
+				t.commit();
+				return listaProductos;
+			}
 
-	        List<TProducto> todos = daoProducto.mostrarProductosPorProveedor(idProveedor);
+			List<TProducto> todos = daoProducto.mostrarProductosPorProveedor(idProveedor);
 
-	        for (TProducto producto : todos) {
-	            if (producto.getActivo()) {
-	                listaProductos.add(producto);
-	            }
-	        }
+			if (todos != null) {
+				for (TProducto producto : todos) {
+					if (producto.getActivo()) {
+						listaProductos.add(producto);
+					}
+				}
+			}
 
-	        if (listaProductos.isEmpty()) {
-	            throw new IllegalArgumentException(
-	                "No hay productos activos asociados al proveedor con ID " + idProveedor);
-	        }
+			t.commit();
 
-	        t.commit();
+		} catch (Exception e) {
+			if (t != null)
+				t.rollback();
+			e.printStackTrace();
+			return new ArrayList<>();
+		}
 
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	        if (t != null) {
-	            try {
-	                t.rollback();
-	            } catch (Exception ex) {
-	                ex.printStackTrace();
-	            }
-	        }
-	        throw new IllegalArgumentException(
-	            "Error al mostrar los productos por proveedor.", e);
-	    }
-
-	    return listaProductos;
+		return listaProductos;
 	}
 }

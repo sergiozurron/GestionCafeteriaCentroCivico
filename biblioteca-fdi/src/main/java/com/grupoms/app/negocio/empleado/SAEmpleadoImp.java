@@ -31,14 +31,14 @@ public class SAEmpleadoImp implements SAEmpleado {
 			t.commit();
 
 		} catch (Exception e) {
-			e.printStackTrace();
-			if (t != null) {
-				try {
-					t.rollback();
-				} catch (Exception ex) {
-					ex.printStackTrace();
-				}
-			}
+		    if (t != null) {
+		        try {
+		            t.rollback();
+		        } catch (Exception ex) {
+		            throw new RuntimeException("Error durante rollback en crearEmpleado", ex);
+		        }
+		    }
+		    throw e;
 		}
 
 		return idGenerado;
@@ -47,42 +47,45 @@ public class SAEmpleadoImp implements SAEmpleado {
 	@Override
 	public Boolean bajaEmpleado(TEmpleado empleado) {
 		Transaction t = null;
-		Boolean exito = false;
 
 		try {
-
 			t = TransactionManager.getInstance().newTransaction();
 			t.start();
 
 			if (empleado == null || empleado.getID() == null || empleado.getID() <= 0)
 				throw new IllegalArgumentException("El empleado debe tener un ID válido para dar de baja.");
 
+			TEmpleado existente = dao.mostrarEmpleado(empleado.getID());
+			if (existente == null)
+				throw new IllegalArgumentException("El empleado no existe.");
+			if (!existente.getActivo())
+				throw new IllegalArgumentException("El empleado ya está dado de baja.");
+
 			empleado.setActivo(false);
 
-			dao.bajaEmpleado(empleado);
+			Boolean exito = dao.bajaEmpleado(empleado);
+
+			if (!exito)
+				throw new RuntimeException("No se pudo dar de baja el empleado");
 
 			t.commit();
-			exito = true;
+			return true;
 
 		} catch (Exception e) {
-			e.printStackTrace();
 			if (t != null) {
 				try {
 					t.rollback();
 				} catch (Exception ex) {
-					ex.printStackTrace();
+					throw new RuntimeException("Error en rollback", ex);
 				}
 			}
+			throw e;
 		}
-
-		return exito;
 	}
 
 	@Override
 	public Boolean modificarEmpleado(TEmpleado empleado) {
 		Transaction t = null;
-		Boolean exito = false;
-		TEmpleado emp = null;
 
 		try {
 
@@ -91,27 +94,30 @@ public class SAEmpleadoImp implements SAEmpleado {
 
 			if (empleado == null || empleado.getID() == null || empleado.getID() <= 0)
 				throw new IllegalArgumentException("El empleado debe tener un ID válido para modificar.");
+			empleado.setActivo(true);
 
-			emp = dao.mostrarEmpleado(empleado.getID());
+			TEmpleado emp = dao.mostrarEmpleado(empleado.getID());
 			if (emp == null)
 				throw new IllegalArgumentException("El empleado con ID " + empleado.getID() + " no existe.");
 
-			exito = dao.modificarEmpleado(empleado);
+			Boolean exito = dao.modificarEmpleado(empleado);
+			
+			if (!exito)
+				throw new RuntimeException("No se pudo dar de baja el empleado");
 
 			t.commit();
+			return true;
 
 		} catch (Exception e) {
-			e.printStackTrace();
-			if (t != null) {
-				try {
-					t.rollback();
-				} catch (Exception ex) {
-					ex.printStackTrace();
-				}
-			}
+		    if (t != null) {
+		        try {
+		            t.rollback();
+		        } catch (Exception ex) {
+		            throw new RuntimeException("Error durante rollback en modificarEmpleado", ex);
+		        }
+		    }
+		    throw e;
 		}
-
-		return exito;
 	}
 
 	@Override
@@ -132,15 +138,14 @@ public class SAEmpleadoImp implements SAEmpleado {
 			t.commit();
 
 		} catch (Exception e) {
-			e.printStackTrace();
-			if (t != null) {
-				try {
-					t.rollback();
-				} catch (Exception ex) {
-					ex.printStackTrace();
-				}
-			}
-
+		    if (t != null) {
+		        try {
+		            t.rollback();
+		        } catch (Exception ex) {
+		            throw new RuntimeException("Error durante rollback en mostrarEmpleado", ex);
+		        }
+		    }
+		    throw e;
 		}
 
 		return emp;
@@ -148,7 +153,7 @@ public class SAEmpleadoImp implements SAEmpleado {
 
 	@Override
 	public List<TEmpleado> mostrarListaEmpleados() {
-		List<TEmpleado> listaEmpleadosActivos = new ArrayList<>();
+		List<TEmpleado> todos = new ArrayList<>();
 		Transaction t = null;
 
 		try {
@@ -156,12 +161,7 @@ public class SAEmpleadoImp implements SAEmpleado {
 			t = TransactionManager.getInstance().newTransaction();
 			t.start();
 
-			List<TEmpleado> todos = dao.mostrarListaEmpleados();
-			for (TEmpleado e : todos) {
-				if (e.getActivo()) {
-					listaEmpleadosActivos.add(e);
-				}
-			}
+			todos = dao.mostrarListaEmpleados();
 
 			t.commit();
 
@@ -171,11 +171,11 @@ public class SAEmpleadoImp implements SAEmpleado {
 				try {
 					t.rollback();
 				} catch (Exception ex) {
-					ex.printStackTrace();
+					throw new RuntimeException("Error en modificarEmpleado", e);
 				}
 			}
 		}
 
-		return listaEmpleadosActivos;
+		return todos;
 	}
 }

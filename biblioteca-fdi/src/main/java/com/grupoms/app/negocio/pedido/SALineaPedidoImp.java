@@ -34,6 +34,7 @@ public class SALineaPedidoImp implements SALineaPedido {
 			TPedido pedido = daoPedido.mostrarPedido(linea.getPedidoId());
 			if (pedido == null || !pedido.getActivo())
 				throw new IllegalArgumentException("Pedido no existe o inactivo");
+			if(pedido.getActivo())throw new IllegalArgumentException("Pedido no existe o inactivo");
 
 			// 2. validar producto
 			if (linea.getProductoId() == null || linea.getProductoId() <= 0)

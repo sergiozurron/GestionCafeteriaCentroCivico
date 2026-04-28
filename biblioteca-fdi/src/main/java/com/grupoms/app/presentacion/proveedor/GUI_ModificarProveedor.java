@@ -17,7 +17,6 @@ public class GUI_ModificarProveedor extends JFrame implements IGUI {
 	private JTextField campoNombre;
 	private JTextField campoTarifa;
 	private JTextField campoTiempoEntrega;
-	private JCheckBox checkActivo;
 	private JButton btnModificar;
 
 	public GUI_ModificarProveedor() {
@@ -34,14 +33,10 @@ public class GUI_ModificarProveedor extends JFrame implements IGUI {
 			setVisible(true);
 		} else if (context.getEvento() == Evento.MODIFICAR_PROVEEDOR_OK) {
 			JOptionPane.showMessageDialog(this, "Proveedor modificado con éxito");
-
-			campoId.setText("");
-			campoNombre.setText("");
-			campoTarifa.setText("");
-			campoTiempoEntrega.setText("");
-			checkActivo.setSelected(true);
+			limpiarFormulario();
 		} else if (context.getEvento() == Evento.MODIFICAR_PROVEEDOR_KO) {
-			JOptionPane.showMessageDialog(this, "Error: No se pudo modificar el proveedor. Verifique los datos.");
+			String mensaje = (String) context.getDatos();
+		    JOptionPane.showMessageDialog(this, mensaje);
 		}
 	}
 
@@ -64,10 +59,6 @@ public class GUI_ModificarProveedor extends JFrame implements IGUI {
 		JLabel labelTiempo = new JLabel("Tiempo Entrega (días):");
 		campoTiempoEntrega = new JTextField(15);
 
-		JLabel labelActivo = new JLabel("Activo:");
-		checkActivo = new JCheckBox();
-		checkActivo.setSelected(true);
-
 		btnModificar = new JButton("Modificar Proveedor");
 		btnModificar.addActionListener(e -> {
 			try {
@@ -75,7 +66,6 @@ public class GUI_ModificarProveedor extends JFrame implements IGUI {
 				String nombre = campoNombre.getText().trim();
 				Double tarifa = Double.parseDouble(campoTarifa.getText().trim());
 				Integer tiempoEntrega = Integer.parseInt(campoTiempoEntrega.getText().trim());
-				Boolean activo = checkActivo.isSelected();
 
 				if (id <= 0) {
 					JOptionPane.showMessageDialog(this, "El ID debe ser mayor que 0");
@@ -99,7 +89,6 @@ public class GUI_ModificarProveedor extends JFrame implements IGUI {
 				proveedor.setNombre(nombre);
 				proveedor.setTarifa(tarifa);
 				proveedor.setTiempoEntrega(tiempoEntrega);
-				proveedor.setActivo(activo);
 
 				Context contexto = new Context(Evento.MODIFICAR_PROVEEDOR, proveedor);
 				Controlador.getInstance().handle(contexto);
@@ -140,16 +129,16 @@ public class GUI_ModificarProveedor extends JFrame implements IGUI {
 		y++;
 		gbc.gridx = 0;
 		gbc.gridy = y;
-		panel.add(labelActivo, gbc);
-		gbc.gridx = 1;
-		panel.add(checkActivo, gbc);
-
-		y++;
-		gbc.gridx = 0;
-		gbc.gridy = y;
 		gbc.gridwidth = 2;
 		panel.add(btnModificar, gbc);
 
 		add(panel, BorderLayout.CENTER);
+	}
+	
+	private void limpiarFormulario() {
+	    campoId.setText("");
+	    campoNombre.setText("");
+	    campoTarifa.setText("");
+	    campoTiempoEntrega.setText("");
 	}
 }

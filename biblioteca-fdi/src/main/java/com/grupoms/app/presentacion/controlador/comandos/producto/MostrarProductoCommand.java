@@ -13,7 +13,7 @@ public class MostrarProductoCommand implements Command {
 	@Override
 	public Context execute(Object data) {
 		if (!(data instanceof Integer)) {
-			return new Context(Evento.MOSTRAR_PRODUCTO_KO, null);
+			return new Context(Evento.MOSTRAR_PRODUCTO_KO, "Datos no válidos");
 		}
 		int productoId = (Integer) data;
 		SAProducto saProducto = FactoriaSA.getInstance().creaSAProducto();
@@ -21,7 +21,7 @@ public class MostrarProductoCommand implements Command {
 			TProducto producto = saProducto.mostrarProducto(productoId);
 			return new Context(Evento.MOSTRAR_PRODUCTO_OK, producto);
 		} catch (Exception e) {
-			return new Context(Evento.MOSTRAR_PRODUCTO_KO, null);
+			return new Context(Evento.MOSTRAR_PRODUCTO_KO, e.getMessage());
 		}
 	}
 

@@ -109,7 +109,6 @@ CREATE TABLE pedidos (
     FOREIGN KEY (mesa_id) REFERENCES mesas(id)
 ) ENGINE=InnoDB;
 
-
 CREATE TABLE entradas_recetas (
     id INT AUTO_INCREMENT PRIMARY KEY,
     producto_id INT NOT NULL,

@@ -1,181 +1,184 @@
 package com.grupoms.app.negocio.empleado;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.grupoms.app.integracion.Transaction.Transaction;
 import com.grupoms.app.integracion.Transaction.TransactionManager;
 import com.grupoms.app.integracion.empleado.DAOEmpleado;
-import com.grupoms.app.integracion.empleado.DAOEmpleadoImp;
+import com.grupoms.app.integracion.factoria.FactoriaDAO;
 
 public class SAEmpleadoImp implements SAEmpleado {
 
-	DAOEmpleado dao = new DAOEmpleadoImp();
-
 	@Override
 	public Integer crearEmpleado(TEmpleado empleado) {
+
+		if (empleado == null)
+			throw new IllegalArgumentException("El empleado no puede ser nulo.");
+
 		Transaction t = null;
-		Integer idGenerado = null;
 
 		try {
-
 			t = TransactionManager.getInstance().newTransaction();
 			t.start();
 
-			if (empleado == null)
-				throw new IllegalArgumentException("El empleado no puede ser nulo.");
+			DAOEmpleado dao = FactoriaDAO.getInstancia().creaDAOEmpleado();
+
 			empleado.setActivo(true);
 
-			idGenerado = dao.crearEmpleado(empleado);
+			Integer id = dao.crearEmpleado(empleado);
+
+			if (id == null || id <= 0)
+				throw new RuntimeException("No se pudo generar el empleado");
 
 			t.commit();
+			return id;
 
 		} catch (Exception e) {
-		    if (t != null) {
-		        try {
-		            t.rollback();
-		        } catch (Exception ex) {
-		            throw new RuntimeException("Error durante rollback en crearEmpleado", ex);
-		        }
-		    }
-		    throw e;
-		}
 
-		return idGenerado;
+			try {
+				if (t != null) t.rollback();
+			} catch (Exception ex) { }
+
+			throw new RuntimeException("Error creando empleado: " + e.getMessage(), e);
+		}
 	}
 
 	@Override
 	public Boolean bajaEmpleado(TEmpleado empleado) {
+
+		if (empleado == null || empleado.getID() == null || empleado.getID() <= 0)
+			throw new IllegalArgumentException("ID de empleado inválido.");
+
 		Transaction t = null;
 
 		try {
 			t = TransactionManager.getInstance().newTransaction();
 			t.start();
 
-			if (empleado == null || empleado.getID() == null || empleado.getID() <= 0)
-				throw new IllegalArgumentException("El empleado debe tener un ID válido para dar de baja.");
+			DAOEmpleado dao = FactoriaDAO.getInstancia().creaDAOEmpleado();
 
 			TEmpleado existente = dao.mostrarEmpleado(empleado.getID());
+
 			if (existente == null)
-				throw new IllegalArgumentException("El empleado no existe.");
+				throw new IllegalStateException("El empleado no existe.");
+
 			if (!existente.getActivo())
-				throw new IllegalArgumentException("El empleado ya está dado de baja.");
+				throw new IllegalStateException("El empleado ya está dado de baja.");
 
-			empleado.setActivo(false);
+			existente.setActivo(false);
 
-			Boolean exito = dao.bajaEmpleado(empleado);
+			Boolean ok = dao.bajaEmpleado(existente);
 
-			if (!exito)
-				throw new RuntimeException("No se pudo dar de baja el empleado");
+			if (!ok)
+				throw new RuntimeException("No se pudo dar de baja el empleado.");
 
 			t.commit();
 			return true;
 
 		} catch (Exception e) {
-			if (t != null) {
-				try {
-					t.rollback();
-				} catch (Exception ex) {
-					throw new RuntimeException("Error en rollback", ex);
-				}
-			}
-			throw e;
+
+			try {
+				if (t != null) t.rollback();
+			} catch (Exception ex) { }
+
+			throw new RuntimeException("Error dando de baja empleado: " + e.getMessage(), e);
 		}
 	}
 
 	@Override
 	public Boolean modificarEmpleado(TEmpleado empleado) {
+
+		if (empleado == null || empleado.getID() == null || empleado.getID() <= 0)
+			throw new IllegalArgumentException("ID de empleado inválido.");
+
 		Transaction t = null;
 
 		try {
-
 			t = TransactionManager.getInstance().newTransaction();
 			t.start();
 
-			if (empleado == null || empleado.getID() == null || empleado.getID() <= 0)
-				throw new IllegalArgumentException("El empleado debe tener un ID válido para modificar.");
-			empleado.setActivo(true);
+			DAOEmpleado dao = FactoriaDAO.getInstancia().creaDAOEmpleado();
 
-			TEmpleado emp = dao.mostrarEmpleado(empleado.getID());
-			if (emp == null)
-				throw new IllegalArgumentException("El empleado con ID " + empleado.getID() + " no existe.");
+			TEmpleado existente = dao.mostrarEmpleado(empleado.getID());
 
-			Boolean exito = dao.modificarEmpleado(empleado);
-			
-			if (!exito)
-				throw new RuntimeException("No se pudo dar de baja el empleado");
+			if (existente == null)
+				throw new IllegalStateException("El empleado no existe.");
+
+			empleado.setActivo(existente.getActivo());
+
+			Boolean ok = dao.modificarEmpleado(empleado);
+
+			if (!ok)
+				throw new RuntimeException("No se pudo modificar el empleado.");
 
 			t.commit();
 			return true;
 
 		} catch (Exception e) {
-		    if (t != null) {
-		        try {
-		            t.rollback();
-		        } catch (Exception ex) {
-		            throw new RuntimeException("Error durante rollback en modificarEmpleado", ex);
-		        }
-		    }
-		    throw e;
+
+			try {
+				if (t != null) t.rollback();
+			} catch (Exception ex) { }
+
+			throw new RuntimeException("Error modificando empleado: " + e.getMessage(), e);
 		}
 	}
 
 	@Override
-	public TEmpleado mostrarEmpleado(Integer ID) {
-		if (ID == null || ID <= 0)
-			throw new IllegalArgumentException("El ID del empleado no es válido.");
+	public TEmpleado mostrarEmpleado(Integer id) {
+
+		if (id == null || id <= 0)
+			throw new IllegalArgumentException("ID inválido.");
 
 		Transaction t = null;
-		TEmpleado emp = null;
 
 		try {
-
 			t = TransactionManager.getInstance().newTransaction();
 			t.start();
 
-			emp = dao.mostrarEmpleado(ID);
+			DAOEmpleado dao = FactoriaDAO.getInstancia().creaDAOEmpleado();
+
+			TEmpleado emp = dao.mostrarEmpleado(id);
+
+			if (emp == null)
+				throw new IllegalStateException("El empleado no existe.");
 
 			t.commit();
+			return emp;
 
 		} catch (Exception e) {
-		    if (t != null) {
-		        try {
-		            t.rollback();
-		        } catch (Exception ex) {
-		            throw new RuntimeException("Error durante rollback en mostrarEmpleado", ex);
-		        }
-		    }
-		    throw e;
-		}
 
-		return emp;
+			try {
+				if (t != null) t.rollback();
+			} catch (Exception ex) { }
+
+			throw new RuntimeException("Error mostrando empleado: " + e.getMessage(), e);
+		}
 	}
 
 	@Override
 	public List<TEmpleado> mostrarListaEmpleados() {
-		List<TEmpleado> todos = new ArrayList<>();
+
 		Transaction t = null;
 
 		try {
-
 			t = TransactionManager.getInstance().newTransaction();
 			t.start();
 
-			todos = dao.mostrarListaEmpleados();
+			DAOEmpleado dao = FactoriaDAO.getInstancia().creaDAOEmpleado();
+
+			List<TEmpleado> lista = dao.mostrarListaEmpleados();
 
 			t.commit();
+			return lista;
 
 		} catch (Exception e) {
-			e.printStackTrace();
-			if (t != null) {
-				try {
-					t.rollback();
-				} catch (Exception ex) {
-					throw new RuntimeException("Error en modificarEmpleado", e);
-				}
-			}
-		}
 
-		return todos;
+			try {
+				if (t != null) t.rollback();
+			} catch (Exception ex) { }
+
+			throw new RuntimeException("Error listando empleados: " + e.getMessage(), e);
+		}
 	}
 }

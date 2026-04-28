@@ -32,8 +32,8 @@ public class GUI_BajaProveedor extends JFrame implements IGUI {
 			JOptionPane.showMessageDialog(this, "Proveedor dado de baja con éxito");
 			campoId.setText("");
 		} else if (context.getEvento() == Evento.BAJA_PROVEEDOR_KO) {
-			JOptionPane.showMessageDialog(this,
-					"Error al dar de baja al proveedor. Verifique que el ID existe y está activo.");
+			String mensaje = (String) context.getDatos();
+		    JOptionPane.showMessageDialog(this, mensaje);
 		}
 	}
 

@@ -12,7 +12,7 @@ public class MostrarPedidoCommand implements Command {
     @Override
     public Context execute(Object data) {
 
-        Integer idPedido = (Integer) data;   // ← lo que envía la GUI
+        Integer idPedido = (Integer) data; 
         SAPedido sa = FactoriaSA.getInstance().creaSAPedido();
 
         try {
@@ -21,11 +21,11 @@ public class MostrarPedidoCommand implements Command {
             if (carrito != null) {
                 return new Context(Evento.MOSTRAR_PEDIDO_OK, carrito);
             } else {
-                return new Context(Evento.MOSTRAR_PEDIDO_KO, null);
+                return new Context(Evento.MOSTRAR_PEDIDO_KO, "No se pudo mostrar el pedido");
             }
 
         } catch (Exception e) {
-            return new Context(Evento.MOSTRAR_PEDIDO_KO, null);
+            return new Context(Evento.MOSTRAR_PEDIDO_KO, e.getMessage());
         }
     }
 }

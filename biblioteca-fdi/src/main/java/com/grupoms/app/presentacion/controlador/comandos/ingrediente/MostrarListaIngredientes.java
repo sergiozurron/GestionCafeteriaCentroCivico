@@ -17,8 +17,7 @@ public class MostrarListaIngredientes implements Command {
 			List<TIngrediente> ingredientes = sa.mostrarListaIngredientes();
 			return new Context(Evento.MOSTRAR_INGREDIENTES_OK, ingredientes);
 		} catch (Exception e) {
-
-			return new Context(Evento.MOSTRAR_INGREDIENTES_KO, null);
+			return new Context(Evento.MOSTRAR_INGREDIENTES_KO, e.getMessage());
 		}
 	}
 }

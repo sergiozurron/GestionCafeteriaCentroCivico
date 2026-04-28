@@ -20,10 +20,10 @@ public class MostrarPedidosEmpleadoCommand implements Command{
 				return new Context(Evento.MOSTRAR_PEDIDOS_EMPLEADO_OK,lista);
 			}
 			else {
-				return new Context(Evento.MOSTRAR_PEDIDOS_EMPLEADO_KO,null);
+				return new Context(Evento.MOSTRAR_PEDIDOS_EMPLEADO_KO, "No se pudo mostrar los pedidos del empleado");
 			}
-		}catch (IllegalArgumentException e) {
-			return new Context(Evento.MOSTRAR_PEDIDOS_EMPLEADO_KO,null);
+		}catch (Exception e) {
+			return new Context(Evento.MOSTRAR_PEDIDOS_EMPLEADO_KO, e.getMessage());
 		}
 	}
 }

@@ -13,161 +13,188 @@ public class SAProductoImp implements SAProducto {
 	@Override
 	public Integer altaProducto(TProducto producto) {
 
-		Transaction t = null;
-		Integer idGenerado = null;
+		Transaction t = TransactionManager.getInstance().newTransaction();
 
 		try {
-			t = TransactionManager.getInstance().newTransaction();
-			DAOProducto daoProducto = FactoriaDAO.getInstancia().creaDAOProducto();
 			t.start();
 
+			DAOProducto daoProducto = FactoriaDAO.getInstancia().creaDAOProducto();
+
 			if (producto == null) {
-				t.commit();
-				return -1;
+				throw new IllegalArgumentException("Producto nulo");
 			}
 
 			producto.setActivo(true);
 
-			idGenerado = daoProducto.altaProducto(producto);
+			if (producto.getNombre() == null || producto.getNombre().isEmpty())
+				throw new IllegalArgumentException("El nombre no puede estar vacío");
+
+			if (producto.getStock() == null || producto.getStock() < 0)
+				throw new IllegalArgumentException("El stock no puede ser negativo");
+
+			if (producto.getPrecio() < 0)
+				throw new IllegalArgumentException("El precio no puede ser negativo");
+
+			if (producto.getCalorias() != null && producto.getCalorias() < 0)
+				throw new IllegalArgumentException("Las calorías no pueden ser negativas");
+
+			if (producto.getTamanho() != null && producto.getTamanho() < 0)
+				throw new IllegalArgumentException("El tamaño no pueden ser negativo");
+
+			if (producto.getTiempoPreparacion() != null && producto.getTiempoPreparacion() < 0)
+				throw new IllegalArgumentException("El tiempo de preparacion no pueden ser negativas");
+
+			Integer id = daoProducto.altaProducto(producto);
+
+			if (id == null) {
+				throw new RuntimeException("Error creando producto");
+			}
 
 			t.commit();
-
-			return (idGenerado != null) ? idGenerado : -2;
+			return id;
 
 		} catch (Exception e) {
-			if (t != null)
+			try {
 				t.rollback();
-			e.printStackTrace();
-			return -99;
+			} catch (Exception ex) {
+			}
+			throw new RuntimeException(e.getMessage());
 		}
 	}
 
 	@Override
 	public Boolean bajaProducto(TProducto producto) {
 
-		Transaction t = null;
+		Transaction t = TransactionManager.getInstance().newTransaction();
 
 		try {
-			t = TransactionManager.getInstance().newTransaction();
-			DAOProducto daoProducto = FactoriaDAO.getInstancia().creaDAOProducto();
 			t.start();
 
+			DAOProducto daoProducto = FactoriaDAO.getInstancia().creaDAOProducto();
+
 			if (producto == null || producto.getId() == null) {
-				t.commit();
-				return false;
+				throw new IllegalArgumentException("Producto inválido");
 			}
 
 			TProducto existente = daoProducto.mostrarProducto(producto.getId());
 
 			if (existente == null || !existente.getActivo()) {
-				t.commit();
-				return false;
+				throw new IllegalStateException("Producto no existe o inactivo");
 			}
 
 			existente.setActivo(false);
 
-			Boolean exito = daoProducto.bajaProducto(existente);
+			Boolean ok = daoProducto.bajaProducto(existente);
+
+			if (!ok) {
+				throw new RuntimeException("No se pudo dar de baja");
+			}
 
 			t.commit();
-
-			return exito;
+			return true;
 
 		} catch (Exception e) {
-			if (t != null)
+			try {
 				t.rollback();
-			e.printStackTrace();
-			return false;
+			} catch (Exception ex) {
+			}
+			throw new RuntimeException(e.getMessage());
 		}
 	}
 
 	@Override
 	public Boolean modificarProducto(TProducto producto) {
 
-		Transaction t = null;
+		Transaction t = TransactionManager.getInstance().newTransaction();
 
 		try {
-			t = TransactionManager.getInstance().newTransaction();
-			DAOProducto daoProducto = FactoriaDAO.getInstancia().creaDAOProducto();
 			t.start();
 
-			if (producto == null || producto.getId() == null) {
-				t.commit();
-				return false;
-			}
+			DAOProducto daoProducto = FactoriaDAO.getInstancia().creaDAOProducto();
 
+			validarProducto(producto);
 			TProducto existente = daoProducto.mostrarProducto(producto.getId());
-
 			if (existente == null || !existente.getActivo()) {
-				t.commit();
-				return false;
+				throw new IllegalStateException("Producto no activo");
 			}
 
-			Boolean exito = daoProducto.modificarProducto(producto);
+			Boolean ok = daoProducto.modificarProducto(producto);
+
+			if (!ok) {
+				throw new RuntimeException("No se pudo modificar");
+			}
 
 			t.commit();
-
-			return exito;
+			return true;
 
 		} catch (Exception e) {
-			if (t != null)
+			try {
 				t.rollback();
-			e.printStackTrace();
-			return false;
+			} catch (Exception ex) {
+			}
+			throw new RuntimeException(e.getMessage());
 		}
 	}
 
 	@Override
 	public TProducto mostrarProducto(Integer id) {
 
-		Transaction t = null;
+		Transaction t = TransactionManager.getInstance().newTransaction();
 
 		try {
-			t = TransactionManager.getInstance().newTransaction();
-			DAOProducto daoProducto = FactoriaDAO.getInstancia().creaDAOProducto();
 			t.start();
 
-			TProducto producto = daoProducto.mostrarProducto(id);
+			if (id == null || id <= 0) {
+				throw new IllegalArgumentException("ID de producto inválido");
+			}
+
+			DAOProducto daoProducto = FactoriaDAO.getInstancia().creaDAOProducto();
+
+			TProducto p = daoProducto.mostrarProducto(id);
+			if (p == null) {
+				throw new IllegalStateException("El producto no existe o está inactivo");
+			}
 
 			t.commit();
-
-			return producto;
+			return p;
 
 		} catch (Exception e) {
-			if (t != null)
+			try {
 				t.rollback();
-			e.printStackTrace();
-			return null;
+			} catch (Exception ex) {
+			}
+			throw new RuntimeException(e.getMessage());
 		}
 	}
 
 	@Override
 	public List<TProducto> mostrarListaProductos() {
 
-		Transaction t = null;
-		List<TProducto> lista = new ArrayList<>();
+		Transaction t = TransactionManager.getInstance().newTransaction();
 
 		try {
-			t = TransactionManager.getInstance().newTransaction();
-			DAOProducto daoProducto = FactoriaDAO.getInstancia().creaDAOProducto();
 			t.start();
+
+			DAOProducto daoProducto = FactoriaDAO.getInstancia().creaDAOProducto();
 
 			List<TProducto> todos = daoProducto.mostrarListaProductos();
 
+			List<TProducto> activos = new ArrayList<>();
+
 			for (TProducto p : todos) {
-				if (p.getActivo()) {
-					lista.add(p);
-				}
+				if (p.getActivo())
+					activos.add(p);
 			}
 
 			t.commit();
-
-			return lista;
+			return activos;
 
 		} catch (Exception e) {
-			if (t != null)
+			try {
 				t.rollback();
-			e.printStackTrace();
-			return new ArrayList<>();
+			} catch (Exception ex) {
+			}
+			throw new RuntimeException(e.getMessage());
 		}
 	}
 
@@ -208,5 +235,35 @@ public class SAProductoImp implements SAProducto {
 		}
 
 		return listaProductos;
+	}
+
+	private void validarProducto(TProducto producto) {
+
+		if (producto == null)
+			throw new IllegalArgumentException("Producto nulo");
+
+		if (producto.getNombre() == null || producto.getNombre().isEmpty())
+			throw new IllegalArgumentException("El nombre no puede estar vacío");
+
+		if (producto.getPrecio() < 0)
+			throw new IllegalArgumentException("El precio no puede ser negativo");
+
+		if (producto.getStock() == null || producto.getStock() < 0)
+			throw new IllegalArgumentException("El stock no puede ser negativo");
+
+		if (producto instanceof TComida) {
+
+			TComida comida = (TComida) producto;
+
+			if (comida.getCalorias() < 0)
+				throw new IllegalArgumentException("Las calorías no pueden ser negativas");
+
+			if (comida.getTiempoPreparacion() < 0)
+				throw new IllegalArgumentException("El tiempo de preparación no puede ser negativo");
+		} else {
+			if (producto.getTamanho() < 0) {
+				throw new IllegalArgumentException("El tamaño no puede ser negativo");
+			}
+		}
 	}
 }

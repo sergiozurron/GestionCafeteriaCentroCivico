@@ -15,7 +15,6 @@ public class GUI_ModificarPedido extends JFrame implements IGUI {
 	private JTextField campoMesa;
 	private JTextField campoEmpleado;
 	private JComboBox<String> comboEstado;
-	private JCheckBox checkActivo;
 	private JButton botonModificar;
 
 	public GUI_ModificarPedido() {
@@ -47,9 +46,6 @@ public class GUI_ModificarPedido extends JFrame implements IGUI {
 				"ABIERTO", "CERRADO", "DEVUELTO"
 		});
 
-		JLabel labelActivo = new JLabel("Activo:");
-		checkActivo = new JCheckBox();
-
 		botonModificar = new JButton("Modificar Pedido");
 
 		botonModificar.addActionListener(e -> modificarPedido());
@@ -74,11 +70,6 @@ public class GUI_ModificarPedido extends JFrame implements IGUI {
 		gbc.gridx = 1;
 		panel.add(comboEstado, gbc);
 
-		gbc.gridx = 0; gbc.gridy = 4;
-		panel.add(labelActivo, gbc);
-		gbc.gridx = 1;
-		panel.add(checkActivo, gbc);
-
 		gbc.gridx = 0; gbc.gridy = 5;
 		gbc.gridwidth = 2;
 		panel.add(botonModificar, gbc);
@@ -98,7 +89,6 @@ public class GUI_ModificarPedido extends JFrame implements IGUI {
 					null : Integer.parseInt(campoEmpleado.getText());
 
 			String estado = (String) comboEstado.getSelectedItem();
-			boolean activo = checkActivo.isSelected();
 
 			TPedido pedido = new TPedido();
 			pedido.setId(idPedido);
@@ -110,7 +100,6 @@ public class GUI_ModificarPedido extends JFrame implements IGUI {
 				pedido.setIdEmpleado(idEmpleado);
 
 			pedido.setEstado(estado);
-			pedido.setActivo(activo);
 
 			Context contexto = new Context(
 					Evento.MODIFICAR_PEDIDO, pedido);
@@ -154,6 +143,5 @@ public class GUI_ModificarPedido extends JFrame implements IGUI {
 		campoIdPedido.setText("");
 		campoMesa.setText("");
 		campoEmpleado.setText("");
-		checkActivo.setSelected(false);
 	}
 }

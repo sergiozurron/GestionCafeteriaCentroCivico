@@ -39,7 +39,8 @@ public class GUI_AltaIngrediente extends JFrame implements IGUI {
 			prov.setText("");
 			dispose();
 		} else if (context.getEvento() == Evento.ALTA_INGREDIENTE_KO) {
-			JOptionPane.showMessageDialog(this, "Error al crear el ingrediente", "Error", JOptionPane.ERROR_MESSAGE);
+			String mensaje = (String) context.getDatos();
+		    JOptionPane.showMessageDialog(this, mensaje);
 		}
 	}
 

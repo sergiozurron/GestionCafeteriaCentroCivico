@@ -119,6 +119,7 @@ public class GUI_ProductosPorProveedor extends JFrame implements IGUI {
             }
 
             tabla.setModel(new javax.swing.table.DefaultTableModel(datos, columnas));
+            this.campoIdProveedor.setText("");
 
         } else if (context.getEvento() == Evento.MOSTRAR_PRODUCTOS_POR_PROVEEDOR_KO) {
 

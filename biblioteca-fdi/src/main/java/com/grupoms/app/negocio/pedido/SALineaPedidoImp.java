@@ -10,102 +10,116 @@ import com.grupoms.app.integracion.pedido.DAOPedido;
 import com.grupoms.app.integracion.producto.DAOProducto;
 import com.grupoms.app.negocio.producto.TProducto;
 
-
 public class SALineaPedidoImp implements SALineaPedido {
 
 	@Override
 	public Integer altaLineaPedido(TLineaPedido linea) {
 
-	    Transaction t = TransactionManager.getInstance().newTransaction();
+		Transaction t = TransactionManager.getInstance().newTransaction();
 
-	    try {
-	        t.start();
+		try {
+			t.start();
 
-	        DAOPedido daoPedido = FactoriaDAO.getInstancia().creaDAOPedido();
-	        DAOProducto daoProducto = FactoriaDAO.getInstancia().creaDAOProducto();
-	        DAOLineaPedido daoLinea = FactoriaDAO.getInstancia().creaDAOLineaPedido();
+			DAOPedido daoPedido = FactoriaDAO.getInstancia().creaDAOPedido();
+			DAOProducto daoProducto = FactoriaDAO.getInstancia().creaDAOProducto();
+			DAOLineaPedido daoLinea = FactoriaDAO.getInstancia().creaDAOLineaPedido();
 
-	        // 1. Comprobar pedido
-	        TPedido pedido = daoPedido.mostrarPedido(linea.getPedidoId());
-	        if (pedido == null || !pedido.getActivo()) {
-	            t.commit();
-	            return -1; // pedido no válido
-	        }
+			// 1. validar pedido
+			TPedido pedido = daoPedido.mostrarPedido(linea.getPedidoId());
+			if (pedido == null || !pedido.getActivo()) {
+				throw new IllegalArgumentException("Pedido no válido o inactivo");
+			}
 
-	        // 2. Comprobar producto
-	        TProducto producto = daoProducto.mostrarProducto(linea.getProductoId());
-	        if (producto == null || !producto.getActivo()) {
-	            t.commit();
-	            return -2; // producto no válido
-	        }
+			// 2. validar producto
+			TProducto producto = daoProducto.mostrarProducto(linea.getProductoId());
+			if (producto == null || !producto.getActivo()) {
+				throw new IllegalArgumentException("Producto no válido o inactivo");
+			}
 
-	        // 3. Comprobar stock
-	        if (producto.getStock() < linea.getCantidad()) {
-	            t.commit();
-	            return -4; // cantidad inválida (sin stock)
-	        }
+			// 3. validar stock
+			if (producto.getStock() < linea.getCantidad()) {
+				throw new IllegalArgumentException("Stock insuficiente");
+			}
 
-	        // 4. Restar stock
-	        producto.setStock(producto.getStock() - linea.getCantidad());
-	        daoProducto.modificarProducto(producto);
+			// 4. actualizar stock
+			producto.setStock(producto.getStock() - linea.getCantidad());
+			daoProducto.modificarProducto(producto);
 
-	        // 5. Crear línea
-	        linea.setActivo(true);
-	        Integer id = daoLinea.altaLineaPedido(linea);
+			// 5. crear línea (SIEMPRE activa)
+			linea.setActivo(true);
 
-	        t.commit();
-	        return id;
+			Integer id = daoLinea.altaLineaPedido(linea);
 
-	    } catch (Exception e) {
-	        if (t != null) t.rollback();
-	        e.printStackTrace();
-	        return -99;
-	    }
+			t.commit();
+			return id;
+
+		} catch (Exception e) {
+
+			try {
+				t.rollback();
+			} catch (Exception ex) {
+				throw new RuntimeException("Error en rollback", ex);
+			}
+
+			throw new RuntimeException("Error en altaLineaPedido", e);
+		}
 	}
-
 
 	@Override
-	public Integer bajaLineaPedido(Integer idPedido,Integer idProducto) {
+	public Integer bajaLineaPedido(Integer idPedido, Integer idProducto) {
 
-	    Transaction t = TransactionManager.getInstance().newTransaction();
+		Transaction t = TransactionManager.getInstance().newTransaction();
 
-	    try {
-	        t.start();
+		try {
+			t.start();
 
-	        DAOLineaPedido daoLinea = FactoriaDAO.getInstancia().creaDAOLineaPedido();
-	        
-	        
-	        daoLinea.bajaLineaPedido(idPedido, idProducto);
+			DAOLineaPedido daoLinea = FactoriaDAO.getInstancia().creaDAOLineaPedido();
 
-	        t.commit();
-	        return 1;
+			Integer resultado = daoLinea.bajaLineaPedido(idPedido, idProducto);
 
-	    } catch (Exception e) {
-	        if (t != null) t.rollback();
-	        e.printStackTrace();
-	        return -99;
-	    }
+			if (resultado == null) {
+				throw new IllegalArgumentException("La línea no existe");
+			}
+
+			t.commit();
+			return resultado;
+
+		} catch (Exception e) {
+
+			try {
+				t.rollback();
+			} catch (Exception ex) {
+				throw new RuntimeException("Error en rollback", ex);
+			}
+
+			throw new RuntimeException("Error en bajaLineaPedido", e);
+		}
 	}
 
+	@Override
+	public List<TLineaPedido> mostrarLineasPorPedido(Integer idPedido) {
 
-    @Override
-    public List<TLineaPedido> mostrarLineasPorPedido(Integer idPedido) {
+		Transaction t = TransactionManager.getInstance().newTransaction();
 
-        Transaction t = TransactionManager.getInstance().newTransaction();
+		try {
+			t.start();
 
-        try {
-            t.start();
+			DAOLineaPedido daoLinea = FactoriaDAO.getInstancia().creaDAOLineaPedido();
 
-            DAOLineaPedido daoLinea = FactoriaDAO.getInstancia().creaDAOLineaPedido();
-            List<TLineaPedido> lista = daoLinea.mostrarLineasPorPedido(idPedido);
+			List<TLineaPedido> lista = daoLinea.mostrarLineasPorPedido(idPedido);
 
-            t.commit();
-            return lista;
+			t.commit();
+			return lista;
 
-        } catch (Exception e) {
-            if (t != null) t.rollback();
-            e.printStackTrace();
-            return null;
-        }
-    }
+		} catch (Exception e) {
+
+			try {
+				t.rollback();
+			} catch (Exception ex) {
+				throw new RuntimeException("Error en rollback", ex);
+			}
+
+			throw new RuntimeException("Error mostrando líneas del pedido", e);
+		}
+	}
 }

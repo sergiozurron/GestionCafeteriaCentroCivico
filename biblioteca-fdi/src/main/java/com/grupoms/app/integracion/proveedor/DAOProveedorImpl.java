@@ -15,11 +15,13 @@ import com.grupoms.app.negocio.proveedor.TProveedor;
 public class DAOProveedorImpl implements DAOProveedor {
 
 	private static final String INSERT = "INSERT INTO proveedores(nombre, tarifa, tiempo_entrega, activo) VALUES (?, ?, ?, ?)";
-	private static final String READ_BY_ID = "SELECT * FROM proveedores WHERE id = ? FOR UPDATE";
-	private static final String READ_BY_NAME = "SELECT * FROM proveedores WHERE nombre = ? FOR UPDATE";
-	private static final String READ_ALL = "SELECT * FROM proveedores FOR UPDATE";
-	private static final String UPDATE = "UPDATE proveedores SET nombre = ?, tarifa = ?, tiempo_entrega = ?, activo = ? WHERE id = ?";
-	private static final String UPDATE_ACTIVO = "UPDATE proveedores SET activo = ? WHERE id = ?";
+	private static final String READ_BY_ID = "SELECT * FROM proveedores WHERE id = ? AND activo = TRUE FOR UPDATE";
+	private static final String READ_BY_NAME = "SELECT * FROM proveedores WHERE nombre = ? AND activo = TRUE FOR UPDATE";
+	private static final String READ_ALL = "SELECT * FROM proveedores WHERE activo = TRUE";
+	private static final String UPDATE = "UPDATE proveedores "
+			+ "SET nombre = ?, tarifa = ?, tiempo_entrega = ?, activo = ? "
+			+ "WHERE id = ? AND activo = TRUE";
+	private static final String UPDATE_ACTIVO = "UPDATE proveedores SET activo = ? WHERE id = ? AND activo = TRUE";
 
 	@Override
 	public Integer creaProveedor(TProveedor proveedor) {
@@ -44,7 +46,7 @@ public class DAOProveedorImpl implements DAOProveedor {
 				}
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			throw new RuntimeException(e.getMessage());
 		}
 		return idGenerado;
 	}
@@ -70,7 +72,7 @@ public class DAOProveedorImpl implements DAOProveedor {
 				}
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			throw new RuntimeException(e.getMessage());
 		}
 		return proveedor;
 	}
@@ -97,7 +99,7 @@ public class DAOProveedorImpl implements DAOProveedor {
 				}
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			throw new RuntimeException(e.getMessage());
 		}
 		return proveedor;
 	}
@@ -121,7 +123,7 @@ public class DAOProveedorImpl implements DAOProveedor {
 				}
 			}
 		} catch (SQLException e) {
-			System.err.println("Error al listar proveedores: " + e.getMessage());
+			throw new RuntimeException(e.getMessage());
 		}
 		return listaProveedores;
 	}
@@ -144,7 +146,7 @@ public class DAOProveedorImpl implements DAOProveedor {
 				exito = rows > 0;
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			throw new RuntimeException(e.getMessage());
 		}
 		return exito;
 	}
@@ -164,9 +166,9 @@ public class DAOProveedorImpl implements DAOProveedor {
 				exito = rows > 0;
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			throw new RuntimeException(e.getMessage());
 		}
 		return exito;
 	}
-	
+
 }

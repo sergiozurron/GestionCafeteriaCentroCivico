@@ -131,18 +131,17 @@ public class DAOEmpleadoImp implements DAOEmpleado {
             Connection c = (Connection) t.getResource();
 
             try (PreparedStatement st = c.prepareStatement(UPDATE)) {
-                st.setString(1, empleado.getNombre());
-                st.setBoolean(2, empleado.getActivo());
-                st.setString(3, empleado.getDondeAtiende());
-                st.setDouble(4, empleado.getSueldo());
-                st.setInt(5, empleado.getID());
+    			st.setString(1, empleado.getNombre());
+    			st.setString(2, empleado.getDondeAtiende());
+    			st.setDouble(3, empleado.getSueldo());
+    			st.setInt(4, empleado.getID());
 
                 int rows = st.executeUpdate();
                 exito = rows > 0;
             }
 
         } catch (SQLException e) {
-            throw new RuntimeException("Error al modificar empleado", e);
+            throw new RuntimeException(e.getMessage());
         }
 
         return exito;

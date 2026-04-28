@@ -19,7 +19,7 @@ public class MostrarListaProductosCommand implements Command {
 			List<TProducto> productos = saProducto.mostrarListaProductos();
 			return new Context(Evento.MOSTRAR_LISTA_PRODUCTO_OK, productos);
 		} catch (Exception e) {
-			return new Context(Evento.MOSTRAR_LISTA_PRODUCTO_KO, null);
+			return new Context(Evento.MOSTRAR_LISTA_PRODUCTO_KO, e.getMessage());
 		}
 	}
 

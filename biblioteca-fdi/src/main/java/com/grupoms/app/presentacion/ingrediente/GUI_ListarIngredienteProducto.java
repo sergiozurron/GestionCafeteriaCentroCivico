@@ -95,7 +95,8 @@ public class GUI_ListarIngredienteProducto extends JFrame implements IGUI {
             campoIDProducto.setText("");
             
         } else if (context.getEvento() == Evento.LISTAR_INGREDIENTES_POR_PRODUCTO_KO) {
-            JOptionPane.showMessageDialog(this, "Error: " + context.getDatos());
+        	String mensaje = (String) context.getDatos();
+		    JOptionPane.showMessageDialog(this, mensaje);
         }
     }
 }

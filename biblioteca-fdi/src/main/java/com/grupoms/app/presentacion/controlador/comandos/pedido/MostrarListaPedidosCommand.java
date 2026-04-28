@@ -20,10 +20,10 @@ public class MostrarListaPedidosCommand implements Command{
 				return new Context(Evento.MOSTRAR_PEDIDOS_OK,lista);
 			}
 			else {
-				return new Context(Evento.MOSTRAR_PEDIDOS_KO,null);
+				return new Context(Evento.MOSTRAR_PEDIDOS_KO, "No se pudo mostrar la lista de pedidos");
 			}
-		}catch (IllegalArgumentException e) {
-			return new Context(Evento.MOSTRAR_PEDIDOS_KO,null);
+		}catch (Exception e) {
+			return new Context(Evento.MOSTRAR_PEDIDOS_KO, e.getMessage());
 		}
 	}
 

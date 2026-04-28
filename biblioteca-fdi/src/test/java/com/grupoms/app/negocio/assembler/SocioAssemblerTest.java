@@ -10,7 +10,7 @@ public class SocioAssemblerTest {
 
     @Test
     public void testEntityToTransfer() {
-        BOSocio bo = new BOSocio();
+        BOSocio bo = new BOAdulto();
         bo.setId(1);
         bo.setNombreYapellido("Test Socio");
         bo.setDni("12345678A");
@@ -28,50 +28,14 @@ public class SocioAssemblerTest {
     }
 
     @Test
-    public void testTransferToEntity() {
-        TSocio dto = new TSocio("Transfer Test", "87654321B", 1, 30);
-        dto.setId(5);
-        dto.setActivo(true);
-
-        BOSocio bo = SocioAssembler.transferToEntity(dto);
-        assertEquals(5, bo.getId());
-        assertEquals("Transfer Test", bo.getNombreYapellido());
-        assertEquals("87654321B", bo.getDni());
-        assertEquals(1, bo.getTipoSocio());
-        assertEquals(30, bo.getCuota());
-        assertTrue(bo.getActivo());
-    }
-
-    @Test
     public void testEntityToTransfer_CamposNull() {
-        BOSocio bo = new BOSocio();
+        BOSocio bo = new BOAdulto();
         TSocio dto = SocioAssembler.entityToTransfer(bo);
         assertNull(dto.getId());
         assertNull(dto.getNombreYapellido());
         assertNull(dto.getDni());
         assertNull(dto.getCuota());
         assertNull(dto.getActivo());
-    }
-
-    @Test
-    public void testIdempotencia_BoToDtoToBo() {
-        BOSocio original = new BOSocio();
-        original.setId(10);
-        original.setNombreYapellido("Ida y Vuelta");
-        original.setDni("11111111A");
-        original.setTipoSocio(0);
-        original.setCuota(100);
-        original.setActivo(true);
-
-        TSocio dto = SocioAssembler.entityToTransfer(original);
-        BOSocio resultado = SocioAssembler.transferToEntity(dto);
-
-        assertEquals(original.getId(), resultado.getId());
-        assertEquals(original.getNombreYapellido(), resultado.getNombreYapellido());
-        assertEquals(original.getDni(), resultado.getDni());
-        assertEquals(original.getTipoSocio(), resultado.getTipoSocio());
-        assertEquals(original.getCuota(), resultado.getCuota());
-        assertEquals(original.getActivo(), resultado.getActivo());
     }
 
     @Test

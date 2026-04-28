@@ -23,7 +23,7 @@ public class DevolverPedidoCommand implements Command{
 	        }
 
 	    } catch (Exception e) {
-	        return new Context(Evento.DEVOLVER_PEDIDO_KO, idPedido);
+	        return new Context(Evento.DEVOLVER_PEDIDO_KO, e.getMessage());
 	    }
 	}
 

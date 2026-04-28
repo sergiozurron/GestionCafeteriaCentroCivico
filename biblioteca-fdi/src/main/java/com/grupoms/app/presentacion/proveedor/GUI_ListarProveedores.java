@@ -83,7 +83,8 @@ public class GUI_ListarProveedores extends JFrame implements IGUI {
 				modeloTabla.addRow(fila);
 			}
 		} else if (context.getEvento() == Evento.MOSTRAR_LISTA_PROVEEDOR_KO) {
-			JOptionPane.showMessageDialog(this, "Error al cargar los proveedores.", "Error", JOptionPane.ERROR_MESSAGE);
+			String mensaje = (String) context.getDatos();
+		    JOptionPane.showMessageDialog(this, mensaje);
 		}
 	}
 }

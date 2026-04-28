@@ -19,7 +19,7 @@ public class ListarIngredientesPorProductoCommand implements Command {
 			List<TEntradaReceta> productos = saIngrediente.mostrarIngredientesPorProducto((Integer) data);
 			return new Context(Evento.LISTAR_INGREDIENTES_POR_PRODUCTO_OK, productos);
 		} catch (Exception e) {
-			return new Context(Evento.LISTAR_INGREDIENTES_POR_PRODUCTO_KO, null);
+			return new Context(Evento.LISTAR_INGREDIENTES_POR_PRODUCTO_KO, e.getMessage());
 		}
 	}
 

@@ -33,7 +33,8 @@ public class GUI_BajaIngrediente extends JFrame implements IGUI {
 			idIngrediente.setText("");
 			dispose();
 		} else if (context.getEvento() == Evento.BAJA_INGREDIENTE_KO) {
-			JOptionPane.showMessageDialog(this, "Error al dar de baja el ingrediente");
+			String mensaje = (String) context.getDatos();
+		    JOptionPane.showMessageDialog(this, mensaje);
 		}
 	}
 

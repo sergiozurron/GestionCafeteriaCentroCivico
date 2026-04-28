@@ -209,7 +209,8 @@ public class GUI_ModificarProducto extends JFrame implements IGUI {
 			JOptionPane.showMessageDialog(this, "Producto modificado con éxito");
 			limpiarCampos();
 		} else if (context.getEvento() == Evento.MODIFICAR_PRODUCTO_KO) {
-			JOptionPane.showMessageDialog(this, "Error al modificar el producto", "Error", JOptionPane.ERROR_MESSAGE);
+			String mensaje = (String) context.getDatos();
+		    JOptionPane.showMessageDialog(this, mensaje);
 		}
 	}
 

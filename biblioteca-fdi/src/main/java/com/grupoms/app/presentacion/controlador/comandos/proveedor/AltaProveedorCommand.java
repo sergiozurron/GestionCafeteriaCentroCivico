@@ -10,11 +10,27 @@ public class AltaProveedorCommand implements Command {
 
 	@Override
 	public Context execute(Object data) {
-		TProveedor proveedor = (TProveedor) data;
-		int idProveedor = FactoriaSA.getInstance().creaSAProveedor().altaProveedor(proveedor);
-		if (idProveedor == -1)
-			return new Context(Evento.ALTA_PROVEEDOR_KO, null);
-		return new Context(Evento.ALTA_PROVEEDOR_OK, idProveedor);
-	}
 
+		if (!(data instanceof TProveedor)) {
+			return new Context(Evento.ALTA_PROVEEDOR_KO, "Datos inválidos");
+		}
+
+		TProveedor proveedor = (TProveedor) data;
+
+		try {
+			int idProveedor = FactoriaSA.getInstance()
+					.creaSAProveedor()
+					.altaProveedor(proveedor);
+
+			if (idProveedor > 0) {
+				return new Context(Evento.ALTA_PROVEEDOR_OK, idProveedor);
+			} else {
+				return new Context(Evento.ALTA_PROVEEDOR_KO,
+						"No se pudo dar de alta el proveedor");
+			}
+
+		} catch (Exception e) {
+			return new Context(Evento.ALTA_PROVEEDOR_KO, e.getMessage());
+		}
+	}
 }

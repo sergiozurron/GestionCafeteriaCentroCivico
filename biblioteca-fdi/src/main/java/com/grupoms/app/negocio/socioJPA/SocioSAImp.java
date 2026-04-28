@@ -81,9 +81,11 @@ public class SocioSAImp implements SocioSA {
 				throw new Exception("El socio no existe o ya está inactivo.");
 			}
 
-			// Solo bloquear si tiene préstamos NO devueltos (pendientes)
+			// Bloquear préstamos pendientes
 			TypedQuery<BOPrestamo> query = em.createNamedQuery("BOPrestamo.findPendientesBySocio", BOPrestamo.class);
 			query.setParameter("idSocio", socio.getId());
+			query.setLockMode(LockModeType.OPTIMISTIC);
+
 			List<BOPrestamo> prestamosPendientes = query.getResultList();
 
 			if (!prestamosPendientes.isEmpty()) {
@@ -94,12 +96,14 @@ public class SocioSAImp implements SocioSA {
 			// Dar de baja los préstamos devueltos que tuviese asociados
 			em.createNamedQuery("BOPrestamo.deleteAllByIdSocio").setParameter("idSocio", socio.getId()).executeUpdate();
 
-			// Limpiar promociones al dar de baja
+			// Limpiar promociones
 			socio.getPromociones().clear();
 
 			socio.setActivo(false);
+
 			t.commit();
 			return 1;
+
 		} catch (Exception e) {
 			if (t.isActive())
 				t.rollback();
@@ -259,6 +263,7 @@ public class SocioSAImp implements SocioSA {
 		return res;
 	}
 
+
 	@Override
 	public List<TSocio> aplicarPromocion(Integer idPromocion) {
 		EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
@@ -271,6 +276,10 @@ public class SocioSAImp implements SocioSA {
 
 			BOPromocion promocion = em.find(BOPromocion.class, idPromocion, LockModeType.OPTIMISTIC);
 
+			if (promocion == null || !promocion.getActivo()) {
+				t.rollback();
+				return resultado;
+			}
 			if (promocion == null || !promocion.getActivo()) {
 				t.rollback();
 				return resultado;

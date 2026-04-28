@@ -1,8 +1,10 @@
 package com.grupoms.app.negocio.socioJPA;
 
-import jakarta.persistence.Entity;
+import jakarta.persistence.Entity; 
 import jakarta.persistence.PrimaryKeyJoinColumn;
 import java.io.Serializable;
+
+import com.grupoms.app.negocio.PromocionJPA.BOPromocion;
 
 import com.grupoms.app.negocio.PromocionJPA.BOPromocion;
 

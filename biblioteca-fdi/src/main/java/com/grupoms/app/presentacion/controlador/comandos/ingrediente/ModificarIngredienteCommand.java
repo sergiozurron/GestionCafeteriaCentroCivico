@@ -21,9 +21,9 @@ public class ModificarIngredienteCommand implements Command {
 		try {
 			Boolean ok = sa.modificarIngrediente(ingr);
 			return ok ? new Context(Evento.MODIFICAR_INGREDIENTE_OK, ingr)
-					: new Context(Evento.MODIFICAR_INGREDIENTE_KO, null);
-		} catch (IllegalArgumentException e) {
-			return new Context(Evento.MODIFICAR_INGREDIENTE_KO, null);
+					: new Context(Evento.MODIFICAR_INGREDIENTE_KO, "No se pudo modificar el ingrediente");
+		} catch (Exception e) {
+			return new Context(Evento.MODIFICAR_INGREDIENTE_KO, e.getMessage());
 		}
 	}
 

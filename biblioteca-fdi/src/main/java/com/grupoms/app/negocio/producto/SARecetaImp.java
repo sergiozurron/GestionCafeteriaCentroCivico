@@ -12,13 +12,6 @@ import com.grupoms.app.integracion.producto.DAOReceta;
 import com.grupoms.app.negocio.ingrediente.TIngrediente;
 
 public class SARecetaImp implements SAReceta {
-	
-	// Significado de los códigos de error:
-	// -1: producto inválido
-	// -2: ingrediente inválido
-	// -3: relación inexistente o duplicada
-	// -4: error inesperado
-	// -99: excepción
 
 	@Override
 	public Integer vincularIngredienteAProducto(Integer idProducto, Integer idIngrediente) {
@@ -32,39 +25,36 @@ public class SARecetaImp implements SAReceta {
 			DAOIngrediente daoIngrediente = FactoriaDAO.getInstancia().creaDAOIngrediente();
 			DAOReceta daoReceta = FactoriaDAO.getInstancia().creaDAOReceta();
 
-			// 1. Producto
 			TProducto producto = daoProducto.mostrarProducto(idProducto);
 			if (producto == null || !producto.getActivo()) {
-				t.commit();
-				return -1;
+				throw new IllegalArgumentException("Producto no válido");
 			}
 
-			// 2. Ingrediente
 			TIngrediente ingrediente = daoIngrediente.mostrarIngrediente(idIngrediente);
 			if (ingrediente == null || !ingrediente.getActivo()) {
-				t.commit();
-				return -2;
+				throw new IllegalArgumentException("Ingrediente no válido");
 			}
 
-			// 3. Ya existe
-			TEntradaReceta receta = daoReceta.mostrarLineaReceta(idProducto, idIngrediente);
-			if (receta != null && receta.getActivo()) {
-				t.commit();
-				return -3;
+			TEntradaReceta existente = daoReceta.mostrarLineaReceta(idProducto, idIngrediente);
+			if (existente != null && existente.getActivo()) {
+				throw new IllegalStateException("La relación ya existe");
 			}
 
-			// 4. Insertar
 			Integer id = daoReceta.vincular(idProducto, idIngrediente);
 
-			t.commit();
+			if (id == null) {
+				throw new RuntimeException("No se pudo vincular ingrediente");
+			}
 
-			return (id != null) ? id : -4;
+			t.commit();
+			return id;
 
 		} catch (Exception e) {
-			if (t != null)
+			try {
 				t.rollback();
-			e.printStackTrace();
-			return -99;
+			} catch (Exception ex) {
+			}
+			throw new RuntimeException("Error en vincularIngredienteAProducto", e);
 		}
 	}
 
@@ -80,39 +70,36 @@ public class SARecetaImp implements SAReceta {
 			DAOIngrediente daoIngrediente = FactoriaDAO.getInstancia().creaDAOIngrediente();
 			DAOReceta daoReceta = FactoriaDAO.getInstancia().creaDAOReceta();
 
-			// 1. Comprobar producto
 			TProducto producto = daoProducto.mostrarProducto(idProducto);
 			if (producto == null || !producto.getActivo()) {
-				t.commit();
-				return -1;
+				throw new IllegalArgumentException("Producto no válido");
 			}
 
-			// 2. Comprobar ingrediente
 			TIngrediente ingrediente = daoIngrediente.mostrarIngrediente(idIngrediente);
 			if (ingrediente == null || !ingrediente.getActivo()) {
-				t.commit();
-				return -2;
+				throw new IllegalArgumentException("Ingrediente no válido");
 			}
 
-			// 3. Comprobar relación
 			TEntradaReceta receta = daoReceta.mostrarLineaReceta(idProducto, idIngrediente);
 			if (receta == null || !receta.getActivo()) {
-				t.commit();
-				return -3;
+				throw new IllegalStateException("Relación no existente");
 			}
 
-			// 4. Desvincular
 			Integer filas = daoReceta.desvincular(idProducto, idIngrediente);
 
-			t.commit();
+			if (filas == null || filas <= 0) {
+				throw new RuntimeException("No se pudo desvincular");
+			}
 
-			return (filas != null && filas > 0) ? 1 : -4;
+			t.commit();
+			return filas;
 
 		} catch (Exception e) {
-			if (t != null)
+			try {
 				t.rollback();
-			e.printStackTrace();
-			return -99;
+			} catch (Exception ex) {
+			}
+			throw new RuntimeException(e.getMessage());
 		}
 	}
 
@@ -125,17 +112,18 @@ public class SARecetaImp implements SAReceta {
 			t.start();
 
 			DAOReceta daoReceta = FactoriaDAO.getInstancia().creaDAOReceta();
+
 			List<TIngrediente> lista = daoReceta.listarIngredientesProducto(idProducto);
 
 			t.commit();
-
-			return lista != null ? lista : new ArrayList<>();
+			return (lista != null) ? lista : new ArrayList<>();
 
 		} catch (Exception e) {
-			if (t != null)
+			try {
 				t.rollback();
-			e.printStackTrace();
-			return new ArrayList<>();
+			} catch (Exception ex) {
+			}
+			throw new RuntimeException("Error listando ingredientes del producto", e);
 		}
 	}
 }

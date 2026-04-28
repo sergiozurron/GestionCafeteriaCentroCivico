@@ -39,8 +39,8 @@ public class GUI_ModificarIngrediente extends JFrame implements IGUI {
 			prov.setText("");
 			dispose();
 		} else if (context.getEvento() == Evento.MODIFICAR_INGREDIENTE_KO) {
-			JOptionPane.showMessageDialog(this, "No se ha podido modificar el ingrediente");
-
+			String mensaje = (String) context.getDatos();
+		    JOptionPane.showMessageDialog(this, mensaje);
 		}
 	}
 

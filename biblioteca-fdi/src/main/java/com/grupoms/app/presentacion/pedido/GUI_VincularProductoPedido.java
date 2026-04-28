@@ -115,38 +115,8 @@ public class GUI_VincularProductoPedido extends JFrame implements IGUI {
 			break;
 
 		case Evento.VINCULAR_PRODUCTO_PEDIDO_KO:
-
-			Object datos = context.getDatos();
-			Integer error = datos != null ? (Integer) datos : null;
-
-			if (error == null) {
-			    JOptionPane.showMessageDialog(this, "Error desconocido");
-			    break;
-			}
-
-
-			switch (error) {
-			case -1:
-				JOptionPane.showMessageDialog(this,
-						"El pedido no existe");
-				break;
-			case -2:
-				JOptionPane.showMessageDialog(this,
-						"El producto no existe");
-				break;
-			case -3:
-				JOptionPane.showMessageDialog(this,
-						"El pedido ya está cerrado");
-				break;
-			case -4:
-				JOptionPane.showMessageDialog(this,
-						"No hay stock suficiente");
-				break;
-			default:
-				JOptionPane.showMessageDialog(this,
-						"Error desconocido");
-				break;
-			}
+			String mensaje = (String) context.getDatos();
+		    JOptionPane.showMessageDialog(this, mensaje);
 			break;
 
 		default:

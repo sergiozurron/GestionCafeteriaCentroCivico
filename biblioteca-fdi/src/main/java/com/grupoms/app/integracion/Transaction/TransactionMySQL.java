@@ -31,7 +31,7 @@ public class TransactionMySQL implements Transaction {
 	    try {
 	        conexion.commit();
 	    } catch (SQLException e) {
-	        throw new RuntimeException("Error en commit de transacción", e);
+	        throw new RuntimeException(e.getMessage());
 	    } finally {
 	        try {
 	            conexion.close();

@@ -14,10 +14,13 @@ import java.util.List;
 public class DAOLineaPedidoImp implements DAOLineaPedido {
 
 	private static final String INSERT_LINEA = "INSERT INTO linea_pedido (pedido_id, producto_id, cantidad, activo) VALUES (?, ?, ?, ?)";
-	private static final String SELECT_LINEA_FOR_DELETE = "SELECT id FROM linea_pedido WHERE pedido_id = ? AND producto_id = ? AND activo = TRUE FOR UPDATE";
-	private static final String DELETE_LOGICO_LINEA = "UPDATE linea_pedido SET activo = FALSE WHERE id = ?";
-	private static final String SELECT_LINEAS_PEDIDO = "SELECT id, pedido_id, producto_id, cantidad "
-			+ "FROM linea_pedido WHERE pedido_id = ? AND activo = TRUE FOR UPDATE";
+
+	private static final String SELECT_LINEA_FOR_DELETE = "SELECT id FROM linea_pedido WHERE pedido_id = ? AND producto_id = ? AND activo = TRUE";
+
+	private static final String DELETE_LOGICO_LINEA = "UPDATE linea_pedido SET activo = FALSE WHERE id = ? AND activo = TRUE";
+
+	private static final String SELECT_LINEAS_PEDIDO = "SELECT id, pedido_id, producto_id, cantidad, activo "
+			+ "FROM linea_pedido WHERE pedido_id = ? AND activo = TRUE";
 
 	@Override
 	public Integer altaLineaPedido(TLineaPedido lp) {

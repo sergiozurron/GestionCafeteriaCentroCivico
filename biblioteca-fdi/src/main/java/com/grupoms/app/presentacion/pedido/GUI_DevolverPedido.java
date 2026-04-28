@@ -28,10 +28,8 @@ public class GUI_DevolverPedido extends JFrame implements IGUI {
 	        dispose();
 	    } 
 	    else if (context.getEvento() == Evento.DEVOLVER_PEDIDO_KO) {
-	        JOptionPane.showMessageDialog(this,
-	            "El pedido no existe, ya esta devuelto o aun no se ha cerrado",
-	            "Error",
-	            JOptionPane.ERROR_MESSAGE);
+	    	String mensaje = (String) context.getDatos();
+		    JOptionPane.showMessageDialog(this, mensaje);
 	    }
         campoID.setText("");
 	}

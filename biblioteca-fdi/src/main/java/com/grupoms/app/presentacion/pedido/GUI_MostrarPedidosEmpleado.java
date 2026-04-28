@@ -103,8 +103,8 @@ public class GUI_MostrarPedidosEmpleado extends JFrame implements IGUI {
 			campoIdEmpleado.setText("");
 
 		} else if (context.getEvento() == Evento.MOSTRAR_PEDIDOS_EMPLEADO_KO) {
-			JOptionPane.showMessageDialog(this, "Error al cargar los pedidos del empleado.", "Error",
-					JOptionPane.ERROR_MESSAGE);
+			String mensaje = (String) context.getDatos();
+		    JOptionPane.showMessageDialog(this, mensaje);
 		}
 	}
 }

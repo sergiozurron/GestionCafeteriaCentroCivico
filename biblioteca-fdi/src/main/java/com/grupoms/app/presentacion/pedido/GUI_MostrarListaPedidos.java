@@ -88,7 +88,8 @@ public class GUI_MostrarListaPedidos extends JFrame implements IGUI {
 			}
 
 		} else if (context.getEvento() == Evento.MOSTRAR_PEDIDOS_KO) {
-			JOptionPane.showMessageDialog(this, "Error la lista esta vacia.", "Error", JOptionPane.ERROR_MESSAGE);
+			String mensaje = (String) context.getDatos();
+		    JOptionPane.showMessageDialog(this, mensaje);
 		}
 	}
 }

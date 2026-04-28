@@ -80,54 +80,34 @@ public class GUI_AltaPedido extends JFrame implements IGUI {
 			Controlador.getInstance().handle(contexto);
 
 		} catch (NumberFormatException ex) {
-			JOptionPane.showMessageDialog(this,
-					"Error: los campos deben ser numéricos");
+			JOptionPane.showMessageDialog(this, "Error: los campos deben ser numéricos");
 		}
 	}
 
 	@Override
 	public void actualizar(Context context) {
+
 		if (context == null) {
 			setVisible(true);
 			return;
 		}
 
-	    int resultado = (int) context.getDatos();
+		if (context.getEvento() == Evento.ALTA_PEDIDO_OK) {
 
-	    if (context.getEvento() == Evento.ALTA_PEDIDO_OK) {
+			int idPedido = (Integer) context.getDatos();
 
-	        JOptionPane.showMessageDialog(this,
-	                "Pedido creado correctamente con ID: " + resultado);
-	        campoMesa.setText("");
-	        campoEmpleado.setText("");
-	        dispose();
+			JOptionPane.showMessageDialog(this, "Pedido creado correctamente con ID: " + idPedido);
 
-	    } else if (context.getEvento() == Evento.ALTA_PEDIDO_KO) {
+			campoMesa.setText("");
+			campoEmpleado.setText("");
+			dispose();
 
-	        switch (resultado) {
+		} else if (context.getEvento() == Evento.ALTA_PEDIDO_KO) {
+			String mensaje = (String) context.getDatos();
+		    JOptionPane.showMessageDialog(this, mensaje);
 
-	            case -1:
-	                JOptionPane.showMessageDialog(this,
-	                        "El empleado no existe o no está activo");
-	                break;
-
-	            case -2:
-	                JOptionPane.showMessageDialog(this,
-	                        "La mesa no existe o no está activa");
-	                break;
-
-	            case -3:
-	                JOptionPane.showMessageDialog(this,
-	                        "Se ha producido un error interno");
-	                break;
-
-	            default:
-	                JOptionPane.showMessageDialog(this,
-	                        "Error desconocido");
-	                break;
-	        }
-	        campoMesa.setText("");
-	        campoEmpleado.setText("");
-	    }
+			campoMesa.setText("");
+			campoEmpleado.setText("");
+		}
 	}
 }

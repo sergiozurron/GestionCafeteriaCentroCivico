@@ -27,20 +27,19 @@ public class DAOLineaPedidoImp implements DAOLineaPedido {
 			if (t == null)
 				throw new IllegalStateException("No hay transacción activa");
 
-			try (Connection c = (Connection) t.getResource()) {
-				try (PreparedStatement ps = c.prepareStatement(INSERT_LINEA, Statement.RETURN_GENERATED_KEYS)) {
+			Connection c = (Connection) t.getResource();
+			try (PreparedStatement ps = c.prepareStatement(INSERT_LINEA, Statement.RETURN_GENERATED_KEYS)) {
 
-					ps.setInt(1, lp.getPedidoId());
-					ps.setInt(2, lp.getProductoId());
-					ps.setInt(3, lp.getCantidad());
-					ps.setBoolean(4, lp.getActivo());
+				ps.setInt(1, lp.getPedidoId());
+				ps.setInt(2, lp.getProductoId());
+				ps.setInt(3, lp.getCantidad());
+				ps.setBoolean(4, lp.getActivo());
 
-					ps.executeUpdate();
+				ps.executeUpdate();
 
-					try (ResultSet rs = ps.getGeneratedKeys()) {
-						if (rs.next()) {
-							return rs.getInt(1);
-						}
+				try (ResultSet rs = ps.getGeneratedKeys()) {
+					if (rs.next()) {
+						return rs.getInt(1);
 					}
 				}
 			}
@@ -61,29 +60,28 @@ public class DAOLineaPedidoImp implements DAOLineaPedido {
 			if (t == null)
 				throw new IllegalStateException("No hay transacción activa");
 
-			try (Connection c = (Connection) t.getResource()) {
-				Integer idLinea;
+			Connection c = (Connection) t.getResource();
+			Integer idLinea;
 
-				try (PreparedStatement ps = c.prepareStatement(SELECT_LINEA_FOR_DELETE)) {
+			try (PreparedStatement ps = c.prepareStatement(SELECT_LINEA_FOR_DELETE)) {
 
-					ps.setInt(1, idPedido);
-					ps.setInt(2, idProducto);
+				ps.setInt(1, idPedido);
+				ps.setInt(2, idProducto);
 
-					try (ResultSet rs = ps.executeQuery()) {
-						if (!rs.next()) {
-							return null;
-						}
-						idLinea = rs.getInt("id");
+				try (ResultSet rs = ps.executeQuery()) {
+					if (!rs.next()) {
+						return null;
 					}
+					idLinea = rs.getInt("id");
 				}
-
-				try (PreparedStatement ps = c.prepareStatement(DELETE_LOGICO_LINEA)) {
-					ps.setInt(1, idLinea);
-					ps.executeUpdate();
-				}
-
-				return idLinea;
 			}
+
+			try (PreparedStatement ps = c.prepareStatement(DELETE_LOGICO_LINEA)) {
+				ps.setInt(1, idLinea);
+				ps.executeUpdate();
+			}
+
+			return idLinea;
 
 		} catch (Exception e) {
 			throw new RuntimeException("Error quitando producto " + idProducto + " del pedido " + idPedido, e);

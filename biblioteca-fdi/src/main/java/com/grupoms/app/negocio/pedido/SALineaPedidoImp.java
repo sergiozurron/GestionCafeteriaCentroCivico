@@ -50,6 +50,16 @@ public class SALineaPedidoImp implements SALineaPedido {
 
 			Integer id = daoLinea.altaLineaPedido(linea);
 
+			double totalActual = pedido.getTotal() != null ? pedido.getTotal() : 0.0;
+			double precio = producto.getPrecio() != null ? producto.getPrecio() : 0.0;
+			double subtotal = precio * linea.getCantidad();
+			pedido.setTotal(totalActual + subtotal);
+
+			Boolean actualizado = daoPedido.modificarPedido(pedido);
+			if (!actualizado) {
+				throw new RuntimeException("No se pudo actualizar el total del pedido");
+			}
+
 			t.commit();
 			return id;
 

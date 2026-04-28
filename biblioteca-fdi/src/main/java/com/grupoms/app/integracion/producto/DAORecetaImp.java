@@ -25,6 +25,9 @@ public class DAORecetaImp implements DAOReceta {
     private static final String UPDATE_DESVINCULAR =
         "UPDATE entradas_recetas SET activo = FALSE WHERE id = ?";
 
+    private static final String UPDATE_REACTIVAR =
+        "UPDATE entradas_recetas SET activo = TRUE WHERE id = ?";
+
     private static final String SELECT_INGREDIENTES_PRODUCTO =
         "SELECT i.id, i.nombre, i.precio, i.activo, i.proveedor_id " +
         "FROM ingredientes i " +
@@ -42,6 +45,27 @@ public class DAORecetaImp implements DAOReceta {
                 throw new IllegalStateException("No hay transacción activa");
 
             Connection c = (Connection) t.getResource();
+
+            try (PreparedStatement ps = c.prepareStatement(SELECT_LINEA)) {
+
+                ps.setInt(1, idProducto);
+                ps.setInt(2, idIngrediente);
+
+                try (ResultSet rs = ps.executeQuery()) {
+                    if (rs.next()) {
+                        int idExistente = rs.getInt("id");
+                        boolean activo = rs.getBoolean("activo");
+
+                        if (!activo) {
+                            try (PreparedStatement psUpdate = c.prepareStatement(UPDATE_REACTIVAR)) {
+                                psUpdate.setInt(1, idExistente);
+                                psUpdate.executeUpdate();
+                            }
+                        }
+                        return idExistente;
+                    }
+                }
+            }
 
             try (PreparedStatement ps = c.prepareStatement(INSERT, PreparedStatement.RETURN_GENERATED_KEYS)) {
 

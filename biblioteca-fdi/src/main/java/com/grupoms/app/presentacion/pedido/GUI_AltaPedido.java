@@ -92,19 +92,32 @@ public class GUI_AltaPedido extends JFrame implements IGUI {
 			return;
 		}
 
-	    int resultado = (int) context.getDatos();
+		Object datos = context.getDatos();
+		Integer resultado = null;
+		String mensaje = null;
+
+		if (datos instanceof Integer) {
+			resultado = (Integer) datos;
+		} else if (datos instanceof String) {
+			mensaje = (String) datos;
+		}
 
 	    if (context.getEvento() == Evento.ALTA_PEDIDO_OK) {
 
-	        JOptionPane.showMessageDialog(this,
-	                "Pedido creado correctamente con ID: " + resultado);
+	        String texto = (resultado != null)
+	        		? "Pedido creado correctamente con ID: " + resultado
+	        		: "Pedido creado correctamente";
+	        JOptionPane.showMessageDialog(this, texto);
 	        campoMesa.setText("");
 	        campoEmpleado.setText("");
 	        dispose();
 
 	    } else if (context.getEvento() == Evento.ALTA_PEDIDO_KO) {
 
-	        switch (resultado) {
+	        if (mensaje != null && !mensaje.isBlank()) {
+	        	JOptionPane.showMessageDialog(this, mensaje);
+	        } else if (resultado != null) {
+	        	switch (resultado) {
 
 	            case -1:
 	                JOptionPane.showMessageDialog(this,
@@ -125,6 +138,10 @@ public class GUI_AltaPedido extends JFrame implements IGUI {
 	                JOptionPane.showMessageDialog(this,
 	                        "Error desconocido");
 	                break;
+	        	}
+	        } else {
+	        	JOptionPane.showMessageDialog(this,
+	        			"Error desconocido");
 	        }
 	        campoMesa.setText("");
 	        campoEmpleado.setText("");

@@ -28,23 +28,20 @@ public class DAOPedidoImp implements DAOPedido {
 	public Boolean modificarPedido(TPedido pedido) {
 
 		Transaction t = TransactionManager.getInstance().getTransaction();
-		try (Connection c = (Connection) t.getResource()) {
-			try (PreparedStatement ps = c.prepareStatement(UPDATE_PEDIDO)) {
+		Connection c = (Connection) t.getResource();
+		try (PreparedStatement ps = c.prepareStatement(UPDATE_PEDIDO)) {
 
-				ps.setDate(1, new java.sql.Date(pedido.getFecha().getTime()));
-				ps.setDouble(2, pedido.getTotal());
-				ps.setString(3, pedido.getEstado());
-				ps.setInt(4, pedido.getIdEmpleado());
-				ps.setInt(5, pedido.getIdMesa());
-				ps.setInt(6, pedido.getId());
+			ps.setDate(1, new java.sql.Date(pedido.getFecha().getTime()));
+			ps.setDouble(2, pedido.getTotal());
+			ps.setString(3, pedido.getEstado());
+			ps.setInt(4, pedido.getIdEmpleado());
+			ps.setInt(5, pedido.getIdMesa());
+			ps.setInt(6, pedido.getId());
 
-				ps.executeUpdate();
-				return true;
+			ps.executeUpdate();
+			return true;
 
-			} catch (Exception e) {
-				throw new RuntimeException("Error modificando el pedido " + pedido.getId(), e);
-			}
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			throw new RuntimeException("Error modificando el pedido " + pedido.getId(), e);
 		}
 	}
@@ -116,27 +113,24 @@ public class DAOPedidoImp implements DAOPedido {
 	public Boolean devolverPedido(Integer idPedido) {
 
 		Transaction t = TransactionManager.getInstance().getTransaction();
-		try (Connection c = (Connection) t.getResource()) {
-			try {
-				try (PreparedStatement ps = c.prepareStatement(SELECT_PEDIDO_EXISTE)) {
-					ps.setInt(1, idPedido);
+		Connection c = (Connection) t.getResource();
+		try {
+			try (PreparedStatement ps = c.prepareStatement(SELECT_PEDIDO_EXISTE)) {
+				ps.setInt(1, idPedido);
 
-					try (ResultSet rs = ps.executeQuery()) {
-						if (!rs.next()) {
-							return false;
-						}
+				try (ResultSet rs = ps.executeQuery()) {
+					if (!rs.next()) {
+						return false;
 					}
 				}
-				try (PreparedStatement ps = c.prepareStatement(UPDATE_DEVOLVER)) {
-					ps.setInt(1, idPedido);
-					ps.executeUpdate();
-				}
-				return true;
-
-			} catch (Exception e) {
-				throw new RuntimeException("Error devolviendo el pedido " + idPedido, e);
 			}
-		} catch (SQLException e) {
+			try (PreparedStatement ps = c.prepareStatement(UPDATE_DEVOLVER)) {
+				ps.setInt(1, idPedido);
+				ps.executeUpdate();
+			}
+			return true;
+
+		} catch (Exception e) {
 			throw new RuntimeException("Error devolviendo el pedido " + idPedido, e);
 		}
 	}

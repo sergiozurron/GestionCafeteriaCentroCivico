@@ -64,9 +64,10 @@ public class GUI_AltaIngrediente extends JFrame implements IGUI {
 		crear = new JButton("Crear Ingrediente");
 		crear.addActionListener(e -> {
 			try {
-				String nombrerI = nombre.getText();
-				Double precioI = Double.parseDouble(precio.getText());
-				Integer provI = Integer.parseInt(prov.getText());
+				String nombrerI = nombre.getText().trim();
+				String precioTexto = precio.getText().trim().replace(',', '.');
+				Double precioI = Double.parseDouble(precioTexto);
+				Integer provI = Integer.parseInt(prov.getText().trim());
 
 				TIngrediente ingr = new TIngrediente();
 				ingr.setNombre(nombrerI);
@@ -77,7 +78,8 @@ public class GUI_AltaIngrediente extends JFrame implements IGUI {
 				Controlador.getInstance().handle(contexto);
 
 			} catch (NumberFormatException ex) {
-				JOptionPane.showMessageDialog(this, "Error: los campos numéricos no son válidos");
+				JOptionPane.showMessageDialog(this,
+						"Error: el precio debe ser numérico (entero o decimal) y el proveedor un entero");
 			}
 		});
 

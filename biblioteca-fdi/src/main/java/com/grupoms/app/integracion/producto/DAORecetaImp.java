@@ -37,7 +37,7 @@ public class DAORecetaImp implements DAOReceta {
     @Override
     public Integer vincular(Integer idProducto, Integer idIngrediente) {
 
-        Integer idGenerado = null;
+
 
         try {
             Transaction t = TransactionManager.getInstance().getTransaction();
@@ -46,47 +46,24 @@ public class DAORecetaImp implements DAOReceta {
 
             Connection c = (Connection) t.getResource();
 
-            try (PreparedStatement ps = c.prepareStatement(SELECT_LINEA)) {
-
-                ps.setInt(1, idProducto);
-                ps.setInt(2, idIngrediente);
-
-                try (ResultSet rs = ps.executeQuery()) {
-                    if (rs.next()) {
-                        int idExistente = rs.getInt("id");
-                        boolean activo = rs.getBoolean("activo");
-
-                        if (!activo) {
-                            try (PreparedStatement psUpdate = c.prepareStatement(UPDATE_REACTIVAR)) {
-                                psUpdate.setInt(1, idExistente);
-                                psUpdate.executeUpdate();
-                            }
-                        }
-                        return idExistente;
-                    }
-                }
-            }
-
             try (PreparedStatement ps = c.prepareStatement(INSERT, PreparedStatement.RETURN_GENERATED_KEYS)) {
 
                 ps.setInt(1, idProducto);
                 ps.setInt(2, idIngrediente);
                 ps.setBoolean(3, true);
-
                 ps.executeUpdate();
 
                 try (ResultSet rs = ps.getGeneratedKeys()) {
                     if (rs.next()) {
-                        idGenerado = rs.getInt(1);
+                        return rs.getInt(1);
                     }
                 }
             }
-
         } catch (SQLException e) {
             throw new RuntimeException("Error en DAOReceta.vincular", e);
         }
 
-        return idGenerado;
+        return -1;
     }
 
 

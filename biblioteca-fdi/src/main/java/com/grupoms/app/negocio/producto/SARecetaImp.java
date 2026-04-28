@@ -42,20 +42,14 @@ public class SARecetaImp implements SAReceta {
 
 			Integer id = daoReceta.vincular(idProducto, idIngrediente);
 
-			if (id == null) {
-				throw new RuntimeException("No se pudo vincular ingrediente");
-			}
-
 			t.commit();
 			return id;
 
 		} catch (Exception e) {
-			try {
-				t.rollback();
-			} catch (Exception ex) {
+			if(t!=null)t.rollback();
+			e.printStackTrace();
+			return -99;
 			}
-			throw new RuntimeException("Error en vincularIngredienteAProducto", e);
-		}
 	}
 
 	@Override

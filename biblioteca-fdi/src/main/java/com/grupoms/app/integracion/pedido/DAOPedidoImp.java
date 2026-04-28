@@ -10,19 +10,21 @@ import com.grupoms.app.negocio.pedido.TPedido;
 
 public class DAOPedidoImp implements DAOPedido {
 
-	private static final String UPDATE_PEDIDO = "UPDATE pedidos SET fecha = ?, total_factura = ?, estado = ?, empleado_id = ?, mesa_id = ? WHERE id = ?";
+	private static final String UPDATE_PEDIDO = "UPDATE pedidos SET fecha = ?, total_factura = ?, estado = ?, empleado_id = ?, mesa_id = ? "
+			+ "WHERE id = ? AND activo = TRUE";
 	private static final String SELECT_PEDIDO_BY_ID = "SELECT id, fecha, total_factura, estado, activo, empleado_id, mesa_id "
-			+ "FROM pedidos WHERE id = ? AND activo = TRUE FOR UPDATE";
-	private static final String SELECT_PEDIDOS_ACTIVOS = "SELECT id, empleado_id, mesa_id, fecha, estado, total_factura "
+			+ "FROM pedidos WHERE id = ? AND activo = TRUE";
+	private static final String SELECT_PEDIDOS_ACTIVOS = "SELECT id, empleado_id, mesa_id, fecha, estado, total_factura, activo "
 			+ "FROM pedidos WHERE activo = TRUE";
-	private static final String SELECT_PEDIDOS_EMPLEADO = "SELECT id, mesa_id, fecha, estado, total_factura, activo "
-			+ "FROM pedidos WHERE empleado_id = ? AND activo = TRUE FOR UPDATE";
-	private static final String SELECT_PEDIDOS_MESA = "SELECT id, empleado_id, fecha, estado, total_factura, activo "
-			+ "FROM pedidos WHERE mesa_id = ? AND activo = TRUE FOR UPDATE";
+	private static final String SELECT_PEDIDOS_EMPLEADO = "SELECT id, empleado_id, mesa_id, fecha, estado, total_factura, activo "
+			+ "FROM pedidos WHERE empleado_id = ? AND activo = TRUE";
+	private static final String SELECT_PEDIDOS_MESA = "SELECT id, empleado_id, mesa_id, fecha, estado, total_factura, activo "
+			+ "FROM pedidos WHERE mesa_id = ? AND activo = TRUE";
 	private static final String INSERT_PEDIDO = "INSERT INTO pedidos (fecha, total_factura, estado, activo, empleado_id, mesa_id) "
 			+ "VALUES (?, ?, ?, ?, ?, ?)";
-	private static final String SELECT_PEDIDO_EXISTE = "SELECT id FROM pedidos WHERE id = ? AND activo = TRUE FOR UPDATE";
-	private static final String UPDATE_DEVOLVER = "UPDATE pedidos SET estado = 'DEVUELTO', activo = FALSE WHERE id = ?";
+	private static final String SELECT_PEDIDO_EXISTE = "SELECT id FROM pedidos WHERE id = ? AND activo = TRUE";
+	private static final String UPDATE_DEVOLVER = "UPDATE pedidos SET estado = 'DEVUELTO', activo = FALSE "
+			+ "WHERE id = ? AND activo = TRUE";
 
 	@Override
 	public Boolean modificarPedido(TPedido pedido) {

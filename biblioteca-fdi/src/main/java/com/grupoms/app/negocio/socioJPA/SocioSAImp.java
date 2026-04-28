@@ -285,9 +285,23 @@ public class SocioSAImp implements SocioSA {
 				return resultado;
 			}
 
-			List<BOSocio> socios = em.createNamedQuery("com.grupoms.app.negocio.socioJPA.BOSocio.findByPromocion", BOSocio.class)
-					.setParameter("idPromocion", idPromocion).setLockMode(LockModeType.OPTIMISTIC).getResultList();
+			TypedQuery<BOSocio> query = em.createNamedQuery(
+
+					"com.grupoms.app.negocio.socioJPA.BOSocio.findByPromocion",
+
+					BOSocio.class
+
+			);
+
+			query.setParameter("idPromocion", idPromocion);
+
+			List<BOSocio> socios = query.getResultList();
+
 			for (BOSocio socio : socios) {
+				em.lock(socio, LockModeType.OPTIMISTIC);
+
+				// Llamada a función polimórfica en BO (se implementa de manera diferente en
+				// infantil o adulto)
 				Integer nuevaCuota = socio.calcularNuevaCuota(promocion);
 				if (nuevaCuota < 0)
 					nuevaCuota = 0;
@@ -308,5 +322,4 @@ public class SocioSAImp implements SocioSA {
 
 		return resultado;
 	}
-
 }

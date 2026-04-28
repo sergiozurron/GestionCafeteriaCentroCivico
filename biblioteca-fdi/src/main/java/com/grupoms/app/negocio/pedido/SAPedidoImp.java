@@ -26,6 +26,7 @@ public class SAPedidoImp implements SAPedido {
 			DAOEmpleado daoEmpleado = FactoriaDAO.getInstancia().creaDAOEmpleado();
 			DAOMesa daoMesa = FactoriaDAO.getInstancia().creaDAOMesa();
 
+			// Recuperar el pedido existente
 			TPedido pedidoBD = dao.mostrarPedido(pedido.getId());
 
 			if (pedidoBD == null || !pedidoBD.getActivo()) {
@@ -33,6 +34,7 @@ public class SAPedidoImp implements SAPedido {
 			}
 			pedido.setActivo(pedidoBD.getActivo());
 
+			// Verificar el empleado si se proporciona un idEmpleado
 			if (pedido.getIdEmpleado() != null) {
 				TEmpleado emp = daoEmpleado.mostrarEmpleado(pedido.getIdEmpleado());
 				if (emp == null || !emp.getActivo()) {
@@ -40,6 +42,7 @@ public class SAPedidoImp implements SAPedido {
 				}
 			}
 
+			// Verificar la mesa si se proporciona un idMesa
 			if (pedido.getIdMesa() != null) {
 				TMesa mesa = daoMesa.mostrarMesa(pedido.getIdMesa());
 				if (mesa == null || !mesa.getActivo()) {
@@ -47,18 +50,25 @@ public class SAPedidoImp implements SAPedido {
 				}
 			}
 
-			if (pedido.getFecha() != null)
+			// Actualizar solo si el valor en pedido es diferente de null
+			if (pedido.getFecha() != null) {
 				pedidoBD.setFecha(pedido.getFecha());
-			if (pedido.getEstado() != null)
+			}
+			if (pedido.getEstado() != null) {
 				pedidoBD.setEstado(pedido.getEstado());
-			if (pedido.getIdEmpleado() != null)
+			}
+			if (pedido.getIdEmpleado() != null) {
 				pedidoBD.setIdEmpleado(pedido.getIdEmpleado());
-			if (pedido.getIdMesa() != null)
+			}
+			if (pedido.getIdMesa() != null) {
 				pedidoBD.setIdMesa(pedido.getIdMesa());
-			if (pedido.getTotal() != null)
+			}
+			if (pedido.getTotal() != null) {
 				pedidoBD.setTotal(pedido.getTotal());
-			if (pedido.getActivo() != null)
+			}
+			if (pedido.getActivo() != null) {
 				pedidoBD.setActivo(pedido.getActivo());
+			}
 
 			Boolean ok = dao.modificarPedido(pedidoBD);
 
@@ -73,8 +83,9 @@ public class SAPedidoImp implements SAPedido {
 			try {
 				t.rollback();
 			} catch (Exception ex) {
+				// Manejo del rollback en caso de error
 			}
-			throw new RuntimeException("Error modificando pedido", e);
+			throw new RuntimeException("Error al modificar el pedido: " + e.getMessage());
 		}
 	}
 
@@ -91,18 +102,18 @@ public class SAPedidoImp implements SAPedido {
 			DAOMesa daoMesa = FactoriaDAO.getInstancia().creaDAOMesa();
 
 			if (pedido.getIdEmpleado() == null || pedido.getIdEmpleado() <= 0)
-			    throw new IllegalArgumentException("Empleado no válido");
+				throw new IllegalArgumentException("Empleado no válido");
 
 			TEmpleado emp = daoEmpleado.mostrarEmpleado(pedido.getIdEmpleado());
 			if (emp == null || !emp.getActivo())
-			    throw new IllegalArgumentException("Empleado no existe o inactivo");
+				throw new IllegalArgumentException("Empleado no existe o inactivo");
 
 			if (pedido.getIdMesa() == null || pedido.getIdMesa() <= 0)
-			    throw new IllegalArgumentException("Mesa no válida");
+				throw new IllegalArgumentException("Mesa no válida");
 
 			TMesa mesa = daoMesa.mostrarMesa(pedido.getIdMesa());
 			if (mesa == null || !mesa.getActivo())
-			    throw new IllegalArgumentException("Mesa no existe o inactiva");
+				throw new IllegalArgumentException("Mesa no existe o inactiva");
 
 			pedido.setActivo(true);
 			pedido.setEstado("ABIERTO");
@@ -308,17 +319,29 @@ public class SAPedidoImp implements SAPedido {
 
 			TPedido pedido = daoPedido.mostrarPedido(idPedido);
 
-			if (pedido == null || !pedido.getActivo() || "DEVUELTO".equals(pedido.getEstado())
-					|| "CERRADO".equals(pedido.getEstado())) {
-				throw new IllegalStateException("Pedido no válido");
-			}
+			if (pedido == null || !pedido.getActivo())
+				throw new IllegalArgumentException("Pedido no válido");
+
+			if ("DEVUELTO".equals(pedido.getEstado()) || "CERRADO".equals(pedido.getEstado()))
+				throw new IllegalStateException("El pedido no se puede cerrar");
 
 			List<TLineaPedido> lineas = daoLinea.mostrarLineasPorPedido(idPedido);
+
+			if (lineas == null || lineas.isEmpty())
+				throw new IllegalStateException("No se puede cerrar un pedido sin líneas");
 
 			double total = 0;
 
 			for (TLineaPedido lp : lineas) {
+
 				TProducto p = daoProducto.mostrarProducto(lp.getProductoId());
+
+				if (p == null || !p.getActivo())
+					throw new IllegalStateException("Producto inválido en el pedido: " + lp.getProductoId());
+
+				if (p.getStock() < 0)
+					throw new IllegalStateException("Stock inconsistente en producto " + p.getId());
+
 				total += p.getPrecio() * lp.getCantidad();
 			}
 
@@ -327,9 +350,8 @@ public class SAPedidoImp implements SAPedido {
 
 			Boolean ok = daoPedido.modificarPedido(pedido);
 
-			if (!ok) {
+			if (!ok)
 				throw new RuntimeException("No se pudo cerrar pedido");
-			}
 
 			t.commit();
 			return pedido;
@@ -339,7 +361,7 @@ public class SAPedidoImp implements SAPedido {
 				t.rollback();
 			} catch (Exception ex) {
 			}
-			throw new RuntimeException(e.getMessage());
+			throw new RuntimeException(e.getMessage(), e);
 		}
 	}
 }

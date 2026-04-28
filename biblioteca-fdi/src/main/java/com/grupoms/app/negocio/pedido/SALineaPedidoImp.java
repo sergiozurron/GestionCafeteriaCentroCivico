@@ -15,6 +15,9 @@ public class SALineaPedidoImp implements SALineaPedido {
 	@Override
 	public Integer altaLineaPedido(TLineaPedido linea) {
 
+		if (linea == null)
+			throw new IllegalArgumentException("La línea no puede ser nula");
+
 		Transaction t = TransactionManager.getInstance().newTransaction();
 
 		try {
@@ -25,27 +28,37 @@ public class SALineaPedidoImp implements SALineaPedido {
 			DAOLineaPedido daoLinea = FactoriaDAO.getInstancia().creaDAOLineaPedido();
 
 			// 1. validar pedido
+			if (linea.getPedidoId() == null || linea.getPedidoId() <= 0)
+				throw new IllegalArgumentException("Pedido no válido");
+
 			TPedido pedido = daoPedido.mostrarPedido(linea.getPedidoId());
-			if (pedido == null || !pedido.getActivo()) {
-				throw new IllegalArgumentException("Pedido no válido o inactivo");
-			}
+			if (pedido == null || !pedido.getActivo())
+				throw new IllegalArgumentException("Pedido no existe o inactivo");
 
 			// 2. validar producto
+			if (linea.getProductoId() == null || linea.getProductoId() <= 0)
+				throw new IllegalArgumentException("Producto no válido");
+
 			TProducto producto = daoProducto.mostrarProducto(linea.getProductoId());
-			if (producto == null || !producto.getActivo()) {
-				throw new IllegalArgumentException("Producto no válido o inactivo");
-			}
+			if (producto == null || !producto.getActivo())
+				throw new IllegalArgumentException("Producto no existe o inactivo");
 
-			// 3. validar stock
-			if (producto.getStock() < linea.getCantidad()) {
+			// 3. validar cantidad
+			if (linea.getCantidad() == null || linea.getCantidad() <= 0)
+				throw new IllegalArgumentException("Cantidad no válida");
+
+			// 4. control de stock
+			if (producto.getStock() < linea.getCantidad())
 				throw new IllegalArgumentException("Stock insuficiente");
-			}
 
-			// 4. actualizar stock
+			// 5. actualizar stock
 			producto.setStock(producto.getStock() - linea.getCantidad());
-			daoProducto.modificarProducto(producto);
 
-			// 5. crear línea (SIEMPRE activa)
+			Boolean stockOk = daoProducto.modificarProducto(producto);
+			if (!stockOk)
+				throw new RuntimeException("No se pudo actualizar el stock");
+
+			// 6. crear línea
 			linea.setActivo(true);
 
 			Integer id = daoLinea.altaLineaPedido(linea);
@@ -71,7 +84,7 @@ public class SALineaPedidoImp implements SALineaPedido {
 				throw new RuntimeException("Error en rollback", ex);
 			}
 
-			throw new RuntimeException("Error en altaLineaPedido", e);
+			throw new RuntimeException(e.getMessage(), e);
 		}
 	}
 
@@ -85,11 +98,13 @@ public class SALineaPedidoImp implements SALineaPedido {
 
 			DAOLineaPedido daoLinea = FactoriaDAO.getInstancia().creaDAOLineaPedido();
 
+			if (idPedido == null || idProducto == null)
+				throw new IllegalArgumentException("Datos inválidos");
+
 			Integer resultado = daoLinea.bajaLineaPedido(idPedido, idProducto);
 
-			if (resultado == null) {
+			if (resultado == null)
 				throw new IllegalArgumentException("La línea no existe");
-			}
 
 			t.commit();
 			return resultado;
@@ -102,7 +117,7 @@ public class SALineaPedidoImp implements SALineaPedido {
 				throw new RuntimeException("Error en rollback", ex);
 			}
 
-			throw new RuntimeException("Error en bajaLineaPedido", e);
+			throw new RuntimeException(e.getMessage(), e);
 		}
 	}
 
@@ -113,6 +128,9 @@ public class SALineaPedidoImp implements SALineaPedido {
 
 		try {
 			t.start();
+
+			if (idPedido == null || idPedido <= 0)
+				throw new IllegalArgumentException("Pedido no válido");
 
 			DAOLineaPedido daoLinea = FactoriaDAO.getInstancia().creaDAOLineaPedido();
 
@@ -129,7 +147,7 @@ public class SALineaPedidoImp implements SALineaPedido {
 				throw new RuntimeException("Error en rollback", ex);
 			}
 
-			throw new RuntimeException("Error mostrando líneas del pedido", e);
+			throw new RuntimeException(e.getMessage(), e);
 		}
 	}
 }

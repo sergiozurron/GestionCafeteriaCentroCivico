@@ -130,10 +130,8 @@ public class GUI_ModificarPedido extends JFrame implements IGUI {
 			break;
 
 		case Evento.MODIFICAR_PEDIDO_KO:
-		    JOptionPane.showMessageDialog(this,
-		        "Error modificando el pedido. Revise que los IDs existen y están activos.",
-		        "Error",
-		        JOptionPane.ERROR_MESSAGE);
+			String mensaje = (String) context.getDatos();
+		    JOptionPane.showMessageDialog(this, mensaje);
 		    break;
 		}
 		limpiarCampos();

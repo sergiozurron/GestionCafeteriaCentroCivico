@@ -80,13 +80,13 @@ public class GUI_AltaPedido extends JFrame implements IGUI {
 			Controlador.getInstance().handle(contexto);
 
 		} catch (NumberFormatException ex) {
-			JOptionPane.showMessageDialog(this,
-					"Error: los campos deben ser numéricos");
+			JOptionPane.showMessageDialog(this, "Error: los campos deben ser numéricos");
 		}
 	}
 
 	@Override
 	public void actualizar(Context context) {
+
 		if (context == null) {
 			setVisible(true);
 			return;
@@ -102,7 +102,7 @@ public class GUI_AltaPedido extends JFrame implements IGUI {
 			mensaje = (String) datos;
 		}
 
-	    if (context.getEvento() == Evento.ALTA_PEDIDO_OK) {
+		if (context.getEvento() == Evento.ALTA_PEDIDO_OK) {
 
 	        String texto = (resultado != null)
 	        		? "Pedido creado correctamente con ID: " + resultado

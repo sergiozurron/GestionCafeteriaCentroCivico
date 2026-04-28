@@ -89,7 +89,8 @@ public class GUI_CerrarPedido extends JFrame implements IGUI {
 			JOptionPane.showMessageDialog(this, "Pedido cerrado con éxito");
 			dispose();
 		} else if (context.getEvento() == Evento.CERRAR_PEDIDO_KO) {
-			JOptionPane.showMessageDialog(this, "Error al cerrar el pedido, revise que el id este activo y no se haya devuelto/cerrado");
+			String mensaje = (String) context.getDatos();
+		    JOptionPane.showMessageDialog(this, mensaje);
 		}
 		campoIdPedido.setText("");
 	}

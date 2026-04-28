@@ -105,28 +105,8 @@ public class GUI_DesvincularProductoPedido extends JFrame implements IGUI {
 			break;
 
 		case Evento.DESVINCULAR_PRODUCTO_PEDIDO_KO:
-
-			int error = (int) context.getDatos();
-
-			switch (error) {
-			case -1:
-				JOptionPane.showMessageDialog(this,
-						"La línea no existe");
-				break;
-			case -2:
-				JOptionPane.showMessageDialog(this,
-						"La línea ya estaba desactivada");
-				break;
-			case -3:
-				JOptionPane.showMessageDialog(this,
-						"El pedido está cerrado");
-				break;
-			default:
-				JOptionPane.showMessageDialog(this,
-						"Error desconocido");
-				break;
-			}
-			break;
+			String mensaje = (String) context.getDatos();
+		    JOptionPane.showMessageDialog(this, mensaje);
 
 		default:
 			break;

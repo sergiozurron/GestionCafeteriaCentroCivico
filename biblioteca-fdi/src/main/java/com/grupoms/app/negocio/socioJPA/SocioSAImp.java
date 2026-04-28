@@ -287,13 +287,24 @@ public class SocioSAImp implements SocioSA {
 				return resultado;
 			}
 
-			List<BOSocio> socios = promocion.getSocios();
+			TypedQuery<BOSocio> query = em.createNamedQuery(
+
+					"com.grupoms.app.negocio.socioJPA.BOSocio.findByPromocion",
+
+					BOSocio.class
+
+			);
+
+			query.setParameter("idPromocion", idPromocion);
+
+			List<BOSocio> socios = query.getResultList();
 
 			for (BOSocio socio : socios) {
 
 				em.lock(socio, LockModeType.OPTIMISTIC);
-				
-				//Llamada a función polimórfica en BO (se implementa de manera diferente en infantil o adulto) 
+
+				// Llamada a función polimórfica en BO (se implementa de manera diferente en
+				// infantil o adulto)
 				Integer nuevaCuota = socio.calcularNuevaCuota(promocion);
 				socio.setCuota(nuevaCuota);
 
@@ -316,29 +327,5 @@ public class SocioSAImp implements SocioSA {
 		}
 
 		return resultado;
-	}
-
-	private Integer calcularNuevaCuota(BOSocio socio, BOPromocion promocion) {
-
-		double nuevaCuota;
-
-		if (socio.getTipoSocio() == 0) {
-			BOAdulto adulto = (BOAdulto) socio;
-
-			if (adulto.getMiembroPleno()) {
-				nuevaCuota = socio.getCuota() - (2 * promocion.getDescuento());
-			} else {
-				nuevaCuota = socio.getCuota() - promocion.getDescuento();
-			}
-
-		} else if (socio.getTipoSocio() == 1) {
-			BOInfantil infantil = (BOInfantil) socio;
-
-			nuevaCuota = socio.getCuota() - (promocion.getDescuento() * (infantil.getReduccion() / 100.0));
-		} else {
-			nuevaCuota = socio.getCuota();
-		}
-
-		return (int) Math.round(nuevaCuota);
 	}
 }

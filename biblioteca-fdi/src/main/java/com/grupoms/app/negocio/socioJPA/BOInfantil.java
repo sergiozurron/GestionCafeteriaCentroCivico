@@ -2,6 +2,8 @@ package com.grupoms.app.negocio.socioJPA;
 
 import java.io.Serializable;
 
+import com.grupoms.app.negocio.PromocionJPA.BOPromocion;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.PrimaryKeyJoinColumn;
 
@@ -37,6 +39,26 @@ public class BOInfantil extends BOSocio implements Serializable {
 
 	public void setReduccion(Double reduccion) {
 		this.reduccion = reduccion;
+	}
+
+	@Override
+	public Integer calcularNuevaCuota(BOPromocion promocion) {
+		Double nuevaCuota = this.cuota - (promocion.getDescuento() * (this.reduccion / 100.0));
+		return nuevaCuota.intValue();
+	}
+
+	@Override
+	public TSocio toDTO() {
+		TInfantil infantil = new TInfantil();
+		infantil.setId(this.id);
+		infantil.setNombreYapellido(this.nombreYapellido);
+		infantil.setDni(this.dni);
+		infantil.setTipoSocio(this.tipoSocio);
+		infantil.setCuota(this.cuota);
+		infantil.setActivo(this.activo);
+		infantil.setEdad(this.edad);
+		infantil.setReduccion(this.reduccion);
+		return infantil;
 	}
 
 }

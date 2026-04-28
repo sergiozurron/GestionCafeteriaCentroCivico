@@ -6,25 +6,20 @@ import java.util.List;
 import com.grupoms.app.negocio.socioJPA.BOSocio;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Inheritance;
-import jakarta.persistence.InheritanceType;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
-import jakarta.persistence.PrimaryKeyJoinColumn;
 import jakarta.persistence.Version;
 
-@Inheritance(strategy = InheritanceType.JOINED)
 @Entity
 @NamedQueries({
 		@NamedQuery(name = "com.grupoms.app.negocio.PromocionJPA.BOPromocion.findAll", query = "SELECT p FROM BOPromocion p"),
 		@NamedQuery(name = "com.grupoms.app.negocio.PromocionJPA.BOPromocion.findByInstance", query = "SELECT p FROM BOPromocion p WHERE p.tipo = :tipo AND p.descuento = :descuento"),
 		@NamedQuery(name = "com.grupoms.app.negocio.PromocionJPA.BOPromocion.findBySocio", query = "SELECT p FROM BOPromocion p JOIN p.socios s WHERE s.id = :idSocio") })
-@PrimaryKeyJoinColumn(referencedColumnName = "id")
-
 public class BOPromocion implements Serializable {
 	private static final long serialVersionUID = 0;
 	@Id
@@ -37,7 +32,7 @@ public class BOPromocion implements Serializable {
 	@Version
 	private int version;
 
-	@ManyToMany(mappedBy = "promociones")
+	@ManyToMany(mappedBy = "promociones", fetch = FetchType.EAGER)
 	private List<BOSocio> socios;
 
 	public BOPromocion(TPromocion promocion) {

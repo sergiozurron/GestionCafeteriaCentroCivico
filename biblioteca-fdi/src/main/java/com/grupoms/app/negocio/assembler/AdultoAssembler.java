@@ -3,7 +3,7 @@ package com.grupoms.app.negocio.assembler;
 import com.grupoms.app.negocio.socioJPA.BOAdulto;
 import com.grupoms.app.negocio.socioJPA.TAdulto;
 
-public class AdultoAssembler extends SocioAssembler {
+public class AdultoAssembler {
 
 	public static TAdulto toDTO(BOAdulto bo) {
 		TAdulto dto = new TAdulto();

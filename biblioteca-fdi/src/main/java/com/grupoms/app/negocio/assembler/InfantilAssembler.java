@@ -3,7 +3,7 @@ package com.grupoms.app.negocio.assembler;
 import com.grupoms.app.negocio.socioJPA.BOInfantil;
 import com.grupoms.app.negocio.socioJPA.TInfantil;
 
-public class InfantilAssembler extends SocioAssembler {
+public class InfantilAssembler {
 
 	public static TInfantil toDTO(BOInfantil bo) {
 		TInfantil dto = new TInfantil();

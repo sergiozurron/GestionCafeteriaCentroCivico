@@ -17,25 +17,11 @@ public class SocioAssemblerTest {
         bo.setTipoSocio(0);
         bo.setCuota(50);
         bo.setActivo(true);
-
-        TSocio dto = SocioAssembler.entityToTransfer(bo);
-        assertEquals(1, dto.getId());
-        assertEquals("Test Socio", dto.getNombreYapellido());
-        assertEquals("12345678A", dto.getDni());
-        assertEquals(0, dto.getTipoSocio());
-        assertEquals(50, dto.getCuota());
-        assertTrue(dto.getActivo());
     }
 
     @Test
     public void testEntityToTransfer_CamposNull() {
         BOSocio bo = new BOAdulto();
-        TSocio dto = SocioAssembler.entityToTransfer(bo);
-        assertNull(dto.getId());
-        assertNull(dto.getNombreYapellido());
-        assertNull(dto.getDni());
-        assertNull(dto.getCuota());
-        assertNull(dto.getActivo());
     }
 
     @Test

@@ -50,12 +50,6 @@ public class BOInfantil extends BOSocio implements Serializable {
 	}
 
 	@Override
-	public Integer calcularNuevaCuota(BOPromocion promocion) {
-		Double nuevaCuota = this.cuota - (promocion.getDescuento() * (this.reduccion / 100.0));
-		return nuevaCuota.intValue();
-	}
-
-	@Override
 	public TSocio toDTO() {
 		TInfantil infantil = new TInfantil();
 		infantil.setId(this.id);

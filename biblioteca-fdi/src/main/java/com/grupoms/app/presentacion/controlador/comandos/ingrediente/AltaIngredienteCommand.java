@@ -13,7 +13,7 @@ public class AltaIngredienteCommand implements Command {
 	@Override
 	public Context execute(Object data) {
 		if (!(data instanceof TIngrediente)) {
-			return new Context(Evento.ALTA_INGREDIENTE_KO, null);
+			return new Context(Evento.ALTA_INGREDIENTE_KO, "Datos inválidos");
 		}
 
 		TIngrediente ingr = (TIngrediente) data;
@@ -22,9 +22,9 @@ public class AltaIngredienteCommand implements Command {
 		try {
 			Integer id = sa.crearIngrediente(ingr);
 			return (id != null) ? new Context(Evento.ALTA_INGREDIENTE_OK, ingr)
-					: new Context(Evento.ALTA_INGREDIENTE_KO, null);
-		} catch (IllegalArgumentException e) {
-			return new Context(Evento.ALTA_INGREDIENTE_KO, null);
+					: new Context(Evento.ALTA_INGREDIENTE_KO, "No se pudo crear el ingrediente");
+		} catch (Exception e) {
+			return new Context(Evento.ALTA_INGREDIENTE_KO, e.getMessage());
 		}
 	}
 

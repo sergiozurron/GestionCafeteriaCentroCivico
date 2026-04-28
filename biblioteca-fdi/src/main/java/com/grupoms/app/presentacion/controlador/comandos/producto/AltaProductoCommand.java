@@ -13,7 +13,7 @@ public class AltaProductoCommand implements Command {
 	@Override
 	public Context execute(Object data) {
 		if (!(data instanceof TProducto)) {
-			return new Context(Evento.ALTA_PRODUCTO_KO, null);
+			return new Context(Evento.ALTA_PRODUCTO_KO, "Los datos no son válidos");
 		}
 
 		TProducto producto = (TProducto) data;
@@ -24,9 +24,9 @@ public class AltaProductoCommand implements Command {
 				producto.setId(idGenerado);
 				return new Context(Evento.ALTA_PRODUCTO_OK, producto);
 			} else
-				return new Context(Evento.ALTA_PRODUCTO_KO, null);
-		} catch (IllegalArgumentException e) {
-			return new Context(Evento.ALTA_PRODUCTO_KO, null);
+				return new Context(Evento.ALTA_PRODUCTO_KO, "No se pudo crear el producto");
+		} catch (Exception e) {
+			return new Context(Evento.ALTA_PRODUCTO_KO, e.getMessage());
 		}
 	}
 }

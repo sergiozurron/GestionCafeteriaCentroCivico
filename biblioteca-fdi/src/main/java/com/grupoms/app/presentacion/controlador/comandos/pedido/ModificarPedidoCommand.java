@@ -19,10 +19,10 @@ public class ModificarPedidoCommand implements Command{
 				return new Context(Evento.MODIFICAR_PEDIDO_OK,pedido);
 			}
 			else {
-				return new Context(Evento.MODIFICAR_PEDIDO_KO,null);
+				return new Context(Evento.MODIFICAR_PEDIDO_KO, "No se pudo modificar el pedido");
 			}
-		}catch (IllegalArgumentException e) {
-			return new Context(Evento.MODIFICAR_PEDIDO_KO,null);
+		}catch (Exception e) {
+			return new Context(Evento.MODIFICAR_PEDIDO_KO, e.getMessage());
 			}
 	}
 

@@ -17,13 +17,13 @@ public class MostrarPedidosMesaCommand implements Command{
 		try {
 			List<TPedido> lista = sa.mostrarPedidosPorMesa(idMesa);
 			if(lista!=null) {
-				return new Context(Evento.MOSTRAR_PEDIDOS_MESA_OK,lista);
+				return new Context(Evento.MOSTRAR_PEDIDOS_MESA_OK, lista);
 			}
 			else {
-				return new Context(Evento.MOSTRAR_PEDIDOS_MESA_KO,null);
+				return new Context(Evento.MOSTRAR_PEDIDOS_MESA_KO, "No se pudo mostrar los pedidos de la mesa");
 			}
-		}catch (IllegalArgumentException e) {
-			return new Context(Evento.MOSTRAR_PEDIDOS_MESA_KO,null);
+		}catch (Exception e) {
+			return new Context(Evento.MOSTRAR_PEDIDOS_MESA_KO, e.getMessage());
 		}
 	}
 }

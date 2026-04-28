@@ -139,7 +139,8 @@ public class GUI_MostrarProveedor extends JFrame implements IGUI {
 					limpiarLabels();
 				}
 			} else if (context.getEvento() == Evento.MOSTRAR_PROVEEDOR_KO) {
-				JOptionPane.showMessageDialog(this, "Proveedor no encontrado en la base de datos");
+				String mensaje = (String) context.getDatos();
+			    JOptionPane.showMessageDialog(this, mensaje);
 				limpiarLabels();
 			}
 		});

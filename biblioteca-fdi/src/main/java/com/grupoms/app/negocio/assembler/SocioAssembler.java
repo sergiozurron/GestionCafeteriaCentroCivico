@@ -15,15 +15,4 @@ public class SocioAssembler {
 		dto.setActivo(bo.getActivo());
 		return dto;
 	}
-
-	public static BOSocio transferToEntity(TSocio dto) {
-		BOSocio bo = new BOSocio();
-		bo.setId(dto.getId());
-		bo.setNombreYapellido(dto.getNombreYapellido());
-		bo.setDni(dto.getDni());
-		bo.setTipoSocio(dto.getTipoSocio());
-		bo.setCuota(dto.getCuota());
-		bo.setActivo(dto.getActivo());
-		return bo;
-	}
 }

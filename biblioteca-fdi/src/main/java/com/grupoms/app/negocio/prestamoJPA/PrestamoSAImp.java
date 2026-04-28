@@ -22,6 +22,7 @@ public class PrestamoSAImp implements PrestamoSA {
 
 	@Override
 	public Boolean altaPrestamo(TPrestamo prestamo) {
+
 		EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
 		EntityTransaction t = em.getTransaction();
 
@@ -30,84 +31,81 @@ public class PrestamoSAImp implements PrestamoSA {
 
 			BOSocio socio = em.find(BOSocio.class, prestamo.getIdSocio(), LockModeType.OPTIMISTIC_FORCE_INCREMENT);
 			if (socio == null || !socio.getActivo()) {
-				t.rollback();
-				return false;
+				throw new IllegalArgumentException("Socio inválido");
 			}
 
-			BOEjemplar ejemplar = em.find(BOEjemplar.class, prestamo.getIdEjemplar(), LockModeType.OPTIMISTIC_FORCE_INCREMENT);
+			BOEjemplar ejemplar = em.find(BOEjemplar.class, prestamo.getIdEjemplar(),
+					LockModeType.OPTIMISTIC_FORCE_INCREMENT);
 			if (ejemplar == null || !ejemplar.getActivo() || !"DISPONIBLE".equalsIgnoreCase(ejemplar.getEstado())) {
-				t.rollback();
-				return false;
-			}
-			
-			BOPrestamo prestamoExistente = em.find(BOPrestamo.class, new PrestamoId(prestamo.getIdSocio(), prestamo.getIdEjemplar(), new Date()));
-			if (prestamoExistente != null) {
-				t.rollback();
-				return false;
+				throw new IllegalArgumentException("Ejemplar no disponible");
 			}
 
-			BOPrestamo boPrestamo = new BOPrestamo();
-			boPrestamo.setSocio(socio);
-			boPrestamo.setEjemplar(ejemplar);
-			boPrestamo.setFechaInicial(new Date());
-			boPrestamo.setFechaMaxima(prestamo.getFechaMaxima());
-			boPrestamo.setPrecioMulta(0.0);
+			BOPrestamo existente = em.find(BOPrestamo.class,
+					new PrestamoId(prestamo.getIdSocio(), prestamo.getIdEjemplar(), new Date()));
+
+			if (existente != null) {
+				throw new IllegalStateException("Préstamo ya existe");
+			}
+
+			BOPrestamo bo = new BOPrestamo();
+			bo.setSocio(socio);
+			bo.setEjemplar(ejemplar);
+			bo.setFechaInicial(new Date());
+			bo.setFechaMaxima(prestamo.getFechaMaxima());
+			bo.setPrecioMulta(0.0);
 
 			ejemplar.setEstado("PRESTADO");
 
-			em.persist(boPrestamo);
+			em.persist(bo);
 
 			t.commit();
+			return true;
+
 		} catch (Exception e) {
 			if (t.isActive())
 				t.rollback();
-			e.printStackTrace();
-			return false;
+			throw new RuntimeException("Error en altaPrestamo", e);
 		} finally {
 			em.close();
 		}
-		return true;
 	}
 
 	@Override
 	public Boolean devolverPrestamo(PrestamoId idPrestamo) {
-	    EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
-	    EntityTransaction t = em.getTransaction();
 
-	    try {
-	        t.begin();
+		EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
+		EntityTransaction t = em.getTransaction();
 
-	        BOPrestamo boprestamo = em.find(BOPrestamo.class, idPrestamo, LockModeType.OPTIMISTIC);
+		try {
+			t.begin();
 
-	        if (boprestamo == null || boprestamo.getFechaDevuelto() != null) {
-	            t.rollback();
-	            return false;
-	        }
- 
-        	Date fechaActual = new Date();
-            if (fechaActual.after(boprestamo.getFechaMaxima())) {
-                long diasAtraso = (fechaActual.getTime() - boprestamo.getFechaMaxima().getTime()) / (1000 * 60 * 60 * 24);
-                double multa = diasAtraso * 1.0; // Suponiendo una multa de 1.0 por día de atraso
-                boprestamo.setPrecioMulta(multa);
-            }
+			BOPrestamo p = em.find(BOPrestamo.class, idPrestamo, LockModeType.OPTIMISTIC);
 
-            boprestamo.getEjemplar().setEstado("DISPONIBLE");
-        	boprestamo.setFechaDevuelto(new java.util.Date());
+			if (p == null || p.getFechaDevuelto() != null) {
+				throw new IllegalArgumentException("Préstamo no válido");
+			}
 
-	        t.commit();
-	        return true;
+			Date now = new Date();
 
-	    } catch (Exception e) {
-	        if (t.isActive())
-	            t.rollback();
-	        e.printStackTrace();
-	        return false;
-	    } finally {
-	        em.close();
-	    }
+			if (now.after(p.getFechaMaxima())) {
+				long dias = (now.getTime() - p.getFechaMaxima().getTime()) / (1000 * 60 * 60 * 24);
+				p.setPrecioMulta(dias * 1.0);
+			}
+
+			p.getEjemplar().setEstado("DISPONIBLE");
+			p.setFechaDevuelto(now);
+
+			t.commit();
+			return true;
+
+		} catch (Exception e) {
+			if (t.isActive())
+				t.rollback();
+			throw new RuntimeException("Error devolviendo préstamo", e);
+		} finally {
+			em.close();
+		}
 	}
-	
-
 
 	@Override
 	public Boolean modificarPrestamo(TPrestamo prestamo) {
@@ -116,7 +114,8 @@ public class PrestamoSAImp implements PrestamoSA {
 		try {
 			t.begin();
 
-			BOPrestamo bo = em.find(BOPrestamo.class, new PrestamoId(prestamo.getIdSocio(), prestamo.getIdEjemplar(), prestamo.getFechaInicial()));
+			BOPrestamo bo = em.find(BOPrestamo.class,
+					new PrestamoId(prestamo.getIdSocio(), prestamo.getIdEjemplar(), prestamo.getFechaInicial()));
 
 			if (bo == null) {
 				t.rollback();
@@ -132,8 +131,7 @@ public class PrestamoSAImp implements PrestamoSA {
 		} catch (Exception e) {
 			if (t.isActive())
 				t.rollback();
-			e.printStackTrace();
-			return false;
+			throw new RuntimeException(e.getMessage());
 		} finally {
 			em.close();
 		}
@@ -154,13 +152,11 @@ public class PrestamoSAImp implements PrestamoSA {
 	public List<TPrestamo> listarPrestamo() {
 		EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
 		try {
-			TypedQuery<BOPrestamo> query = em.createQuery("SELECT p FROM BOPrestamo p",
-					BOPrestamo.class);
+			TypedQuery<BOPrestamo> query = em.createQuery("SELECT p FROM BOPrestamo p", BOPrestamo.class);
 
 			return query.getResultList().stream().map(PrestamoAssembler::toDTO).collect(Collectors.toList());
 		} catch (Exception e) {
-			e.printStackTrace();
-			return Collections.emptyList();
+			throw new RuntimeException(e.getMessage());
 		} finally {
 			em.close();
 		}

@@ -12,7 +12,7 @@ public class BajaIngredienteCommand implements Command {
 	@Override
 	public Context execute(Object data) {
 		if (!(data instanceof TIngrediente)) {
-			return new Context(Evento.BAJA_INGREDIENTE_KO, null);
+			return new Context(Evento.BAJA_INGREDIENTE_KO, "Datos inválidos");
 		}
 
 		TIngrediente ingr = (TIngrediente) data;
@@ -27,8 +27,8 @@ public class BajaIngredienteCommand implements Command {
 				return new Context(Evento.BAJA_INGREDIENTE_KO,ingr);
 
 			}
-		} catch (IllegalArgumentException e) {
-			return new Context(Evento.BAJA_INGREDIENTE_KO, null);
+		} catch (Exception e) {
+			return new Context(Evento.BAJA_INGREDIENTE_KO, e.getMessage());
 		}
 	}
 }

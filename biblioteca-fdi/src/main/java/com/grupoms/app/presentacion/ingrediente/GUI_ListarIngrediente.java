@@ -81,7 +81,8 @@ public class GUI_ListarIngrediente extends JFrame implements IGUI {
 				modeloTabla.addRow(fila);
 			}
 		} else if (context.getEvento() == Evento.MOSTRAR_INGREDIENTES_KO) {
-			JOptionPane.showMessageDialog(this, "Error al cargar los ingredientes.");
+			String mensaje = (String) context.getDatos();
+		    JOptionPane.showMessageDialog(this, mensaje);
 		}
 
 	}

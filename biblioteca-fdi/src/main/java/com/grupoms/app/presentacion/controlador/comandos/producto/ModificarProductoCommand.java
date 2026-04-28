@@ -13,7 +13,7 @@ public class ModificarProductoCommand implements Command {
 	@Override
 	public Context execute(Object data) {
 		if (!(data instanceof TProducto)) {
-			return new Context(Evento.MODIFICAR_PRODUCTO_KO, null);
+			return new Context(Evento.MODIFICAR_PRODUCTO_KO, "Datos no válidos");
 		}
 
 		TProducto producto = (TProducto) data;
@@ -21,11 +21,11 @@ public class ModificarProductoCommand implements Command {
 		try {
 			Boolean resultado = saProducto.modificarProducto(producto);
 			if (resultado == null || !resultado) {
-				return new Context(Evento.MODIFICAR_PRODUCTO_KO, null);
+				return new Context(Evento.MODIFICAR_PRODUCTO_KO, "No se pudo modificar el producto");
 			}
 			return new Context(Evento.MODIFICAR_PRODUCTO_OK, producto);
 		} catch (Exception e) {
-			return new Context(Evento.MODIFICAR_PRODUCTO_KO, null);
+			return new Context(Evento.MODIFICAR_PRODUCTO_KO, e.getMessage());
 		}
 	}
 

@@ -26,8 +26,8 @@ public class AltaPedidoCommand implements Command {
 				return new Context(Evento.ALTA_PEDIDO_KO, idGenerado);
 			}
 
-		} catch (IllegalArgumentException e) {
-			return new Context(Evento.ALTA_PEDIDO_KO, null);
+		} catch (Exception e) {
+			return new Context(Evento.ALTA_PEDIDO_KO, e.getMessage());
 		}
 	}
 }

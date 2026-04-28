@@ -18,7 +18,7 @@ public class ListarIngredientesPorProveedorCommand implements Command {
 			List<TIngrediente> ingredientes = saIngrediente.mostrarIngredientesProveedor((Integer) data);
 			return new Context(Evento.LISTAR_INGREDIENTES_POR_PROVEEDOR_OK, ingredientes);
 		} catch (Exception e) {
-			return new Context(Evento.LISTAR_INGREDIENTES_POR_PROVEEDOR_KO, null);
+			return new Context(Evento.LISTAR_INGREDIENTES_POR_PROVEEDOR_KO, e.getMessage());
 		}
 	}
 

@@ -73,7 +73,8 @@ public class GUI_BajaProducto extends JFrame implements IGUI {
 			JOptionPane.showMessageDialog(this, "Producto dado de baja con éxito");
 			idProd.setText("");
 		} else if (context.getEvento() == Evento.BAJA_PRODUCTO_KO) {
-			JOptionPane.showMessageDialog(this, "Error al dar de baja el producto", "Error", JOptionPane.ERROR_MESSAGE);
+			String mensaje = (String) context.getDatos();
+		    JOptionPane.showMessageDialog(this, mensaje);
 		}
 	}
 }

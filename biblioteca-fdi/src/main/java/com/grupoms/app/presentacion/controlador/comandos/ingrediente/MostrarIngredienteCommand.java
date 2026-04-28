@@ -26,9 +26,9 @@ public class MostrarIngredienteCommand implements Command {
 		try {
 			TIngrediente emp = sa.mostrarIngrediente(id);
 			return (emp != null) ? new Context(Evento.MOSTRAR_INGREDIENTE_OK, emp)
-					: new Context(Evento.MOSTRAR_INGREDIENTE_KO, null);
+					: new Context(Evento.MOSTRAR_INGREDIENTE_KO, "No se pudo mostrar el ingrediente");
 		} catch (IllegalArgumentException e) {
-			return new Context(Evento.MOSTRAR_INGREDIENTE_KO, null);
+			return new Context(Evento.MOSTRAR_INGREDIENTE_KO, e.getMessage());
 		}
 	}
 

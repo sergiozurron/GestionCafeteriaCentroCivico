@@ -14,7 +14,7 @@ public class MostrarProductosPorProveedorCommand implements Command {
     @Override
     public Context execute(Object data) {
         if (!(data instanceof Integer)) {
-            return new Context(Evento.MOSTRAR_PRODUCTOS_POR_PROVEEDOR_KO, null);
+            return new Context(Evento.MOSTRAR_PRODUCTOS_POR_PROVEEDOR_KO, "Datos no válidos");
         }
 
         Integer idProveedor = (Integer) data;
@@ -28,8 +28,7 @@ public class MostrarProductosPorProveedorCommand implements Command {
                 return new Context(Evento.MOSTRAR_PRODUCTOS_POR_PROVEEDOR_OK, productos);
             }
         } catch (Exception e) {
-            e.printStackTrace();
-            return new Context(Evento.MOSTRAR_PRODUCTOS_POR_PROVEEDOR_KO, null);
+            return new Context(Evento.MOSTRAR_PRODUCTOS_POR_PROVEEDOR_KO, e.getMessage());
         }
     }
 }

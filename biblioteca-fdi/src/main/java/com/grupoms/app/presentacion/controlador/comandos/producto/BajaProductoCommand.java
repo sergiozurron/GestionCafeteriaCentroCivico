@@ -14,12 +14,12 @@ public class BajaProductoCommand implements Command {
 		try {
 			Boolean resultado = FactoriaSA.getInstance().creaSAProducto().bajaProducto(p);
 			if (resultado == null || !resultado) {
-				return new Context(Evento.BAJA_PRODUCTO_KO, null);
+				return new Context(Evento.BAJA_PRODUCTO_KO, "No se pudo dar de baja el producto");
 			}
 			return new Context(Evento.BAJA_PRODUCTO_OK, p);
-		} catch (IllegalArgumentException e) {
+		} catch (Exception e) {
 			System.out.println(e.getMessage());
-			return new Context(Evento.BAJA_PRODUCTO_KO, null);
+			return new Context(Evento.BAJA_PRODUCTO_KO, e.getMessage());
 		}
 	}
 

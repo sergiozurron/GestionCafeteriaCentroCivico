@@ -12,10 +12,18 @@ public class MostrarListaMesasCommand implements Command {
 
 	@Override
 	public Context execute(Object data) {
-		List<TMesa> mesas = FactoriaSA.getInstance().creaSAMesa().mostrarListaMesa();
-		if (mesas.isEmpty()) {
-			return new Context(Evento.MOSTRAR_LISTA_MESA_KO, null);
+
+		try {
+			List<TMesa> mesas = FactoriaSA.getInstance().creaSAMesa().mostrarListaMesa();
+
+			if (mesas == null || mesas.isEmpty()) {
+				return new Context(Evento.MOSTRAR_LISTA_MESA_KO, "No hay mesas disponibles");
+			}
+
+			return new Context(Evento.MOSTRAR_LISTA_MESA_OK, mesas);
+
+		} catch (RuntimeException e) {
+			return new Context(Evento.MOSTRAR_LISTA_MESA_KO, e.getMessage());
 		}
-		return new Context(Evento.MOSTRAR_LISTA_MESA_OK, mesas);
 	}
 }

@@ -189,7 +189,8 @@ public class GUI_AltaProducto extends JFrame implements IGUI {
 			panelBebida.setVisible(false);
 			panelComida.setVisible(false);
 		} else if (context.getEvento() == Evento.ALTA_PRODUCTO_KO) {
-			JOptionPane.showMessageDialog(this, "Error al crear el producto", "Error", JOptionPane.ERROR_MESSAGE);
+			String mensaje = (String) context.getDatos();
+		    JOptionPane.showMessageDialog(this, mensaje);
 		}
 	}
 }

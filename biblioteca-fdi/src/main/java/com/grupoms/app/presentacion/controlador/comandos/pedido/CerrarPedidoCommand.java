@@ -21,12 +21,12 @@ public class CerrarPedidoCommand implements Command {
 			if(pedido != null) {
 				return new Context(Evento.CERRAR_PEDIDO_OK,pedido);
 			}else {
-				return new Context(Evento.CERRAR_PEDIDO_KO,null);
+				return new Context(Evento.CERRAR_PEDIDO_KO,"No se pudo cerrar el pedido");
 			}
 			
 
-		} catch (IllegalArgumentException e) {
-			return new Context(Evento.CERRAR_PEDIDO_KO, null);
+		} catch (Exception e) {
+			return new Context(Evento.CERRAR_PEDIDO_KO, e.getMessage());
 		}
 	}
 

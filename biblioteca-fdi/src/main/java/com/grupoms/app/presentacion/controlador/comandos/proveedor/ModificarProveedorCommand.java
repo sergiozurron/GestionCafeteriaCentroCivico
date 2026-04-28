@@ -10,11 +10,31 @@ public class ModificarProveedorCommand implements Command {
 
 	@Override
 	public Context execute(Object data) {
-		TProveedor proveedor = (TProveedor) data;
-		Boolean resultado = FactoriaSA.getInstance().creaSAProveedor().modificarProveedor(proveedor);
-		if (resultado == null || !resultado)
-			return new Context(Evento.MODIFICAR_PROVEEDOR_KO, null);
-		return new Context(Evento.MODIFICAR_PROVEEDOR_OK, proveedor.getId());
-	}
 
+		try {
+			TProveedor proveedor = (TProveedor) data;
+
+			Boolean resultado = FactoriaSA.getInstance()
+					.creaSAProveedor()
+					.modificarProveedor(proveedor);
+
+			if (resultado == null || !resultado) {
+				return new Context(
+						Evento.MODIFICAR_PROVEEDOR_KO,
+						"No se pudo modificar el proveedor"
+				);
+			}
+
+			return new Context(
+					Evento.MODIFICAR_PROVEEDOR_OK,
+					proveedor.getId()
+			);
+
+		} catch (Exception e) {
+			return new Context(
+					Evento.MODIFICAR_PROVEEDOR_KO,
+					e.getMessage()
+			);
+		}
+	}
 }

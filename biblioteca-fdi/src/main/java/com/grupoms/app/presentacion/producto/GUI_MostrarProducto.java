@@ -108,15 +108,12 @@ public class GUI_MostrarProducto extends JFrame implements IGUI {
 				"Información del Producto",
 				JOptionPane.INFORMATION_MESSAGE
 			);
+			
+			this.idProducto.setText("");
 
 		} else if (context.getEvento() == Evento.MOSTRAR_PRODUCTO_KO) {
-
-			JOptionPane.showMessageDialog(
-				this,
-				"Producto no encontrado",
-				"Error",
-				JOptionPane.ERROR_MESSAGE
-			);
+			String mensaje = (String) context.getDatos();
+		    JOptionPane.showMessageDialog(this, mensaje);
 		}
 	}
 

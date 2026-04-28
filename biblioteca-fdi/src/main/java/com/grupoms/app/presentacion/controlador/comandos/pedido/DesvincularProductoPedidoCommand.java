@@ -19,10 +19,10 @@ public class DesvincularProductoPedidoCommand implements Command {
 				lineaPedido.setId(idGenerado);
 				return new Context(Evento.DESVINCULAR_PRODUCTO_PEDIDO_OK, lineaPedido);
 			} else {
-				return new Context(Evento.DESVINCULAR_PRODUCTO_PEDIDO_KO, null);
+				return new Context(Evento.DESVINCULAR_PRODUCTO_PEDIDO_KO, "No se pudo desvincular el producto del pedido");
 			}
-		}catch (IllegalArgumentException e) {
-			return new Context(Evento.DESVINCULAR_PRODUCTO_PEDIDO_KO, null);
+		}catch (Exception e) {
+			return new Context(Evento.DESVINCULAR_PRODUCTO_PEDIDO_KO, e.getMessage());
 		}
 	}
 

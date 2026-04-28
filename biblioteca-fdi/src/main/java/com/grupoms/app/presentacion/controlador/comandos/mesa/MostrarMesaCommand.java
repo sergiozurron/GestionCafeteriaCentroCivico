@@ -11,23 +11,30 @@ public class MostrarMesaCommand implements Command {
 
 	@Override
 	public Context execute(Object data) {
-		Integer id = null;
+
+		Integer id;
 
 		if (data instanceof Integer) {
 			id = (Integer) data;
 		} else if (data instanceof TMesa) {
 			id = ((TMesa) data).getId();
 		} else {
-			return new Context(Evento.MOSTRAR_MESA_OK, null);
+			return new Context(Evento.MOSTRAR_MESA_KO, "Datos inválidos");
 		}
 
 		SAMesa sa = FactoriaSA.getInstance().creaSAMesa();
 
 		try {
-			TMesa emp = sa.mostrarMesa(id);
-			return (emp != null) ? new Context(Evento.MOSTRAR_MESA_OK, emp) : new Context(Evento.MOSTRAR_MESA_KO, null);
-		} catch (IllegalArgumentException e) {
-			return new Context(Evento.MOSTRAR_MESA_KO, null);
+			TMesa mesa = sa.mostrarMesa(id);
+
+			if (mesa == null) {
+				return new Context(Evento.MOSTRAR_MESA_KO, "Mesa no encontrada");
+			}
+
+			return new Context(Evento.MOSTRAR_MESA_OK, mesa);
+
+		} catch (RuntimeException e) {
+			return new Context(Evento.MOSTRAR_MESA_KO, e.getMessage());
 		}
 	}
 }

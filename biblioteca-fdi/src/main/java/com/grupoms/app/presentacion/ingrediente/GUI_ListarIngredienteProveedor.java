@@ -84,7 +84,8 @@ public class GUI_ListarIngredienteProveedor extends JFrame implements IGUI {
 			}
 			campoIDProveedor.setText("");
 		} else if (context.getEvento() == Evento.LISTAR_INGREDIENTES_POR_PROVEEDOR_KO) {
-			JOptionPane.showMessageDialog(this, "Error: " + context.getDatos());
+			String mensaje = (String) context.getDatos();
+		    JOptionPane.showMessageDialog(this, mensaje);
 		}
 	}
 }

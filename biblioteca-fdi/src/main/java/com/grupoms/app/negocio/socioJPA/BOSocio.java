@@ -14,7 +14,7 @@ import java.util.List;
 		@NamedQuery(name = "com.grupoms.app.negocio.socioJPA.BOSocio.findByType", query = "SELECT s FROM BOSocio s WHERE s.tipoSocio = :tipo"),
 		@NamedQuery(name = "com.grupoms.app.negocio.socioJPA.BOSocio.findAll", query = "SELECT s FROM BOSocio s"),
 		@NamedQuery(name = "com.grupoms.app.negocio.socioJPA.BOSocio.findByPromocion", query = "SELECT s FROM BOSocio s JOIN s.promociones p WHERE p.id = :idPromocion AND p.activo=true") })
-public class BOSocio implements Serializable {
+public abstract class BOSocio implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -129,4 +129,6 @@ public class BOSocio implements Serializable {
 			this.promociones.remove(promocion);
 		}
 	}
+	
+	public abstract Integer calcularNuevaCuota(BOPromocion promocion);
 }

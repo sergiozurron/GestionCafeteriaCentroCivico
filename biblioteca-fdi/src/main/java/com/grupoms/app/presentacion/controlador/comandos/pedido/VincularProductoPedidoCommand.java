@@ -7,23 +7,25 @@ import com.grupoms.app.presentacion.controlador.Context;
 import com.grupoms.app.presentacion.controlador.Evento;
 import com.grupoms.app.presentacion.controlador.comandos.Command;
 
-public class VincularProductoPedidoCommand implements Command{
+public class VincularProductoPedidoCommand implements Command {
 
 	@Override
 	public Context execute(Object data) {
-	    TLineaPedido lineaPedido = (TLineaPedido) data;
-	    SALineaPedido sa = FactoriaSA.getInstance().creaSALineaPedido();
+		TLineaPedido lineaPedido = (TLineaPedido) data;
+		SALineaPedido sa = FactoriaSA.getInstance().creaSALineaPedido();
 
-	    Integer resultado = sa.altaLineaPedido(lineaPedido);
+		try {
+			Integer resultado = sa.altaLineaPedido(lineaPedido);
 
-	    if (resultado != null && resultado > 0) {
-	        // OK → resultado es el ID generado
-	        return new Context(Evento.VINCULAR_PRODUCTO_PEDIDO_OK, resultado);
-	    } else {
-	        // KO → resultado es un código negativo (-1, -2, -99…)
-	        return new Context(Evento.VINCULAR_PRODUCTO_PEDIDO_KO, resultado);
-	    }
+			if (resultado != null && resultado > 0) {
+				return new Context(Evento.VINCULAR_PRODUCTO_PEDIDO_OK, resultado);
+			} else {
+				return new Context(Evento.VINCULAR_PRODUCTO_PEDIDO_KO, 
+						"No se pudo vincular el producto al pedido");
+			}
+
+		} catch (Exception e) {
+			return new Context(Evento.VINCULAR_PRODUCTO_PEDIDO_KO, e.getMessage());
+		}
 	}
-
-
 }

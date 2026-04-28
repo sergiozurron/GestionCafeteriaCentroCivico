@@ -82,25 +82,29 @@ public class SocioSAImp implements SocioSA {
 				throw new Exception("El socio no existe o ya está inactivo.");
 			}
 
-			// Solo bloquear si tiene préstamos NO devueltos (pendientes)
+			// Bloquear préstamos pendientes
 			TypedQuery<BOPrestamo> query = em.createNamedQuery("BOPrestamo.findPendientesBySocio", BOPrestamo.class);
 			query.setParameter("idSocio", socio.getId());
+			query.setLockMode(LockModeType.OPTIMISTIC);
+
 			List<BOPrestamo> prestamosPendientes = query.getResultList();
 
 			if (!prestamosPendientes.isEmpty()) {
 				t.rollback();
 				throw new Exception("El socio tiene préstamos pendientes de devolver.");
 			}
-			
-			// Dar de baja los préstamos devueltos que tuviese asociados
+
+			// Borrar préstamos devueltos
 			em.createNamedQuery("BOPrestamo.deleteAllByIdSocio").setParameter("idSocio", socio.getId()).executeUpdate();
 
-			// Limpiar promociones al dar de baja
+			// Limpiar promociones
 			socio.getPromociones().clear();
 
 			socio.setActivo(false);
+
 			t.commit();
 			return 1;
+
 		} catch (Exception e) {
 			if (t.isActive())
 				t.rollback();
@@ -195,8 +199,7 @@ public class SocioSAImp implements SocioSA {
 		EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
 		try {
 			return em.createNamedQuery("com.grupoms.app.negocio.socioJPA.BOSocio.findByPromocion", BOSocio.class)
-					.setParameter("idPromocion", idPromocion).getResultList().stream()
-					.map(bo -> {
+					.setParameter("idPromocion", idPromocion).getResultList().stream().map(bo -> {
 						if (bo instanceof BOAdulto)
 							return AdultoAssembler.toDTO((BOAdulto) bo);
 						else if (bo instanceof BOInfantil)
@@ -266,81 +269,76 @@ public class SocioSAImp implements SocioSA {
 		}
 		return res;
 	}
-	
+
 	@Override
 	public List<TSocio> aplicarPromocion(Integer idPromocion) {
-	    EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
-	    EntityTransaction t = em.getTransaction();
+		EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
+		EntityTransaction t = em.getTransaction();
 
-	    List<TSocio> resultado = new java.util.ArrayList<>();
+		List<TSocio> resultado = new java.util.ArrayList<>();
 
-	    try {
-	        t.begin();
+		try {
+			t.begin();
 
-	        BOPromocion promocion = em.find(BOPromocion.class, idPromocion, LockModeType.OPTIMISTIC);
+			BOPromocion promocion = em.find(BOPromocion.class, idPromocion, LockModeType.OPTIMISTIC);
 
-	        if (promocion == null || !promocion.getActivo()) {
-	            t.rollback();
-	            return resultado;
-	        }
+			if (promocion == null || !promocion.getActivo()) {
+				t.rollback();
+				return resultado;
+			}
 
-	        TypedQuery<BOSocio> query = em.createNamedQuery(
-	            "com.grupoms.app.negocio.socioJPA.BOSocio.findByPromocion",
-	            BOSocio.class
-	        );
-	        query.setParameter("idPromocion", idPromocion);
+			List<BOSocio> socios = promocion.getSocios();
 
-	        List<BOSocio> socios = query.getResultList();	        
-	        
-	        for (BOSocio socio : socios) {
-	        	
-	        	Integer nuevaCuota = calcularNuevaCuota(socio, promocion);
-	        	if(nuevaCuota < 0) nuevaCuota = 0;
+			for (BOSocio socio : socios) {
 
-	            socio.setCuota(nuevaCuota);
+				em.lock(socio, LockModeType.OPTIMISTIC);
+				
+				//Llamada a función polimórfica en BO (se implementa de manera diferente en infantil o adulto) 
+				Integer nuevaCuota = socio.calcularNuevaCuota(promocion);
+				socio.setCuota(nuevaCuota);
 
-	            if (socio instanceof BOAdulto)
-	                resultado.add(AdultoAssembler.toDTO((BOAdulto) socio));
-	            else if (socio instanceof BOInfantil)
-	                resultado.add(InfantilAssembler.toDTO((BOInfantil) socio));
-	            else
-	                resultado.add(SocioAssembler.entityToTransfer(socio));
-	        }
+				if (socio instanceof BOAdulto)
+					resultado.add(AdultoAssembler.toDTO((BOAdulto) socio));
+				else if (socio instanceof BOInfantil)
+					resultado.add(InfantilAssembler.toDTO((BOInfantil) socio));
+				else
+					resultado.add(SocioAssembler.entityToTransfer(socio));
+			}
 
-	        t.commit();
+			t.commit();
 
-	    } catch (Exception e) {
-	        if (t.isActive()) t.rollback();
-	        e.printStackTrace();
-	    } finally {
-	        em.close();
-	    }
+		} catch (Exception e) {
+			if (t.isActive())
+				t.rollback();
+			e.printStackTrace();
+		} finally {
+			em.close();
+		}
 
-	    return resultado;
+		return resultado;
 	}
-	
+
 	private Integer calcularNuevaCuota(BOSocio socio, BOPromocion promocion) {
 
-	    double nuevaCuota;
+		double nuevaCuota;
 
-	    if (socio.getTipoSocio() == 0) {
-	        BOAdulto adulto = (BOAdulto) socio;
+		if (socio.getTipoSocio() == 0) {
+			BOAdulto adulto = (BOAdulto) socio;
 
-	        if (adulto.getMiembroPleno()) {
-	            nuevaCuota = socio.getCuota() - (2 * promocion.getDescuento());
-	        } else {
-	            nuevaCuota = socio.getCuota() - promocion.getDescuento();
-	        }
+			if (adulto.getMiembroPleno()) {
+				nuevaCuota = socio.getCuota() - (2 * promocion.getDescuento());
+			} else {
+				nuevaCuota = socio.getCuota() - promocion.getDescuento();
+			}
 
-	    } else if (socio.getTipoSocio() == 1) {
-	        BOInfantil infantil = (BOInfantil) socio;
+		} else if (socio.getTipoSocio() == 1) {
+			BOInfantil infantil = (BOInfantil) socio;
 
-	        nuevaCuota = socio.getCuota() -
-	                (promocion.getDescuento() * (infantil.getReduccion() / 100.0));
-	    } else {
-	        nuevaCuota = socio.getCuota();
-	    }
+			nuevaCuota = socio.getCuota() - (promocion.getDescuento() * (infantil.getReduccion() / 100.0));
+		} else {
+			nuevaCuota = socio.getCuota();
+		}
 
-	    return (int) Math.round(nuevaCuota);
+		return (int) Math.round(nuevaCuota);
 	}
 }

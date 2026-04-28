@@ -37,7 +37,8 @@ public class GUI_AltaProveedor extends JFrame implements IGUI {
 			campoTarifa.setText("");
 			campoTiempoEntrega.setText("");
 		} else if (context.getEvento() == Evento.ALTA_PROVEEDOR_KO) {
-			JOptionPane.showMessageDialog(this, "Error: No se pudo crear el proveedor. Puede que ya exista.");
+			String mensaje = (String) context.getDatos();
+		    JOptionPane.showMessageDialog(this, mensaje);
 		}
 	}
 

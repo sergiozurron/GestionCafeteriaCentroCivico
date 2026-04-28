@@ -7,7 +7,6 @@ import com.grupoms.app.integracion.factoria.EntityManagerSingleton;
 import com.grupoms.app.negocio.PromocionJPA.BOPromocion;
 import com.grupoms.app.negocio.assembler.AdultoAssembler;
 import com.grupoms.app.negocio.assembler.InfantilAssembler;
-import com.grupoms.app.negocio.assembler.SocioAssembler;
 import com.grupoms.app.negocio.prestamoJPA.BOPrestamo;
 
 import jakarta.persistence.EntityManager;
@@ -94,7 +93,7 @@ public class SocioSAImp implements SocioSA {
 				throw new Exception("El socio tiene préstamos pendientes de devolver.");
 			}
 
-			// Borrar préstamos devueltos
+			// Dar de baja los préstamos devueltos que tuviese asociados
 			em.createNamedQuery("BOPrestamo.deleteAllByIdSocio").setParameter("idSocio", socio.getId()).executeUpdate();
 
 			// Limpiar promociones
@@ -165,10 +164,8 @@ public class SocioSAImp implements SocioSA {
 			}
 			if (socio instanceof BOAdulto) {
 				return AdultoAssembler.toDTO((BOAdulto) socio);
-			} else if (socio instanceof BOInfantil) {
-				return InfantilAssembler.toDTO((BOInfantil) socio);
 			} else {
-				return SocioAssembler.entityToTransfer(socio);
+				return InfantilAssembler.toDTO((BOInfantil) socio);
 			}
 		} finally {
 			em.close();
@@ -184,10 +181,8 @@ public class SocioSAImp implements SocioSA {
 			return query.getResultList().stream().map(bo -> {
 				if (bo instanceof BOAdulto)
 					return AdultoAssembler.toDTO((BOAdulto) bo);
-				else if (bo instanceof BOInfantil)
-					return InfantilAssembler.toDTO((BOInfantil) bo);
 				else
-					return SocioAssembler.entityToTransfer(bo);
+					return InfantilAssembler.toDTO((BOInfantil) bo);
 			}).collect(Collectors.toList());
 		} finally {
 			em.close();
@@ -202,10 +197,8 @@ public class SocioSAImp implements SocioSA {
 					.setParameter("idPromocion", idPromocion).getResultList().stream().map(bo -> {
 						if (bo instanceof BOAdulto)
 							return AdultoAssembler.toDTO((BOAdulto) bo);
-						else if (bo instanceof BOInfantil)
-							return InfantilAssembler.toDTO((BOInfantil) bo);
 						else
-							return SocioAssembler.entityToTransfer(bo);
+							return InfantilAssembler.toDTO((BOInfantil) bo);
 					}).collect(Collectors.toList());
 		} finally {
 			em.close();
@@ -270,6 +263,7 @@ public class SocioSAImp implements SocioSA {
 		return res;
 	}
 
+
 	@Override
 	public List<TSocio> aplicarPromocion(Integer idPromocion) {
 		EntityManager em = EntityManagerSingleton.getEMF().createEntityManager();
@@ -282,6 +276,10 @@ public class SocioSAImp implements SocioSA {
 
 			BOPromocion promocion = em.find(BOPromocion.class, idPromocion, LockModeType.OPTIMISTIC);
 
+			if (promocion == null || !promocion.getActivo()) {
+				t.rollback();
+				return resultado;
+			}
 			if (promocion == null || !promocion.getActivo()) {
 				t.rollback();
 				return resultado;
@@ -300,20 +298,16 @@ public class SocioSAImp implements SocioSA {
 			List<BOSocio> socios = query.getResultList();
 
 			for (BOSocio socio : socios) {
-
 				em.lock(socio, LockModeType.OPTIMISTIC);
 
 				// Llamada a función polimórfica en BO (se implementa de manera diferente en
 				// infantil o adulto)
 				Integer nuevaCuota = socio.calcularNuevaCuota(promocion);
-				socio.setCuota(nuevaCuota);
+				if (nuevaCuota < 0)
+					nuevaCuota = 0;
 
-				if (socio instanceof BOAdulto)
-					resultado.add(AdultoAssembler.toDTO((BOAdulto) socio));
-				else if (socio instanceof BOInfantil)
-					resultado.add(InfantilAssembler.toDTO((BOInfantil) socio));
-				else
-					resultado.add(SocioAssembler.entityToTransfer(socio));
+				socio.setCuota(nuevaCuota);
+				resultado.add(socio.toDTO());
 			}
 
 			t.commit();

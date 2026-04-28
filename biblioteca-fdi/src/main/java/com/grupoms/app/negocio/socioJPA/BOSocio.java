@@ -131,4 +131,7 @@ public abstract class BOSocio implements Serializable {
 	}
 	
 	public abstract Integer calcularNuevaCuota(BOPromocion promocion);
+	
+	public abstract TSocio toDTO();
+	
 }

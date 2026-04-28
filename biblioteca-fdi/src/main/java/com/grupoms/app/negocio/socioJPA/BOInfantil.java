@@ -49,4 +49,18 @@ public class BOInfantil extends BOSocio implements Serializable {
 	    return (int) Math.round(Math.max(nuevaCuota, 0));
 	}
 
+	@Override
+	public TSocio toDTO() {
+		TInfantil infantil = new TInfantil();
+		infantil.setId(this.id);
+		infantil.setNombreYapellido(this.nombreYapellido);
+		infantil.setDni(this.dni);
+		infantil.setTipoSocio(this.tipoSocio);
+		infantil.setCuota(this.cuota);
+		infantil.setActivo(this.activo);
+		infantil.setEdad(this.edad);
+		infantil.setReduccion(this.reduccion);
+		return infantil;
+	}
+
 }

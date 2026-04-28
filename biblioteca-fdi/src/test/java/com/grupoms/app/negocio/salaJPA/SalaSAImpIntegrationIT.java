@@ -3,7 +3,6 @@ package com.grupoms.app.negocio.salaJPA;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Date;
-import java.util.List;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -11,7 +10,6 @@ import org.junit.jupiter.api.Test;
 
 import com.grupoms.app.integracion.factoria.EntityManagerSingleton;
 import com.grupoms.app.negocio.ClaseJPA.BOClase;
-import com.grupoms.app.negocio.ClaseJPA.TClase;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
@@ -80,23 +78,6 @@ public class SalaSAImpIntegrationIT {
         TSala sala = servicio.mostrarSala(idSala);
         assertThat(sala).isNotNull();
         assertThat(sala.getActivo()).isTrue();
-    }
-
-    @Test
-    public void mostrarClasesPorSala_inexistente_shouldReturnNull() {
-        List<TClase> clases = servicio.mostrarClasesPorSala(999999);
-
-        assertThat(clases).isNull();
-    }
-
-    @Test
-    public void mostrarClasesPorSala_salaValidaSinClases_shouldReturnListaVacia() {
-        Integer idSala = crearSala("Sala_Sin_Clases_IT", 18, true);
-
-        List<TClase> clases = servicio.mostrarClasesPorSala(idSala);
-
-        assertThat(clases).isNotNull();
-        assertThat(clases).isEmpty();
     }
 
     @Test

@@ -6,6 +6,8 @@ import java.io.Serializable;
 
 import com.grupoms.app.negocio.PromocionJPA.BOPromocion;
 
+import com.grupoms.app.negocio.PromocionJPA.BOPromocion;
+
 @Entity
 @PrimaryKeyJoinColumn(referencedColumnName = "id")
 public class BOAdulto extends BOSocio implements Serializable {
@@ -29,18 +31,27 @@ public class BOAdulto extends BOSocio implements Serializable {
 	public void setMiembroPleno(Boolean miembroPleno) {
 		this.miembroPleno = miembroPleno;
 	}
-	
-	@Override
+
 	public Integer calcularNuevaCuota(BOPromocion promocion) {
-	    double nuevaCuota;
-
-	    if (this.getMiembroPleno()) {
-	        nuevaCuota = this.getCuota() - (2 * promocion.getDescuento());
-	    } else {
-	        nuevaCuota = this.getCuota() - promocion.getDescuento();
-	    }
-
-	    return (int) Math.round(Math.max(nuevaCuota, 0));
+		Double nuevaCuota;
+        if (this.miembroPleno) {
+            nuevaCuota = this.cuota - (2 * promocion.getDescuento());
+        } else {
+            nuevaCuota = this.cuota - promocion.getDescuento();
+        }
+        return nuevaCuota.intValue();
 	}
-	
+
+	@Override
+	public TSocio toDTO() {
+		TAdulto adulto = new TAdulto();
+		adulto.setId(this.id);
+		adulto.setNombreYapellido(this.nombreYapellido);
+		adulto.setDni(this.dni);
+		adulto.setTipoSocio(this.tipoSocio);
+		adulto.setCuota(this.cuota);
+		adulto.setActivo(this.activo);
+		adulto.setMiembroPleno(this.miembroPleno);
+		return adulto;
+	}
 }

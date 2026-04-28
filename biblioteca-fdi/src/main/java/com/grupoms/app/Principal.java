@@ -172,8 +172,8 @@ public class Principal extends JFrame {
 		panelCentroCivico.add(crearPanelCategoria("Sala", new String[][] {
 				{ "Alta Sala", FactoriaVistas.GUI_ALTA_SALA }, { "Baja Sala", FactoriaVistas.GUI_BAJA_SALA },
 				{ "Listar Sala", FactoriaVistas.GUI_LISTAR_SALA }, { "Mostrar Sala", FactoriaVistas.GUI_MOSTRAR_SALA },
-				{ "Modificar Sala", FactoriaVistas.GUI_MODIFICAR_SALA },
-				{ "Mostrar Clases por Sala", FactoriaVistas.GUI_MOSTRAR_CLASES_POR_SALA } }));
+				{ "Modificar Sala", FactoriaVistas.GUI_MODIFICAR_SALA } }));
+
 		panelCentroCivico.add(crearPanelCategoria("Socio",
 				new String[][] { { "Alta Socio", FactoriaVistas.GUI_ALTA_SOCIO },
 						{ "Baja Socio", FactoriaVistas.GUI_BAJA_SOCIO },

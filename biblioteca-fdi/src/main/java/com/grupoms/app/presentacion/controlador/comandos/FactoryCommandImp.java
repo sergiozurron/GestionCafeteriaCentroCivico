@@ -39,7 +39,6 @@ import com.grupoms.app.presentacion.comandos.salaJPA.AltaSalaCommand;
 import com.grupoms.app.presentacion.comandos.salaJPA.BajaSalaCommand;
 import com.grupoms.app.presentacion.comandos.salaJPA.ListarSalasCommand;
 import com.grupoms.app.presentacion.comandos.salaJPA.ModificarSalaCommand;
-import com.grupoms.app.presentacion.comandos.salaJPA.MostrarClasesPorSalaCommand;
 import com.grupoms.app.presentacion.comandos.salaJPA.MostrarSalaCommand;
 import com.grupoms.app.presentacion.comandos.socioJPA.AltaSocioCommand;
 import com.grupoms.app.presentacion.comandos.socioJPA.BajaSocioCommand;
@@ -164,7 +163,6 @@ public class FactoryCommandImp extends FactoryCommand {
 		commands.put(Evento.MODIFICAR_SALA, new ModificarSalaCommand());
 		commands.put(Evento.MOSTRAR_SALA, new MostrarSalaCommand());
 		commands.put(Evento.LISTAR_SALA, new ListarSalasCommand());
-		commands.put(Evento.MOSTRAR_CLASES_POR_SALA, new MostrarClasesPorSalaCommand());
 
 		commands.put(Evento.ALTA_PRESTAMO, new AltaPrestamoCommand());
 		commands.put(Evento.DEVOLUCION_PRESTAMO, new DevolverPrestamoCommand());
@@ -286,7 +284,6 @@ public class FactoryCommandImp extends FactoryCommand {
 		views.put(Evento.LISTAR_SALA, FactoriaVistas.GUI_LISTAR_SALA);
 		views.put(Evento.MOSTRAR_SALA, FactoriaVistas.GUI_MOSTRAR_SALA);
 		views.put(Evento.MODIFICAR_SALA, FactoriaVistas.GUI_MODIFICAR_SALA);
-		views.put(Evento.MOSTRAR_CLASES_POR_SALA, FactoriaVistas.GUI_MOSTRAR_CLASES_POR_SALA);
 
 		views.put(Evento.ALTA_CLASE, FactoriaVistas.GUI_ALTA_CLASE);
 		views.put(Evento.BAJA_CLASE, FactoriaVistas.GUI_BAJA_CLASE);

@@ -341,7 +341,8 @@ public class SAPedidoImp implements SAPedido {
 
 				if (p.getStock() < 0)
 					throw new IllegalStateException("Stock inconsistente en producto " + p.getId());
-
+				p.setStock(p.getStock()-lp.getCantidad());
+				daoProducto.modificarProducto(p);
 				total += p.getPrecio() * lp.getCantidad();
 			}
 

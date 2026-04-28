@@ -34,7 +34,6 @@ public class SALineaPedidoImp implements SALineaPedido {
 			TPedido pedido = daoPedido.mostrarPedido(linea.getPedidoId());
 			if (pedido == null || !pedido.getActivo())
 				throw new IllegalArgumentException("Pedido no existe o inactivo");
-			if(pedido.getActivo())throw new IllegalArgumentException("Pedido no existe o inactivo");
 
 			// 2. validar producto
 			if (linea.getProductoId() == null || linea.getProductoId() <= 0)
@@ -54,7 +53,7 @@ public class SALineaPedidoImp implements SALineaPedido {
 
 			// 5. actualizar stock
 			producto.setStock(producto.getStock() - linea.getCantidad());
-
+			
 			Boolean stockOk = daoProducto.modificarProducto(producto);
 			if (!stockOk)
 				throw new RuntimeException("No se pudo actualizar el stock");

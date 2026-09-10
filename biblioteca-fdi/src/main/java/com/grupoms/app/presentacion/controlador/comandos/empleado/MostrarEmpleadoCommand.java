@@ -11,25 +11,24 @@ public class MostrarEmpleadoCommand implements Command {
 
     @Override
     public Context execute(Object data) {
-        Integer id = null;
-
-        if (data instanceof Integer) {
-            id = (Integer) data;
-        } else if (data instanceof TEmpleado) {
-            id = ((TEmpleado) data).getID();
-        } else {
-            return new Context(Evento.MOSTRAR_EMPLEADO_KO, null);
+        if (!(data instanceof Integer)) {
+            return new Context(Evento.MOSTRAR_EMPLEADO_KO, "ID inválido");
         }
 
+        Integer id = (Integer) data;
         SAEmpleado sa = FactoriaSA.getInstance().creaSAEmpleado();
 
         try {
             TEmpleado emp = sa.mostrarEmpleado(id);
-            return (emp != null)
-                ? new Context(Evento.MOSTRAR_EMPLEADO_OK, emp)
-                : new Context(Evento.MOSTRAR_EMPLEADO_KO, null);
-        } catch (IllegalArgumentException e) {
-            return new Context(Evento.MOSTRAR_EMPLEADO_KO, null);
+
+            if (emp == null) {
+                return new Context(Evento.MOSTRAR_EMPLEADO_KO, "Empleado no encontrado");
+            }
+
+            return new Context(Evento.MOSTRAR_EMPLEADO_OK, emp);
+
+        } catch (RuntimeException e) {
+            return new Context(Evento.MOSTRAR_EMPLEADO_KO, e.getMessage());
         }
     }
 }

@@ -1,254 +1,239 @@
 package com.grupoms.app.integracion.pedido;
 
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.grupoms.app.integracion.DBConfig;
 import com.grupoms.app.integracion.Transaction.Transaction;
 import com.grupoms.app.integracion.Transaction.TransactionManager;
 import com.grupoms.app.negocio.pedido.TPedido;
 
-public class DAOPedidoImp implements DAOPedido{
+public class DAOPedidoImp implements DAOPedido {
 
-    @Override
-    public Integer altaPedido(TPedido pedido) {
-        Integer idGenerado = null;
-        try {
-            Transaction t = TransactionManager.getInstance().getTransaction();
-            Connection c = (Connection) t.getResource();
+	private static final String UPDATE_PEDIDO = "UPDATE pedidos SET fecha = ?, total_factura = ?, estado = ?, empleado_id = ?, mesa_id = ? "
+			+ "WHERE id = ? AND activo = TRUE";
+	private static final String SELECT_PEDIDO_BY_ID = "SELECT id, fecha, total_factura, estado, activo, empleado_id, mesa_id "
+			+ "FROM pedidos WHERE id = ? AND activo = TRUE";
+	private static final String SELECT_PEDIDOS_ACTIVOS = "SELECT id, empleado_id, mesa_id, fecha, estado, total_factura, activo "
+			+ "FROM pedidos WHERE activo = TRUE";
+	private static final String SELECT_PEDIDOS_EMPLEADO = "SELECT id, empleado_id, mesa_id, fecha, estado, total_factura, activo "
+			+ "FROM pedidos WHERE empleado_id = ? AND activo = TRUE";
+	private static final String SELECT_PEDIDOS_MESA = "SELECT id, empleado_id, mesa_id, fecha, estado, total_factura, activo "
+			+ "FROM pedidos WHERE mesa_id = ? AND activo = TRUE";
+	private static final String INSERT_PEDIDO = "INSERT INTO pedidos (fecha, total_factura, estado, activo, empleado_id, mesa_id) "
+			+ "VALUES (?, ?, ?, ?, ?, ?)";
+	private static final String SELECT_PEDIDO_EXISTE = "SELECT id FROM pedidos WHERE id = ? AND activo = TRUE";
+	private static final String UPDATE_DEVOLVER = "UPDATE pedidos SET estado = 'DEVUELTO', activo = FALSE "
+			+ "WHERE id = ? AND activo = TRUE";
 
-            String sql = "INSERT INTO pedidos (fecha, total_factura, estado, activo, empleado_id, mesa_id) VALUES (?, ?, ?, ?, ?, ?)";
-            try (PreparedStatement ps = c.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-                ps.setTimestamp(1, new Timestamp(pedido.getFecha().getTime()));
-                ps.setDouble(2, pedido.getTotal());
-                ps.setString(3, pedido.getEstado());
-                ps.setBoolean(4, pedido.getActivo());
-                ps.setInt(5, pedido.getIdEmpleado());
-                ps.setInt(6, pedido.getIdMesa());
+	@Override
+	public Boolean modificarPedido(TPedido pedido) {
 
-                ps.executeUpdate();
+		Transaction t = TransactionManager.getInstance().getTransaction();
+		Connection c = (Connection) t.getResource();
+		try (PreparedStatement ps = c.prepareStatement(UPDATE_PEDIDO)) {
 
-                try (ResultSet rs = ps.getGeneratedKeys()) {
-                    if (rs.next()) {
-                        idGenerado = rs.getInt(1);
-                        pedido.setId(idGenerado);
-                    }
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return idGenerado;
-    }
+			ps.setDate(1, new java.sql.Date(pedido.getFecha().getTime()));
+			ps.setDouble(2, pedido.getTotal());
+			ps.setString(3, pedido.getEstado());
+			ps.setInt(4, pedido.getIdEmpleado());
+			ps.setInt(5, pedido.getIdMesa());
+			ps.setInt(6, pedido.getId());
 
-    @Override
-    public Boolean modificarPedido(TPedido pedido) {
-        boolean act=false;
-        try{
-            Connection c = (Connection) TransactionManager.getInstance().getTransaction().getResource();
+			ps.executeUpdate();
+			return true;
 
-            String sql = "UPDATE pedidos SET fecha = ?, total_factura = ?, estado = ?, activo = ?, empleado_id = ?, mesa_id = ? WHERE id = ?";
-            try (PreparedStatement ps = c.prepareStatement(sql)) {
-                ps.setTimestamp(1, new java.sql.Timestamp(pedido.getFecha().getTime()));
-                ps.setDouble(2, pedido.getTotal());
-                ps.setString(3, pedido.getEstado());
-                ps.setBoolean(4, pedido.getActivo());
-                ps.setInt(5, pedido.getIdEmpleado());
-                ps.setInt(6, pedido.getIdMesa());
-                ps.setInt(7, pedido.getId());
+		} catch (Exception e) {
+			throw new RuntimeException("Error modificando el pedido " + pedido.getId(), e);
+		}
+	}
 
-                int rows = ps.executeUpdate(); // número de filas afectadas
-                act = (rows>0);
-            }
-        }catch(Exception e){
-            e.printStackTrace();
-        }
-        return act;
-    }
+	@Override
+	public TPedido mostrarPedido(Integer idPedido) {
 
-    @Override
-    public TPedido mostrarPedido(Integer idPedido) {
-        TPedido pedido = null;
-        try {
-            Transaction t = TransactionManager.getInstance().getTransaction();
-            if (t==null)
-                throw new IllegalStateException("No hay transaccion activa");
-            Connection c = (Connection) t.getResource();
+		TPedido pedido = null;
 
-            String sql = "SELECT id, fecha, total_factura, estado, activo, empleado_id, mesa_id FROM pedidos WHERE id = ?";
-            try (PreparedStatement ps = c.prepareStatement(sql)) {
-                ps.setInt(1, idPedido);
+		Transaction t = TransactionManager.getInstance().getTransaction();
+		Connection c = (Connection) t.getResource();
 
-                try (ResultSet rs = ps.executeQuery()) {
-                    if (rs.next()) {
-                        pedido = new TPedido();
-                        pedido.setId(rs.getInt("id"));
-                        pedido.setFecha(rs.getDate("fecha"));
-                        pedido.setTotal(rs.getDouble("total_factura"));
-                        pedido.setEstado(rs.getString("estado"));
-                        pedido.setActivo(rs.getBoolean("activo"));
-                        pedido.setIdEmpleado(rs.getInt("empleado_id"));
-                        pedido.setIdMesa(rs.getInt("mesa_id"));
-                    }
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return pedido;
-    }
+		try (PreparedStatement ps = c.prepareStatement(SELECT_PEDIDO_BY_ID)) {
 
-    @Override
-    public List<TPedido> mostrarListaPedidos() {
-        List<TPedido> lista = new ArrayList<>();
+			ps.setInt(1, idPedido);
 
-        try {
-            Transaction t = TransactionManager.getInstance().getTransaction();
-            Connection c = (Connection) t.getResource();
+			try (ResultSet rs = ps.executeQuery()) {
 
-            String sql = "SELECT id, fecha, total_factura, estado, activo, empleado_id, mesa_id FROM pedidos";
+				if (rs.next()) {
+					pedido = new TPedido();
+					pedido.setId(rs.getInt("id"));
+					pedido.setFecha(rs.getDate("fecha"));
+					pedido.setTotal(rs.getDouble("total_factura"));
+					pedido.setEstado(rs.getString("estado"));
+					pedido.setActivo(rs.getBoolean("activo"));
+					pedido.setIdEmpleado(rs.getInt("empleado_id"));
+					pedido.setIdMesa(rs.getInt("mesa_id"));
+				}
+			}
 
-            try (PreparedStatement ps = c.prepareStatement(sql);
-                 ResultSet rs = ps.executeQuery()) {
+		} catch (Exception e) {
+			throw new RuntimeException("Error mostrando el pedido " + idPedido, e);
+		}
 
-                while (rs.next()) {
-                    TPedido pedido = new TPedido();
-                    pedido.setId(rs.getInt("id"));
-                    pedido.setFecha(rs.getDate("fecha"));
-                    pedido.setTotal(rs.getDouble("total_factura"));
-                    pedido.setEstado(rs.getString("estado"));
-                    pedido.setActivo(rs.getBoolean("activo"));
-                    pedido.setIdEmpleado(rs.getInt("empleado_id"));
-                    pedido.setIdMesa(rs.getInt("mesa_id"));
-                    lista.add(pedido);
-                }
-            }
+		return pedido;
+	}
 
-        } catch (SQLException e) {
-            System.err.println("Error mostrando la lista de pedidos: "+e.getMessage());
-        }
+	@Override
+	public List<TPedido> mostrarListaPedidos() {
 
-        return lista;
-    }
+		List<TPedido> lista = new ArrayList<>();
 
-    @Override
-    public void devolverPedido(TPedido pedido) {
-        try {
-            Transaction t = TransactionManager.getInstance().getTransaction();
-            Connection c = (Connection) t.getResource();
+		Transaction t = TransactionManager.getInstance().getTransaction();
+		Connection c = (Connection) t.getResource();
 
-            String sql = "UPDATE pedidos SET estado = ?, activo = ? WHERE id = ?";
-            try (PreparedStatement ps = c.prepareStatement(sql)) {
-                ps.setString(1, "DEVUELTO");
-                ps.setBoolean(2, false);
-                ps.setInt(3, pedido.getId());
+		try (PreparedStatement ps = c.prepareStatement(SELECT_PEDIDOS_ACTIVOS); ResultSet rs = ps.executeQuery()) {
 
-                ps.executeUpdate();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+			while (rs.next()) {
+				TPedido p = new TPedido();
+				p.setId(rs.getInt("id"));
+				p.setIdEmpleado(rs.getInt("empleado_id"));
+				p.setIdMesa(rs.getInt("mesa_id"));
+				p.setFecha(rs.getDate("fecha"));
+				p.setEstado(rs.getString("estado"));
+				p.setTotal(rs.getDouble("total_factura"));
+				p.setActivo(true);
 
-    @Override
-    public List<TPedido> mostrarPedidosPorEmpleado(Integer idEmpleado) {
-        List<TPedido> lista = new ArrayList<>();
+				lista.add(p);
+			}
 
-        try {
-            Transaction t = TransactionManager.getInstance().getTransaction();
-            Connection c = (Connection) t.getResource();
+		} catch (Exception e) {
+			throw new RuntimeException("Error mostrando la lista de pedidos", e);
+		}
 
-            String sql = "SELECT id, fecha, total_factura, estado, activo, empleado_id, mesa_id FROM pedidos WHERE empleado_id = ?";
+		return lista;
+	}
 
-            try (PreparedStatement ps = c.prepareStatement(sql)) {
-                ps.setInt(1, idEmpleado);
+	@Override
+	public Boolean devolverPedido(Integer idPedido) {
 
-                try (ResultSet rs = ps.executeQuery()) {
-                    while (rs.next()) {
-                        TPedido pedido = new TPedido();
-                        pedido.setId(rs.getInt("id"));
-                        pedido.setFecha(rs.getDate("fecha"));
-                        pedido.setTotal(rs.getDouble("total_factura"));
-                        pedido.setEstado(rs.getString("estado"));
-                        pedido.setActivo(rs.getBoolean("activo"));
-                        pedido.setIdEmpleado(rs.getInt("empleado_id"));
-                        pedido.setIdMesa(rs.getInt("mesa_id"));
-                        lista.add(pedido);
-                    }
-                }
-            }
+		Transaction t = TransactionManager.getInstance().getTransaction();
+		Connection c = (Connection) t.getResource();
+		try {
+			try (PreparedStatement ps = c.prepareStatement(SELECT_PEDIDO_EXISTE)) {
+				ps.setInt(1, idPedido);
 
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+				try (ResultSet rs = ps.executeQuery()) {
+					if (!rs.next()) {
+						return false;
+					}
+				}
+			}
+			try (PreparedStatement ps = c.prepareStatement(UPDATE_DEVOLVER)) {
+				ps.setInt(1, idPedido);
+				ps.executeUpdate();
+			}
+			return true;
 
-        return lista;
-    }
+		} catch (Exception e) {
+			throw new RuntimeException("Error devolviendo el pedido " + idPedido, e);
+		}
+	}
 
-    @Override
-    public List<TPedido> mostrarPedidosPorMesa(Integer idMesa) {
-        List<TPedido> lista = new ArrayList<>();
+	@Override
+	public List<TPedido> mostrarPedidosPorEmpleado(Integer idEmpleado) {
 
-        try {
-            Transaction t = TransactionManager.getInstance().getTransaction();
-            Connection c = (Connection) t.getResource();
+		List<TPedido> lista = new ArrayList<>();
 
-            String sql = "SELECT id, fecha, total_factura, estado, activo, empleado_id, mesa_id FROM pedidos WHERE mesa_id = ?";
+		Transaction t = TransactionManager.getInstance().getTransaction();
+		Connection c = (Connection) t.getResource();
 
-            try (PreparedStatement ps = c.prepareStatement(sql)) {
-                ps.setInt(1, idMesa);
+		try (PreparedStatement ps = c.prepareStatement(SELECT_PEDIDOS_EMPLEADO)) {
 
-                try (ResultSet rs = ps.executeQuery()) {
-                    while (rs.next()) {
-                        TPedido pedido = new TPedido();
-                        pedido.setId(rs.getInt("id"));
-                        pedido.setFecha(rs.getDate("fecha"));
-                        pedido.setTotal(rs.getDouble("total_factura"));
-                        pedido.setEstado(rs.getString("estado"));
-                        pedido.setActivo(rs.getBoolean("activo"));
-                        pedido.setIdEmpleado(rs.getInt("empleado_id"));
-                        pedido.setIdMesa(rs.getInt("mesa_id"));
-                        lista.add(pedido);
-                    }
-                }
-            }
+			ps.setInt(1, idEmpleado);
 
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+			try (ResultSet rs = ps.executeQuery()) {
 
-        return lista;
-    }
+				while (rs.next()) {
+					TPedido p = new TPedido();
+					p.setId(rs.getInt("id"));
+					p.setIdMesa(rs.getInt("mesa_id"));
+					p.setFecha(rs.getDate("fecha"));
+					p.setEstado(rs.getString("estado"));
+					p.setTotal(rs.getDouble("total_factura"));
+					p.setActivo(rs.getBoolean("activo"));
 
-    private Connection getConnection() throws SQLException {
-        Transaction tx = getTransaction();
-        if (tx == null) {
-            return DriverManager.getConnection(DBConfig.getUrl(), DBConfig.getUser(), DBConfig.getPassword());
-        }
-        return (Connection) tx.getResource();
-    }
+					lista.add(p);
+				}
+			}
 
-    private void closeConnection(Connection conn) {
-        if (conn == null) {
-            return;
-        }
-        try {
-            if (getTransaction() == null) {
-                conn.close();
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
+		} catch (Exception e) {
+			throw new RuntimeException("Error mostrando pedidos del empleado " + idEmpleado, e);
+		}
 
-    private Transaction getTransaction() {
-        try {
-            return TransactionManager.getInstance().getTransaction();
-        } catch (IllegalStateException e) {
-            return null;
-        }
-    }
+		return lista;
+	}
 
+	@Override
+	public List<TPedido> mostrarPedidosPorMesa(Integer idMesa) {
+
+		List<TPedido> lista = new ArrayList<>();
+
+		Transaction t = TransactionManager.getInstance().getTransaction();
+		Connection c = (Connection) t.getResource();
+
+		try (PreparedStatement ps = c.prepareStatement(SELECT_PEDIDOS_MESA)) {
+
+			ps.setInt(1, idMesa);
+
+			try (ResultSet rs = ps.executeQuery()) {
+
+				while (rs.next()) {
+					TPedido p = new TPedido();
+					p.setId(rs.getInt("id"));
+					p.setIdEmpleado(rs.getInt("empleado_id"));
+					p.setFecha(rs.getDate("fecha"));
+					p.setEstado(rs.getString("estado"));
+					p.setTotal(rs.getDouble("total_factura"));
+					p.setActivo(rs.getBoolean("activo"));
+
+					lista.add(p);
+				}
+			}
+
+		} catch (Exception e) {
+			throw new RuntimeException("Error mostrando pedidos de la mesa " + idMesa, e);
+		}
+
+		return lista;
+	}
+
+	@Override
+	public Integer altaPedido(TPedido pedido) {
+
+		Integer id = null;
+
+		Transaction t = TransactionManager.getInstance().getTransaction();
+		Connection conn = (Connection) t.getResource();
+
+		try (PreparedStatement ps = conn.prepareStatement(INSERT_PEDIDO, Statement.RETURN_GENERATED_KEYS)) {
+
+			ps.setDate(1, pedido.getFecha());
+			ps.setDouble(2, pedido.getTotal());
+			ps.setString(3, pedido.getEstado());
+			ps.setBoolean(4, pedido.getActivo());
+			ps.setInt(5, pedido.getIdEmpleado());
+			ps.setInt(6, pedido.getIdMesa());
+
+			ps.executeUpdate();
+
+			try (ResultSet rs = ps.getGeneratedKeys()) {
+				if (rs.next()) {
+					id = rs.getInt(1);
+				}
+			}
+
+		} catch (SQLException e) {
+			throw new RuntimeException("Error dando de alta el pedido", e);
+		}
+
+		return id;
+	}
 }

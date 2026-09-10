@@ -1,16 +1,13 @@
 package com.grupoms.app.integracion.Transaction;
 
-import java.sql.Connection;
-
 public interface Transaction {
 
-    void start() throws Exception;
+	void start() ;
 
-    void commit() throws Exception;
+	void commit() ;
 
-    void rollback() throws Exception;
-    
-    public Object getResource();
+	void rollback() ;
 
-    Connection getConnection();
+	public Object getResource();
+	
 }

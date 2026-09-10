@@ -10,15 +10,14 @@ import com.grupoms.app.presentacion.controlador.Evento;
 import com.grupoms.app.presentacion.controlador.comandos.Command;
 
 public class MostrarListaIngredientes implements Command {
-     public Context execute(Object data) {
-        SAIngrediente sa = FactoriaSA.getInstance().creaSAIngrediente();
+	public Context execute(Object data) {
+		SAIngrediente sa = FactoriaSA.getInstance().creaSAIngrediente();
 
-        try {
-            List<TIngrediente> ingredientes = sa.mostrarListaIngredientes();
-            return new Context(Evento.MOSTRAR_INGREDIENTES_OK, ingredientes);
-        } catch (Exception e) {
-            // Cualquier excepción se traduce a KO
-            return new Context(Evento.MOSTRAR_INGREDIENTES_KO, null);
-        }
-    }
+		try {
+			List<TIngrediente> ingredientes = sa.mostrarListaIngredientes();
+			return new Context(Evento.MOSTRAR_INGREDIENTES_OK, ingredientes);
+		} catch (Exception e) {
+			return new Context(Evento.MOSTRAR_INGREDIENTES_KO, e.getMessage());
+		}
+	}
 }

@@ -11,75 +11,140 @@ import com.grupoms.app.presentacion.controlador.Evento;
 
 public class GUI_AltaPedido extends JFrame implements IGUI {
 
-    private JTextField campoMesa;
-    private JTextField campoEmpleado;
-    private JButton crearPedido;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private JTextField campoMesa;
+	private JTextField campoEmpleado;
+	private JButton crearPedido;
 
-    public GUI_AltaPedido() {
-        super("Alta Pedido");
-        initGUI();
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        pack();
-        setLocationRelativeTo(null);
-        setVisible(true);
-    }
+	public GUI_AltaPedido() {
+		super("Alta Pedido");
+		initGUI();
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		pack();
+		setLocationRelativeTo(null);
+	}
 
-    private void initGUI() {
-        JPanel panel = new JPanel(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(5,5,5,5);
-        gbc.fill = GridBagConstraints.HORIZONTAL;
+	private void initGUI() {
 
-        JLabel labelMesa = new JLabel("ID Mesa:");
-        campoMesa = new JTextField(10);
+		JPanel panel = new JPanel(new GridBagLayout());
+		GridBagConstraints gbc = new GridBagConstraints();
 
-        JLabel labelEmpleado = new JLabel("ID Empleado:");
-        campoEmpleado = new JTextField(10);
+		gbc.insets = new Insets(5, 5, 5, 5);
+		gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        crearPedido = new JButton("Crear Pedido");
-        crearPedido.addActionListener(e -> crearPedido());
+		JLabel labelMesa = new JLabel("ID Mesa:");
+		campoMesa = new JTextField(10);
 
-        gbc.gridx = 0; gbc.gridy = 0; panel.add(labelMesa, gbc);
-        gbc.gridx = 1; panel.add(campoMesa, gbc);
-        gbc.gridx = 0; gbc.gridy = 1; panel.add(labelEmpleado, gbc);
-        gbc.gridx = 1; panel.add(campoEmpleado, gbc);
-        gbc.gridx = 0; gbc.gridy = 2; gbc.gridwidth = 2; panel.add(crearPedido, gbc);
+		JLabel labelEmpleado = new JLabel("ID Empleado:");
+		campoEmpleado = new JTextField(10);
 
-        add(panel);
-    }
+		crearPedido = new JButton("Crear Pedido");
+		crearPedido.addActionListener(e -> crearPedido());
 
-    private void crearPedido() {
-        try {
-            int idMesa = Integer.parseInt(campoMesa.getText());
-            int idEmpleado = Integer.parseInt(campoEmpleado.getText());
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		panel.add(labelMesa, gbc);
 
-            TPedido pedido = new TPedido();
-            pedido.setIdMesa(idMesa);
-            pedido.setIdEmpleado(idEmpleado);
+		gbc.gridx = 1;
+		panel.add(campoMesa, gbc);
 
-            // Llamamos al controlador para crear el pedido
-            Context contexto = new Context(Evento.ALTA_PEDIDO, pedido);
-            Controlador.getInstance().handle(contexto);
+		gbc.gridx = 0;
+		gbc.gridy = 1;
+		panel.add(labelEmpleado, gbc);
 
+		gbc.gridx = 1;
+		panel.add(campoEmpleado, gbc);
 
-        } catch (NumberFormatException ex) {
-            JOptionPane.showMessageDialog(this, "Error: los campos numéricos no son válidos");
-        }
-    }
+		gbc.gridx = 0;
+		gbc.gridy = 2;
+		gbc.gridwidth = 2;
+		panel.add(crearPedido, gbc);
 
-    @Override
-public void actualizar(Context context) {
-    if (context.getEvento() == Evento.ALTA_PEDIDO_OK) {
-        TPedido pedidoCreado = (TPedido) context.getDatos();
-        if (pedidoCreado != null && pedidoCreado.getId() != null) {
-            JOptionPane.showMessageDialog(this, 
-                "Pedido creado con éxito. ID del pedido: " + pedidoCreado.getId());
-            // Limpiar campos si quieres
-            campoMesa.setText("");
-            campoEmpleado.setText("");
-        }
-    } else if (context.getEvento() == Evento.ALTA_PEDIDO_KO) {
-        JOptionPane.showMessageDialog(this, "Error al crear el pedido");
-    }
-}
+		add(panel);
+	}
+
+	private void crearPedido() {
+
+		try {
+			int idMesa = Integer.parseInt(campoMesa.getText());
+			int idEmpleado = Integer.parseInt(campoEmpleado.getText());
+
+			TPedido pedido = new TPedido();
+			pedido.setIdMesa(idMesa);
+			pedido.setIdEmpleado(idEmpleado);
+
+			Context contexto = new Context(Evento.ALTA_PEDIDO, pedido);
+			Controlador.getInstance().handle(contexto);
+
+		} catch (NumberFormatException ex) {
+			JOptionPane.showMessageDialog(this, "Error: los campos deben ser numéricos");
+		}
+	}
+
+	@Override
+	public void actualizar(Context context) {
+
+		if (context == null) {
+			setVisible(true);
+			return;
+		}
+
+		Object datos = context.getDatos();
+		Integer resultado = null;
+		String mensaje = null;
+
+		if (datos instanceof Integer) {
+			resultado = (Integer) datos;
+		} else if (datos instanceof String) {
+			mensaje = (String) datos;
+		}
+
+		if (context.getEvento() == Evento.ALTA_PEDIDO_OK) {
+
+	        String texto = (resultado != null)
+	        		? "Pedido creado correctamente con ID: " + resultado
+	        		: "Pedido creado correctamente";
+	        JOptionPane.showMessageDialog(this, texto);
+	        campoMesa.setText("");
+	        campoEmpleado.setText("");
+	        dispose();
+
+	    } else if (context.getEvento() == Evento.ALTA_PEDIDO_KO) {
+
+	        if (mensaje != null && !mensaje.isBlank()) {
+	        	JOptionPane.showMessageDialog(this, mensaje);
+	        } else if (resultado != null) {
+	        	switch (resultado) {
+
+	            case -1:
+	                JOptionPane.showMessageDialog(this,
+	                        "El empleado no existe o no está activo");
+	                break;
+
+	            case -2:
+	                JOptionPane.showMessageDialog(this,
+	                        "La mesa no existe o no está activa");
+	                break;
+
+	            case -3:
+	                JOptionPane.showMessageDialog(this,
+	                        "Se ha producido un error interno");
+	                break;
+
+	            default:
+	                JOptionPane.showMessageDialog(this,
+	                        "Error desconocido");
+	                break;
+	        	}
+	        } else {
+	        	JOptionPane.showMessageDialog(this,
+	        			"Error desconocido");
+	        }
+	        campoMesa.setText("");
+	        campoEmpleado.setText("");
+	    }
+	}
 }

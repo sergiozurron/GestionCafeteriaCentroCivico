@@ -17,9 +17,11 @@ public class MostrarListaEmpleadosCommand implements Command {
 
         try {
             List<TEmpleado> lista = sa.mostrarListaEmpleados();
-            return new Context(Evento.MOSTRAR_EMPLEADOS_OK,lista);
-        } catch (Exception e) {
-            return new Context(Evento.MOSTRAR_EMPLEADOS_KO, null);
+
+            return new Context(Evento.MOSTRAR_EMPLEADOS_OK, lista);
+
+        } catch (RuntimeException e) {
+            return new Context(Evento.MOSTRAR_EMPLEADOS_KO, e.getMessage());
         }
     }
 }

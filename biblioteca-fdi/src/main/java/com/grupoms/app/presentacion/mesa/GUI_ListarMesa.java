@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.List;
 
 import javax.swing.JButton;
@@ -12,6 +14,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 
 import com.grupoms.app.negocio.mesa.TMesa;
@@ -24,112 +27,145 @@ import com.grupoms.app.presentacion.controlador.Evento;
 
 public class GUI_ListarMesa extends JFrame implements IGUI {
 
-    private JButton baja;
-    private List<TMesa> listaMesas;
-    private JTable tablaMesas;
-    private DefaultTableModel modeloTabla;
+	private JButton btnCerrar;
+	private JButton btnCargar;
+	private List<TMesa> listaMesas;
+	private JTable tablaMesas;
+	private DefaultTableModel modeloTabla;
 
-    public GUI_ListarMesa() {
-        super("Mostrar Lista de Mesas");
-        initGUI();
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        pack();
-        setLocationRelativeTo(null);
+	public GUI_ListarMesa() {
+		super("Mostrar Lista de Mesas");
+		initGUI();
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				limpiarVista();
+			}
 
-        Context contexto = new Context(Evento.MOSTRAR_LISTA_MESA, null);
-        Controlador.getInstance().handle(contexto);
-    }
+			@Override
+			public void windowClosed(WindowEvent e) {
+				limpiarVista();
+			}
+		});
+		pack();
+		setLocationRelativeTo(null);
+	}
 
-    @Override
-    @SuppressWarnings("unchecked")
-    public void actualizar(Context context) {
-    	if (context == null)
-    		setVisible(true);
-        else if (context.getEvento() == Evento.MOSTRAR_LISTA_MESA_OK) {
-            listaMesas = (List<TMesa>) context.getDatos();
-            actualizarTabla();
-        } else if (context.getEvento() == Evento.MOSTRAR_LISTA_MESA_KO) {
-            JOptionPane.showMessageDialog(this, "Error al mostrar lista de mesas", "Error", JOptionPane.ERROR_MESSAGE);
-        }
-    }
+	@Override
+	@SuppressWarnings("unchecked")
+	public void actualizar(Context context) {
+		if (context == null) {
+			limpiarVista();
+			setVisible(true);
+			return;
+		}
 
-    private void initGUI() {
-        setLayout(new BorderLayout());
+		SwingUtilities.invokeLater(() -> {
+			if (context.getEvento() == Evento.MOSTRAR_LISTA_MESA_OK) {
+				listaMesas = (List<TMesa>) context.getDatos();
+				actualizarTabla();
+			} else if (context.getEvento() == Evento.MOSTRAR_LISTA_MESA_KO) {
+				
+				if (modeloTabla != null) {
+					modeloTabla.setRowCount(0);
+				}
+				
+				
+				String mensaje = context.getDatos() != null ? context.getDatos().toString() : "No hay mesas activas.";
+				
+				
+				JOptionPane.showMessageDialog(this, mensaje, "Información", JOptionPane.INFORMATION_MESSAGE);
+			}
+		});
+	}
 
-        JPanel panelSuperior = new JPanel(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(5, 5, 5, 5);
-        gbc.fill = GridBagConstraints.HORIZONTAL;
+	private void initGUI() {
+		setLayout(new BorderLayout());
 
-        baja = new JButton("Cerrar");
-        baja.addActionListener(e -> dispose());
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        panelSuperior.add(baja, gbc);
-        add(panelSuperior, BorderLayout.NORTH);
+		JPanel panelSuperior = new JPanel(new GridBagLayout());
+		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.insets = new Insets(5, 5, 5, 5);
+		gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        String[] columnas = {
-            "Tipo", "ID", "Ubicación", "Número", "Capacidad",
-            "Reservada", "Privacidad", "Cubierta", "Suplemento"
-        };
+		
+		btnCargar = new JButton("Cargar Mesas");
+		btnCargar.addActionListener(e -> {
+			Controlador.getInstance().handle(new Context(Evento.MOSTRAR_LISTA_MESA, null));
+		});
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		panelSuperior.add(btnCargar, gbc);
 
-        modeloTabla = new DefaultTableModel(columnas, 0) {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-        };
+		
+		btnCerrar = new JButton("Cerrar");
+		btnCerrar.addActionListener(e -> dispose());
+		gbc.gridx = 1;
+		gbc.gridy = 0;
+		panelSuperior.add(btnCerrar, gbc);
 
-        tablaMesas = new JTable(modeloTabla);
-        JScrollPane scroll = new JScrollPane(tablaMesas);
-        add(scroll, BorderLayout.CENTER);
+		add(panelSuperior, BorderLayout.NORTH);
 
-        setVisible(true);
-    }
+		String[] columnas = { "Tipo", "ID", "Ubicación", "Número", "Capacidad", "Reservada", "Privacidad", "Cubierta",
+				"Suplemento" };
 
-    private void actualizarTabla() {
-        modeloTabla.setRowCount(0); 
+		modeloTabla = new DefaultTableModel(columnas, 0) {
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				return false;
+			}
+		};
 
-        if (listaMesas != null) {
-            for (TMesa mesa : listaMesas) {
+		tablaMesas = new JTable(modeloTabla);
+		JScrollPane scroll = new JScrollPane(tablaMesas);
+		add(scroll, BorderLayout.CENTER);
+	}
 
-                String tipo = mesa.getTipo();
-                String id = String.valueOf(mesa.getId());
-                String ubicacion = mesa.getUbicacion();
-                String numero = String.valueOf(mesa.getNumero());
-                String capacidad = String.valueOf(mesa.getCapacidad());
+	private void actualizarTabla() {
+		modeloTabla.setRowCount(0);
 
-                String reservada = "N/A";
-                String cubierta = "N/A";
-                String privacidad = "N/A";
-                String suplemento = "N/A";
+		if (listaMesas == null || listaMesas.isEmpty()) {
+			return; 
+		}
 
+		for (TMesa mesa : listaMesas) {
+			
+			String tipo = "Desconocido";
+			if (mesa instanceof TMesaSala) {
+				tipo = "Sala";
+			} else if (mesa instanceof TMesaTerraza) {
+				tipo = "Terraza";
+			}
 
-                if (mesa instanceof TMesaSala) {
-                    TMesaSala sala = (TMesaSala) mesa;
-                    reservada = sala.getReservada() ? "Reservada" : "Sin reservar";
-                    privacidad = sala.getPrivacidad();
-                } 
-                else if (mesa instanceof TMesaTerraza) {
-                    TMesaTerraza terraza = (TMesaTerraza) mesa;
-                    cubierta = terraza.getCubierta() ? "Cubierta" : "No cubierta";
-                    suplemento = String.valueOf(terraza.getSuplemento());
-                }
+			String id = String.valueOf(mesa.getId());
+			String ubicacion = mesa.getUbicacion() != null ? mesa.getUbicacion() : "N/A";
+			String numero = String.valueOf(mesa.getNumero());
+			String capacidad = String.valueOf(mesa.getCapacidad());
 
-                Object[] fila = {
-                    tipo,
-                    id,
-                    ubicacion,
-                    numero,
-                    capacidad,
-                    reservada,
-                    privacidad,
-                    cubierta,
-                    suplemento
-                };
+			String reservada = "N/A";
+			String cubierta = "N/A";
+			String privacidad = "N/A";
+			String suplemento = "N/A";
 
-                modeloTabla.addRow(fila);
-            }
-        }
-    }
+			if (mesa instanceof TMesaSala) {
+				TMesaSala sala = (TMesaSala) mesa;
+				reservada = (sala.getReservada() != null && sala.getReservada()) ? "Sí" : "No";
+				privacidad = sala.getPrivacidad() != null ? sala.getPrivacidad() : "N/A";
+			} else if (mesa instanceof TMesaTerraza) {
+				TMesaTerraza terraza = (TMesaTerraza) mesa;
+				cubierta = (terraza.getCubierta() != null && terraza.getCubierta()) ? "Sí" : "No";
+				suplemento = terraza.getSuplemento() != null ? terraza.getSuplemento() + " €" : "N/A";
+			}
+
+			Object[] fila = { tipo, id, ubicacion, numero, capacidad, reservada, privacidad, cubierta, suplemento };
+			modeloTabla.addRow(fila);
+		}
+	}
+
+	private void limpiarVista() {
+		listaMesas = null;
+		if (modeloTabla != null) {
+			modeloTabla.setRowCount(0);
+		}
+	}
 }

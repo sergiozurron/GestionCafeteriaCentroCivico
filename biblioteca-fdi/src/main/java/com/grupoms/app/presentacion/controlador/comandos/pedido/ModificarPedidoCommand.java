@@ -9,25 +9,21 @@ import com.grupoms.app.presentacion.controlador.comandos.Command;
 
 public class ModificarPedidoCommand implements Command{
 
-    @Override
-    public Context execute(Object data) {
-         if (!(data instanceof TPedido)) {
-            return new Context(Evento.MODIFICAR_PEDIDO_KO, null);
-        }
+	@Override
+	public Context execute(Object data) {
+		TPedido pedido = (TPedido) data;
+		SAPedido sa = FactoriaSA.getInstance().creaSAPedido();
+		try {
+			Boolean ok = sa.modificarPedido(pedido);
+			if(ok) {
+				return new Context(Evento.MODIFICAR_PEDIDO_OK,pedido);
+			}
+			else {
+				return new Context(Evento.MODIFICAR_PEDIDO_KO, "No se pudo modificar el pedido");
+			}
+		}catch (Exception e) {
+			return new Context(Evento.MODIFICAR_PEDIDO_KO, e.getMessage());
+			}
+	}
 
-        TPedido pedido = (TPedido) data;
-        SAPedido saPedido = FactoriaSA.getInstance().creaSAPedido();
-
-        try {
-            Integer resultado = saPedido.modificarPedido(pedido);
-            if (resultado == null || resultado <= 0) {
-                return new Context(Evento.MODIFICAR_PEDIDO_KO, null);
-            }
-            pedido.setId(resultado);
-            return new Context(Evento.MODIFICAR_PEDIDO_OK, pedido);
-        } catch (Exception e) {
-            return new Context(Evento.MODIFICAR_PEDIDO_KO, null);
-        }
-    }
-    
 }

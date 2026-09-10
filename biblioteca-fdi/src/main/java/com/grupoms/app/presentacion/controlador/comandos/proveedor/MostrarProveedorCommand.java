@@ -14,12 +14,11 @@ public class MostrarProveedorCommand implements Command {
 		try {
 			TProveedor proveedor = FactoriaSA.getInstance().creaSAProveedor().mostrarProveedor(idProveedor);
 			if (proveedor == null)
-				return new Context(Evento.MOSTRAR_PROVEEDOR_KO, null);
+				return new Context(Evento.MOSTRAR_PROVEEDOR_KO, "No se pudo mostrar el proveedor");
 			return new Context(Evento.MOSTRAR_PROVEEDOR_OK, proveedor);
 		} catch (Exception e) {
-			return new Context(Evento.MOSTRAR_PROVEEDOR_KO, null);
+			return new Context(Evento.MOSTRAR_PROVEEDOR_KO, e.getMessage());
 		}
 	}
 
 }
-

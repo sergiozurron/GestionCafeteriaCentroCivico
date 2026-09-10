@@ -5,7 +5,7 @@ public class TProveedor {
 	private Integer id;
 	private String nombre;
 	private Double tarifa;
-	private Integer tiempoEntrega; // En días
+	private Integer tiempoEntrega;
 	private Boolean activo;
 
 	public Integer getId() {

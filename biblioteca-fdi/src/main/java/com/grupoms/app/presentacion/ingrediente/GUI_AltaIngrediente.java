@@ -9,96 +9,104 @@ import com.grupoms.app.presentacion.controlador.Context;
 import com.grupoms.app.presentacion.controlador.Controlador;
 import com.grupoms.app.presentacion.controlador.Evento;
 
-public class GUI_AltaIngrediente extends JFrame implements IGUI{
+public class GUI_AltaIngrediente extends JFrame implements IGUI {
 
 	private JTextField nombre;
-    private JTextField precio;
-    private JTextField prov;
+	private JTextField precio;
+	private JTextField prov;
 
-    
-    private JButton crear;
+	private JButton crear;
 
-    public GUI_AltaIngrediente(){
-       super("Alta Ingrediente");
-       initGUI(); //iniciamos el front por asi ddecirlo
-       setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); //destruye la ventana sin cerrar la app
-       pack(); //ajusta
-       setLocationRelativeTo(null); //centra
-        //es visible
-    }
-    @Override
-    public void actualizar(Context context) {
-    	if (context == null) {
-    		setVisible(true);
-        } else if (context.getEvento() == Evento.ALTA_INGREDIENTE_OK) {
-            // Muestra mensaje de éxito
-            JOptionPane.showMessageDialog(this, "Ingrediente creado con éxito");
-            // Limpia los campos para la siguiente entrada
-            nombre.setText("");
-            precio.setText("");
-            prov.setText("");
-        } else if (context.getEvento() == Evento.ALTA_INGREDIENTE_KO) {
-            JOptionPane.showMessageDialog(this, "Error al crear el ingrediente", "Error", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-    
-    public void initGUI(){
-        setLayout(new BorderLayout()); //layout general
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(8, 8, 8, 8);
-        gbc.fill = GridBagConstraints.HORIZONTAL;
+	public GUI_AltaIngrediente() {
+		super("Alta Ingrediente");
+		initGUI();
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		pack();
+		setLocationRelativeTo(null);
 
-        JPanel panel = new JPanel(new GridBagLayout()); //panel principal
+	}
 
-        JLabel labelNombre = new JLabel("Nombre Ingrediente:");
-        nombre = new JTextField(10);
+	@Override
+	public void actualizar(Context context) {
+		if (context == null) {
+			setVisible(true);
+		} else if (context.getEvento() == Evento.ALTA_INGREDIENTE_OK) {
 
-        JLabel labelPrecio = new JLabel("Precio:");
-        precio = new JTextField(10);
+			JOptionPane.showMessageDialog(this, "Ingrediente creado con éxito");
 
-        JLabel labelProv = new JLabel("ID proveedor:");
-        prov = new JTextField(10);
+			nombre.setText("");
+			precio.setText("");
+			prov.setText("");
+			dispose();
+		} else if (context.getEvento() == Evento.ALTA_INGREDIENTE_KO) {
+			String mensaje = (String) context.getDatos();
+		    JOptionPane.showMessageDialog(this, mensaje);
+		}
+	}
 
-        crear = new JButton("Crear Ingrediente");
-        crear.addActionListener(e -> {
-            try {
-                String nombrerI = nombre.getText();
-                Double precioI = Double.parseDouble(precio.getText());
-                Integer provI = Integer.parseInt(prov.getText());
-                // Crear el TPedido directamente aquí
-                TIngrediente ingr = new TIngrediente();
-                ingr.setNombre(nombrerI);
-                ingr.setPrecio(precioI);
-                ingr.setIDProveedor(provI);
-                // Enviar al controlador
-                Context contexto = new Context(Evento.ALTA_INGREDIENTE, ingr);
-                Controlador.getInstance().handle(contexto);
+	public void initGUI() {
+		setLayout(new BorderLayout());
+		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.insets = new Insets(8, 8, 8, 8);
+		gbc.fill = GridBagConstraints.HORIZONTAL;
 
-            } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(this, "Error: los campos numéricos no son válidos");
-            }
-        });
+		JPanel panel = new JPanel(new GridBagLayout());
 
-        gbc.gridx = 0; gbc.gridy = 0;
-        panel.add(labelNombre, gbc);
-        gbc.gridx = 1;
-        panel.add(nombre, gbc);
+		JLabel labelNombre = new JLabel("Nombre Ingrediente:");
+		nombre = new JTextField(10);
 
-        gbc.gridx = 0; gbc.gridy = 1;
-        panel.add(labelPrecio, gbc);
-        gbc.gridx = 1;
-        panel.add(precio, gbc);
+		JLabel labelPrecio = new JLabel("Precio:");
+		precio = new JTextField(10);
 
-        gbc.gridx = 0; gbc.gridy = 2;
-        panel.add(labelProv, gbc);
-        gbc.gridx = 1;
-        panel.add(prov, gbc);
+		JLabel labelProv = new JLabel("ID proveedor:");
+		prov = new JTextField(10);
 
-        gbc.gridx = 0; gbc.gridy = 3; 
-        gbc.gridwidth = 2;
-        panel.add(crear, gbc);
+		crear = new JButton("Crear Ingrediente");
+		crear.addActionListener(e -> {
+			try {
+				String nombrerI = nombre.getText().trim();
+				String precioTexto = precio.getText().trim().replace(',', '.');
+				Double precioI = Double.parseDouble(precioTexto);
+				Integer provI = Integer.parseInt(prov.getText().trim());
 
-        add(panel, BorderLayout.CENTER);
-    }
-    
+				TIngrediente ingr = new TIngrediente();
+				ingr.setNombre(nombrerI);
+				ingr.setPrecio(precioI);
+				ingr.setIDProveedor(provI);
+
+				Context contexto = new Context(Evento.ALTA_INGREDIENTE, ingr);
+				Controlador.getInstance().handle(contexto);
+
+			} catch (NumberFormatException ex) {
+				JOptionPane.showMessageDialog(this,
+						"Error: el precio debe ser numérico (entero o decimal) y el proveedor un entero");
+			}
+		});
+
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		panel.add(labelNombre, gbc);
+		gbc.gridx = 1;
+		panel.add(nombre, gbc);
+
+		gbc.gridx = 0;
+		gbc.gridy = 1;
+		panel.add(labelPrecio, gbc);
+		gbc.gridx = 1;
+		panel.add(precio, gbc);
+
+		gbc.gridx = 0;
+		gbc.gridy = 2;
+		panel.add(labelProv, gbc);
+		gbc.gridx = 1;
+		panel.add(prov, gbc);
+
+		gbc.gridx = 0;
+		gbc.gridy = 3;
+		gbc.gridwidth = 2;
+		panel.add(crear, gbc);
+
+		add(panel, BorderLayout.CENTER);
+	}
+
 }

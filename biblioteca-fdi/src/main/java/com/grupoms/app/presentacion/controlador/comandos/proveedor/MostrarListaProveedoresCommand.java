@@ -18,10 +18,8 @@ public class MostrarListaProveedoresCommand implements Command {
 			List<TProveedor> listaProveedores = sa.mostrarListaProveedores();
 			return new Context(Evento.MOSTRAR_LISTA_PROVEEDOR_OK, listaProveedores);
 		} catch (Exception e) {
-			return new Context(Evento.MOSTRAR_LISTA_PROVEEDOR_KO, null);
+			return new Context(Evento.MOSTRAR_LISTA_PROVEEDOR_KO, e.getMessage());
 		}
 	}
 
 }
-
-

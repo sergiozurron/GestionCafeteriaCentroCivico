@@ -28,7 +28,6 @@ public class GUI_MostrarProveedor extends JFrame implements IGUI {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		pack();
 		setLocationRelativeTo(null);
-		setVisible(true);
 	}
 
 	private void initGUI() {
@@ -50,7 +49,6 @@ public class GUI_MostrarProveedor extends JFrame implements IGUI {
 					return;
 				}
 
-				// Enviar al controlador
 				Context contexto = new Context(Evento.MOSTRAR_PROVEEDOR, id);
 				Controlador.getInstance().handle(contexto);
 
@@ -59,7 +57,6 @@ public class GUI_MostrarProveedor extends JFrame implements IGUI {
 			}
 		});
 
-		// Labels para mostrar datos
 		labelIdValor = new JLabel();
 		labelNombreValor = new JLabel();
 		labelTarifaValor = new JLabel();
@@ -68,42 +65,50 @@ public class GUI_MostrarProveedor extends JFrame implements IGUI {
 
 		int y = 0;
 
-		gbc.gridx = 0; gbc.gridy = y;
+		gbc.gridx = 0;
+		gbc.gridy = y;
 		panel.add(labelId, gbc);
 		gbc.gridx = 1;
 		panel.add(campoId, gbc);
 
 		y++;
-		gbc.gridx = 0; gbc.gridy = y; gbc.gridwidth = 2;
+		gbc.gridx = 0;
+		gbc.gridy = y;
+		gbc.gridwidth = 2;
 		panel.add(btnMostrar, gbc);
 
 		y++;
 		gbc.gridwidth = 1;
-		gbc.gridx = 0; gbc.gridy = y;
+		gbc.gridx = 0;
+		gbc.gridy = y;
 		panel.add(new JLabel("ID:"), gbc);
 		gbc.gridx = 1;
 		panel.add(labelIdValor, gbc);
 
 		y++;
-		gbc.gridx = 0; gbc.gridy = y;
+		gbc.gridx = 0;
+		gbc.gridy = y;
 		panel.add(new JLabel("Nombre:"), gbc);
 		gbc.gridx = 1;
 		panel.add(labelNombreValor, gbc);
 
 		y++;
-		gbc.gridx = 0; gbc.gridy = y;
+		gbc.gridx = 0;
+		gbc.gridy = y;
 		panel.add(new JLabel("Tarifa:"), gbc);
 		gbc.gridx = 1;
 		panel.add(labelTarifaValor, gbc);
 
 		y++;
-		gbc.gridx = 0; gbc.gridy = y;
+		gbc.gridx = 0;
+		gbc.gridy = y;
 		panel.add(new JLabel("Tiempo de Entrega:"), gbc);
 		gbc.gridx = 1;
 		panel.add(labelTiempoValor, gbc);
 
 		y++;
-		gbc.gridx = 0; gbc.gridy = y;
+		gbc.gridx = 0;
+		gbc.gridy = y;
 		panel.add(new JLabel("Activo:"), gbc);
 		gbc.gridx = 1;
 		panel.add(labelActivoValor, gbc);
@@ -114,25 +119,28 @@ public class GUI_MostrarProveedor extends JFrame implements IGUI {
 	@Override
 	public void actualizar(Context context) {
 		if (context == null) {
+			setVisible(true);
 			return;
 		}
 
-		// Ejecutar en el hilo de Swing
 		SwingUtilities.invokeLater(() -> {
 			if (context.getEvento() == Evento.MOSTRAR_PROVEEDOR_OK) {
 				TProveedor proveedor = (TProveedor) context.getDatos();
 				if (proveedor != null) {
 					labelIdValor.setText(proveedor.getId() != null ? proveedor.getId().toString() : "N/A");
 					labelNombreValor.setText(proveedor.getNombre() != null ? proveedor.getNombre() : "N/A");
-					labelTarifaValor.setText(proveedor.getTarifa() != null ? String.format("%.2f €", proveedor.getTarifa()) : "0.00 €");
-					labelTiempoValor.setText(proveedor.getTiempoEntrega() != null ? proveedor.getTiempoEntrega() + " días" : "N/A");
+					labelTarifaValor.setText(
+							proveedor.getTarifa() != null ? String.format("%.2f €", proveedor.getTarifa()) : "0.00 €");
+					labelTiempoValor.setText(
+							proveedor.getTiempoEntrega() != null ? proveedor.getTiempoEntrega() + " días" : "N/A");
 					Boolean activo = proveedor.getActivo();
 					labelActivoValor.setText(activo != null && activo ? "Sí" : "No");
 				} else {
 					limpiarLabels();
 				}
 			} else if (context.getEvento() == Evento.MOSTRAR_PROVEEDOR_KO) {
-				JOptionPane.showMessageDialog(this, "Proveedor no encontrado en la base de datos");
+				String mensaje = (String) context.getDatos();
+			    JOptionPane.showMessageDialog(this, mensaje);
 				limpiarLabels();
 			}
 		});

@@ -1,219 +1,247 @@
 package com.grupoms.app.negocio.ingrediente;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import com.grupoms.app.integracion.factoria.FactoriaDAO;
+import com.grupoms.app.integracion.ingrediente.DAOIngrediente;
+import com.grupoms.app.negocio.producto.TEntradaReceta;
 import com.grupoms.app.integracion.Transaction.Transaction;
 import com.grupoms.app.integracion.Transaction.TransactionManager;
-import com.grupoms.app.integracion.ingrediente.DAOIngrediente;
-import com.grupoms.app.integracion.ingrediente.DAOIngredienteImp;
 
-public class SAIngredienteImp implements SAIngrediente{
+public class SAIngredienteImp implements SAIngrediente {
 
-    DAOIngrediente dao = new DAOIngredienteImp();
+	@Override
+	public Integer crearIngrediente(TIngrediente ingrediente) {
 
-    @Override
-    public Integer crearIngrediente(TIngrediente ingrediente) {
-        Transaction t = null;
-        Integer idGenerado = null;
+		if (ingrediente == null)
+			throw new IllegalArgumentException("Ingrediente no válido");
 
-        try {
-            // 1. Iniciar transacción
-            t = TransactionManager.getInstance().newTransaction();
-            t.start();
-            // 2. Inicializar campos del ingrediente
-            ingrediente.setActivo(true);
-            idGenerado = dao.crearIngrediente(ingrediente);
-            
-            // 4. Commit
-            t.commit();
+		if (ingrediente.getNombre() == null || ingrediente.getNombre().isEmpty())
+			throw new IllegalArgumentException("El nombre no puede estar vacío");
 
-        } catch (Exception e) {
-            e.printStackTrace();
-            if (t != null) {
-                try { t.rollback(); } catch(Exception ex) { ex.printStackTrace(); }
-            }
-        }
+		if (ingrediente.getIDProveedor() == null || ingrediente.getIDProveedor() <= 0)
+			throw new IllegalArgumentException("Proveedor no válido");
 
-        return idGenerado;
-    }
+		Transaction t = TransactionManager.getInstance().newTransaction();
 
-    @Override
-    public Boolean bajaIngrediente(TIngrediente ingrediente) {
-        Transaction t = null;
-        Boolean exito = false;
+		try {
+			t.start();
 
-        try {
-            // 1. Iniciar transacción
-            t = TransactionManager.getInstance().newTransaction();
-            t.start();
+			DAOIngrediente dao = FactoriaDAO.getInstancia().creaDAOIngrediente();
 
-            if (ingrediente == null || ingrediente.getID() == null || ingrediente.getID() <= 0)
-                throw new IllegalArgumentException("El ingrediente debe tener un ID válido para dar de baja.");
-            ingrediente.setActivo(false);
-            dao.bajaIngrediente(ingrediente);
-            
-            // 4. Commit
-            t.commit();
-            exito = true;
+			com.grupoms.app.integracion.proveedor.DAOProveedor daoProveedor = FactoriaDAO.getInstancia()
+					.creaDAOProveedor();
+			com.grupoms.app.negocio.proveedor.TProveedor proveedor = daoProveedor
+					.mostrarProveedor(ingrediente.getIDProveedor());
 
-        } catch (Exception e) {
-            e.printStackTrace();
-            if (t != null) {
-                try { t.rollback(); } catch(Exception ex) { ex.printStackTrace(); }
-            }
-        }
-        return exito;
+			if (proveedor == null)
+				throw new IllegalStateException("El proveedor no existe");
 
-    }
+			if (!proveedor.getActivo())
+				throw new IllegalStateException("El proveedor no está activo");
 
-    @Override
-    public Boolean modificarIngrediente(TIngrediente ingrediente) {
-        Transaction t = null;
-        Boolean exito = false;
-        TIngrediente ing = null;
+			ingrediente.setActivo(true);
 
-        try {
-            // 1. Iniciar transacción
-            t = TransactionManager.getInstance().newTransaction();
-            t.start();
-            ing = dao.mostrarIngrediente(ingrediente.getID());
-            if (ing == null)
-                throw new IllegalArgumentException("El ingrediente con ID " + ingrediente.getID() + " no existe.");
-            
-            exito = dao.modificarIngrediente(ingrediente);
-            t.commit();
+			Integer id = dao.crearIngrediente(ingrediente);
 
-        } catch (Exception e) {
-            e.printStackTrace();
-            if (t != null) {
-                try { t.rollback(); } catch(Exception ex) { ex.printStackTrace(); }
-            }
-        }
+			if (id == null || id <= 0)
+				throw new RuntimeException("No se pudo crear el ingrediente");
 
-        return exito;
-    }
+			t.commit();
+			return id;
 
-    @Override
-    public TIngrediente mostrarIngrediente(Integer ID) {
-        if (ID == null || ID <= 0)
-            throw new IllegalArgumentException("El ID del ingrediente no es válido.");
-        Transaction t = null;
-        TIngrediente ing = null;
+		} catch (Exception e) {
 
-        try {
-            // 1. Iniciar transacción
-            t = TransactionManager.getInstance().newTransaction();
-            t.start();
+			try {
+				t.rollback();
+			} catch (Exception ex) {
+			}
 
-            // 2. Consultar el ingrediente
-            ing = dao.mostrarIngrediente(ID);
+			throw new RuntimeException(e.getMessage(), e);
+		}
+	}
 
-            // 3. Commit de la transacción
-            t.commit();
+	@Override
+	public Boolean modificarIngrediente(TIngrediente ingrediente) {
 
-        } catch (Exception e) {
-            e.printStackTrace();
-            if (t != null) {
-                        try { t.rollback(); } catch (Exception ex) { ex.printStackTrace(); }
-            }
-        }
+		if (ingrediente == null || ingrediente.getID() == null || ingrediente.getID() <= 0)
+			throw new IllegalArgumentException("Ingrediente no válido");
 
-        // 4. Devolver el ingrediente (null si hubo error)
-        return ing;
-    }
+		if (ingrediente.getIDProveedor() == null || ingrediente.getIDProveedor() <= 0)
+			throw new IllegalArgumentException("Proveedor no válido");
 
-    @Override
-    public List<TIngrediente> mostrarListaIngredientes() {
-        List<TIngrediente> listaIngredientes = new ArrayList<>();
-        Transaction t = null;
-        try {
-            t = TransactionManager.getInstance().newTransaction();
-            t.start();
+		Transaction t = TransactionManager.getInstance().newTransaction();
 
-            List<TIngrediente> todos = dao.mostrarListaIngredientes();
-            for(TIngrediente ing : todos) {
-                if(ing.getActivo()) {
-                    listaIngredientes.add(ing);
-                }
-            }
-            if (listaIngredientes.isEmpty()) {
-                throw new IllegalArgumentException("No hay ingredientes activos en la base de datos.");
-            }
-            t.commit();
-        } catch (Exception e) {
-            e.printStackTrace();
-            if (t != null) {
-                try { t.rollback(); } catch(Exception ex) { ex.printStackTrace(); }
-            }
-            throw new IllegalArgumentException("Error al mostrar la lista de ingredientes", e);
-        }
-        return listaIngredientes;
-    }
+		try {
+			t.start();
 
-    @Override
-    public List<TIngrediente> mostrarIngredientePorProducto(Integer IDProducto) {
-        if (IDProducto == null || IDProducto <= 0)
-            throw new IllegalArgumentException("El ID del producto no es válido.");
+			DAOIngrediente daoIngrediente = FactoriaDAO.getInstancia().creaDAOIngrediente();
+			com.grupoms.app.integracion.proveedor.DAOProveedor daoProveedor = FactoriaDAO.getInstancia()
+					.creaDAOProveedor();
+			TIngrediente existente = daoIngrediente.mostrarIngrediente(ingrediente.getID());
 
-        List<TIngrediente> listaIngredientes = null;
-        Transaction t = null;
-        try {
-            t = TransactionManager.getInstance().newTransaction();
+			if (existente == null)
+				throw new IllegalArgumentException("El ingrediente no existe");
 
-            t.start();
+			if (!existente.getActivo())
+				throw new IllegalArgumentException("El ingrediente está inactivo");
+			com.grupoms.app.negocio.proveedor.TProveedor proveedor = daoProveedor
+					.mostrarProveedor(ingrediente.getIDProveedor());
+			if (proveedor == null)
+				throw new IllegalArgumentException("El proveedor no existe");
+			if (!proveedor.getActivo())
+				throw new IllegalArgumentException("El proveedor no está activo");
+			ingrediente.setActivo(existente.getActivo());
+			Boolean exito = daoIngrediente.modificarIngrediente(ingrediente);
+			if (!exito)
+				throw new RuntimeException("No se pudo modificar el ingrediente");
 
+			t.commit();
+			return true;
 
-            listaIngredientes = dao.listarIngredientesPorProducto(IDProducto);
+		} catch (Exception e) {
+			try {
+				t.rollback();
+			} catch (Exception ex) {
+				throw new RuntimeException("Error en rollback", ex);
+			}
+			throw new RuntimeException(e.getMessage(), e);
+		}
+	}
 
-            // Filtramos solo activos
-            listaIngredientes.removeIf(ing -> !ing.getActivo());
+	@Override
+	public Boolean bajaIngrediente(TIngrediente ingrediente) {
 
-            if (listaIngredientes.isEmpty()) {
-                t.rollback();
-                System.out.println("[INFO] No hay ingredientes activos en la base de datos.");
-                return new ArrayList<>(); // Devolvemos set vacío para la GUI
-            }
+		if (ingrediente == null || ingrediente.getID() == null || ingrediente.getID() <= 0)
+			throw new IllegalArgumentException("Ingrediente no válido");
 
-            t.commit();
+		Transaction t = TransactionManager.getInstance().newTransaction();
 
-        } catch (Exception e) {
-            e.printStackTrace();
-            try { if (t != null) t.rollback(); } catch (Exception ex) { ex.printStackTrace(); }
-            throw new RuntimeException("Error en SA al mostrar lista de ingredientes.", e);
-        }
+		try {
+			t.start();
 
-        return listaIngredientes;
-    }
+			DAOIngrediente dao = FactoriaDAO.getInstancia().creaDAOIngrediente();
 
+			TIngrediente existente = dao.mostrarIngrediente(ingrediente.getID());
 
-    @Override
-    public List<TIngrediente> mostrarProveedorPorIngrediente(TIngrediente ingrediente) {
-        if (ingrediente == null || ingrediente.getIDProveedor() == null || ingrediente.getIDProveedor() <= 0)
-            throw new IllegalArgumentException("El ingrediente debe tener un ID de proveedor válido.");
+			if (existente == null)
+				throw new IllegalArgumentException("El ingrediente no existe");
 
-        List<TIngrediente> listaIngredientes = null;
-        Transaction t = null;
-        try {
-            t = TransactionManager.getInstance().newTransaction();
-            t.start();
-            listaIngredientes = dao.mostrarProveedorPorIngrediente(ingrediente.getIDProveedor());
-            t.commit();
-        } catch (Exception e) {
-            e.printStackTrace();
-            if (t != null) {
-                try { t.rollback(); } catch(Exception ex) { ex.printStackTrace(); }
-            }
-            throw new IllegalArgumentException("Error al mostrar ingredientes del proveedor con ID: " + ingrediente.getIDProveedor(), e);
-        }
-        return listaIngredientes;
-    }
+			if (!existente.getActivo())
+				throw new IllegalArgumentException("El ingrediente ya está dado de baja");
 
-    @Override
-    public void vincularProducto(Integer idIngrediente, Integer idProducto, Integer cantidad) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'vincularProducto'");
-    }
+			existente.setActivo(false);
 
-    
+			Boolean exito = dao.bajaIngrediente(existente);
+
+			t.commit();
+			return exito;
+
+		} catch (Exception e) {
+			t.rollback();
+			throw new RuntimeException("Error en SA al dar de baja ingrediente", e);
+		}
+	}
+
+	@Override
+	public TIngrediente mostrarIngrediente(Integer id) {
+
+		if (id == null || id <= 0)
+			throw new IllegalArgumentException("ID no válido");
+
+		Transaction t = TransactionManager.getInstance().newTransaction();
+
+		try {
+			t.start();
+
+			DAOIngrediente dao = FactoriaDAO.getInstancia().creaDAOIngrediente();
+
+			TIngrediente ing = dao.mostrarIngrediente(id);
+
+			if (ing == null)
+				throw new IllegalArgumentException("Ingrediente no encontrado");
+
+			t.commit();
+			return ing;
+
+		} catch (Exception e) {
+			t.rollback();
+			throw new RuntimeException("Error en SA al mostrar ingrediente", e);
+		}
+	}
+
+	@Override
+	public List<TIngrediente> mostrarListaIngredientes() {
+
+		Transaction t = null;
+
+		try {
+			t = TransactionManager.getInstance().newTransaction();
+			t.start();
+
+			DAOIngrediente dao = FactoriaDAO.getInstancia().creaDAOIngrediente();
+
+			List<TIngrediente> lista = dao.mostrarListaIngredientes();
+
+			t.commit();
+			return lista;
+
+		} catch (Exception e) {
+			if (t != null)
+				t.rollback();
+			throw new RuntimeException("Error en SA al mostrar lista de ingredientes", e);
+		}
+	}
+
+	@Override
+	public List<TEntradaReceta> mostrarIngredientesPorProducto(Integer IDProducto) {
+
+		if (IDProducto == null || IDProducto <= 0)
+			throw new IllegalArgumentException("ID de producto no válido");
+
+		Transaction t = null;
+
+		try {
+			t = TransactionManager.getInstance().newTransaction();
+			t.start();
+
+			DAOIngrediente dao = FactoriaDAO.getInstancia().creaDAOIngrediente();
+
+			List<TEntradaReceta> lista = dao.listarIngredientesPorProducto(IDProducto);
+
+			t.commit();
+			return lista;
+
+		} catch (Exception e) {
+			if (t != null)
+				t.rollback();
+			throw new RuntimeException("Error en SA al listar ingredientes por producto", e);
+		}
+	}
+
+	@Override
+	public List<TIngrediente> mostrarIngredientesProveedor(Integer idProveedor) {
+
+		if (idProveedor == null || idProveedor <= 0)
+			throw new IllegalArgumentException("Proveedor no válido");
+
+		Transaction t = null;
+
+		try {
+			t = TransactionManager.getInstance().newTransaction();
+			t.start();
+
+			DAOIngrediente dao = FactoriaDAO.getInstancia().creaDAOIngrediente();
+
+			List<TIngrediente> lista = dao.mostrarIngredientesProveedor(idProveedor);
+
+			t.commit();
+			return lista;
+
+		} catch (Exception e) {
+			if (t != null)
+				t.rollback();
+			throw new RuntimeException("Error al mostrar ingredientes por proveedor", e);
+		}
+	}
 }

@@ -11,15 +11,15 @@ import com.grupoms.app.presentacion.controlador.comandos.Command;
 
 public class ListarIngredientesPorProveedorCommand implements Command {
 
-    @Override
-    public Context execute(Object data) {
-        SAIngrediente saProducto = FactoriaSA.getInstance().creaSAIngrediente();
-        try {
-            List<TIngrediente> productos = saProducto.mostrarProveedorPorIngrediente((TIngrediente) data);
-            return new Context(Evento.MOSTRAR_INGREDIENTES_OK, productos);
-        } catch (Exception e) {
-            return new Context(Evento.MOSTRAR_INGREDIENTES_KO, null);
-        }
-    }
-    
+	@Override
+	public Context execute(Object data) {
+		SAIngrediente saIngrediente = FactoriaSA.getInstance().creaSAIngrediente();
+		try {
+			List<TIngrediente> ingredientes = saIngrediente.mostrarIngredientesProveedor((Integer) data);
+			return new Context(Evento.LISTAR_INGREDIENTES_POR_PROVEEDOR_OK, ingredientes);
+		} catch (Exception e) {
+			return new Context(Evento.LISTAR_INGREDIENTES_POR_PROVEEDOR_KO, e.getMessage());
+		}
+	}
+
 }

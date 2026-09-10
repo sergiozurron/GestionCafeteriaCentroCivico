@@ -7,28 +7,27 @@ import com.grupoms.app.presentacion.controlador.Context;
 import com.grupoms.app.presentacion.controlador.Evento;
 import com.grupoms.app.presentacion.controlador.comandos.Command;
 
-public class AltaPedidoCommand implements Command{
+public class AltaPedidoCommand implements Command {
 
-    @Override
-    public Context execute(Object data) {
-        if (!(data instanceof TPedido)) {
-            return new Context(Evento.ALTA_PEDIDO_KO, null);
-        }
+	@Override
+	public Context execute(Object data) {
 
-        TPedido pedido = (TPedido) data;
-        SAPedido saPedido = FactoriaSA.getInstance().creaSAPedido();
+		TPedido pedido = (TPedido) data;
+		SAPedido sa = FactoriaSA.getInstance().creaSAPedido();
 
-        try {
-            Integer idPedido = saPedido.altaPedido(pedido);
-            if (idPedido == null || idPedido <= 0) {
-                return new Context(Evento.ALTA_PEDIDO_KO, null);
-            }
-            pedido.setId(idPedido);
+		try {
 
-            return new Context(Evento.ALTA_PEDIDO_OK, pedido);
-        } catch (Exception e) {
-            return new Context(Evento.ALTA_PEDIDO_KO, null);
-        }
-    }
-    
+			Integer idGenerado = sa.altaPedido(pedido);
+
+			if (idGenerado != null && idGenerado > 0) {
+				pedido.setId(idGenerado);
+				return new Context(Evento.ALTA_PEDIDO_OK, idGenerado);
+			} else {
+				return new Context(Evento.ALTA_PEDIDO_KO, idGenerado);
+			}
+
+		} catch (Exception e) {
+			return new Context(Evento.ALTA_PEDIDO_KO, e.getMessage());
+		}
+	}
 }

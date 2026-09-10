@@ -1,7 +1,6 @@
 package com.grupoms.app.integracion.ingrediente;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -9,30 +8,39 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.grupoms.app.integracion.DBConfig;
 import com.grupoms.app.integracion.Transaction.Transaction;
 import com.grupoms.app.integracion.Transaction.TransactionManager;
 import com.grupoms.app.negocio.ingrediente.TIngrediente;
+import com.grupoms.app.negocio.producto.TEntradaReceta;
 
-public class DAOIngredienteImp implements DAOIngrediente{
+public class DAOIngredienteImp implements DAOIngrediente {
+
+    private static final String INSERT = "INSERT INTO ingredientes(nombre, precio, activo, proveedor_id) VALUES (?, ?, ?, ?)";
+    private static final String READ_BY_ID = "SELECT id, nombre, precio, activo, proveedor_id FROM ingredientes WHERE id = ? AND activo = True FOR UPDATE";
+    private static final String READ_ALL = "SELECT id, nombre, precio, activo, proveedor_id FROM ingredientes WHERE activo = True FOR UPDATE";
+    private static final String READ_BY_PROVEEDOR = 
+    		"SELECT id, nombre, precio, activo, proveedor_id FROM ingredientes WHERE proveedor_id = ? AND activo = True FOR UPDATE";
+    private static final String UPDATE = "UPDATE ingredientes SET nombre=?, precio=?, proveedor_id=? WHERE id=?";
+    private static final String UPDATE_ACTIVO = "UPDATE ingredientes SET activo=? WHERE id=?";
+    private static final String READ_ENTRADAS_RECETA = 
+    		"SELECT id, producto_id, ingrediente_id, activo FROM entradas_recetas WHERE producto_id = ? AND activo = True FOR UPDATE";
 
     @Override
     public Integer crearIngrediente(TIngrediente ingrediente) {
         Integer idGenerado = null;
+
         try {
             Transaction t = TransactionManager.getInstance().getTransaction();
             Connection c = (Connection) t.getResource();
 
-            // Insert en la tabla ingredientes
-            String sql = "INSERT INTO ingredientes (nombre, precio, activo, proveedor_id) VALUES (?, ?, ?, ?)";
-            try (PreparedStatement ps = c.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            try (PreparedStatement ps = c.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS)) {
                 ps.setString(1, ingrediente.getNombre());
                 ps.setDouble(2, ingrediente.getPrecio());
                 ps.setBoolean(3, ingrediente.getActivo());
                 ps.setInt(4, ingrediente.getIDProveedor());
+
                 ps.executeUpdate();
 
-                // Obtener el ID generado
                 try (ResultSet rs = ps.getGeneratedKeys()) {
                     if (rs.next()) {
                         idGenerado = rs.getInt(1);
@@ -41,206 +49,185 @@ public class DAOIngredienteImp implements DAOIngrediente{
                 }
             }
 
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (SQLException e) {
+            throw new RuntimeException(e.getMessage());
         }
+
         return idGenerado;
     }
 
     @Override
     public TIngrediente mostrarIngrediente(Integer id) {
-        TIngrediente ingr = null;
-        try{
-            Transaction t = TransactionManager.getInstance().getTransaction();
-            if (t==null)
-                throw new IllegalStateException("No hay transaccion activa");
-            Connection c = (Connection) t.getResource();
+        TIngrediente ing = null;
 
-            String sql = "SELECT id, nombre, precio, activo, proveedor_id FROM ingredientes WHERE id = ?";
-            try (PreparedStatement ps = c.prepareStatement(sql)) {
-            ps.setInt(1, id);
-
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    ingr = new TIngrediente();
-                    ingr.setID(rs.getInt("id"));
-                    ingr.setNombre(rs.getString("nombre"));
-                    ingr.setPrecio(rs.getDouble("precio"));
-                    ingr.setIDProveedor(rs.getInt("proveedor_id"));
-                }
-            }
-        }
-    }catch(Exception e){
-        e.printStackTrace();
-    }
-        return ingr;  
-    }
-
-    @Override
-    public List<TIngrediente> mostrarListaIngredientes() throws Exception{
-        List<TIngrediente> listaIngredientes = new ArrayList<>();
         try {
             Transaction t = TransactionManager.getInstance().getTransaction();
             Connection c = (Connection) t.getResource();
 
-            String sql = "SELECT id, nombre, precio, activo, proveedor_id FROM ingredientes";
-            try (PreparedStatement ps = c.prepareStatement(sql)) {
-                ResultSet rs = ps.executeQuery();
+            try (PreparedStatement ps = c.prepareStatement(READ_BY_ID)) {
+                ps.setInt(1, id);
+
+                try (ResultSet rs = ps.executeQuery()) {
+                    if (rs.next()) {
+                        ing = new TIngrediente();
+                        ing.setID(rs.getInt("id"));
+                        ing.setNombre(rs.getString("nombre"));
+                        ing.setPrecio(rs.getDouble("precio"));
+                        ing.setActivo(rs.getBoolean("activo"));
+                        ing.setIDProveedor(rs.getInt("proveedor_id"));
+                    }
+                }
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Error mostrando ingrediente " + id, e);
+        }
+
+        return ing;
+    }
+
+    @Override
+    public List<TIngrediente> mostrarListaIngredientes() {
+        List<TIngrediente> lista = new ArrayList<>();
+
+        try {
+            Transaction t = TransactionManager.getInstance().getTransaction();
+            Connection c = (Connection) t.getResource();
+
+            try (PreparedStatement ps = c.prepareStatement(READ_ALL);
+                 ResultSet rs = ps.executeQuery()) {
 
                 while (rs.next()) {
-                    TIngrediente ingrediente = new TIngrediente();
-                    ingrediente.setID(rs.getInt("id"));
-                    ingrediente.setNombre(rs.getString("nombre"));
-                    ingrediente.setPrecio(rs.getDouble("precio"));
-                    ingrediente.setActivo(rs.getBoolean("activo"));
-                    ingrediente.setIDProveedor(rs.getInt("proveedor_id"));
-                    listaIngredientes.add(ingrediente);
+                    TIngrediente i = new TIngrediente();
+                    i.setID(rs.getInt("id"));
+                    i.setNombre(rs.getString("nombre"));
+                    i.setPrecio(rs.getDouble("precio"));
+                    i.setActivo(rs.getBoolean("activo"));
+                    i.setIDProveedor(rs.getInt("proveedor_id"));
+                    lista.add(i);
                 }
             }
+
         } catch (SQLException e) {
-            System.err.println("Error mostrando la lista de ingredientes: "+e.getMessage());
+            throw new RuntimeException("Error mostrando lista de ingredientes", e);
         }
-        return listaIngredientes;
+
+        return lista;
     }
 
-
     @Override
-    public List<TIngrediente> mostrarProveedorPorIngrediente(Integer idProveedor) {
-        List<TIngrediente> listaIngredientes = new ArrayList<>();
+    public List<TIngrediente> mostrarIngredientesProveedor(Integer idProveedor) {
+        List<TIngrediente> lista = new ArrayList<>();
+
         try {
             Transaction t = TransactionManager.getInstance().getTransaction();
             Connection c = (Connection) t.getResource();
 
-            String sql = "SELECT id, nombre, precio, activo, proveedor_id FROM ingredientes WHERE proveedor_id = ?";
-            try (PreparedStatement ps = c.prepareStatement(sql)) {
+            try (PreparedStatement ps = c.prepareStatement(READ_BY_PROVEEDOR)) {
                 ps.setInt(1, idProveedor);
 
                 try (ResultSet rs = ps.executeQuery()) {
                     while (rs.next()) {
-                        TIngrediente ingrediente = new TIngrediente();
-                        ingrediente.setID(rs.getInt("id"));
-                        ingrediente.setNombre(rs.getString("nombre"));
-                        ingrediente.setPrecio(rs.getDouble("precio"));
-                        ingrediente.setActivo(rs.getBoolean("activo"));
-                        ingrediente.setIDProveedor(rs.getInt("proveedor_id"));
-                        listaIngredientes.add(ingrediente);
+                        TIngrediente i = new TIngrediente();
+                        i.setID(rs.getInt("id"));
+                        i.setNombre(rs.getString("nombre"));
+                        i.setPrecio(rs.getDouble("precio"));
+                        i.setActivo(rs.getBoolean("activo"));
+                        i.setIDProveedor(rs.getInt("proveedor_id"));
+                        lista.add(i);
                     }
                 }
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(
+                "Error mostrando ingredientes del proveedor " + idProveedor, e);
         }
-        return listaIngredientes;
+
+        return lista;
     }
 
     @Override
-    public Boolean modificarIngrediente(TIngrediente tingrediente) {
-       Boolean exito = false;
-       try{
-            Transaction t = TransactionManager.getInstance().getTransaction();
-            Connection c= (Connection) t.getResource();
+    public Boolean modificarIngrediente(TIngrediente ing) {
 
-            String sql = "UPDATE ingredientes SET nombre = ?, precio = ?, proveedor_id = ? WHERE id =?"; 
-            try (PreparedStatement st = c.prepareStatement(sql)){
-                st.setString(1,tingrediente.getNombre());
-                st.setDouble(2, tingrediente.getPrecio());
-                st.setInt(3, tingrediente.getIDProveedor());
-                st.setInt(4, tingrediente.getID());
-                
-                int  rows = st.executeUpdate();
-                exito = rows > 0 ? true : false;
-                st.close();
-            }
-        }catch (Exception e) {
-            e.printStackTrace();
-        }
-        return exito;
+    	try {
+    		Transaction t = TransactionManager.getInstance().getTransaction();
+    		Connection c = (Connection) t.getResource();
+
+    		try (PreparedStatement ps = c.prepareStatement(UPDATE)) {
+    			ps.setString(1, ing.getNombre());
+    			ps.setDouble(2, ing.getPrecio());
+    			ps.setInt(3, ing.getIDProveedor());
+    			ps.setInt(4, ing.getID());
+    			int rows = ps.executeUpdate();
+
+    			if (rows == 0) {
+    				throw new RuntimeException("No se actualizó ningún registro");
+    			}
+
+    			return true;
+    		}
+
+    	} catch (SQLException e) {
+    		throw new RuntimeException("Error modificando ingrediente " + ing.getID(), e);
+    	}
     }
 
     @Override
-    public Boolean bajaIngrediente(TIngrediente ingrediente) {
-        Boolean exito = false;
-         try {
+    public Boolean bajaIngrediente(TIngrediente ing) {
+
+        try {
             Transaction t = TransactionManager.getInstance().getTransaction();
             Connection c = (Connection) t.getResource();
 
-            String sql = "UPDATE ingredientes SET activo = ? WHERE id = ?";
-            try (PreparedStatement stmt = c.prepareStatement(sql)) {
-    
-                stmt.setBoolean(1, ingrediente.getActivo());
-                stmt.setInt(2, ingrediente.getID());
-
-                int rows = stmt.executeUpdate();
-                exito = rows > 0;
+            try (PreparedStatement ps = c.prepareStatement(READ_BY_ID)) {
+                ps.setInt(1, ing.getID());
+                ps.executeQuery();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+
+            try (PreparedStatement ps = c.prepareStatement(UPDATE_ACTIVO)) {
+                ps.setBoolean(1, ing.getActivo());
+                ps.setInt(2, ing.getID());
+
+                return ps.executeUpdate() > 0;
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Error dando de baja ingrediente " + ing.getID(), e);
         }
-        return exito;
     }
 
     @Override
-    public List<TIngrediente> listarIngredientesPorProducto(Integer idProducto) throws Exception {
-        Transaction t = TransactionManager.getInstance().getTransaction();
-        if(t == null) {
-            throw new IllegalStateException("No hay transacción activa al mostrar los ingredientes");
-        }
-        List<TIngrediente> lista = new ArrayList<>();
-        try (Connection c = (Connection) t.getResource()) {
-            String sql = "SELECT i.id, i.nombre, i.precio, i.activo, i.proveedor_id " +
-                    "FROM ingredientes i " +
-                    "JOIN producto_ingrediente pi ON i.id = pi.id_ingrediente " +
-                    "WHERE pi.id_producto = ?";
-            PreparedStatement ps = c.prepareStatement(sql);
-            ps.setInt(1,idProducto);
-            ResultSet rs = ps.executeQuery();
+    public List<TEntradaReceta> listarIngredientesPorProducto(Integer idProducto) {
 
-            while (rs.next()) {
-                TIngrediente ing = new TIngrediente();
-                ing.setID(rs.getInt("id"));
-                ing.setNombre(rs.getString("nombre"));
-                ing.setPrecio(rs.getDouble("precio"));
-                ing.setActivo(rs.getBoolean("activo"));
-                ing.setIDProveedor(rs.getInt("proveedor_id"));
-                lista.add(ing);
-            }
+        List<TEntradaReceta> lista = new ArrayList<>();
 
-            rs.close();
-            ps.close();
-            return lista;
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new Exception("Error al listar ingredientes por producto: " + e.getMessage());
-        }
-    }
-
-    private Connection getConnection() throws SQLException {
-        Transaction tx = getTransaction();
-        if (tx == null) {
-            return DriverManager.getConnection(DBConfig.getUrl(), DBConfig.getUser(), DBConfig.getPassword());
-        }
-        return (Connection) tx.getResource();
-    }
-
-    private void closeConnection(Connection conn) {
-        if (conn == null) {
-            return;
-        }
         try {
-            if (getTransaction() == null) {
-                conn.close();
+            Transaction t = TransactionManager.getInstance().getTransaction();
+            Connection c = (Connection) t.getResource();
+
+            try (PreparedStatement ps = c.prepareStatement(READ_ENTRADAS_RECETA)) {
+
+                ps.setInt(1, idProducto);
+
+                try (ResultSet rs = ps.executeQuery()) {
+
+                    while (rs.next()) {
+                        TEntradaReceta er = new TEntradaReceta();
+                        er.setProductoID(rs.getInt("producto_id"));
+                        er.setIngredienteID(rs.getInt("ingrediente_id"));
+                        er.setActivo(rs.getBoolean("activo"));
+
+                        lista.add(er);
+                    }
+                }
             }
+
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException(
+                "Error listando ingredientes del producto " + idProducto, e);
         }
-    }
 
-    private Transaction getTransaction() {
-        try {
-            return TransactionManager.getInstance().getTransaction();
-        } catch (IllegalStateException e) {
-            return null;
-        }
+        return lista;
     }
-
 }

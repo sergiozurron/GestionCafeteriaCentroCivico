@@ -13,231 +13,289 @@ import com.grupoms.app.negocio.producto.TProducto;
 
 public class DAOProductoImp implements DAOProducto {
 
-    private static final String INSERT_PRODUCTO = 
-        "INSERT INTO PRODUCTOS(nombre, precio, stock, activo, tipo, tamanho, tiempo_preparacion, calorias) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-    private static final String READ_BY_ID = "SELECT * FROM PRODUCTOS WHERE id = ?";
-    private static final String UPDATE_PRODUCTO = 
-        "UPDATE PRODUCTOS SET nombre = ?, precio = ?, stock = ?, activo = ?, tamanho = ?, tiempo_preparacion = ?, calorias = ? WHERE id = ?";
-    private static final String DESACTIVAR_PRODUCTO = "UPDATE PRODUCTOS SET activo = false WHERE id = ?";
-    private static final String ALL = "SELECT * FROM PRODUCTOS";
-    private static final String DELETE_PRODUCTO = "DELETE FROM PRODUCTOS";
+	private static final String INSERT_PRODUCTO = "INSERT INTO productos(nombre, precio, stock, activo) VALUES (?, ?, ?, ?)";
+	private static final String INSERT_COMIDA = "INSERT INTO comidas(id, tipo, calorias, tiempo_preparacion) VALUES (?, ?, ?, ?)";
+	private static final String INSERT_BEBIDA = "INSERT INTO bebidas(id, tipo, tamaño) VALUES (?, ?, ?)";
+	private static final String READ_BY_ID = "SELECT p.*, "
+			+ " c.tipo AS tipo_comida, c.calorias, c.tiempo_preparacion, " + " b.tipo AS tipo_bebida, b.tamaño "
+			+ "FROM productos p " + "LEFT JOIN comidas c ON p.id = c.id " + "LEFT JOIN bebidas b ON p.id = b.id "
+			+ "WHERE p.id = ? AND p.activo = TRUE FOR UPDATE";
+	private static final String UPDATE_PRODUCTO = "UPDATE productos SET nombre = ?, precio = ?, stock = ?, activo = ? "
+			+ "WHERE id = ? AND activo = TRUE";
+	private static final String UPDATE_COMIDA = "UPDATE comidas SET calorias = ?, tiempo_preparacion = ? "
+			+ "WHERE id = ?";
+	private static final String UPDATE_BEBIDA = "UPDATE bebidas SET tamaño = ? " + "WHERE id = ?";
+	private static final String DESACTIVAR_PRODUCTO = "UPDATE productos SET activo = FALSE WHERE id = ? AND activo = TRUE";
+	private static final String ALL = "SELECT p.*, " + "c.calorias, c.tiempo_preparacion, " + "b.tamaño "
+			+ "FROM productos p " + "LEFT JOIN comidas c ON p.id = c.id " + "LEFT JOIN bebidas b ON p.id = b.id "
+			+ "WHERE p.activo = TRUE";
+	private static final String PRODUCTOS_POR_PROVEEDOR = "SELECT DISTINCT p.*, " + "c.calorias, c.tiempo_preparacion, "
+			+ "b.tamaño " + "FROM productos p " + "LEFT JOIN comidas c ON p.id = c.id "
+			+ "LEFT JOIN bebidas b ON p.id = b.id " + "JOIN entradas_recetas er ON p.id = er.producto_id "
+			+ "JOIN ingredientes i ON er.ingrediente_id = i.id " + "WHERE i.proveedor_id = ? AND p.activo = TRUE";
 
-    @Override
-    public Integer altaProducto(TProducto producto) {
-        Integer idGenerado = null;
-        try {
-            Transaction t = TransactionManager.getInstance().getTransaction();
-            Connection c = (Connection) t.getResource();
+	@Override
+	public Integer altaProducto(TProducto producto) {
 
-            try (PreparedStatement ps = c.prepareStatement(INSERT_PRODUCTO, Statement.RETURN_GENERATED_KEYS)) {
-                ps.setString(1, producto.getNombre());
-                ps.setDouble(2, producto.getPrecio());
-                ps.setInt(3, producto.getStock());
-                ps.setBoolean(4, producto.getActivo());
+		Integer idGenerado = null;
 
-                // Tipo de producto y campos específicos
-                if (producto instanceof TBebida) {
-                    ps.setString(5, "Bebida");
-                    ps.setInt(6, ((TBebida) producto).getTamanho());
-                    ps.setNull(7, Types.INTEGER);
-                    ps.setNull(8, Types.INTEGER);
-                } else if (producto instanceof TComida) {
-                    ps.setString(5, "Comida");
-                    ps.setNull(6, Types.INTEGER);
-                    ps.setInt(7, ((TComida) producto).getTiempoPreparacion());
-                    ps.setInt(8, ((TComida) producto).getCalorias());
-                }
+		try {
+			Transaction t = TransactionManager.getInstance().getTransaction();
+			Connection c = (Connection) t.getResource();
 
-                ps.executeUpdate();
+			try (PreparedStatement ps = c.prepareStatement(INSERT_PRODUCTO, Statement.RETURN_GENERATED_KEYS)) {
 
-                try (ResultSet rs = ps.getGeneratedKeys()) {
-                    if (rs.next()) {
-                        idGenerado = rs.getInt(1);
-                        producto.setId(idGenerado);
-                    }
-                }
-            }
+				ps.setString(1, producto.getNombre());
+				ps.setDouble(2, producto.getPrecio());
+				ps.setInt(3, producto.getStock());
+				ps.setBoolean(4, producto.getActivo());
 
-        } catch (SQLException e) {
-            System.err.println("Error dando de alta producto: " + e.getMessage());
-        }
-        return idGenerado;
-    }
+				ps.executeUpdate();
 
-    @Override
-    public Integer bajaProducto(Integer id) {
-        try {
-            Transaction t = TransactionManager.getInstance().getTransaction();
-            Connection c = (Connection) t.getResource();
+				try (ResultSet rs = ps.getGeneratedKeys()) {
+					if (rs.next()) {
+						idGenerado = rs.getInt(1);
+						producto.setId(idGenerado);
+					}
+				}
+			}
+			if (producto instanceof TComida) {
 
-            try (PreparedStatement ps = c.prepareStatement(DESACTIVAR_PRODUCTO)) {
-                ps.setInt(1, id);
-                int rows = ps.executeUpdate();
-                return rows > 0 ? id : -1;
-            }
+				try (PreparedStatement ps = c.prepareStatement(INSERT_COMIDA)) {
+					ps.setInt(1, idGenerado);
+					ps.setString(2, "Comida");
+					ps.setInt(3, ((TComida) producto).getCalorias());
+					ps.setInt(4, ((TComida) producto).getTiempoPreparacion());
+					ps.executeUpdate();
+				}
 
-        } catch (SQLException e) {
-            System.err.println("Error dando de baja producto: " + e.getMessage());
-        }
-        return -1;
-    }
+			} else if (producto instanceof TBebida) {
 
-    @Override
-    public Integer modificarProducto(TProducto producto) {
-        try {
-            Transaction t = TransactionManager.getInstance().getTransaction();
-            Connection c = (Connection) t.getResource();
+				try (PreparedStatement ps = c.prepareStatement(INSERT_BEBIDA)) {
+					ps.setInt(1, idGenerado);
+					ps.setString(2, "Bebida");
+					ps.setInt(3, ((TBebida) producto).getTamanho());
+					ps.executeUpdate();
+				}
+			}
 
-            try (PreparedStatement ps = c.prepareStatement(UPDATE_PRODUCTO)) {
-                ps.setString(1, producto.getNombre());
-                ps.setDouble(2, producto.getPrecio());
-                ps.setInt(3, producto.getStock());
-                ps.setBoolean(4, producto.getActivo());
+		} catch (SQLException e) {
+			throw new RuntimeException("Error dando de alta producto", e);
+		}
 
-                if (producto instanceof TBebida) {
-                    ps.setInt(5, ((TBebida) producto).getTamanho());
-                    ps.setNull(6, Types.INTEGER);
-                    ps.setNull(7, Types.INTEGER);
-                } else if (producto instanceof TComida) {
-                    ps.setNull(5, Types.INTEGER);
-                    ps.setInt(6, ((TComida) producto).getTiempoPreparacion());
-                    ps.setInt(7, ((TComida) producto).getCalorias());
-                }
+		return idGenerado;
+	}
 
-                ps.setInt(8, producto.getId());
+	@Override
+	public Boolean bajaProducto(TProducto producto) {
+		Boolean exito = false;
+		try {
+			Transaction t = TransactionManager.getInstance().getTransaction();
+			Connection c = (Connection) t.getResource();
 
-                int rows = ps.executeUpdate();
-                return rows > 0 ? producto.getId() : -1;
-            }
+			try (PreparedStatement ps = c.prepareStatement(DESACTIVAR_PRODUCTO)) {
+				ps.setInt(1, producto.getId());
+				int rows = ps.executeUpdate();
+				exito = rows > 0;
+			}
 
-        } catch (SQLException e) {
-            System.err.println("Error modificando producto: " + e.getMessage());
-        }
-        return -1;
-    }
+		} catch (SQLException e) {
+			throw new RuntimeException("Error dando de baja producto: " + e.getMessage(), e);
+		}
+		return exito;
+	}
 
-    @Override
-    public TProducto mostrarProducto(Integer id) {
-        TProducto producto = null;
-        try {
-            Transaction t = TransactionManager.getInstance().getTransaction();
-            Connection c = (Connection) t.getResource();
+	@Override
+	public Boolean modificarProducto(TProducto producto) {
 
-            try (PreparedStatement ps = c.prepareStatement(READ_BY_ID)) {
-                ps.setInt(1, id);
+		boolean exito = false;
 
-                try (ResultSet rs = ps.executeQuery()) {
-                    if (rs.next()) {
-                        String tipo = rs.getString("tipo");
-                        if ("Bebida".equals(tipo)) {
-                            TBebida bebida = new TBebida();
-                            bebida.setTamanho(rs.getInt("tamanho"));
-                            producto = bebida;
-                        } else if ("Comida".equals(tipo)) {
-                            TComida comida = new TComida();
-                            comida.setTiempoPreparacion(rs.getInt("tiempo_preparacion"));
-                            comida.setCalorias(rs.getInt("calorias"));
-                            producto = comida;
-                        }
+		try {
+			Transaction t = TransactionManager.getInstance().getTransaction();
+			Connection c = (Connection) t.getResource();
 
-                        producto.setId(rs.getInt("id"));
-                        producto.setNombre(rs.getString("nombre"));
-                        producto.setPrecio(rs.getDouble("precio"));
-                        producto.setStock(rs.getInt("stock"));
-                        producto.setActivo(rs.getBoolean("activo"));
-                    }
-                }
-            }
+			try (PreparedStatement ps = c.prepareStatement(UPDATE_PRODUCTO)) {
 
-        } catch (SQLException e) {
-            System.err.println("Error mostrando producto: " + e.getMessage());
-        }
-        return producto;
-    }
+				ps.setString(1, producto.getNombre());
+				ps.setDouble(2, producto.getPrecio());
+				ps.setInt(3, producto.getStock());
+				ps.setBoolean(4, producto.getActivo());
+				ps.setInt(5, producto.getId());
 
-    @Override
-    public List<TProducto> mostrarListaProductos() {
-        List<TProducto> listaProductos = new ArrayList<>();
-        try {
-            Transaction t = TransactionManager.getInstance().getTransaction();
-            Connection c = (Connection) t.getResource();
+				ps.executeUpdate();
+			}
 
-            try (PreparedStatement ps = c.prepareStatement(ALL);
-                 ResultSet rs = ps.executeQuery()) {
+			if (producto instanceof TComida) {
 
-                while (rs.next()) {
-                    TProducto producto;
-                    String tipo = rs.getString("tipo");
+				try (PreparedStatement ps = c.prepareStatement(UPDATE_COMIDA)) {
+					ps.setInt(1, ((TComida) producto).getCalorias());
+					ps.setInt(2, ((TComida) producto).getTiempoPreparacion());
+					ps.setInt(3, producto.getId());
+					ps.executeUpdate();
+				}
 
-                    if ("Bebida".equals(tipo)) {
-                        TBebida bebida = new TBebida();
-                        bebida.setTamanho(rs.getInt("tamanho"));
-                        producto = bebida;
-                    } else {
-                        TComida comida = new TComida();
-                        comida.setTiempoPreparacion(rs.getInt("tiempo_preparacion"));
-                        comida.setCalorias(rs.getInt("calorias"));
-                        producto = comida;
-                    }
+			} else if (producto instanceof TBebida) {
 
-                    producto.setId(rs.getInt("id"));
-                    producto.setNombre(rs.getString("nombre"));
-                    producto.setPrecio(rs.getDouble("precio"));
-                    producto.setStock(rs.getInt("stock"));
-                    producto.setActivo(rs.getBoolean("activo"));
+				try (PreparedStatement ps = c.prepareStatement(UPDATE_BEBIDA)) {
+					ps.setInt(1, ((TBebida) producto).getTamanho());
+					ps.setInt(2, producto.getId());
+					ps.executeUpdate();
+				}
+			}
 
-                    listaProductos.add(producto);
-                }
-            }
+			exito = true;
 
-        } catch (SQLException e) {
-            System.err.println("Error mostrando lista de productos: " + e.getMessage());
-        }
+		} catch (SQLException e) {
+			throw new RuntimeException(e.getMessage());
+		}
 
-        return listaProductos;
-    }
+		return exito;
+	}
 
-    @Override
-    public void eliminaTodas() {
-        try {
-            Transaction t = TransactionManager.getInstance().getTransaction();
-            Connection c = (Connection) t.getResource();
+	@Override
+	public TProducto mostrarProducto(Integer id) {
+		TProducto producto = null;
+		try {
+			Transaction t = TransactionManager.getInstance().getTransaction();
+			Connection c = (Connection) t.getResource();
 
-            try (PreparedStatement ps = c.prepareStatement(DELETE_PRODUCTO)) {
-                ps.executeUpdate();
-            }
+			try (PreparedStatement ps = c.prepareStatement(READ_BY_ID)) {
+				ps.setInt(1, id);
 
-        } catch (SQLException e) {
-            System.err.println("Error eliminando todos los productos: " + e.getMessage());
-        }
-    }
+				try (ResultSet rs = ps.executeQuery()) {
+					if (rs.next()) {
+						if (rs.getObject("calorias") != null) {
 
-    private Connection getConnection() throws SQLException {
-        Transaction tx = getTransaction();
-        if (tx == null) {
-            return DriverManager.getConnection(DBConfig.getUrl(), DBConfig.getUser(), DBConfig.getPassword());
-        }
-        return (Connection) tx.getResource();
-    }
+							TComida comida = new TComida();
+							comida.setTiempoPreparacion(rs.getInt("tiempo_preparacion"));
+							comida.setCalorias(rs.getInt("calorias"));
+							producto = comida;
 
-    private void closeConnection(Connection conn) {
-        if (conn == null) {
-            return;
-        }
-        try {
-            if (getTransaction() == null) {
-                conn.close();
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
+						} else if (rs.getObject("tamaño") != null) {
 
-    private Transaction getTransaction() {
-        try {
-            return TransactionManager.getInstance().getTransaction();
-        } catch (IllegalStateException e) {
-            return null;
-        }
-    }
+							TBebida bebida = new TBebida();
+							bebida.setTamanho(rs.getInt("tamaño"));
+							producto = bebida;
+						}
+
+						if (producto != null) {
+							producto.setId(rs.getInt("id"));
+							producto.setNombre(rs.getString("nombre"));
+							producto.setPrecio(rs.getDouble("precio"));
+							producto.setStock(rs.getInt("stock"));
+							producto.setActivo(rs.getBoolean("activo"));
+						}
+					}
+				}
+			}
+
+		} catch (SQLException e) {
+			throw new RuntimeException("Error mostrando producto: ", e);
+		}
+		return producto;
+	}
+
+	@Override
+	public List<TProducto> mostrarProductosPorProveedor(Integer idProveedor) {
+
+		List<TProducto> listaProductos = new ArrayList<>();
+
+		try {
+			Transaction t = TransactionManager.getInstance().getTransaction();
+			Connection c = (Connection) t.getResource();
+
+			try (PreparedStatement ps = c.prepareStatement(PRODUCTOS_POR_PROVEEDOR)) {
+
+				ps.setInt(1, idProveedor);
+
+				try (ResultSet rs = ps.executeQuery()) {
+
+					while (rs.next()) {
+
+						TProducto producto = null;
+
+						if (rs.getObject("calorias") != null) {
+
+							TComida comida = new TComida();
+							comida.setTiempoPreparacion(rs.getInt("tiempo_preparacion"));
+							comida.setCalorias(rs.getInt("calorias"));
+							producto = comida;
+
+						} else if (rs.getObject("tamaño") != null) {
+
+							TBebida bebida = new TBebida();
+							bebida.setTamanho(rs.getInt("tamaño"));
+							producto = bebida;
+
+						} else {
+							continue;
+						}
+
+						producto.setId(rs.getInt("id"));
+						producto.setNombre(rs.getString("nombre"));
+						producto.setPrecio(rs.getDouble("precio"));
+						producto.setStock(rs.getInt("stock"));
+						producto.setActivo(rs.getBoolean("activo"));
+
+						listaProductos.add(producto);
+					}
+				}
+			}
+
+		} catch (SQLException e) {
+			throw new RuntimeException("Error mostrando productos por proveedor: ", e);
+		}
+
+		return listaProductos;
+	}
+
+	@Override
+	public List<TProducto> mostrarListaProductos() {
+
+		List<TProducto> listaProductos = new ArrayList<>();
+
+		try {
+			Transaction t = TransactionManager.getInstance().getTransaction();
+			Connection c = (Connection) t.getResource();
+
+			try (PreparedStatement ps = c.prepareStatement(ALL); ResultSet rs = ps.executeQuery()) {
+
+				while (rs.next()) {
+
+					TProducto producto = null;
+
+					if (rs.getObject("calorias") != null) {
+
+						TComida comida = new TComida();
+						comida.setTiempoPreparacion(rs.getInt("tiempo_preparacion"));
+						comida.setCalorias(rs.getInt("calorias"));
+						producto = comida;
+
+					} else if (rs.getObject("tamaño") != null) {
+
+						TBebida bebida = new TBebida();
+						bebida.setTamanho(rs.getInt("tamaño"));
+						producto = bebida;
+
+					} else {
+						continue;
+					}
+
+					producto.setId(rs.getInt("id"));
+					producto.setNombre(rs.getString("nombre"));
+					producto.setPrecio(rs.getDouble("precio"));
+					producto.setStock(rs.getInt("stock"));
+					producto.setActivo(rs.getBoolean("activo"));
+
+					listaProductos.add(producto);
+				}
+			}
+
+		} catch (SQLException e) {
+			throw new RuntimeException("Error mostrando lista de productos: ", e);
+		}
+
+		return listaProductos;
+	}
+
 }

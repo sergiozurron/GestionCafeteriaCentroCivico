@@ -8,156 +8,190 @@ import com.grupoms.app.integracion.Transaction.TransactionManager;
 import com.grupoms.app.integracion.factoria.FactoriaDAO;
 import com.grupoms.app.integracion.mesa.DAOMesa;
 
-public class SAMesaImp implements SAMesa{
-	private DAOMesa daoMesa = FactoriaDAO.getInstancia().creaDAOMesa();
+public class SAMesaImp implements SAMesa {
 
 	@Override
 	public Integer altaMesa(TMesa mesa) {
 		Transaction t = null;
-        Integer idGenerado = null;
+		Integer idGenerado = null;
 
-        try {
-            t = TransactionManager.getInstance().newTransaction();
-            t.start();
-            mesa.setActivo(true);
-            idGenerado = daoMesa.altaMesa(mesa);
-			if (idGenerado == -1) {
-                throw new RuntimeException("No se pudo dar de alta la mesa");
-            }
-            mesa.setId(idGenerado);
-            t.commit();
+		try {
+			t = TransactionManager.getInstance().newTransaction();
+			t.start();
+			DAOMesa daoMesa = FactoriaDAO.getInstancia().creaDAOMesa();
 
-        } catch (Exception e) {
-            e.printStackTrace();
-            if (t != null) {
-                try { t.rollback(); } catch(Exception ex) { ex.printStackTrace(); }
-            }
-        }
+			mesa.setActivo(true);
+			idGenerado = daoMesa.altaMesa(mesa);
 
-        return idGenerado;
+			if (idGenerado == null) {
+				throw new RuntimeException("Error en integración al intentar insertar la mesa.");
+			}
+
+			t.commit();
+
+		} catch (Exception e) {
+			if (t != null) {
+				try {
+					t.rollback();
+				} catch (Exception ex) {
+					System.err.println("Error fatal durante el rollback: " + ex.getMessage());
+				}
+			}
+			throw new RuntimeException("Error en SA al dar de alta mesa", e);
+		}
+
+		return idGenerado;
 	}
 
 	@Override
 	public Boolean bajaMesa(TMesa mesa) {
+
+		if (mesa == null || mesa.getId() == null || mesa.getId() <= 0)
+			throw new IllegalArgumentException("La mesa debe tener un id válido.");
+
 		Transaction t = null;
-        Boolean exito = false;
 
-        try {
-            t = TransactionManager.getInstance().newTransaction();
-            t.start();
-            
-            if(mesa == null || mesa.getId() == null || mesa.getId() <= 0)
-            	throw new IllegalArgumentException("La mesa debe tener un id válido para dar de baja.");
-            
-            
-            mesa.setActivo(false);
-            
-            daoMesa.bajaMesa(mesa);
-            
-            // 4. Commit
-            t.commit();
-            exito = true;
+		try {
+			t = TransactionManager.getInstance().newTransaction();
+			t.start();
 
-        } catch (Exception e) {
-            e.printStackTrace();
-            if (t != null) {
-                try { t.rollback(); } catch(Exception ex) { ex.printStackTrace(); }
-            }
-        }
-        return exito;
+			DAOMesa daoMesa = FactoriaDAO.getInstancia().creaDAOMesa();
+
+			TMesa existente = daoMesa.mostrarMesa(mesa.getId());
+
+			if (existente == null)
+				throw new IllegalArgumentException("La mesa no existe.");
+
+			if (!existente.getActivo())
+				throw new IllegalStateException("La mesa ya está dada de baja.");
+
+			existente.setActivo(false);
+			Boolean exito = daoMesa.bajaMesa(existente);
+
+			if (!exito)
+				throw new RuntimeException("No se pudo dar de baja la mesa.");
+
+			t.commit();
+			return true;
+
+		} catch (Exception e) {
+			if (t != null)
+				t.rollback();
+			throw new RuntimeException("Error en SA al dar de baja mesa", e);
+		}
 	}
 
 	@Override
 	public Boolean modificarMesa(TMesa mesa) {
-	    Transaction t = null;
-	    Boolean exito = false;
+		if (mesa == null)
+			throw new IllegalArgumentException("Mesa no válida");
+		
+		Transaction t = null;
+		Boolean exito = false;
 
-	    if (mesa == null || mesa.getId() == null || mesa.getId() <= 0)
-	        throw new IllegalArgumentException("La mesa a modificar no es válida.");
+		if (mesa == null || mesa.getId() == null || mesa.getId() <= 0)
+			throw new IllegalArgumentException("La mesa a modificar no es válida.");
 
-	    try {
-	        t = TransactionManager.getInstance().newTransaction();
-	        t.start();
+		try {
+			t = TransactionManager.getInstance().newTransaction();
+			t.start();
+			DAOMesa daoMesa = FactoriaDAO.getInstancia().creaDAOMesa();
 
-	        TMesa existente = daoMesa.mostrarMesa(mesa.getId());
-	        if (existente == null || !existente.getActivo())
-	            throw new IllegalArgumentException("No existe una mesa activa con ID " + mesa.getId());
+			TMesa existente = daoMesa.mostrarMesa(mesa.getId());
+			if (existente == null || !existente.getActivo()) {
+				throw new IllegalArgumentException("No existe una mesa activa con ID " + mesa.getId());
+			}
 
-	        exito = daoMesa.modificarMesa(mesa);
+			exito = daoMesa.modificarMesa(mesa);
 
-	        t.commit();
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	        if (t != null) {
-	            try { t.rollback(); } catch(Exception ex) { ex.printStackTrace(); }
-	        }
-	    }
-	    return exito;
+			if (!exito) {
+				throw new RuntimeException("Error en Integración: No se pudo modificar la mesa.");
+			}
+
+			t.commit();
+
+		} catch (IllegalArgumentException e) {
+			if (t != null) {
+				try {
+					t.rollback();
+				} catch (Exception ex) {
+				}
+			}
+			throw e;
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (t != null) {
+				try {
+					t.rollback();
+				} catch (Exception ex) {
+				}
+			}
+			throw new RuntimeException("Error fatal modificando: " + e.getMessage());
+		}
+
+		return exito;
 	}
-
-
 
 	@Override
 	public TMesa mostrarMesa(Integer ID) {
-		 if (ID == null || ID <= 0)
-            throw new IllegalArgumentException("El ID del ingrediente no es válido.");
-        Transaction t = null;
-        TMesa ing = null;
+		if (ID == null || ID <= 0) {
+			return null;
+		}
 
-        try {
-            // 1. Iniciar transacción
-            t = TransactionManager.getInstance().newTransaction();
-            t.start();
+		Transaction t = null;
+		TMesa mesa = null;
 
-            // 2. Consultar el ingrediente
-            ing = daoMesa.mostrarMesa(ID);
-            if (ing == null)
-                throw new IllegalArgumentException("El ingrediente con ID " + ID + " no existe.");
+		try {
+			t = TransactionManager.getInstance().newTransaction();
+			t.start();
 
-            // 3. Commit de la transacción
-            t.commit();
+			DAOMesa daoMesa = FactoriaDAO.getInstancia().creaDAOMesa();
+			mesa = daoMesa.mostrarMesa(ID);
 
-        } catch (Exception e) {
-            e.printStackTrace();
-            if (t != null) {
-                try { 
-                    t.rollback(); 
-                } catch(Exception ex) { 
-                    ex.printStackTrace(); 
-                }
-            }
-            throw new RuntimeException(e.getMessage(), e);
-        }
-		return ing;
+			if (mesa == null || !mesa.getActivo()) {
+				mesa = null;
+			}
+
+			t.commit();
+
+		} catch (Exception e) {
+
+			if (t != null) {
+				try {
+					t.rollback();
+				} catch (Exception ex) {
+					System.err.println("Error crítico durante el rollback: " + ex.getMessage());
+				}
+			}
+			throw new RuntimeException("Error en SA al mostrar mesa", e);
+		}
+
+		return mesa;
 	}
 
 	@Override
 	public List<TMesa> mostrarListaMesa() {
-		List<TMesa> listaIngredientes = new ArrayList<>();
-        Transaction t = null;
-        try {
-            t = TransactionManager.getInstance().newTransaction();
-            t.start();
+		List<TMesa> listaMesas = new ArrayList<>();
+		Transaction t = null;
+		try {
+			t = TransactionManager.getInstance().newTransaction();
+			t.start();
+			DAOMesa daoMesa = FactoriaDAO.getInstancia().creaDAOMesa();
 
-            List<TMesa> todos = daoMesa.mostrarListaMesa();
-            for(TMesa ing : todos) {
-                if(ing.getActivo()) {
-                    listaIngredientes.add(ing);
-                }
-            }
-            if (listaIngredientes.isEmpty()) {
-                throw new IllegalArgumentException("No hay ingredientes activos en la base de datos.");
-            }
-            t.commit();
-        } catch (Exception e) {
-            e.printStackTrace();
-            if (t != null) {
-                try { t.rollback(); } catch(Exception ex) { ex.printStackTrace(); }
-            }
-            throw new IllegalArgumentException("Error al mostrar la lista de ingredientes", e);
-        }
-        return listaIngredientes;
+			listaMesas = daoMesa.mostrarListaMesaActivas();
+
+			t.commit();
+		} catch (Exception e) {
+			if (t != null) {
+				try {
+					t.rollback();
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
+			}
+			throw new RuntimeException("Error al mostrar la lista de mesas: " + e.getMessage(), e);
+		}
+		return listaMesas;
 	}
-	
 
 }

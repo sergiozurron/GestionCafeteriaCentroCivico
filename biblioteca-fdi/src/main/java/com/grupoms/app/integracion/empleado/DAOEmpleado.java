@@ -4,13 +4,13 @@ import java.util.List;
 import com.grupoms.app.negocio.empleado.*;
 
 public interface DAOEmpleado {
-    public Integer crearEmpleado(TEmpleado empleado);
+	public Integer crearEmpleado(TEmpleado empleado);
 
-    public TEmpleado mostrarEmpleado(Integer id);
+	public TEmpleado mostrarEmpleado(Integer id);
 
-    public List<TEmpleado> mostrarListaEmpleados() throws Exception;
+	public List<TEmpleado> mostrarListaEmpleados() throws Exception;
 
-    public Boolean modificarEmpleado(TEmpleado empleado);
+	public Boolean modificarEmpleado(TEmpleado empleado);
 
-    public Boolean bajaEmpleado(TEmpleado empleado);
+	public Boolean bajaEmpleado(TEmpleado empleado);
 }

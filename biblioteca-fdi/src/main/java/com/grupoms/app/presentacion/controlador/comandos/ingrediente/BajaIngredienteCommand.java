@@ -7,24 +7,28 @@ import com.grupoms.app.presentacion.controlador.Context;
 import com.grupoms.app.presentacion.controlador.Evento;
 import com.grupoms.app.presentacion.controlador.comandos.Command;
 
-public class BajaIngredienteCommand implements Command{
+public class BajaIngredienteCommand implements Command {
 
-    @Override
-    public Context execute(Object data) {
-     if (!(data instanceof TIngrediente)) {
-            return new Context(Evento.BAJA_INGREDIENTE_KO, null);
-        }
+	@Override
+	public Context execute(Object data) {
+		if (!(data instanceof TIngrediente)) {
+			return new Context(Evento.BAJA_INGREDIENTE_KO, "Datos inválidos");
+		}
 
-        TIngrediente ingr = (TIngrediente) data;
-        SAIngrediente sa = FactoriaSA.getInstance().creaSAIngrediente();
+		TIngrediente ingr = (TIngrediente) data;
+		SAIngrediente sa = FactoriaSA.getInstance().creaSAIngrediente();
 
-        try {
-            Boolean ok = sa.bajaIngrediente(ingr);
-            return ok
-                ? new Context(Evento.BAJA_INGREDIENTE_OK, ingr)
-                : new Context(Evento.BAJA_INGREDIENTE_KO, null);
-        } catch (IllegalArgumentException e) {
-            return new Context(Evento.BAJA_INGREDIENTE_KO, null);
-        }
-    }
+		try {
+			Boolean ok = sa.bajaIngrediente(ingr);
+			if(ok) {
+				return new Context(Evento.BAJA_INGREDIENTE_OK,ingr);
+			}
+			else {
+				return new Context(Evento.BAJA_INGREDIENTE_KO,ingr);
+
+			}
+		} catch (Exception e) {
+			return new Context(Evento.BAJA_INGREDIENTE_KO, e.getMessage());
+		}
+	}
 }

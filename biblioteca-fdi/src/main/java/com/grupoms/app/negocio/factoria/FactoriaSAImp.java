@@ -1,21 +1,42 @@
 package com.grupoms.app.negocio.factoria;
 
-import com.grupoms.app.negocio.mesa.*;
-import com.grupoms.app.negocio.proveedor.*;
-import com.grupoms.app.negocio.pedido.*;
-import com.grupoms.app.negocio.empleado.*;
-import com.grupoms.app.negocio.ingrediente.*;
-import com.grupoms.app.negocio.materialJPA.*;
-import com.grupoms.app.negocio.producto.*;
-
+import com.grupoms.app.negocio.ClaseJPA.ClaseSA;
+import com.grupoms.app.negocio.ClaseJPA.ClaseSAImp;
+import com.grupoms.app.negocio.EjemplarJPA.EjemplarSA;
+import com.grupoms.app.negocio.EjemplarJPA.EjemplarSAImp;
+import com.grupoms.app.negocio.PromocionJPA.PromocionSA;
+import com.grupoms.app.negocio.PromocionJPA.PromocionSAImp;
+import com.grupoms.app.negocio.empleado.SAEmpleado;
+import com.grupoms.app.negocio.empleado.SAEmpleadoImp;
+import com.grupoms.app.negocio.ingrediente.SAIngrediente;
+import com.grupoms.app.negocio.ingrediente.SAIngredienteImp;
+import com.grupoms.app.negocio.materialJPA.MaterialSA;
+import com.grupoms.app.negocio.materialJPA.MaterialSAImp;
+import com.grupoms.app.negocio.mesa.SAMesa;
+import com.grupoms.app.negocio.mesa.SAMesaImp;
+import com.grupoms.app.negocio.pedido.SALineaPedido;
+import com.grupoms.app.negocio.pedido.SALineaPedidoImp;
+import com.grupoms.app.negocio.pedido.SAPedido;
+import com.grupoms.app.negocio.pedido.SAPedidoImp;
+import com.grupoms.app.negocio.prestamoJPA.PrestamoSA;
+import com.grupoms.app.negocio.prestamoJPA.PrestamoSAImp;
+import com.grupoms.app.negocio.producto.SAProducto;
+import com.grupoms.app.negocio.producto.SAProductoImp;
+import com.grupoms.app.negocio.producto.SAReceta;
+import com.grupoms.app.negocio.producto.SARecetaImp;
+import com.grupoms.app.negocio.proveedor.SAProveedor;
+import com.grupoms.app.negocio.proveedor.SAProveedorImpl;
+import com.grupoms.app.negocio.salaJPA.SalaSA;
+import com.grupoms.app.negocio.salaJPA.SalaSAImp;
+import com.grupoms.app.negocio.socioJPA.SocioSA;
+import com.grupoms.app.negocio.socioJPA.SocioSAImp;
 
 public class FactoriaSAImp extends FactoriaSA {
-	
 
 	public SAProveedor creaSAProveedor() {
 		return new SAProveedorImpl();
 	}
-	
+
 	public SAMesa creaSAMesa() {
 		return new SAMesaImp();
 	}
@@ -35,10 +56,6 @@ public class FactoriaSAImp extends FactoriaSA {
 		return new SAProductoImp();
 	}
 
-	@Override
-	public SAOrden creaSAOrden() {
-		return new SAOrdenImp();
-	}
 
 	@Override
 	public SAEmpleado creaSAEmpleado() {
@@ -48,6 +65,44 @@ public class FactoriaSAImp extends FactoriaSA {
 	@Override
 	public MaterialSA creaSAMaterial() {
 		return new MaterialSAImp();
+	}
+
+	public PromocionSA creaSAPromocion() {
+		return new PromocionSAImp();
+	}
+
+	public EjemplarSA creaSAEjemplar() {
+		return new EjemplarSAImp();
+	}
+
+	public ClaseSA creaSAClase() {
+		return new ClaseSAImp();
+	}
+
+	@Override
+	public SalaSA creaSASala() {
+
+		return new SalaSAImp();
+	}
+
+	@Override
+	public SocioSA creaSASocio() {
+		return new SocioSAImp();
+	}
+
+	@Override
+	public PrestamoSA creaSAPrestamo() {
+		return new PrestamoSAImp();
+	}
+
+	@Override
+	public SALineaPedido creaSALineaPedido() {
+		return new SALineaPedidoImp();
+	}
+
+	@Override
+	public SAReceta creaSAReceta() {
+		return new SARecetaImp();
 	}
 
 }
